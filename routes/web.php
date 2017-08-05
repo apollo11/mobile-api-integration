@@ -15,6 +15,19 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+
+Route::get('login/{provider}', 'Auth\LoginController@redirectToProvider');
+Route::get('login/{provider}/callback', 'Auth\LoginController@handleProviderCallback');
+
+
+Route::group(['prefix'=>'api/v1','middleware' => 'auth:api'], function() {
+
+    Route::get('/test', 'test@index')->name('test');
+
+});
+
+
+
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');

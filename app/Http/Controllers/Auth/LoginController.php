@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use Socialite;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
@@ -35,5 +36,24 @@ class LoginController extends Controller
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
+    }
+
+    /**
+     * @param $provider
+     * @return mixed
+     */
+    public function redirectToProvider($provider)
+    {
+        return Socialite::driver($provider)->stateless()->redirect()->getTargetUrl();
+
+    }
+
+    /**
+     * @param $provider
+     */
+    public function handleProviderCallBack($provider)
+    {
+        $user = Socialite::driver($provider)->stateless()->user();
+        dd($user);
     }
 }
