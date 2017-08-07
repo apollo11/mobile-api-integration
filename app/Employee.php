@@ -10,4 +10,9 @@ class Employee extends Model
     {
         return $this->belongsTo('YYJobs\User');
     }
+
+    public function schedule()
+    {
+        return $this->hasMany('YYJobs\Schedule');
+    }
 }
