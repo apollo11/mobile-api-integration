@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Validator;
+use App\User;
 use Illuminate\Http\Request;
 
 class EmployerController extends Controller
@@ -34,7 +36,28 @@ class EmployerController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validator = Validator::make($request->all(), $this->rules());
+
+        if($validator->fails()) {
+
+            return response()->json(['errors' => $validator->errors(), 'success' => 'false' ]);
+
+        } else {
+
+            $user = new User();
+            $user->name = $request->input('name');
+            $user->email = $request->input('email');
+            $user->password = bcrypt($request->input('password'));
+            $user->role = $request->input('role');
+            $user->role_id = $request->input('role_id');
+            $user->platform = $request->input('platform');
+            $user->mobile_no = $request->input('mobile_no');
+            $user->business_name = $request->input('business_name');
+            $user->save();
+
+            return response()->json(['success' => 'true']);
+
+        }
     }
 
     /**
@@ -81,4 +104,23 @@ class EmployerController extends Controller
     {
         //
     }
+
+    /**
+     * @return array
+     */
+    public function rules()
+    {
+        $validate = [
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:6',
+            'role' => 'required|string',
+            'role_id' => 'required|integer',
+            'mobile_no' => 'required',
+            'business_name' => 'required|string'
+        ];
+
+        return $validate;
+    }
+
 }

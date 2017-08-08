@@ -17,3 +17,5 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::post('v1/register/employee','EmployeeController@store');
+Route::post('v1/register/employer', 'EmployerController@store');

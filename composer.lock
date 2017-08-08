@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "d2c2e86da4297614a5c1d32ec5f31308",
+    "content-hash": "57a7887b8a30a7817121080133cd73d1",
     "packages": [
         {
             "name": "defuse/php-encryption",
