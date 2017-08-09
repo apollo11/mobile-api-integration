@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 
 class EmployerController extends Controller
 {
+
     /**
      * Display a listing of the resource.
      *
@@ -15,7 +16,12 @@ class EmployerController extends Controller
      */
     public function index()
     {
-        //
+        $employers = \App\User::where('role_id', 1)
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return view('dashboard.employer', ['employers' => $employers]);
+
     }
 
     /**
@@ -49,7 +55,7 @@ class EmployerController extends Controller
             $user->email = $request->input('email');
             $user->password = bcrypt($request->input('password'));
             $user->role = $request->input('role');
-            $user->role_id = $request->input('role_id');
+            $user->role_id = 1;
             $user->platform = $request->input('platform');
             $user->mobile_no = $request->input('mobile_no');
             $user->business_name = $request->input('business_name');
@@ -114,8 +120,6 @@ class EmployerController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:6',
-            'role' => 'required|string',
-            'role_id' => 'required|integer',
             'mobile_no' => 'required',
             'business_name' => 'required|string'
         ];
