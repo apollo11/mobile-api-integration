@@ -16,18 +16,15 @@ Route::get('/', function () {
 });
 
 
-Route::get('login/{provider}', 'Auth\LoginController@redirectToProvider');
-Route::get('login/{provider}/callback', 'Auth\LoginController@handleProviderCallback');
 
-
-Route::group(['prefix'=>'api/v1','middleware' => 'auth:api'], function() {
-
-    Route::get('/test', 'test@index')->name('test');
-
-});
 
 
 
 Auth::routes();
+Route::group(['middleware' => ['auth']],function () {
+
+    Route::get('dashboard/employee', 'EmployeeController@index');
+    Route::get('dashboard/employer', 'EmployerController@index');
+});
 
 Route::get('/home', 'HomeController@index')->name('home');

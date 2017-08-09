@@ -15,7 +15,11 @@ class EmployeeController extends Controller
      */
     public function index()
     {
-        //
+            $employee = \App\User::where('role_id', 2)
+                ->orderBy('created_at', 'desc')
+                ->get();
+
+            return view('dashboard.employee', ['employees' => $employee]);
     }
 
     /**
@@ -48,7 +52,7 @@ class EmployeeController extends Controller
             $user->email = $request->input('email');
             $user->password = bcrypt($request->input('password'));
             $user->role = $request->input('role');
-            $user->role_id = $request->input('role_id');
+            $user->role_id = 2;
             $user->platform = $request->input('platform');
             $user->mobile_no = $request->input('mobile_no');
             $user->nric_no = $request->input('nric_no');
@@ -115,10 +119,9 @@ class EmployeeController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:6',
-            'role' => 'required|string',
             'role_id' => 'required|integer',
             'mobile_no' => 'required',
-            'nric_no' => 'required|integer',
+            'nric_no' => 'required|integer|unique:users',
             'school' => 'required|string'
 
         ];
