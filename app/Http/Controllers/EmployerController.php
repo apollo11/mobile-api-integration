@@ -42,18 +42,19 @@ class EmployerController extends Controller
      */
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), $this->rules());
+        $data = $request->all();
+        $validate = $this->validator($data);
+        $errorMsg  = $validate->errors()->all();
 
-        if($validator->fails()) {
+        if($validate->fails()) {
 
-            return response()->json(['errors' => $validator->errors(), 'success' => 'false' ]);
+            return $this->mapValidator($errorMsg);
 
         } else {
 
             $user = new User();
             $user->name = $request->input('name');
             $user->email = $request->input('email');
-            $user->password = bcrypt($request->input('password'));
             $user->role = $request->input('role');
             $user->role_id = 1;
             $user->platform = $request->input('platform');
@@ -61,7 +62,7 @@ class EmployerController extends Controller
             $user->business_name = $request->input('business_name');
             $user->save();
 
-            return response()->json(['success' => 'true']);
+            return $this->successResponse();
 
         }
     }
@@ -119,12 +120,51 @@ class EmployerController extends Controller
         $validate = [
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:6',
             'mobile_no' => 'required',
             'business_name' => 'required|string'
         ];
 
         return $validate;
     }
+
+    public function validator($data)
+    {
+        $validator = Validator::make($data, $this->rules());
+
+        return $validator;
+
+    }
+
+
+    public function mapValidator($data)
+    {
+        foreach ($data as $error) {
+            $value[] =  $error;
+        }
+
+        $output = ['error'=>
+            [
+                'title'=> 'Validation Error'
+                , 'code' => 110001
+                , "status_code" => 400
+                , "messages" => $value
+            ],
+            "success" => false
+        ];
+
+        return response($output)->header('status', 400);
+
+    }
+
+    public function successResponse()
+    {
+        $output = [
+            "status" => 200,
+            "success" => true,
+        ];
+
+        return response($output)->header('status', 200);
+    }
+
 
 }
