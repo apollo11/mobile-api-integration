@@ -40,13 +40,16 @@ class EmployeeController extends Controller
      */
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), $this->rules());
+        $data = $request->all();
+        $validate = $this->validator($data);
+        $errorMsg  = $validate->errors()->all();
 
-        if($validator->fails()) {
+        if($validate->fails()) {
 
-            return response()->json(['errors' => $validator->errors(), 'success' => 'false' ]);
+            return $this->mapValidator($errorMsg);
 
         } else {
+
             $user = new User();
             $user->name = $request->input('name');
             $user->email = $request->input('email');
@@ -59,7 +62,7 @@ class EmployeeController extends Controller
             $user->school = $request->input('school');
             $user->save();
 
-            return response()->json(['success' => 'true']);
+            return $this->successResponse();
 
         }
 
@@ -119,7 +122,6 @@ class EmployeeController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:6',
-            'role_id' => 'required|integer',
             'mobile_no' => 'required',
             'nric_no' => 'required|integer|unique:users',
             'school' => 'required|string'
@@ -128,5 +130,54 @@ class EmployeeController extends Controller
 
         return $validate;
     }
+
+    /**
+     * m
+     * @param $data
+     * @return mixed
+     */
+
+    public function validator($data)
+    {
+        $validator = Validator::make($data, $this->rules());
+
+        return $validator;
+
+    }
+
+    public function mapValidator($data)
+    {
+        foreach ($data as $error) {
+            $value[] =  $error;
+        }
+
+        $output = ['error'=>
+            [
+                'title'=> 'Validation Error'
+                , 'code' => 110001
+                , "status_code" => 400
+                , "messages" => $value
+            ],
+            "success" => false
+        ];
+
+        return response($output)->header('status', 400);
+
+    }
+
+    /**
+     * @return mixed
+     */
+
+    public function successResponse()
+    {
+        $output = [
+            "status_code" => 200,
+            "success" => true,
+        ];
+
+        return response($output)->header('status', 200);
+    }
+
 
 }

@@ -12,16 +12,19 @@
                             <tr>
                                 <th>Checkbox</th>
                                 <th>#</th>
+                                <th>Name</th>
                                 <th>Company Name</th>
                                 <th>Contact No.</th>
+                                <th>Email</th>
                             </tr>
                             @foreach($employers as $user)
                                 <tr>
                                     <td><input type="checkbox" /></td>
                                     <td>{{ $user->id }}</td>
+                                    <td>{{ $user->name }}</td>
                                     <td>{{ $user->business_name }}</td>
                                     <td>{{ $user->mobile_no }}</td>
-                                    <td></td>
+                                    <td>{{ $user->email }}</td>
                                 </tr>
                             @endforeach
                         </table>
