@@ -6,6 +6,9 @@ use GuzzleHttp\Client;
 trait OauthTrait
 {
     protected $accessUrl = 'http://yyjobs.local/oauth/token';
+    protected $grantType = 'password';
+    protected $clientId = '1';
+    protected $clientSecret = 'V9D1qNxo4SB50AXFnbUnQ1sAKVZfoFo7iaH6vEEr';
 
     public function ouathResposne(array $data)
     {
@@ -13,9 +16,9 @@ trait OauthTrait
 
         $response = $http->post($this->accessUrl,['form_params' =>
         [
-            'grant_type' => 'password',
-            'client_id' => 1,
-            'client_secret' => 'V9D1qNxo4SB50AXFnbUnQ1sAKVZfoFo7iaH6vEEr',
+            'grant_type' => $this->grantType,
+            'client_id' => $this->clientId,
+            'client_secret' => $this->clientSecret,
             'username' => $data['email'],
             'password' => $data['password'],
             'scope' => '*'
@@ -33,9 +36,9 @@ trait OauthTrait
 
         $response = $http->post($this->accessUrl,['form_params' =>
             [
-                'grant_type' => 'password',
-                'client_id' => 1,
-                'client_secret' => 'V9D1qNxo4SB50AXFnbUnQ1sAKVZfoFo7iaH6vEEr',
+                'grant_type' => $this->grantType,
+                'client_id' => $this->clientId,
+                'client_secret' => $this->clientSecret,
                 'username' => $data['email'],
                 'password' => $socialUniqueId ,
                 'scope' => '*'
