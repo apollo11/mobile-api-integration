@@ -1,13 +1,14 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Social;
 
 use App\Http\Traits\OauthTrait;
 use Validator;
 use App\User;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
-class EmployeeController extends Controller
+class SocialController extends Controller
 {
     use OauthTrait;
     /**
@@ -17,11 +18,7 @@ class EmployeeController extends Controller
      */
     public function index()
     {
-            $employee = \App\User::where('role_id', 2)
-                ->orderBy('created_at', 'desc')
-                ->get();
 
-            return view('dashboard.employee', ['employees' => $employee]);
     }
 
     /**
@@ -51,23 +48,24 @@ class EmployeeController extends Controller
             return $this->mapValidator($errorMsg);
 
         } else {
-
             $user = new User();
             $user->name = $request->input('name');
             $user->email = $request->input('email');
-            $user->password = bcrypt($request->input('password'));
+            $user->password = bcrypt(!$request->input('social_fb_id') ? $request->input('social_google_id') : $request->input('social_fb_id'));
             $user->role = $request->input('role');
             $user->role_id = 2;
             $user->platform = $request->input('platform');
             $user->mobile_no = $request->input('mobile_no');
             $user->nric_no = $request->input('nric_no');
             $user->school = $request->input('school');
+            $user->social_access_token = $request->input('social_access_token');
+            $user->social_fb_id = $request->input('social_fb_id');
+            $user->social_google_id = $request->input('social_google_id');
             $user->save();
 
             return $this->successResponse($data);
 
         }
-
     }
 
     /**
@@ -76,9 +74,12 @@ class EmployeeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($email)
     {
-        //
+        $account = \App\User::where('email', $email)
+            ->first();
+
+        return response()->json(["details" =>$account]);
     }
 
     /**
@@ -115,6 +116,26 @@ class EmployeeController extends Controller
         //
     }
 
+    public function mapValidator($data)
+    {
+        foreach ($data as $error) {
+            $value[] =  $error;
+        }
+
+        $output = ['error'=>
+            [
+                'title'=> 'Validation Error'
+                , 'code' => 110002
+                , "status_code" => 400
+                , "messages" => $value
+            ],
+            "success" => false
+        ];
+
+        return response($output)->header('status', 400);
+
+    }
+
     /**
      * @return array
      */
@@ -123,7 +144,6 @@ class EmployeeController extends Controller
         $validate = [
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:6',
             'mobile_no' => 'required',
             'nric_no' => 'required|string|unique:users',
 
@@ -132,8 +152,8 @@ class EmployeeController extends Controller
         return $validate;
     }
 
+
     /**
-     * m
      * @param $data
      * @return mixed
      */
@@ -146,25 +166,7 @@ class EmployeeController extends Controller
 
     }
 
-    public function mapValidator($data)
-    {
-        foreach ($data as $error) {
-            $value[] =  $error;
-        }
 
-        $output = ['error'=>
-            [
-                'title'=> 'Validation Error'
-                , 'code' => 110001
-                , "status_code" => 400
-                , "messages" => $value
-            ],
-            "success" => false
-        ];
-
-        return response($output)->header('status', 400);
-
-    }
 
     /**
      * @return mixed
@@ -172,7 +174,7 @@ class EmployeeController extends Controller
 
     public function successResponse($data)
     {
-        return $this->ouathResposne($data);
+        return $this->ouathSocialResposne($data);
 //        $output = [
 //            "status_code" => 200,
 //            "success" => true,
@@ -180,6 +182,5 @@ class EmployeeController extends Controller
 //
 //        return response($output)->header('status', 200);
     }
-
 
 }

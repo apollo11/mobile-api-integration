@@ -17,7 +17,7 @@ class SchoolController extends Controller
     {
         $school = new School();
 
-        return $school->university();
+        return response()->json($school->university());
 
     }
 
