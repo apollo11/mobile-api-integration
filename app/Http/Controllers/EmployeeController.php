@@ -123,7 +123,7 @@ class EmployeeController extends Controller
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:6',
             'mobile_no' => 'required',
-            'nric_no' => 'required|integer|unique:users',
+            'nric_no' => 'required|string|unique:users',
             'school' => 'required|string'
 
         ];

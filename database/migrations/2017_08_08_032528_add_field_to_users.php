@@ -21,6 +21,7 @@ class AddFieldToUsers extends Migration
             $table->string('business_name')->nullable();
             $table->string('nric_no')->unique()->nullable();
             $table->string('school')->nullable();
+            $table->string('social_access_token')->nullable();
         });
     }
 

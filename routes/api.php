@@ -23,6 +23,11 @@ Route::prefix('v1/register/')->group(function () {
     Route::post('password/email','Auth\EmailResetController@sendResetLinkEmailControl');
 });
 
+Route::prefix('v1/social')->group(function () {
+    Route::post('fb/register', 'Social\FaceBookController@store');
+    Route::post('google/register', 'Social\GoogleController@store');
+});
+
 Route::prefix('v1/')->group(function () {
     Route::get('school', 'School\SchoolController@index');
 });
