@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers\Social;
 
+use App\Http\Traits\OauthTrait;
 use Validator;
 use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
-class FaceBookController extends Controller
+class SocialController extends Controller
 {
+    use OauthTrait;
     /**
      * Display a listing of the resource.
      *
@@ -46,11 +48,10 @@ class FaceBookController extends Controller
             return $this->mapValidator($errorMsg);
 
         } else {
-
             $user = new User();
             $user->name = $request->input('name');
             $user->email = $request->input('email');
-            $user->password = bcrypt($request->input('unique_id'));
+            $user->password = bcrypt(!$request->input('social_fb_id') ? $request->input('social_google_id') : $request->input('social_fb_id'));
             $user->role = $request->input('role');
             $user->role_id = 2;
             $user->platform = $request->input('platform');
@@ -58,12 +59,13 @@ class FaceBookController extends Controller
             $user->nric_no = $request->input('nric_no');
             $user->school = $request->input('school');
             $user->social_access_token = $request->input('social_access_token');
+            $user->social_fb_id = $request->input('social_fb_id');
+            $user->social_google_id = $request->input('social_google_id');
             $user->save();
 
-            return $this->successResponse();
+            return $this->successResponse($data);
 
         }
-
     }
 
     /**
@@ -72,9 +74,12 @@ class FaceBookController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($email)
     {
-        //
+        $account = \App\User::where('email', $email)
+            ->first();
+
+        return response()->json(["details" =>$account]);
     }
 
     /**
@@ -139,11 +144,8 @@ class FaceBookController extends Controller
         $validate = [
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string',
             'mobile_no' => 'required',
-            'nric_no' => 'required|integer|unique:users',
-            'school' => 'required|string',
-            'social_access_token'=>'required'
+            'nric_no' => 'required|string|unique:users',
 
         ];
 
@@ -170,14 +172,15 @@ class FaceBookController extends Controller
      * @return mixed
      */
 
-    public function successResponse()
+    public function successResponse($data)
     {
-        $output = [
-            "status_code" => 200,
-            "success" => true,
-        ];
-
-        return response($output)->header('status', 200);
+        return $this->ouathSocialResposne($data);
+//        $output = [
+//            "status_code" => 200,
+//            "success" => true,
+//        ];
+//
+//        return response($output)->header('status', 200);
     }
 
 }

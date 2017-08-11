@@ -22,6 +22,8 @@ class AddFieldToUsers extends Migration
             $table->string('nric_no')->unique()->nullable();
             $table->string('school')->nullable();
             $table->string('social_access_token')->nullable();
+            $table->string('social_google_id')->nullable();
+            $table->string('social_fb_id')->nullable();
         });
     }
 

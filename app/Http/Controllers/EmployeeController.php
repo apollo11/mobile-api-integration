@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Traits\OauthTrait;
 use Validator;
 use App\User;
 use Illuminate\Http\Request;
 
 class EmployeeController extends Controller
 {
+    use OauthTrait;
     /**
      * Display a listing of the resource.
      *
@@ -62,7 +64,7 @@ class EmployeeController extends Controller
             $user->school = $request->input('school');
             $user->save();
 
-            return $this->successResponse();
+            return $this->successResponse($data);
 
         }
 
@@ -124,7 +126,6 @@ class EmployeeController extends Controller
             'password' => 'required|string|min:6',
             'mobile_no' => 'required',
             'nric_no' => 'required|string|unique:users',
-            'school' => 'required|string'
 
         ];
 
@@ -169,14 +170,15 @@ class EmployeeController extends Controller
      * @return mixed
      */
 
-    public function successResponse()
+    public function successResponse($data)
     {
-        $output = [
-            "status_code" => 200,
-            "success" => true,
-        ];
-
-        return response($output)->header('status', 200);
+        return $this->ouathResposne($data);
+//        $output = [
+//            "status_code" => 200,
+//            "success" => true,
+//        ];
+//
+//        return response($output)->header('status', 200);
     }
 
 

@@ -21,12 +21,15 @@ Route::prefix('v1/register/')->group(function () {
     Route::post('employee','EmployeeController@store');
     Route::post('employer', 'EmployerController@store');
     Route::post('password/email','Auth\EmailResetController@sendResetLinkEmailControl');
+    Route::post('social', 'Social\SocialController@store');
+
 });
 
-Route::prefix('v1/social')->group(function () {
-    Route::post('fb/register', 'Social\FaceBookController@store');
-    Route::post('google/register', 'Social\GoogleController@store');
+Route::prefix('v1/details')->group(function () {
+
+    Route::get('{email}', 'Social\SocialController@show');
 });
+
 
 Route::prefix('v1/')->group(function () {
     Route::get('school', 'School\SchoolController@index');

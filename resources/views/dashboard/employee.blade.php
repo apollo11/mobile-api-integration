@@ -16,6 +16,7 @@
                                 <th>NRIC</th>
                                 <th>Contact No.</th>
                                 <th>Email</th>
+                                <th>School</th>
                             </tr>
                             @foreach($employees as $user)
                             <tr>
@@ -25,6 +26,7 @@
                                 <td>{{ $user->nric_no }}</td>
                                 <td>{{ $user->mobile_no }}</td>
                                 <td>{{ $user->email }}</td>
+                                <td>{{ $user->school }}</td>
                             </tr>
                             @endforeach
                         </table>
