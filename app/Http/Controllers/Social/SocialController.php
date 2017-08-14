@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Social;
 use App\Http\Traits\OauthTrait;
 use Validator;
 use App\User;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -58,7 +59,7 @@ class SocialController extends Controller
             $user->mobile_no = $request->input('mobile_no');
             $user->nric_no = $request->input('nric_no');
             $user->school = $request->input('school');
-            $user->social_access_token = $request->input('social_access_token');
+            $user->social_access_token = bcrypt($request->input('social_access_token'));
             $user->social_fb_id = $request->input('social_fb_id');
             $user->social_google_id = $request->input('social_google_id');
             $user->save();
@@ -79,7 +80,9 @@ class SocialController extends Controller
         $account = \App\User::where('email', $email)
             ->first();
 
-        return response()->json(["details" =>$account]);
+        if(Hash::check('social_access_token', $account['social_access_token']));
+            return response()->json(["details" => $account]);
+
     }
 
     /**

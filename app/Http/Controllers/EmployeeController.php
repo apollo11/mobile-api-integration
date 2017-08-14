@@ -70,6 +70,23 @@ class EmployeeController extends Controller
 
     }
 
+    public function validateOtp(Request $request)
+    {
+        $data = $request->all();
+        $validate = $this->validator($data);
+        $errorMsg  = $validate->errors()->all();
+
+        if($validate->fails()) {
+
+            return $this->mapValidator($errorMsg);
+
+        } else {
+            return $this->ValidUseSuccessResp($data);
+
+        }
+
+    }
+
     /**
      * Display the specified resource.
      *
@@ -173,13 +190,9 @@ class EmployeeController extends Controller
     public function successResponse($data)
     {
         return $this->ouathResposne($data);
-//        $output = [
-//            "status_code" => 200,
-//            "success" => true,
-//        ];
-//
-//        return response($output)->header('status', 200);
     }
+
+
 
 
 }

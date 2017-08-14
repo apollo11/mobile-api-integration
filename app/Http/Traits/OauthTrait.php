@@ -8,7 +8,7 @@ trait OauthTrait
     protected $accessUrl = 'http://yyjobs.local/oauth/token';
     protected $grantType = 'password';
     protected $clientId = '1';
-    protected $clientSecret = 'V9D1qNxo4SB50AXFnbUnQ1sAKVZfoFo7iaH6vEEr';
+    protected $clientSecret = 'NlAGjQ2GRQsvmvRwyJYtw1yV17VUw6Me3VZON0ol';
 
     public function ouathResposne(array $data)
     {
@@ -47,6 +47,18 @@ trait OauthTrait
         ]);
 
         return json_decode((string) $response->getBody(), true);
+    }
+
+    public function ValidUseSuccessResp()
+    {
+        $output = [
+            "status_code" => 200,
+            "success" => true,
+        ];
+
+        return response($output)->header('status', 200);
+
+
     }
 
 

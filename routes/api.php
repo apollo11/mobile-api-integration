@@ -20,6 +20,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::prefix('v1/register/')->group(function () {
     Route::post('employee','EmployeeController@store');
     Route::post('employer', 'EmployerController@store');
+    Route::post('validate/otp', 'EmployeeController@validateOtp');
     Route::post('password/email','Auth\EmailResetController@sendResetLinkEmailControl');
     Route::post('social', 'Social\SocialController@store');
 
