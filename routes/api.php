@@ -17,10 +17,16 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+
+Route::prefix('v1/')->group(function () {
+
+    Route::post('login','Auth\LoginController@oauthLogin');
+});
+
 Route::prefix('v1/register/')->group(function () {
     Route::post('employee','EmployeeController@store');
     Route::post('employer', 'EmployerController@store');
-    Route::post('validate/otp', 'EmployeeController@validateOtp');
+    Route::post('validate/user', 'EmployeeController@validateUser');
     Route::post('password/email','Auth\EmailResetController@sendResetLinkEmailControl');
     Route::post('social', 'Social\SocialController@store');
 

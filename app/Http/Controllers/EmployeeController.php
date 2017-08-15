@@ -70,10 +70,10 @@ class EmployeeController extends Controller
 
     }
 
-    public function validateOtp(Request $request)
+    public function validateUser(Request $request)
     {
         $data = $request->all();
-        $validate = $this->validator($data);
+        $validate = $this->userValidator($data);
         $errorMsg  = $validate->errors()->all();
 
         if($validate->fails()) {
@@ -81,10 +81,9 @@ class EmployeeController extends Controller
             return $this->mapValidator($errorMsg);
 
         } else {
-            return $this->ValidUseSuccessResp($data);
+            return $this->ValidUseSuccessResp(200, true);
 
         }
-
     }
 
     /**
@@ -93,9 +92,13 @@ class EmployeeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($email)
     {
-        //
+        $account = \App\User::where('email', $email)
+            ->first();
+
+        return ["details" => $account];
+
     }
 
     /**
@@ -150,6 +153,23 @@ class EmployeeController extends Controller
     }
 
     /**
+     * @return array
+     */
+    public function userRules()
+    {
+        $validate = [
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'mobile_no' => 'required',
+            'nric_no' => 'required|string|unique:users',
+
+        ];
+
+        return $validate;
+    }
+
+
+    /**
      * m
      * @param $data
      * @return mixed
@@ -162,6 +182,21 @@ class EmployeeController extends Controller
         return $validator;
 
     }
+
+    /**
+     * m
+     * @param $data
+     * @return mixed
+     */
+
+    public function userValidator($data)
+    {
+        $validator = Validator::make($data, $this->userRules());
+
+        return $validator;
+
+    }
+
 
     public function mapValidator($data)
     {

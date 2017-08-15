@@ -160,11 +160,11 @@
     <script src="{{ asset('assets/global/plugins/jqvmap/jqvmap/data/jquery.vmap.sampledata.js') }}" type="text/javascript"></script>
     <!-- END PAGE LEVEL PLUGINS -->
     <!-- BEGIN THEME GLOBAL SCRIPTS -->
-    <script src="{{ asset('/assets/global/scripts/app.js') }}" type="text/javascript'}}"></script>
+    <script src="{{ asset('assets/global/scripts/app.js') }}" type="text/javascript'}}"></script>
     <!-- END THEME GLOBAL SCRIPTS -->
 
     <!-- BEGIN PAGE LEVEL SCRIPTS -->
-    <script src="{{ asset('/assets/pages/scripts/dashboard.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('assets/pages/scripts/dashboard.js') }}" type="text/javascript"></script>
     <!-- END PAGE LEVEL SCRIPTS -->
     {{--<!-- BEGIN THEME LAYOUT SCRIPTS -->--}}
     <script src="{{ asset('assets/layouts/layout/scripts/layout.js') }}" type="text/javascript"></script>
@@ -173,12 +173,13 @@
     <script src=" {{ asset('assets/layouts/global/scripts/quick-nav.js') }}" type="text/javascript"></script>
     <!-- END THEME LAYOUT SCRIPTS -->
     <script>
-        $(document).ready(function()
+        jQuery(document).ready(function()
         {
             $('#clickmewow').click(function()
             {
                 $('#radio1003').attr('checked', 'checked');
             });
+            App.init();
         })
     </script>
 

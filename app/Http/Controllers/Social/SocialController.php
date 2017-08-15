@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Social;
 
+use App\Http\Traits\HttpRequest;
 use App\Http\Traits\OauthTrait;
 use Validator;
 use App\User;
@@ -12,6 +13,7 @@ use App\Http\Controllers\Controller;
 class SocialController extends Controller
 {
     use OauthTrait;
+    use HttpRequest;
     /**
      * Display a listing of the resource.
      *
@@ -49,24 +51,66 @@ class SocialController extends Controller
             return $this->mapValidator($errorMsg);
 
         } else {
-            $user = new User();
-            $user->name = $request->input('name');
-            $user->email = $request->input('email');
-            $user->password = bcrypt(!$request->input('social_fb_id') ? $request->input('social_google_id') : $request->input('social_fb_id'));
-            $user->role = $request->input('role');
-            $user->role_id = 2;
-            $user->platform = $request->input('platform');
-            $user->mobile_no = $request->input('mobile_no');
-            $user->nric_no = $request->input('nric_no');
-            $user->school = $request->input('school');
-            $user->social_access_token = bcrypt($request->input('social_access_token'));
-            $user->social_fb_id = $request->input('social_fb_id');
-            $user->social_google_id = $request->input('social_google_id');
-            $user->save();
-
-            return $this->successResponse($data);
-
+            return $this->execution($data);
         }
+    }
+
+    /**
+     * This are the data which needed to stored
+     * @param array $data
+     */
+
+    public function userData(array $data)
+    {
+        $googleId = $data['social_google_id'] != null ? $data['social_google_id'] : null;
+        $fbId = $data['social_fb_id'] != null ? $data['social_fb_id'] : null;
+        $school = !empty($data['school']) ? $data['school'] : null;
+        $role = 'employer';
+
+        $user = new User();
+        $user->name = $data['name'];
+        $user->email = $data['email'];
+        $user->password = bcrypt(!$googleId ? $fbId : $googleId);
+        $user->role = $role;
+        $user->role_id = 2;
+        $user->role = $role;
+        $user->platform = $data['platform'];
+        $user->mobile_no = $data['mobile_no'];
+        $user->nric_no = $data['nric_no'];
+        $user->school = $school;
+        $user->social_access_token = bcrypt($data['social_access_token']);
+        $user->social_fb_id = $googleId;
+        $user->social_google_id = $fbId;
+        $user->save();
+    }
+
+    /**
+     * here isthe logic if the
+     * @param array $data
+     * @return mixed
+     */
+
+    public function execution(array $data)
+    {
+        $fbUser = $this->validateFbUser($data['social_access_token']);
+        $googleUser = $this->validateGoogleUser($data['social_access_token']);
+        if (!empty($data['social_fb_id'])) {
+            if($fbUser['status_code'] == 200) {
+                 $this->userData($data);
+                 return $this->successResponse($data);
+
+            } else {
+                return $this->ValidUseSuccessResp(400, false);
+            }
+        } else {
+            if($googleUser['status_code'] == 200) {
+                $this->userData($data);
+                return $this->successResponse($data);
+            } else {
+                return $this->ValidUseSuccessResp(400, false);
+            }
+        }
+
     }
 
     /**
@@ -169,8 +213,6 @@ class SocialController extends Controller
 
     }
 
-
-
     /**
      * @return mixed
      */
@@ -178,12 +220,16 @@ class SocialController extends Controller
     public function successResponse($data)
     {
         return $this->ouathSocialResposne($data);
-//        $output = [
-//            "status_code" => 200,
-//            "success" => true,
-//        ];
-//
-//        return response($output)->header('status', 200);
+    }
+
+    public function validateFbUser($token)
+    {
+        return $this->getSocialFbResponse($token);
+    }
+
+    public function validateGoogleUser($token)
+    {
+        return $this->getSocialGoogleResponse($token);
     }
 
 }
