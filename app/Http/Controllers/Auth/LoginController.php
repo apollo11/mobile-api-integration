@@ -3,8 +3,11 @@
 namespace App\Http\Controllers\Auth;
 
 use Socialite;
+use App\User;
+use App\Http\Traits\OauthTrait;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Http\Request;
 
 class LoginController extends Controller
 {
@@ -20,7 +23,7 @@ class LoginController extends Controller
     */
 
     use AuthenticatesUsers;
-
+    use OauthTrait;
     /**
      * Where to redirect users after login.
      *
@@ -55,5 +58,11 @@ class LoginController extends Controller
     {
         $user = Socialite::driver($provider)->stateless()->user();
         dd($user);
+    }
+
+    public function oauthLogin(Request $request)
+    {
+        $data = $request->all();
+        return $this->ouathResposne($data);
     }
 }

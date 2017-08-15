@@ -70,15 +70,35 @@ class EmployeeController extends Controller
 
     }
 
+    public function validateUser(Request $request)
+    {
+        $data = $request->all();
+        $validate = $this->userValidator($data);
+        $errorMsg  = $validate->errors()->all();
+
+        if($validate->fails()) {
+
+            return $this->mapValidator($errorMsg);
+
+        } else {
+            return $this->ValidUseSuccessResp(200, true);
+
+        }
+    }
+
     /**
      * Display the specified resource.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($email)
     {
-        //
+        $account = \App\User::where('email', $email)
+            ->first();
+
+        return ["details" => $account];
+
     }
 
     /**
@@ -133,6 +153,23 @@ class EmployeeController extends Controller
     }
 
     /**
+     * @return array
+     */
+    public function userRules()
+    {
+        $validate = [
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'mobile_no' => 'required',
+            'nric_no' => 'required|string|unique:users',
+
+        ];
+
+        return $validate;
+    }
+
+
+    /**
      * m
      * @param $data
      * @return mixed
@@ -145,6 +182,21 @@ class EmployeeController extends Controller
         return $validator;
 
     }
+
+    /**
+     * m
+     * @param $data
+     * @return mixed
+     */
+
+    public function userValidator($data)
+    {
+        $validator = Validator::make($data, $this->userRules());
+
+        return $validator;
+
+    }
+
 
     public function mapValidator($data)
     {
@@ -173,13 +225,9 @@ class EmployeeController extends Controller
     public function successResponse($data)
     {
         return $this->ouathResposne($data);
-//        $output = [
-//            "status_code" => 200,
-//            "success" => true,
-//        ];
-//
-//        return response($output)->header('status', 200);
     }
+
+
 
 
 }
