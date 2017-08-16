@@ -65,4 +65,26 @@ class LoginController extends Controller
         $data = $request->all();
         return $this->ouathResposne($data);
     }
+
+    public function show($email)
+    {
+        $user = new User();
+        $account = $user::where('email', $email)
+            ->first();
+
+        return $account;
+
+    }
+
+    public function socialLogin(Request $request)
+    {
+        $data = [
+            'social_id' => $request->input('social_id'),
+            'email' => $request->input('email')
+        ];
+
+        return $this->ouathSocialResposne($data);
+
+    }
+
 }

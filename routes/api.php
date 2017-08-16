@@ -21,9 +21,12 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::prefix('v1/')->group(function () {
 
     Route::post('login','Auth\LoginController@oauthLogin');
+    Route::post('social/login', 'Auth\LoginController@socialLogin');
+
 });
 
 Route::prefix('v1/register/')->group(function () {
+
     Route::post('employee','EmployeeController@store');
     Route::post('employer', 'EmployerController@store');
     Route::post('validate/user', 'EmployeeController@validateUser');
@@ -32,13 +35,22 @@ Route::prefix('v1/register/')->group(function () {
 
 });
 
+Route::prefix('v1/social')->group(function () {
+//    Route::post('login', '')
+    Route::post('validate/user', 'Social\SocialController@socialUserValidate');
+
+});
+
 Route::prefix('v1/details')->group(function () {
 
     Route::get('{email}', 'Social\SocialController@show');
+
 });
 
 
 Route::prefix('v1/')->group(function () {
+
     Route::get('school', 'School\SchoolController@index');
+
 });
 

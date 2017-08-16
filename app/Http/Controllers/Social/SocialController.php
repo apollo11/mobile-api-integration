@@ -6,7 +6,6 @@ use App\Http\Traits\HttpRequest;
 use App\Http\Traits\OauthTrait;
 use Validator;
 use App\User;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -124,9 +123,7 @@ class SocialController extends Controller
         $account = \App\User::where('email', $email)
             ->first();
 
-        if(Hash::check('social_access_token', $account['social_access_token']));
-            return response()->json(["details" => $account]);
-
+        return $account;
     }
 
     /**
@@ -180,6 +177,55 @@ class SocialController extends Controller
         ];
 
         return response($output)->header('status', 400);
+
+    }
+
+    public function socialUserRules()
+    {
+        $validate = [
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'mobile_no' => 'required',
+            'nric_no' => 'required|string|unique:users',
+            'social_fb_id' => 'unique:users',
+            'social_google_id' => 'unique:users',
+        ];
+
+        return $validate;
+    }
+
+    public function socialUserValidate(Request $request)
+    {
+        $data = $request->all();
+        $validate = $this->socialIdValidation($data);
+
+        $validator = Validator::make($validate, $this->socialUserRules());
+        $errorMsg  = $validator->errors()->all();
+
+        if($validator->fails()) {
+
+            return $this->mapValidator($errorMsg);
+
+        } else {
+
+            return $this->ValidUseSuccessResp(200, true);
+
+        }
+
+    }
+
+    public function socialIdValidation(array $data)
+    {
+        $value = [
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'mobile_no' => $data['mobile_no'],
+            'nric_no' => $data['nric_no'],
+            'social_fb_id' => !empty($data['social_fb_id']) ? $data['social_fb_id'] : 'no id' ,
+            'social_google_id' => !empty($data['social_google_id']) ? $data['social_google_id'] : 'no id'
+        ];
+
+        return $value;
 
     }
 

@@ -97,7 +97,7 @@ class EmployeeController extends Controller
         $account = \App\User::where('email', $email)
             ->first();
 
-        return ["details" => $account];
+        return $account;
 
     }
 
