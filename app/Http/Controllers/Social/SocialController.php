@@ -6,6 +6,7 @@ use App\Http\Traits\HttpRequest;
 use App\Http\Traits\OauthTrait;
 use Validator;
 use App\User;
+use App\Http\Traits\HttpResponse;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -13,6 +14,7 @@ class SocialController extends Controller
 {
     use OauthTrait;
     use HttpRequest;
+    use HttpResponse;
     /**
      * Display a listing of the resource.
      *
@@ -162,21 +164,7 @@ class SocialController extends Controller
 
     public function mapValidator($data)
     {
-        foreach ($data as $error) {
-            $value[] =  $error;
-        }
-
-        $output = ['error'=>
-            [
-                'title'=> 'Validation Error'
-                , 'code' => 110002
-                , "status_code" => 400
-                , "messages" => $value
-            ],
-            "success" => false
-        ];
-
-        return response($output)->header('status', 400);
+        return $this->errorResponse($data, 'Validation Error',110001,400 );
 
     }
 
