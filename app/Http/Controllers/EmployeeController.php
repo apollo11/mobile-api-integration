@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Traits\OauthTrait;
+use App\Http\Traits\HttpResponse;
 use Validator;
 use App\User;
 use Illuminate\Http\Request;
@@ -10,6 +11,7 @@ use Illuminate\Http\Request;
 class EmployeeController extends Controller
 {
     use OauthTrait;
+    use HttpResponse;
     /**
      * Display a listing of the resource.
      *
@@ -97,7 +99,7 @@ class EmployeeController extends Controller
         $account = \App\User::where('email', $email)
             ->first();
 
-        return ["details" => $account];
+        return $account;
 
     }
 
@@ -200,21 +202,8 @@ class EmployeeController extends Controller
 
     public function mapValidator($data)
     {
-        foreach ($data as $error) {
-            $value[] =  $error;
-        }
+        return $this->errorResponse($data, 'Validation Error',110001,400 );
 
-        $output = ['error'=>
-            [
-                'title'=> 'Validation Error'
-                , 'code' => 110001
-                , "status_code" => 400
-                , "messages" => $value
-            ],
-            "success" => false
-        ];
-
-        return response($output)->header('status', 400);
 
     }
 

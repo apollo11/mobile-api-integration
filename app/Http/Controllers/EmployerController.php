@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use Validator;
 use App\User;
+use App\Http\Traits\HttpResponse;
 use Illuminate\Http\Request;
 
 class EmployerController extends Controller
 {
+    use HttpResponse;
 
     /**
      * Display a listing of the resource.
@@ -138,32 +140,13 @@ class EmployerController extends Controller
 
     public function mapValidator($data)
     {
-        foreach ($data as $error) {
-            $value[] =  $error;
-        }
-
-        $output = ['error'=>
-            [
-                'title'=> 'Validation Error'
-                , 'code' => 110001
-                , "status_code" => 400
-                , "messages" => $value
-            ],
-            "success" => false
-        ];
-
-        return response($output)->header('status', 400);
+        return $this->errorResponse($data, 'Validation Error',110001,400 );
 
     }
 
     public function successResponse()
     {
-        $output = [
-            "status" => 200,
-            "success" => true,
-        ];
-
-        return response($output)->header('status', 200);
+        return $this->ValidUseSuccessResp(200, true);
     }
 
 
