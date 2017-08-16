@@ -204,6 +204,7 @@ class EmployeeController extends Controller
     {
         return $this->errorResponse($data, 'Validation Error',110001,400 );
 
+
     }
 
     /**

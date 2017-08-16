@@ -4,9 +4,9 @@ namespace App\Http\Controllers\Social;
 
 use App\Http\Traits\HttpRequest;
 use App\Http\Traits\OauthTrait;
+use App\Http\Traits\HttpResponse;
 use Validator;
 use App\User;
-use App\Http\Traits\HttpResponse;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -80,8 +80,8 @@ class SocialController extends Controller
         $user->nric_no = $data['nric_no'];
         $user->school = $school;
         $user->social_access_token = bcrypt($data['social_access_token']);
-        $user->social_fb_id = $googleId;
-        $user->social_google_id = $fbId;
+        $user->social_fb_id = $fbId;
+        $user->social_google_id = $googleId ;
         $user->save();
     }
 

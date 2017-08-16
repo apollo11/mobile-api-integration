@@ -25,21 +25,20 @@
     <!-- BEGIN PAGE LEVEL PLUGINS -->
     {{--<link href="{{ asset('assets/global/plugins/gritter/css/jquery.gritter.css') }}" rel="stylesheet" type="text/css" />--}}
     <link href="{{ asset('assets/global/plugins/bootstrap-daterangepicker/daterangepicker.css') }}" rel="stylesheet" type="text/css" />
-    <link href="{{ asset('assets/global/plugins/fullcalendar/fullcalendar.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('assets/global/plugins/fullcalendar/fullcalendar.min.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('assets/global/plugins/jqvmap/jqvmap/jqvmap.css') }}" rel="stylesheet" type="text/css" />
     <!-- END PAGE LEVEL PLUGINS -->
 
     <!-- BEGIN THEME GLOBAL STYLES -->
-    <link href="{{ asset('assets/global/css/components.css') }}" rel="stylesheet" id="style_components" type="text/css" />
+    <link href="{{ asset('assets/global/css/components.min.css') }}" rel="stylesheet" id="style_components" type="text/css" />
     <link href="{{ asset('assets/global/css/plugins.css') }}" rel="stylesheet" type="text/css" />
     <!-- END THEME GLOBAL STYLES -->
 
     <!-- BEGIN THEME LAYOUT STYLES -->
-    <link href="{{ asset('assets/global/css/component.css" rel="stylesheet') }}" type="text/css" />
-    <link href="{{ asset('assets/global/css/plugins.css" rel="stylesheet') }}" type="text/css" />
-    <link href="{{ asset('assets/layouts/layout/css/layout.css') }}" rel="stylesheet" type="text/css" id="style_color" />
-    <link href="{{ asset('assets/layouts/layout/css/themes/darkblue.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('assets/layouts/layout/css/layout.min.css') }}" rel="stylesheet" type="text/css" id="style_color" />
+    <link href="{{ asset('assets/layouts/layout/css/themes/darkblue.min.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('assets/layouts/layout/css/custom.min.css') }}" rel="stylesheet" type="text/css"/>
+    <link href="{{ asset('assets/pages/css/login.min.css') }}" rel="stylesheet" type="text/css"/>
     <!-- END THEME LAYOUT STYLES -->
     <link rel="shortcut icon" href="favicon.ico" /> </head>
 </head>
@@ -101,10 +100,14 @@
                 {{--</div>--}}
             {{--</div>--}}
         {{--</nav>--}}
-
-        @include('layouts.header')
+        @if (!Auth::guest())
+            @include('layouts.header')
+        @endif
         <div class="page-container">
-            @include('layouts.sidebar')
+            @if(!Auth::guest())
+              @include('layouts.sidebar')
+            @endif
+
             @yield('content')
         </div>
 

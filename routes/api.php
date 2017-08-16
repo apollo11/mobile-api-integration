@@ -21,7 +21,8 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::prefix('v1/')->group(function () {
 
     Route::post('login','Auth\LoginController@oauthLogin');
-    Route::post('social/login', 'Auth\LoginController@socialLogin');
+    Route::post('social/fb/login', 'Auth\LoginController@socialFBLogin');
+    Route::post('social/google/login', 'Auth\LoginController@socialGoogleLogin');
 
 });
 
