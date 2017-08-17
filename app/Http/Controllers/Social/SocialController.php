@@ -24,7 +24,6 @@ class SocialController extends Controller
     {
 
     }
-
     /**
      * Show the form for creating a new resource.
      *
@@ -173,7 +172,7 @@ class SocialController extends Controller
         $validate = [
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
-            'mobile_no' => 'required',
+            'mobile_no' => 'required|unique:users',
             'nric_no' => 'required|string|unique:users',
             'social_fb_id' => 'unique:users',
             'social_google_id' => 'unique:users',
@@ -225,7 +224,7 @@ class SocialController extends Controller
         $validate = [
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
-            'mobile_no' => 'required',
+            'mobile_no' => 'required|unique:users',
             'nric_no' => 'required|string|unique:users',
 
         ];
@@ -253,7 +252,7 @@ class SocialController extends Controller
 
     public function successResponse($data)
     {
-        return $this->ouathSocialResposne($data);
+        return $this->ouathSocialResponse($data);
     }
 
     public function validateFbUser($token)

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Http\Traits\HttpResponse;
 use Validator;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Http\Request;
@@ -10,6 +11,7 @@ use App\Http\Controllers\Controller;
 
 class EmailResetController extends Controller
 {
+    use HttpResponse;
     /**
      * EmailResetController constructor.
      */
@@ -30,7 +32,9 @@ class EmailResetController extends Controller
 
         if ($validator->fails()) {
 
-            return response()->json(['errors' => $validator->errors(), 'success' => 'false']);
+            return $this->errorResponse($validator->errors()->all(), 'Validation Error',110001,400 );
+
+            //return response()->json(['errors' => $validator->errors(), 'success' => 'false']);
 
         } else {
 
@@ -70,7 +74,8 @@ class EmailResetController extends Controller
      */
     protected function sendResetLinkResponse($response)
     {
-        return $response()->json(['status' => $response]);
+        return $this->ValidUseSuccessResp(200, true);
+        //return $response()->json(['status' => $response]);
     }
 
     /**
@@ -82,7 +87,8 @@ class EmailResetController extends Controller
      */
     protected function sendResetLinkFailedResponse(Request $request, $response)
     {
-        return response()->json(['failed' => $response]);
+        return $this->errorResponse(['Email not registered.'], 'Password failed to reset.',110006,400 );
+       //return response()->json(['failed' => $response]);
     }
 
     /**

@@ -14,12 +14,12 @@ trait HttpResponse
                 'title'=> $title
                 , 'code' => $code
                 , "status_code" => $statusCode
-                , "messages" => $value
+                , "messages" => $data
             ],
             "success" => false
         ];
 
-        return response($output)->header('status', 400);
+        return response($output)->header('status', $statusCode);
 
 
     }

@@ -15,3 +15,6 @@ define('LARAVEL_START', microtime(true));
 */
 
 require __DIR__.'/../vendor/autoload.php';
+
+//Load custom constants
+require __DIR__.'/constant.php';

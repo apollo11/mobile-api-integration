@@ -43,7 +43,7 @@
     <link rel="shortcut icon" href="favicon.ico" /> </head>
 </head>
     <!-- END HEAD -->
-<body class="page-header-fixed page-sidebar-closed-hide-logo page-content-white page-sidebar-fixed">
+<body class="page-header-fixed page-sidebar-closed-hide-logo page-container-bg-solid page-content-white">
     <div class="page-wrapper">
         {{--<nav class="navbar navbar-default navbar-static-top">--}}
             {{--<div class="container">--}}
@@ -101,15 +101,25 @@
             {{--</div>--}}
         {{--</nav>--}}
         @if (!Auth::guest())
-            @include('layouts.header')
+                <div class="page-header navbar navbar-fixed-top">
+                    @include('layouts.header')
+                </div>
+                <div class="clearfix"> </div>
         @endif
-        <div class="page-container">
+
+
+    <div class="page-container">
             @if(!Auth::guest())
+            <div class="page-sidebar-wrapper">
               @include('layouts.sidebar')
+            </div>
             @endif
 
-            @yield('content')
-        </div>
+           @yield('content')
+    </div>
+    <div class="page-footer">
+        @include('layouts.footer')
+    </div>
 
 
     </div>
