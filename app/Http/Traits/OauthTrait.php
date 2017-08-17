@@ -6,16 +6,23 @@ use GuzzleHttp\Exception\RequestException;
 
 trait OauthTrait
 {
-    protected $accessUrl = 'http://yyjobs.local/oauth/token';
+    protected $accessUrl;
     protected $grantType = 'password';
     protected $clientId = '1';
     protected $clientSecret = '4z6dhlZOuTzNHJlO3GzxH45nwwaj7iMeiSS768tQ';
 
+
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return mixed
+     */
+    public function endpoint()
+    {
+        return $this->accessUrl = constant('OUATH_ENDPOINT');
+    }
+
+    /**
+     * @param $nric
+     * @return \Illuminate\Database\Eloquent\Model|null|static
      */
     public function getUserNric($nric)
     {
@@ -31,7 +38,7 @@ trait OauthTrait
         $details = $this->getUserNric($data['nric_no']);
         $http = new Client();
         try{
-            $response = $http->post($this->accessUrl,['form_params' =>
+            $response = $http->post($this->endpoint(),['form_params' =>
                 [
                     'grant_type' => $this->grantType,
                     'client_id' => $this->clientId,
@@ -64,7 +71,7 @@ trait OauthTrait
         $http = new Client();
 
         try {
-            $response = $http->post($this->accessUrl,['form_params' =>
+            $response = $http->post($this->endpoint(),['form_params' =>
                 [
                     'grant_type' => $this->grantType,
                     'client_id' => $this->clientId,
@@ -98,7 +105,7 @@ trait OauthTrait
 
         $http = new Client();
         try {
-            $response = $http->post($this->accessUrl,['form_params' =>
+            $response = $http->post($this->endpoint(),['form_params' =>
                 [
                     'grant_type' => $this->grantType,
                     'client_id' => $this->clientId,

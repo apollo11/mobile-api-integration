@@ -11,14 +11,14 @@ trait HttpRequest
 
     public function fbEndpoint ()
     {
-        $this->fbUrl = 'https://graph.facebook.com';
+        $this->fbUrl = constant('FB_ENDPOINT');
 
         return  $this->fbUrl;
      }
 
      public function googleEndPoint()
      {
-         $this->googleUrl = 'https://www.googleapis.com';
+         $this->googleUrl = constant('GOOGLE_ENDPOINT');
 
          return $this->googleUrl;
 
