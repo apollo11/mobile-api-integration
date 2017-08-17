@@ -14,7 +14,7 @@ trait HttpResponse
                 'title'=> $title
                 , 'code' => $code
                 , "status_code" => $statusCode
-                , "messages" => $value
+                , "messages" => $data
             ],
             "success" => false
         ];

@@ -213,7 +213,7 @@ class EmployeeController extends Controller
 
     public function successResponse($data)
     {
-        return $this->ouathResposne($data);
+        return $this->ouathResponse($data);
     }
 
 

@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Auth;
 
-use Socialite;
 use App\User;
 use App\Http\Traits\OauthTrait;
 use App\Http\Traits\HttpRequest;
@@ -45,29 +44,10 @@ class LoginController extends Controller
         $this->middleware('guest')->except('logout');
     }
 
-    /**
-     * @param $provider
-     * @return mixed
-     */
-    public function redirectToProvider($provider)
-    {
-        return Socialite::driver($provider)->stateless()->redirect()->getTargetUrl();
-
-    }
-
-    /**
-     * @param $provider
-     */
-    public function handleProviderCallBack($provider)
-    {
-        $user = Socialite::driver($provider)->stateless()->user();
-        dd($user);
-    }
-
     public function oauthLogin(Request $request)
     {
         $data = $request->all();
-        return $this->ouathResposne($data);
+        return $this->ouathResponse($data);
     }
 
     public function show($email)
@@ -102,24 +82,25 @@ class LoginController extends Controller
 
     }
 
-
     public function socialFBLogin(Request $request)
     {
         $data = $request->all();
         $user = $this->fbUser($data['social_fb_id']);
         $fbUser = $this->validateFbUser($data['social_access_token']);
-        if (!empty($user['social_fb_id'])) {
+        if (!empty($user['social_fb_id']) || !empty($user)) {
             if ($fbUser['status_code'] == 200) {
                 $value = [
                     'social_id' => $user['social_fb_id'],
                     'email' => $user['email']
                 ];
 
-                return $this->ouathSociaLoginlResposne($value);
+                return $this->ouathSociaLoginlResponse($value);
 
             } else {
-                return $this->ValidUseSuccessResp(400, true);
+                return $this->ValidUseSuccessResp(400, false);
             }
+        }else {
+            return $this->ValidUseSuccessResp(400, false);
         }
     }
 
@@ -128,18 +109,20 @@ class LoginController extends Controller
         $data = $request->all();
         $user = $this->googleUser($data['social_google_id']);
         $googleUser = $this->validateGoogleUser($data['social_access_token']);
-        if (!empty($user['social_google_id'])) {
+        if (!empty($user['social_google_id']) || !empty($user)) {
             if ($googleUser['status_code'] == 200) {
                 $value = [
                     'social_id' => $user['social_google_id'],
                     'email' => $user['email']
                 ];
 
-                return $this->ouathSociaLoginlResposne($value);
+                return $this->ouathSociaLoginlResponse($value);
 
             } else {
-                return $this->ValidUseSuccessResp(400, true);
+                return $this->ValidUseSuccessResp(400, false);
             }
+        }else {
+            return $this->ValidUseSuccessResp(400, false);
         }
     }
 

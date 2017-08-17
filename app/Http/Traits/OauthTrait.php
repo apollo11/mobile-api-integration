@@ -2,13 +2,14 @@
 namespace App\Http\Traits;
 
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\RequestException;
 
 trait OauthTrait
 {
     protected $accessUrl = 'http://yyjobs.local/oauth/token';
     protected $grantType = 'password';
     protected $clientId = '1';
-    protected $clientSecret = 'SSja2wOoGu1bxAolvwAyHfMCKQJG4skQnE97k2iZ';
+    protected $clientSecret = '4z6dhlZOuTzNHJlO3GzxH45nwwaj7iMeiSS768tQ';
 
     /**
      * Display the specified resource.
@@ -25,72 +26,101 @@ trait OauthTrait
 
     }
 
-    public function ouathResposne(array $data)
+    public function ouathResponse(array $data)
     {
         $details = $this->getUserNric($data['nric_no']);
-
         $http = new Client();
-        $response = $http->post($this->accessUrl,['form_params' =>
-        [
-            'grant_type' => $this->grantType,
-            'client_id' => $this->clientId,
-            'client_secret' => $this->clientSecret,
-            'username' => $details['email'],
-            'password' => $data['password'],
-            'scope' => '*'
-        ]
-        ]);
+        try{
+            $response = $http->post($this->accessUrl,['form_params' =>
+                [
+                    'grant_type' => $this->grantType,
+                    'client_id' => $this->clientId,
+                    'client_secret' => $this->clientSecret,
+                    'username' => $details['email'],
+                    'password' => $data['password'],
+                    'scope' => '*'
+                ]
+            ]);
 
-        $object =  json_decode((string) $response->getBody(), true);
+            return [
+                'user' => $details
+                , 'oauth' =>  json_decode((string) $response->getBody(), true)
+            ];
 
-        return ['oauth' => $object , 'user' => $details];
+        }catch (RequestException $e) {
 
+            if ($e->hasResponse()) {
+
+                return $this->errorResponse(['Invalid Username or Password'],'Invalid Credentials', 110002, 401);
+            }
+
+        }
    }
 
-    public function ouathSociaLoginlResposne(array $data)
+    public function ouathSociaLoginlResponse(array $data)
     {
         $details = $this->show($data['email']);
+
         $http = new Client();
 
-        $response = $http->post($this->accessUrl,['form_params' =>
-            [
-                'grant_type' => $this->grantType,
-                'client_id' => $this->clientId,
-                'client_secret' => $this->clientSecret,
-                'username' => $data['email'],
-                'password' => $data['social_id'],
-                'scope' => '*'
-            ]
-        ]);
+        try {
+            $response = $http->post($this->accessUrl,['form_params' =>
+                [
+                    'grant_type' => $this->grantType,
+                    'client_id' => $this->clientId,
+                    'client_secret' => $this->clientSecret,
+                    'username' => $data['email'],
+                    'password' => $data['social_id'],
+                    'scope' => '*'
+                ]
+            ]);
 
-        $object =  json_decode((string) $response->getBody(), true);
+            return [
+                'user' => $details
+                , 'oauth' =>  json_decode((string) $response->getBody(), true)
+            ];
 
-        return ['oauth' => $object , 'user' => $details];
 
+        } catch (RequestException $e) {
+
+            if ($e->hasResponse()) {
+
+                return $this->errorResponse(['Invalid Social Account'],'Invalid Credentials', 110003, 401);
+            }
+        }
 
     }
 
-    public function ouathSocialResposne(array $data)
+    public function ouathSocialResponse(array $data)
     {
         $details = $this->show($data['email']);
         $socialUniqueId = !$data['social_google_id'] ? $data['social_fb_id'] : $data['social_google_id'];
+
         $http = new Client();
+        try {
+            $response = $http->post($this->accessUrl,['form_params' =>
+                [
+                    'grant_type' => $this->grantType,
+                    'client_id' => $this->clientId,
+                    'client_secret' => $this->clientSecret,
+                    'username' => $details['email'],
+                    'password' => $socialUniqueId ,
+                    'scope' => '*'
 
-        $response = $http->post($this->accessUrl,['form_params' =>
-            [
-                'grant_type' => $this->grantType,
-                'client_id' => $this->clientId,
-                'client_secret' => $this->clientSecret,
-                'username' => $data['email'],
-                'password' => $socialUniqueId ,
-                'scope' => '*'
+                ]
+            ]);
+            return [
+                'user' => $details
+                , 'oauth' =>  json_decode((string) $response->getBody(), true)
+            ];
 
-            ]
-        ]);
+        } catch (RequestException $e) {
 
-        $object =  json_decode((string) $response->getBody(), true);
-        return ['oauth' => $object , 'user' => $details];
+            if ($e->hasResponse()) {
 
+                return $this->errorResponse(['Invalid Social Account'],'Invalid Credentials', 110004, 401);
+            }
+        }
 
     }
 

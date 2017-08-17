@@ -24,7 +24,6 @@ class SocialController extends Controller
     {
 
     }
-
     /**
      * Show the form for creating a new resource.
      *
@@ -253,7 +252,7 @@ class SocialController extends Controller
 
     public function successResponse($data)
     {
-        return $this->ouathSocialResposne($data);
+        return $this->ouathSocialResponse($data);
     }
 
     public function validateFbUser($token)
