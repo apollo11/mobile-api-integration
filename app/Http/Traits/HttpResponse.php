@@ -19,7 +19,7 @@ trait HttpResponse
             "success" => false
         ];
 
-        return response($output)->header('status', 400);
+        return response($output)->header('status', $statusCode);
 
 
     }

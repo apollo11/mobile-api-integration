@@ -100,7 +100,8 @@ class LoginController extends Controller
                 return $this->ValidUseSuccessResp(400, false);
             }
         }else {
-            return $this->ValidUseSuccessResp(400, false);
+
+            return $this->errorResponse(['Please check your credentials or sign up.'],'Account Not Found',110005, 400);
         }
     }
 
@@ -122,7 +123,9 @@ class LoginController extends Controller
                 return $this->ValidUseSuccessResp(400, false);
             }
         }else {
-            return $this->ValidUseSuccessResp(400, false);
+
+            return $this->errorResponse(['Please check your credentials or sign up.'],'Account Not Found',110005, 400);
+
         }
     }
 
