@@ -145,7 +145,7 @@ class EmployeeController extends Controller
         $validate = [
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:6',
+            'password' => 'required|string|min:6|alpha_num',
             'mobile_no' => 'required|unique:users',
             'nric_no' => 'required|string|unique:users',
 

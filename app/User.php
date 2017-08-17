@@ -44,6 +44,8 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
+//    protected $dateFormat = 'U';
+
     public function employeeProfile()
     {
         return $this->hasOne('YYJobs\Employee');
