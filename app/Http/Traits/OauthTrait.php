@@ -9,7 +9,7 @@ trait OauthTrait
     protected $accessUrl;
     protected $grantType = 'password';
     protected $clientId = '1';
-    protected $clientSecret = '4z6dhlZOuTzNHJlO3GzxH45nwwaj7iMeiSS768tQ';
+    protected $clientSecret = 'BkAuHnUmw64JvC2AivyFj6umB9wFI9ZXRjrkf2Df';
 
 
     /**

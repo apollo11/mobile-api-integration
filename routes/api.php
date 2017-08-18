@@ -26,6 +26,12 @@ Route::prefix('v1/')->group(function () {
 
 });
 
+Route::prefix('v1')->group(function () {
+
+    Route::post('mobile/login', 'Mobile\MobileFireBaseController@checkIfValidToken');
+
+});
+
 Route::prefix('v1/register/')->group(function () {
 
     Route::post('employee','EmployeeController@store');
