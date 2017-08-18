@@ -40,11 +40,11 @@
                     </label>
                     <a href="{{ route('password.request') }}" id="forget-password" class="forget-password">Forgot Password?</a>
                 </div>
-                <div class="create-account">
-                    <p>
-                        <a href="javascript:;" id="register-btn" class="uppercase">Create an account</a>
-                    </p>
-                </div>
+                {{--<div class="create-account">--}}
+                    {{--<p>--}}
+                        {{--<a href="javascript:;" id="register-btn" class="uppercase">Create an account</a>--}}
+                    {{--</p>--}}
+                {{--</div>--}}
             </form>
             <!-- END LOGIN FORM -->
         </div>
