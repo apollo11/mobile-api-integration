@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\User;
 use App\Http\Traits\HttpResponse;
 use Validator;
 use Illuminate\Support\Facades\Password;
@@ -12,6 +13,7 @@ use App\Http\Controllers\Controller;
 class EmailResetController extends Controller
 {
     use HttpResponse;
+
     /**
      * EmailResetController constructor.
      */
@@ -28,13 +30,19 @@ class EmailResetController extends Controller
      */
     public function sendResetLinkEmailControl(Request $request)
     {
-        $validator = Validator::make($request->all(), $this->validateEmail());
+        $data = $request->all();
+        $validator = Validator::make($data, $this->validateEmail());
+        $checkSocialAccount = $this->show($data['email']);
+        $checkAccount = !empty($checkSocialAccount['social_google_id']) || !empty($checkSocialAccount['social_fb_id']);
 
         if ($validator->fails()) {
 
-            return $this->errorResponse($validator->errors()->all(), 'Validation Error',110001,400 );
+            return $this->errorResponse($validator->errors()->all(), 'Validation Error', 110001, 400);
 
-            //return response()->json(['errors' => $validator->errors(), 'success' => 'false']);
+
+        } else if ($checkAccount) {
+
+            return $this->errorResponse(['Email not found in record'], 'Invalid email', 110001, 400);
 
         } else {
 
@@ -52,6 +60,17 @@ class EmailResetController extends Controller
         }
 
     }
+
+    public function show($email)
+    {
+        $user = new User();
+        $account = $user::where('email', $email)
+            ->first();
+
+        return $account;
+
+    }
+
 
     /**
      * @return array
@@ -87,8 +106,8 @@ class EmailResetController extends Controller
      */
     protected function sendResetLinkFailedResponse(Request $request, $response)
     {
-        return $this->errorResponse(['Email not registered.'], 'Password failed to reset.',110006,400 );
-       //return response()->json(['failed' => $response]);
+        return $this->errorResponse(['Email not registered.'], 'Password failed to reset.', 110006, 400);
+        //return response()->json(['failed' => $response]);
     }
 
     /**

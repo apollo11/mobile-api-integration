@@ -29,6 +29,8 @@ Route::prefix('v1/')->group(function () {
 Route::prefix('v1')->group(function () {
 
     Route::post('mobile/login', 'Mobile\MobileFireBaseController@checkIfValidToken');
+    Route::post('mobile/test', 'Mobile\MobileFireBaseController@fireBaseValidation');
+    Route::get('mobile/testd', 'Mobile\MobileFireBaseController@testDecrypt');
 
 });
 

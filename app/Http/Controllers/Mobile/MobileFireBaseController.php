@@ -2,44 +2,113 @@
 
 namespace App\Http\Controllers\Mobile;
 
-use Kreait\Firebase\Factory;
-use Kreait\Firebase\ServiceAccount;
+use App\Http\Traits\OauthTrait;
+use App\Http\Traits\HttpResponse;
+use App\User;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Http\Request;
+
 use App\Http\Controllers\Controller;
 
 class MobileFireBaseController extends Controller
 {
+    use OauthTrait;
+    use HttpResponse;
 
-    public function checkIfValidToken(Request $request)
+    public function userData(array $value)
     {
-        $data = $request->input('access_token');
+        $data = [
+           'firebase_token' => $value['firebase_token'],
+            'mobile_no' => $value['mobile_no']
+        ];
 
-        $serviceAccount = ServiceAccount::fromJsonFile(__DIR__ . '/firebase_credentials.json');
+        return $data;
+    }
 
-        $firebase = (new Factory)
-            ->withServiceAccount($serviceAccount)
-            ->create();
+    public function fireBaseValidation(Request $request)
+    {
+        $data = $this->userData($request->all());
 
-        try {
+        $user = new User();
+        $userDetails = $user->getUserDetailsByMobileNo($data['mobile_no']);
+        $getMobileNo = $this->setMobileNo($userDetails);
+        $decrypt = decrypt($getMobileNo['password']);
 
-            $tokenHandler = $firebase->getTokenHandler();
-            $idToken = $tokenHandler->verifyIdToken($data);
-            $uid = $idToken->getClaim('sub');
+        return $decrypt; //$this->ouathResponse($getMobileNo);
 
-            return response()->json(['success', $uid]);
 
-        } catch (\Firebase\Auth\Token\Exception\ExpiredToken $e) {
 
-            return response()->json(['expired' => $e->getMessage()]);
+//        $serviceAccount = ServiceAccount::fromJsonFile(__DIR__ . '/firebase_credentials.json');
+//
+//
+//
+//        $firebase = (new Factory)
+//            ->withServiceAccount($serviceAccount)
+//            ->create();
 
-        } catch (\Firebase\Auth\Token\Exception\IssuedInTheFuture $e) {
+//        try {
+//
+//            $tokenHandler = $firebase->getTokenHandler();
+//            $idToken = $tokenHandler->verifyIdToken($data['firebase_token']);
+//            $uid = $idToken->getClaim('sub');
+//
+//            if ($getMobileNo && $uid) {
+//
+//                return $uid = $idToken->getClaim('sub');
+//
+//            } else {
+//
+//                return $this->ValidUseSuccessResp(400, false);
+//
+//            }
+//
+//        } catch (\Firebase\Auth\Token\Exception\ExpiredToken $e) {
+//
+//            return response()->json(['expired' => $e->getMessage()]);
+//
+//        } catch (\Firebase\Auth\Token\Exception\IssuedInTheFuture $e) {
+//
+//            return response()->json(['future_error' => $e->getMessage()]);
+//
+//        } catch (\Firebase\Auth\Token\Exception\InvalidToken $e) {
+//
+//            return response()->json(['invalid_token' => $e->getMessage()]);
+//        }
 
-            return response()->json(['testError' => $e->getMessage()]);
+    }
 
-        } catch (\Firebase\Auth\Token\Exception\InvalidToken $e) {
+    public function getMobileNo($mobileNo)
+    {
 
-            return response()->json(['invalid_token' => $e->getMessage()]);
+        $user = new User();
+        $userDetails = $user->getUserDetailsByMobileNo($mobileNo);
+
+        return $userDetails;
+    }
+
+    public function testDecrypt()
+    {
+        $encrypted = Crypt::encryptString('Hello World');
+
+        $decrypted = Crypt::decryptString($encrypted);
+
+        return $decrypted;
+
+    }
+
+    public function setMobileNo($data)
+    {
+        foreach ($data as $value => $user)
+        {
+            $output = [ 'mobile_no' => $user->mobile_no
+                        , 'password' => $user->password
+                        , 'email' => $user->password
+                        , 'nric_no' => $user->nric_no
+            ];
+
         }
+
+        return !isset($output) ? '': (array) $output;
     }
 
 }
