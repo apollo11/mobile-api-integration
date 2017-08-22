@@ -107,7 +107,6 @@ class EmailResetController extends Controller
     protected function sendResetLinkFailedResponse(Request $request, $response)
     {
         return $this->errorResponse(['Email not registered.'], 'Password failed to reset.', 110006, 400);
-        //return response()->json(['failed' => $response]);
     }
 
     /**
