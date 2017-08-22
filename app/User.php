@@ -3,6 +3,7 @@
 namespace App;
 
 use Laravel\Passport\HasApiTokens;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
@@ -55,5 +56,23 @@ class User extends Authenticatable
     public function employerProfile()
     {
         return $this->hasOne('YYJobs\Employer');
+    }
+
+    public function getUserDetailsByMobileNo($mobile)
+    {
+        $user = DB::table('users')->select('id', 'email', 'mobile_no', 'password', 'nric_no')
+            ->where('mobile_no', $mobile)
+            ->get();
+
+        return $user;
+
+    }
+
+    public function getUserDetails($nric)
+    {
+       $user =  DB::table('users')->where('nric_no', $nric)->first();
+
+       return (array) $user;
+
     }
 }
