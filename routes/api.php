@@ -41,6 +41,9 @@ Route::prefix('v1/register/')->group(function () {
     Route::post('password/email','Auth\EmailResetController@sendResetLinkEmailControl');
     Route::post('social', 'Social\SocialController@store');
 
+    Route::post('fb', 'Social\FaceBookController@store');
+    Route::post('google', 'Social\GoogleController@store');
+
 });
 
 Route::prefix('v1/social')->group(function () {
