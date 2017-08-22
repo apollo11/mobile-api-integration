@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers\Social;
 
+use Validator;
+use App\User;
 use App\Http\Traits\HttpRequest;
 use App\Http\Traits\OauthTrait;
 use App\Http\Traits\HttpResponse;
-use Validator;
-use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
-class SocialController extends Controller
+class GoogleController extends Controller
 {
     use OauthTrait;
     use HttpRequest;
@@ -64,14 +64,13 @@ class SocialController extends Controller
     public function userData(array $data)
     {
         $googleId = $data['social_google_id'] != null ? $data['social_google_id'] : null;
-        $fbId = $data['social_fb_id'] != null ? $data['social_fb_id'] : null;
         $school = !empty($data['school']) ? $data['school'] : null;
-        $role = 'employer';
+        $role = 'employee';
 
         $user = new User();
         $user->name = $data['name'];
         $user->email = $data['email'];
-        $user->password = bcrypt(!$googleId ? $fbId : $googleId);
+        $user->password = bcrypt($googleId);
         $user->role = $role;
         $user->role_id = 2;
         $user->role = $role;
@@ -80,8 +79,8 @@ class SocialController extends Controller
         $user->nric_no = $data['nric_no'];
         $user->school = $school;
         $user->social_access_token = bcrypt($data['social_access_token']);
-        $user->social_fb_id = $fbId;
-        $user->social_google_id = $googleId ;
+        $user->social_google_id = $googleId;
+
         $user->save();
     }
 
@@ -93,33 +92,25 @@ class SocialController extends Controller
 
     public function execution(array $data)
     {
-        $fbUser = $this->validateFbUser($data['social_access_token']);
-        $googleUser = $this->validateGoogleUser($data['social_access_token']);
-        if (!empty($data['social_fb_id'])) {
-            if($fbUser['status_code'] == 200) {
-                 $this->userData($data);
-                 return $this->successResponse($data);
+        $googleUser = $this->validateFbUser($data['social_access_token']);
 
-            } else {
-                return $this->ValidUseSuccessResp(400, false);
-            }
+        if (!empty($data['social_google_id']) && $googleUser['status_code'] == 200) {
+
+            $this->userData($data);
+
+            return $this->successResponse($data);
+
         } else {
-            if($googleUser['status_code'] == 200) {
-                $this->userData($data);
-                return $this->successResponse($data);
-            } else {
-                return $this->ValidUseSuccessResp(400, false);
-            }
+            return $this->ValidUseSuccessResp(400, false);
         }
 
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param $email
+     * @return \Illuminate\Database\Eloquent\Model|null|static
      */
+
     public function show($email)
     {
         $account = \App\User::where('email', $email)
@@ -168,55 +159,6 @@ class SocialController extends Controller
 
     }
 
-    public function socialUserRules()
-    {
-        $validate = [
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'mobile_no' => 'required|unique:users',
-            'nric_no' => 'required|string|unique:users',
-            'social_fb_id' => 'unique:users',
-            'social_google_id' => 'unique:users',
-        ];
-
-        return $validate;
-    }
-
-    public function socialUserValidate(Request $request)
-    {
-        $data = $request->all();
-        $validate = $this->socialIdValidation($data);
-
-        $validator = Validator::make($validate, $this->socialUserRules());
-        $errorMsg  = $validator->errors()->all();
-
-        if($validator->fails()) {
-
-            return $this->mapValidator($errorMsg);
-
-        } else {
-
-            return $this->ValidUseSuccessResp(200, true);
-
-        }
-
-    }
-
-    public function socialIdValidation(array $data)
-    {
-        $value = [
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'mobile_no' => $data['mobile_no'],
-            'nric_no' => $data['nric_no'],
-            'social_fb_id' => !empty($data['social_fb_id']) ? $data['social_fb_id'] : 'no id' ,
-            'social_google_id' => !empty($data['social_google_id']) ? $data['social_google_id'] : 'no id'
-        ];
-
-        return $value;
-
-    }
-
     /**
      * @return array
      */
@@ -253,17 +195,11 @@ class SocialController extends Controller
 
     public function successResponse($data)
     {
-        return $this->ouathSocialResponse($data);
+        return $this->ouathSocialGoogleResponse($data);
     }
 
     public function validateFbUser($token)
     {
-        return $this->getSocialFbResponse($token);
-    }
-
-    public function validateGoogleUser($token)
-    {
         return $this->getSocialGoogleResponse($token);
     }
-
 }

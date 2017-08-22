@@ -98,10 +98,10 @@ trait OauthTrait
 
     }
 
-    public function ouathSocialResponse(array $data)
+    public function ouathSocialFbResponse(array $data)
     {
         $details = $this->show($data['email']);
-        $socialUniqueId = !$data['social_google_id'] ? $data['social_fb_id'] : $data['social_google_id'];
+        $socialUniqueId = $data['social_fb_id'];
 
         $http = new Client();
         try {
@@ -130,6 +130,41 @@ trait OauthTrait
         }
 
     }
+
+
+    public function ouathSocialGoogleResponse(array $data)
+    {
+        $details = $this->show($data['email']);
+        $socialUniqueId = $data['social_google_id'];
+
+        $http = new Client();
+        try {
+            $response = $http->post($this->endpoint(),['form_params' =>
+                [
+                    'grant_type' => $this->grantType,
+                    'client_id' => $this->clientId,
+                    'client_secret' => $this->clientSecret,
+                    'username' => $details['email'],
+                    'password' => $socialUniqueId ,
+                    'scope' => '*'
+
+                ]
+            ]);
+            return [
+                'user' => $details
+                , 'oauth' =>  json_decode((string) $response->getBody(), true)
+            ];
+
+        } catch (RequestException $e) {
+
+            if ($e->hasResponse()) {
+
+                return $this->errorResponse(['Invalid Social Account'],'Invalid Credentials', 110004, 401);
+            }
+        }
+
+    }
+
 
 
 }
