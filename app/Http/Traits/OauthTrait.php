@@ -6,10 +6,10 @@ use GuzzleHttp\Exception\RequestException;
 
 trait OauthTrait
 {
-    protected $accessUrl;
-    protected $grantType = 'password';
-    protected $clientId = '1';
-    protected $clientSecret = '8aawlAPIffY4ST5XrsGIP9BdB6EtGWihXaJZcfm1';
+//    protected $accessUrl;
+//    protected $grantType = 'password';
+//    protected $clientId = '1';
+//    protected $clientSecret = 'T5GJfuX9KnDTM91vvAclQIfsZZzZrAyAbngHaV6q';
 
 
     /**
@@ -37,12 +37,13 @@ trait OauthTrait
     {
         $details = $this->getUserNric($data['nric_no']);
         $http = new Client();
+
         try{
             $response = $http->post($this->endpoint(),['form_params' =>
                 [
-                    'grant_type' => $this->grantType,
-                    'client_id' => $this->clientId,
-                    'client_secret' => $this->clientSecret,
+                    'grant_type' => $data['grant_type'],
+                    'client_id' => $data['client_id'],
+                    'client_secret' => $data['client_secret'],
                     'username' => $details['email'],
                     'password' => $data['password'],
                     'scope' => '*'
@@ -73,9 +74,9 @@ trait OauthTrait
         try {
             $response = $http->post($this->endpoint(),['form_params' =>
                 [
-                    'grant_type' => $this->grantType,
-                    'client_id' => $this->clientId,
-                    'client_secret' => $this->clientSecret,
+                    'grant_type' => $data['grant_type'],
+                    'client_id' => $data['client_id'],
+                    'client_secret' => $data['client_secret'],
                     'username' => $data['email'],
                     'password' => $data['social_id'],
                     'scope' => '*'
@@ -107,9 +108,9 @@ trait OauthTrait
         try {
             $response = $http->post($this->endpoint(),['form_params' =>
                 [
-                    'grant_type' => $this->grantType,
-                    'client_id' => $this->clientId,
-                    'client_secret' => $this->clientSecret,
+                    'grant_type' => $data['grant_type'],
+                    'client_id' => $data['client_id'],
+                    'client_secret' => $data['client_secret'],
                     'username' => $details['email'],
                     'password' => $socialUniqueId ,
                     'scope' => '*'
@@ -141,9 +142,9 @@ trait OauthTrait
         try {
             $response = $http->post($this->endpoint(),['form_params' =>
                 [
-                    'grant_type' => $this->grantType,
-                    'client_id' => $this->clientId,
-                    'client_secret' => $this->clientSecret,
+                    'grant_type' => $data['grant_type'],
+                    'client_id' => $data['client_id'],
+                    'client_secret' => $data['client_secret'],
                     'username' => $details['email'],
                     'password' => $socialUniqueId ,
                     'scope' => '*'
@@ -164,7 +165,5 @@ trait OauthTrait
         }
 
     }
-
-
 
 }

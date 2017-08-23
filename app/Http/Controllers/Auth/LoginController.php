@@ -35,21 +35,27 @@ class LoginController extends Controller
     protected $redirectTo = '/home';
 
     /**
-     * Create a new controller instance.
-     *
-     * @return void
+     * LoginController constructor.
      */
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
     }
 
+    /**
+     * @param Request $request
+     * @return array
+     */
     public function oauthLogin(Request $request)
     {
         $data = $request->all();
         return $this->ouathResponse($data);
     }
 
+    /**
+     * @param $email
+     * @return \Illuminate\Database\Eloquent\Model|null|static
+     */
     public function show($email)
     {
         $user = new User();
@@ -60,6 +66,10 @@ class LoginController extends Controller
 
     }
 
+    /**
+     * @param $fbId
+     * @return \Illuminate\Database\Eloquent\Model|null|static
+     */
     public function fbUser($fbId)
     {
         $user = new User();
@@ -71,6 +81,10 @@ class LoginController extends Controller
 
     }
 
+    /**
+     * @param $googleId
+     * @return \Illuminate\Database\Eloquent\Model|null|static
+     */
     public function googleUser($googleId)
     {
         $user = new User();
@@ -82,6 +96,10 @@ class LoginController extends Controller
 
     }
 
+    /**
+     * @param Request $request
+     * @return array
+     */
     public function socialFBLogin(Request $request)
     {
         $data = $request->all();
@@ -99,12 +117,16 @@ class LoginController extends Controller
             } else {
                 return $this->ValidUseSuccessResp(400, false);
             }
-        }else {
+        } else {
 
-            return $this->errorResponse(['Please check your credentials or sign up.'],'Account Not Found',110005, 400);
+            return $this->errorResponse(['Please check your credentials or sign up.'], 'Account Not Found', 110005, 400);
         }
     }
 
+    /**
+     * @param Request $request
+     * @return array
+     */
     public function socialGoogleLogin(Request $request)
     {
         $data = $request->all();
@@ -112,6 +134,7 @@ class LoginController extends Controller
         $googleUser = $this->validateGoogleUser($data['social_access_token']);
         if (!empty($user['social_google_id']) || !empty($user)) {
             if ($googleUser['status_code'] == 200) {
+
                 $value = [
                     'social_id' => $user['social_google_id'],
                     'email' => $user['email']
@@ -122,18 +145,26 @@ class LoginController extends Controller
             } else {
                 return $this->ValidUseSuccessResp(400, false);
             }
-        }else {
+        } else {
 
-            return $this->errorResponse(['Please check your credentials or sign up.'],'Account Not Found',110005, 400);
+            return $this->errorResponse(['Please check your credentials or sign up.'], 'Account Not Found', 110005, 400);
 
         }
     }
 
+    /**
+     * @param $token
+     * @return array
+     */
     public function validateFbUser($token)
     {
         return $this->getSocialFbResponse($token);
     }
 
+    /**
+     * @param $token
+     * @return array
+     */
     public function validateGoogleUser($token)
     {
         return $this->getSocialGoogleResponse($token);
