@@ -109,7 +109,9 @@ class LoginController extends Controller
             if ($fbUser['status_code'] == 200) {
                 $value = [
                     'social_id' => $user['social_fb_id'],
-                    'email' => $user['email']
+                    'email' => $user['email'],
+                    'client_id' => $data['client_id'],
+                    'client_secret' => $data['client_secret'],
                 ];
 
                 return $this->ouathSociaLoginlResponse($value);
@@ -137,7 +139,9 @@ class LoginController extends Controller
 
                 $value = [
                     'social_id' => $user['social_google_id'],
-                    'email' => $user['email']
+                    'email' => $user['email'],
+                    'client_id' => $data['client_id'],
+                    'client_secret' => $data['client_secret'],
                 ];
 
                 return $this->ouathSociaLoginlResponse($value);
