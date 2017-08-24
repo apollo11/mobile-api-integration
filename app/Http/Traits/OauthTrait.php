@@ -6,10 +6,8 @@ use GuzzleHttp\Exception\RequestException;
 
 trait OauthTrait
 {
-//    protected $accessUrl;
-//    protected $grantType = 'password';
-//    protected $clientId = '1';
-//    protected $clientSecret = 'T5GJfuX9KnDTM91vvAclQIfsZZzZrAyAbngHaV6q';
+    protected $accessUrl;
+    protected $grantType = 'password';
 
 
     /**
@@ -38,10 +36,10 @@ trait OauthTrait
         $details = $this->getUserNric($data['nric_no']);
         $http = new Client();
 
-        try{
+        try {
             $response = $http->post($this->endpoint(),['form_params' =>
                 [
-                    'grant_type' => $data['grant_type'],
+                    'grant_type' => $this->grantType,
                     'client_id' => $data['client_id'],
                     'client_secret' => $data['client_secret'],
                     'username' => $details['email'],
@@ -74,7 +72,7 @@ trait OauthTrait
         try {
             $response = $http->post($this->endpoint(),['form_params' =>
                 [
-                    'grant_type' => $data['grant_type'],
+                    'grant_type' => $this->grantType,
                     'client_id' => $data['client_id'],
                     'client_secret' => $data['client_secret'],
                     'username' => $data['email'],
@@ -108,7 +106,7 @@ trait OauthTrait
         try {
             $response = $http->post($this->endpoint(),['form_params' =>
                 [
-                    'grant_type' => $data['grant_type'],
+                    'grant_type' => $this->grantType,
                     'client_id' => $data['client_id'],
                     'client_secret' => $data['client_secret'],
                     'username' => $details['email'],
@@ -142,7 +140,7 @@ trait OauthTrait
         try {
             $response = $http->post($this->endpoint(),['form_params' =>
                 [
-                    'grant_type' => $data['grant_type'],
+                    'grant_type' => $this->grantType,
                     'client_id' => $data['client_id'],
                     'client_secret' => $data['client_secret'],
                     'username' => $details['email'],
