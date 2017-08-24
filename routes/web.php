@@ -18,8 +18,16 @@ Route::get('/', function () {
 Auth::routes();
 Route::group(['middleware' => ['auth']],function () {
 
-    Route::get('dashboard/employee', 'EmployeeController@index');
-    Route::get('dashboard/employer', 'EmployerController@index');
+    Route::prefix('dashboard')->group(function() {
+        Route::get('/employee', 'EmployeeController@index');
+
+    });
+
+    Route::prefix('employer')->group(function () {
+        Route::get('/lists', 'EmployerController@index')->name('employer.lists');
+        Route::get('/create', 'EmployerController@create')->name('employer.create');
+    });
+
 });
 
 Route::get('/home', 'HomeController@index')->name('home');

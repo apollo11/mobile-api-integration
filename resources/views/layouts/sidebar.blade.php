@@ -43,14 +43,19 @@
             </a>
         </li>
         <li>
-            <a href="/dashboard/employer">
+            <a href="{{ route('employer.lists') }}">
                 <i class="icon-home"></i>
                 Newly Employers</a>
         </li>
         <li>
-            <a href="/dashboard/employer">
+            <a href="{{ route('employer.lists') }}">
                 <i class="icon-basket"></i>
                 Employers</a>
+        </li>
+        <li>
+            <a href="{{ route('employer.create') }}">
+                <i class="icon-basket"></i>
+                Create Employers</a>
         </li>
         <li>
             <a href="ecommerce_orders_view.html">
