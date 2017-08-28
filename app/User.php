@@ -58,6 +58,12 @@ class User extends Authenticatable
         return $this->hasOne('YYJobs\Employer');
     }
 
+    public function job()
+    {
+        return $this->hasMany('App\Job');
+
+    }
+
     public function getUserDetailsByMobileNo($mobile)
     {
         $user = DB::table('users')->select('id', 'email', 'mobile_no', 'password', 'nric_no')

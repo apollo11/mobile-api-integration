@@ -63,10 +63,21 @@
                 Payouts</a>
         </li>
         <li>
-            <a href="ecommerce_products.html">
+            <a href="{{ route('job.create') }}">
                 <i class="icon-handbag"></i>
                 Job Management</a>
         </li>
+        <li>
+            <a href="{{ route('industry.create') }}">
+                <i class="icon-handbag"></i>
+                Industry</a>
+        </li>
+        <li>
+            <a href="{{ route('location.create') }}">
+                <i class="icon-handbag"></i>
+                Location</a>
+        </li>
+
         <li>
             <a href="ecommerce_products_edit.html">
                 <i class="icon-pencil"></i>

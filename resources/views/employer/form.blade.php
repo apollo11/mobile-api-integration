@@ -120,18 +120,6 @@
                                         </div>
                                     </div>
 
-                                    <div class="form-group{{ $errors->has('industry') ? ' has-error' : '' }}">
-                                        <label class="col-md-3 control-label">Industry</label>
-                                        <div class="col-md-7">
-                                            <input type="text" class="form-control" placeholder="Enter Industry" value="{{ old('industry') }}" name="industry">
-                                            @if ($errors->has('industry'))
-                                                <span class="help-block">
-                                                <strong>{{ $errors->first('industry') }}</strong>
-                                               </span>
-                                            @endif
-                                        </div>
-                                    </div>
-
                                 </div>
                                 <div class="form-actions">
                                     <div class="row">
