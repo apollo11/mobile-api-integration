@@ -62,6 +62,7 @@ Route::prefix('v1/details')->group(function () {
 Route::prefix('v1/')->group(function () {
 
     Route::get('school', 'School\SchoolController@index');
+    Route::get('industry', 'Industry\IndustryController@index');
+    Route::get('location', 'Location\LocationController@index');
 
 });
-
