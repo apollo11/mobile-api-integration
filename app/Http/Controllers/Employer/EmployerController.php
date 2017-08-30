@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Employer;
 
 use Validator;
 use App\User;
+use App\Industry;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -34,7 +35,9 @@ class EmployerController extends Controller
      */
     public function create()
     {
-        return view('employer.form');
+        $industry = $this->industryList();
+
+        return view('employer.form', ['industry' => $industry]);
     }
 
     /**
@@ -45,9 +48,8 @@ class EmployerController extends Controller
      */
     public function store(Request $request)
     {
-        $companyLogo['company_logo'] = $request->file('company_logo')->store('avatars');
-        $data = array_merge($request->all(), $companyLogo);
-        //return $data;
+        $data = $request->all();
+
         $validator = $this->rules($data);
 
         if($validator->fails()) {
@@ -55,9 +57,15 @@ class EmployerController extends Controller
             return redirect('employer/create')
                 ->withErrors($validator)
                 ->withInput();
+
         } else {
 
-            return $this->saveData($data);
+            $companyLogo['company_logo'] = $request->file('company_logo')->store('avatars');
+            $merge = array_merge($data, $companyLogo);
+
+            $this->saveData($merge);
+
+            return redirect('employer/lists');
         }
     }
 
@@ -75,14 +83,13 @@ class EmployerController extends Controller
         $employer->email = $data['email'];
         $employer->company_description = $data['company_description'];
         $employer->business_manager = $data['business_manager'];
-        $employer->password = $data['password'];
+        $employer->password = bcrypt($data['password']);
         $employer->contact_person = $data['contact_person'];
         $employer->rate = $data['hourly_rate'];
         $employer->profile_image_path = $data['company_logo'];
         $employer->industry = $data['industry'];
 
         $employer->save();
-        return redirect('employer/list');
     }
 
     /**
@@ -159,6 +166,20 @@ class EmployerController extends Controller
             'hourly_rate' => 'required|digits:1',
             'industry' => 'required|string'
         ]);
+
+    }
+
+    /**
+     * List of available industries
+     */
+
+    public function industryList()
+    {
+        $industry = new Industry();
+
+        $output = $industry::all();
+
+        return $output;
 
     }
 }

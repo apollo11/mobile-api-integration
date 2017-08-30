@@ -19,9 +19,8 @@
                                     <tr>
                                         <th>Checkbox</th>
                                         <th>#</th>
-                                        <th>Name</th>
+                                        <th>Business Manager</th>
                                         <th>Company Name</th>
-                                        <th>Contact No.</th>
                                         <th>Email</th>
                                     </tr>
                                     </thead>
@@ -30,9 +29,9 @@
                                         <tr>
                                             <td><input type="checkbox"/></td>
                                             <td>{{ $user->id }}</td>
-                                            <td>{{ $user->name }}</td>
-                                            <td>{{ $user->business_name }}</td>
-                                            <td>{{ $user->mobile_no }}</td>
+                                            <td>{{ $user->business_manager }}</td>
+                                            <td>{{ $user->company_name }}</td>
+                                            <td>{{ $user->contact_no }}</td>
                                             <td>{{ $user->email }}</td>
                                             <td><span class="label label-sm label-info"> Pending </span></td>
                                         </tr>

@@ -47,23 +47,23 @@ class User extends Authenticatable
 
 //    protected $dateFormat = 'U';
 
+    public function job()
+    {
+       return  $this->hasMany('App\Job');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
     public function employeeProfile()
     {
         return $this->hasOne('YYJobs\Employee');
     }
 
-
-    public function employerProfile()
-    {
-        return $this->hasOne('YYJobs\Employer');
-    }
-
-    public function job()
-    {
-        return $this->hasMany('App\Job');
-
-    }
-
+    /**
+     * @param $mobile
+     * @return mixed
+     */
     public function getUserDetailsByMobileNo($mobile)
     {
         $user = DB::table('users')->select('id', 'email', 'mobile_no', 'password', 'nric_no')
@@ -74,6 +74,10 @@ class User extends Authenticatable
 
     }
 
+    /**
+     * @param $nric
+     * @return array
+     */
     public function getUserDetails($nric)
     {
        $user =  DB::table('users')->where('nric_no', $nric)->first();

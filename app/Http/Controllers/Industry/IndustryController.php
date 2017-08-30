@@ -63,7 +63,7 @@ class IndustryController extends Controller
     public function saveData(array $data)
     {
         $query = new Industry();
-        $query->industry = $data['industry'];
+        $query->name = $data['name'];
         $query->save();
     }
 
@@ -119,12 +119,13 @@ class IndustryController extends Controller
     public function rules($data)
     {
         return Validator::make($data, [
-            'industry' => 'required|string|unique:industries'
+            'name' => 'required|string|unique:industries'
         ]);
     }
 
     /**
      * List of available industries
+     * Renponse to API
      */
 
     public function industryList()
@@ -135,5 +136,18 @@ class IndustryController extends Controller
 
         return $output;
 
+    }
+
+    /**
+     * Return lists of industry
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function lists()
+    {
+        $industry = new Industry();
+
+        $output = $industry->industryLists();
+
+        return response()->json(['industries' => $output ]);
     }
 }

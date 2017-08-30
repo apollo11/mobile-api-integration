@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
 
 class Location extends Model
@@ -19,5 +20,13 @@ class Location extends Model
      * @var string
      */
     protected $table = 'locations';
+
+    public function locationLists()
+    {
+        $location = DB::table('locations')->select('id', 'name')->get();
+
+        return $location;
+
+    }
 
 }

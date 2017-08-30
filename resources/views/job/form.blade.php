@@ -98,6 +98,27 @@
                                         </div>
                                     </div>
 
+                                    <div class="form-group{{ $errors->has('job_location') ? ' has-error' : '' }}">
+                                        <label class="col-md-3 control-label">Location</label>
+                                        <div class="col-md-7">
+                                            <select class="form-control" name="job_location">
+                                                @foreach( $location as $value)
+                                                    @if($loop->count == 0)
+                                                        <option value="none">None</option>
+                                                    @else
+                                                        <option value="{{ $value->id.'.'.$value->name }}">{{ $value->name }}</option>
+                                                    @endif
+                                                @endforeach
+                                            </select>
+
+                                            @if ($errors->has('job_location'))
+                                                <span class="help-block">
+                                                <strong>{{ $errors->first('job_location') }}</strong>
+                                               </span>
+                                            @endif
+                                        </div>
+                                    </div>
+
                                     <div class="form-group{{ $errors->has('job_image') ? ' has-error' : '' }}">
                                         <label for="Image Upload" class="col-md-3 control-label">Job Image</label>
                                         <div class="col-md-9">
@@ -116,9 +137,9 @@
                                             <input type="text" class="form-control"
                                                    placeholder="Enter no. of person requested"
                                                    value="{{ old('no_of_person') }}" name="no_of_person">
-                                            @if ($errors->has('job_role'))
+                                            @if ($errors->has('no_of_person'))
                                                 <span class="help-block">
-                                                {{ $errors->first('job_role') }}
+                                                {{ $errors->first('no_of_person') }}
                                                </span>
                                             @endif
                                         </div>
@@ -137,11 +158,24 @@
                                         </div>
                                     </div>
 
+                                    <div class="form-group{{ $errors->has('contact_no') ? ' has-error' : '' }}">
+                                        <label class="col-md-3 control-label">Contact No.</label>
+                                        <div class="col-md-7">
+                                            <input type="text" class="form-control" placeholder="Enter Contact No."
+                                                   value="{{ old('contact_no') }}" name="contact_no">
+                                            @if ($errors->has('contact_no'))
+                                                <span class="help-block">
+                                                <strong>{{ $errors->first('contact_no') }}</strong>
+                                               </span>
+                                            @endif
+                                        </div>
+                                    </div>
+
                                     <div class="form-group{{ $errors->has('business_manager') ? ' has-error' : '' }}">
                                         <label class="col-md-3 control-label">Business Manager</label>
                                         <div class="col-md-7">
                                             <input type="text" class="form-control" placeholder="Enter Business Manager"
-                                                   value="{{ old('business_manager') }}" name="business_manager">
+                                                   value="{{ $user->business_manager }}" name="business_manager">
                                             @if ($errors->has('business_manager'))
                                                 <span class="help-block">
                                                 {{ $errors->first('business_manager') }}
@@ -153,7 +187,7 @@
                                     <div class="form-group{{ $errors->has('job_employer') ? ' has-error' : '' }}">
                                         <label class="col-md-3 control-label">Employer</label>
                                         <div class="col-md-7">
-                                            <input type="text" class="form-control" value="{{ old('job_employer') }}"
+                                            <input type="text" class="form-control" value="{{ $user->company_name }}"
                                                    name="job_employer">
                                             @if ($errors->has('job_employer'))
                                                 <span class="help-block">
@@ -190,8 +224,9 @@
                                             @endif
                                         </div>
                                     </div>
+
                                     <div class="form-group{{ $errors->has('date') ? ' has-error' : '' }}">
-                                        <label class="control-label col-md-3">Job Date and Time</label>
+                                        <label class="control-label col-md-3">Start Job Date and Time</label>
                                         <div class="col-md-7">
                                             <div class="input-group date form_datetime form_datetime bs-datetime">
                                                 <input type="text" name="date" size="16" class="form-control">
@@ -209,6 +244,25 @@
                                         </div>
                                     </div>
 
+                                    <div class="form-group{{ $errors->has('end_date') ? ' has-error' : '' }}">
+                                        <label class="control-label col-md-3">Job End Date and Time</label>
+                                        <div class="col-md-7">
+                                            <div class="input-group date form_datetime form_datetime bs-datetime">
+                                                <input type="text" name="end_date" size="16" class="form-control">
+                                                <span class="input-group-addon">
+                                                    <button class="btn default date-set" type="button">
+                                                        <i class="fa fa-calendar"></i>
+                                                    </button>
+                                                                        </span>
+                                                @if ($errors->has('end_date'))
+                                                    <span class="help-block">
+                                                <strong>{{ $errors->first('end_date') }}</strong>
+                                               </span>
+                                                @endif
+                                            </div>
+                                        </div>
+                                    </div>
+
                                     <div class="form-group{{ $errors->has('notes') ? ' has-error' : '' }}">
                                         <label class="col-md-3 control-label">Important Notes</label>
                                         <div class="col-md-7">
@@ -220,6 +274,28 @@
                                             @endif
                                         </div>
                                     </div>
+
+                                    <div class="form-group{{ $errors->has('industry') ? ' has-error' : '' }}">
+                                        <label class="col-md-3 control-label">Industry</label>
+                                        <div class="col-md-7">
+                                            <select class="form-control" name="industry">
+                                                @foreach( $industry as $value)
+                                                    @if($loop->count == 0)
+                                                        <option value="none">None</option>
+                                                    @else
+                                                        <option value="{{ $value->id.'.'.$value->name}}">{{ $value->name }}</option>
+                                                        {{--<option value="{{ $value->name }}">{{ $value->name }}</option>--}}
+                                                    @endif
+                                                @endforeach
+                                            </select>
+                                            @if ($errors->has('industry'))
+                                                <span class="help-block">
+                                                <strong>{{ $errors->first('industry') }}</strong>
+                                               </span>
+                                            @endif
+                                        </div>
+                                    </div>
+
 
                                     <div class="form-group{{ $errors->has('job_status') ? ' has-error' : '' }}">
                                         <label class="col-md-3 control-label">Job Status</label>

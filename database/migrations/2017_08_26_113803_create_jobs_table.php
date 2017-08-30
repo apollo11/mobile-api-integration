@@ -28,7 +28,7 @@ class CreateJobsTable extends Migration
             $table->string('business_manager');
             $table->string('employer');
             $table->string('language');
-            $table->dateTime('job_date');
+            $table->dateTimeTz('job_date');
             $table->decimal('rate', 5, 2);
             $table->longText('notes');
             $table->enum('status', ['active', 'inactive']);

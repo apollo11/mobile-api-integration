@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
 
 class Industry extends Model
@@ -19,5 +20,12 @@ class Industry extends Model
      * @var string
      */
     protected $table = 'industries';
+
+    public function industryLists()
+    {
+        $industry = DB::table('industries')->select('id', 'name')->get();
+
+        return $industry;
+    }
 
 }

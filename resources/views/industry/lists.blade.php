@@ -27,7 +27,7 @@
                                         <tr>
                                             <td><input type="checkbox"/></td>
                                             <td>{{ $value->id }}</td>
-                                            <td>{{ $value->industry }}</td>
+                                            <td>{{ $value->name }}</td>
                                         </tr>
                                     @endforeach
                                     </tbody>

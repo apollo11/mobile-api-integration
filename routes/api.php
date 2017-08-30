@@ -62,7 +62,11 @@ Route::prefix('v1/details')->group(function () {
 Route::prefix('v1/')->group(function () {
 
     Route::get('school', 'School\SchoolController@index');
-    Route::get('industry', 'Industry\IndustryController@index');
-    Route::get('location', 'Location\LocationController@index');
+    Route::get('industry', 'Industry\IndustryController@lists');
+    Route::get('location', 'Location\LocationController@lists');
 
 });
+
+Route::get('v1/job/lists', 'Job\JobController@jobApiLists')->middleware('auth:api');
+
+Route::get('v1/job/filter/{location?}/{industry?}/{date?}','Job\JobController@filterJobs');

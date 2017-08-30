@@ -30,14 +30,14 @@
                                   enctype="multipart/form-data">
                                 {{ csrf_field() }}
                                 <div class="form-body">
-                                    <div class="form-group{{ $errors->has('industry') ? ' has-error' : '' }}">
+                                    <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
                                         <label class="col-md-3 control-label">Industry</label>
                                         <div class="col-md-7">
                                             <input type="text" class="form-control" placeholder="Enter Industry"
-                                                   value="{{ old('industry') }}" name="industry">
-                                            @if ($errors->has('industry'))
+                                                   value="{{ old('name') }}" name="name">
+                                            @if ($errors->has('name'))
                                                 <span class="help-block">
-                                                {{ $errors->first('industry') }}
+                                                {{ $errors->first('name') }}
                                                </span>
                                             @endif
                                         </div>

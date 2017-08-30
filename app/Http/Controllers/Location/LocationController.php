@@ -65,7 +65,7 @@ class LocationController extends Controller
     {
 
         $query = new Location();
-        $query->location = $data['location'];
+        $query->name = $data['name'];
         $query->save();
 
     }
@@ -124,7 +124,7 @@ class LocationController extends Controller
     public function rules($data)
     {
         return Validator::make($data, [
-            'location' => 'required|string|unique:locations'
+            'name' => 'required|string|unique:locations'
         ]);
     }
 
@@ -139,5 +139,19 @@ class LocationController extends Controller
         $output = $location::all();
 
         return $output;
+    }
+
+    /**
+     * Output location
+     * @return \Illuminate\Http\JsonResponse
+     */
+
+    public function lists()
+    {
+        $location = new location();
+
+        $output = $location->locationLists();
+
+        return response()->json(['locations' => $output]);
     }
 }

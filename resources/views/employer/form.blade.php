@@ -120,6 +120,28 @@
                                         </div>
                                     </div>
 
+                                    <div class="form-group{{ $errors->has('industry') ? ' has-error' : '' }}">
+                                        <label class="col-md-3 control-label">Industry</label>
+                                        <div class="col-md-7">
+                                            <select class="form-control" name="industry">
+                                                @foreach( $industry as $value)
+                                                    @if($loop->count == 0)
+                                                         <option value="none">None</option>
+                                                    @else
+                                                        <option value="{{ $value->id }}">{{ $value->name }}</option>
+                                                    @endif
+                                                @endforeach
+                                            </select>
+                                            @if ($errors->has('industry'))
+                                                <span class="help-block">
+                                                <strong>{{ $errors->first('industry') }}</strong>
+                                               </span>
+                                            @endif
+                                        </div>
+                                    </div>
+
+
+
                                 </div>
                                 <div class="form-actions">
                                     <div class="row">

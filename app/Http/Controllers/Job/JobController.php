@@ -4,6 +4,10 @@ namespace App\Http\Controllers\Job;
 
 use Validator;
 use App\Job;
+use App\Location;
+use App\Industry;
+use Storage;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -28,7 +32,11 @@ class JobController extends Controller
      */
     public function create()
     {
-        return view('job.form');
+        $user = Auth::user();
+        $location = $this->location();
+        $industry = $this->industry();
+
+        return view('job.form', ['user' => $user, 'industry' => $industry, 'location' => $location]);
     }
 
     /**
@@ -41,46 +49,62 @@ class JobController extends Controller
     {
         $data = $request->all();
 
-        $validator = $this->rules($request->all());
+        $location = explode('.',$request->input('job_location'));
+        $industry = explode('.', $request->input('industry'));
 
-        if($validator->fails($data)) {
+        $splitJobAndIndustry = [
+            'location_id' => $location[0],
+            'job_location' =>  $location[1],
+            'industry_id' => $industry[0],
+            'industry' => $industry[1]
+        ];
+
+        $validator = $this->rules($data);
+
+        if($validator->fails()) {
+
             return redirect('job/create')
                 ->withErrors($validator)
                 ->withInput();
         } else {
 
             $profile['job_image'] = $request->file('job_image')->store('jobs');
-            $mergeData = array_merge($data, $profile);
+            $mergeData = array_merge($data, $profile, $splitJobAndIndustry);
+
 
             $this->saveData($mergeData);
 
-            return redirect('job/list');
-        }
+            return redirect('job/lists');
+     }
 
     }
 
     public function saveData(array $data)
     {
-        $id = Auth::user()->id();
-
-        $employer = \App\User::find($id);
         $query = new Job();
+        $query->job_id = Auth::user()->id;
         $query->job_title = $data['job_title'];
+        $query->location_id = $data['location_id'];
+        $query->location = $data['job_location'];
         $query->description = $data['job_description'];
         $query->role = $data['job_role'];
         $query->choices = $data['gender'];
         $query->job_image_path = $data['job_image'];
         $query->no_of_person = $data['no_of_person'];
         $query->contact_person = $data['contact_person'];
+        $query->contact_no = $data['contact_no'];
         $query->business_manager = $data['business_manager'];
         $query->employer = $data['job_employer'];
         $query->rate = $data['hourly_rate'];
         $query->language = $data['preferred_language'];
         $query->job_date = $data['date'];
+        $query->end_date = $data['end_date'];
+        $query->industry_id = $data['industry_id'];
+        $query->industry = $data['industry'];
         $query->notes = $data['notes'];
         $query->status = $data['job_status'];
 
-        $employer->job()->save($query);
+        $query->save();
 
     }
 
@@ -136,7 +160,7 @@ class JobController extends Controller
     {
         return Validator::make($data, [
            'job_title' => 'required',
-            'job_desc' => 'required|string',
+            'job_description' => 'required|string',
             'job_role' => 'required|string',
             'job_image' => 'required',
             'no_of_person' => 'required|numeric',
@@ -146,9 +170,14 @@ class JobController extends Controller
             'hourly_rate' => 'required|digits_between:1,5',
             'preferred_language' => 'required|string',
             'date' => 'required|date',
+            'end_date' => 'required|date',
             'notes' => 'required|string',
             'job_status' => 'required|string',
-            'gender' => 'required:string'
+            'gender' => 'required|string',
+            'job_location' => 'required|string',
+            'contact_no' => 'required|string',
+            'industry' => 'required|string',
+
         ]);
     }
 
@@ -164,4 +193,85 @@ class JobController extends Controller
 
     }
 
+    /**
+     * Lists of location for dropdown
+     */
+    public function location()
+    {
+        $location = new Location();
+
+        $output = $location->locationLists();
+
+        return $output;
+
+    }
+
+    /**
+     * List of available industries for dropdown
+     */
+    public function industry()
+    {
+        $location = new Industry();
+
+        $output = $location::all();
+
+        return $output;
+
+    }
+
+    /**
+     * API List for jobs
+     */
+
+    public function jobApiLists()
+    {
+        $job = new Job();
+
+        $output = $job->jobLists();
+
+        foreach ($output as $value) {
+
+            $start_date = $date = date_create($value->start_date, timezone_open('UTC'));
+            $end_date = $date = date_create($value->end_date, timezone_open('UTC'));
+
+
+            $data[] = [
+                'id' => $value->id,
+                'employer' => $value->employer,
+                'industry' => [
+                    'id' => $value->industry_id,
+                    'name' => $value->industry
+                ],
+                'location' => [
+                    'id' => $value->location_id,
+                    'name' => $value->location,
+                ],
+                'start_date' => date_format($start_date, 'Y-m-d H:i:sP'),
+                'end_date' => date_format($end_date, 'Y-m-d H:i:sP'),
+                'contact_no' => $value->contact_no,
+                'rate' => $value->rate,
+                'thumbnail_url' => $value->job_image_path
+            ];
+        }
+
+        return response()->json(['jobs' => $data]);
+    }
+
+    /**
+     * @param array $location
+     * @param array $industry
+     * @param $date
+     * @return mixed
+     */
+    public function filterJobs($location = null, $industry = null, $date=null)
+    {
+       $splitLocation =  explode(',',$location);
+       $splitIndustry = explode(',', $industry);
+
+        $job = new Job();
+        $value = $job->multipleFilter($splitLocation,$splitIndustry, $date);
+
+        return $value;
+
+    }
 }
