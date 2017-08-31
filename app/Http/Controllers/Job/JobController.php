@@ -299,7 +299,7 @@ class JobController extends Controller
             ];
         }
 
-        $dataUndefined = !empty($data) ? $data : '';
+        $dataUndefined = !empty($data) ? $data : [];
 
         return response()->json(['jobs' => $dataUndefined]);
     }
