@@ -2,7 +2,6 @@
 
 namespace App;
 
-use Faker\Provider\DateTime;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
 
@@ -64,6 +63,7 @@ class Job extends Model
                 , 'rate'
                 , 'job_image_path')
             ->orderBy('created_at', 'desc')
+            ->orderBy('employer', 'asc')
             ->get();
 
         return $joblist;
@@ -88,6 +88,7 @@ class Job extends Model
                 , 'job_image_path')
             ->whereIn('industry_id', $id)
             ->orderBy('created_at', 'desc')
+            ->orderBy('employer', 'asc')
             ->get();
 
         return $value;
@@ -111,6 +112,7 @@ class Job extends Model
                 , 'job_image_path')
             ->whereIn('location_id', $id)
             ->orderBy('created_at', 'desc')
+            ->orderBy('employer', 'asc')
             ->get();
 
         return $value;
@@ -132,10 +134,10 @@ class Job extends Model
                 , 'contact_no'
                 , 'rate'
                 , 'job_image_path')
-            ->whereDate('job_date', $date)
+            ->where('job_date', '>=', date($date))
             ->orderBy('created_at', 'desc')
+            ->orderBy('employer', 'asc')
             ->get();
-
         return $value;
     }
 
@@ -157,17 +159,91 @@ class Job extends Model
                 , 'job_image_path')
             ->whereIn('industry_id', $industry)
             ->whereIn('location_id', $location)
-            ->where('job_date','>=', date($date))
+            ->where('job_date', '>=', date($date))
             ->orderBy('created_at', 'desc')
-             ->get();
+            ->get();
 
         return $jobs;
     }
 
     /**
-     * Filter
+     * Filter by location and industry
      */
 
+    public function filterbyLocationAndIndustry($location, $industry)
+    {
+        $jobs = DB::table('jobs')
+            ->select('id', 'employer'
+                , 'location'
+                , 'location_id'
+                , 'industry'
+                , 'industry_id'
+                , 'job_date as start_date'
+                , 'end_date'
+                , 'contact_no'
+                , 'rate'
+                , 'job_image_path')
+            ->whereIn('industry_id', $industry)
+            ->whereIn('location_id', $location)
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return $jobs;
+    }
+
+    /**
+     * Filter by industry and date
+     */
+
+    public function filterByLocationDate($location, $date)
+    {
+
+        $jobs = DB::table('jobs')
+            ->select('id', 'employer'
+                , 'location'
+                , 'location_id'
+                , 'industry'
+                , 'industry_id'
+                , 'job_date as start_date'
+                , 'end_date'
+                , 'contact_no'
+                , 'rate'
+                , 'job_image_path')
+            ->whereIn('location_id', $location)
+            ->where('job_date', '>=', date($date))
+            ->orderBy('created_at', 'desc')
+            ->orderBy('employer', 'asc')
+            ->get();
+
+        return $jobs;
+
+    }
+
+    /**
+     * Filter by indutry and date
+     */
+
+    public function filterByIndustryDate($industry, $date)
+    {
+        $jobs = DB::table('jobs')
+            ->select('id', 'employer'
+                , 'location'
+                , 'location_id'
+                , 'industry'
+                , 'industry_id'
+                , 'job_date as start_date'
+                , 'end_date'
+                , 'contact_no'
+                , 'rate'
+                , 'job_image_path')
+            ->whereIn('industry_id', $industry)
+            ->where('job_date', '>=', date($date))
+            ->orderBy('created_at', 'desc')
+            ->orderBy('employer', 'asc')
+            ->get();
+
+        return $jobs;
+    }
 
 
 }

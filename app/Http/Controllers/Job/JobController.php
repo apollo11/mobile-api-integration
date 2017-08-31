@@ -234,24 +234,47 @@ class JobController extends Controller
     {
         $job = new Job();
 
-        $industry =  $this->request->get('industry');
-        $location = $this->request->get('location');
+        $industry = $this->request->get('industries');
+        $location = $this->request->get('locations');
         $date = $this->request->get('date');
 
-        if(empty($location) && empty($date)) {
+        if (empty($location) && empty($date)) {
+
             $output = $job->filterJobsByIndustry($industry);
-        }elseif(empty($industry) && empty($date)) {
+
+        } elseif (empty($industry) && empty($date)) {
+
             $output = $job->filterJobsByLocation($location);
-        }else{
+
+        } else if (empty($industry) && empty($location)) {
+
+            $output = $job->filterByDate($date);
+
+        } elseif (!empty($industry) && !empty($location)) {
+
+            $output = $job->filterbyLocationAndIndustry($location, $industry);
+
+        } elseif (!empty($industry) && !empty($location) && !empty($date)) {
+
+            $output = $job->multipleFilter($location, $industry, $date);
+
+        } elseif (!empty($location) && !empty($date)) {
+
+            $output = $job->filterByLocationDate($location, $date);
+
+        } elseif (!empty($industry) && !empty($date)) {
+
+            $output = $job->filterByIndustryDate($industry, $date);
+
+        } else {
+
             $output = $job->jobLists();
         }
-
 
         foreach ($output as $value) {
 
             $start_date = $date = date_create($value->start_date, timezone_open('UTC'));
             $end_date = $date = date_create($value->end_date, timezone_open('UTC'));
-
 
             $data[] = [
                 'id' => $value->id,
@@ -272,7 +295,9 @@ class JobController extends Controller
             ];
         }
 
-        return response()->json(['jobs' => $data]);
+        $dataUndefined = !empty($data) ? $data : '';
+
+        return response()->json(['jobs' => $dataUndefined]);
     }
 
     /**
