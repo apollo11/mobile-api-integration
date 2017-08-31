@@ -43,14 +43,19 @@
             </a>
         </li>
         <li>
-            <a href="/dashboard/employer">
+            <a href="{{ route('employer.lists') }}">
                 <i class="icon-home"></i>
                 Newly Employers</a>
         </li>
         <li>
-            <a href="/dashboard/employer">
+            <a href="{{ route('employer.lists') }}">
                 <i class="icon-basket"></i>
                 Employers</a>
+        </li>
+        <li>
+            <a href="{{ route('employer.create') }}">
+                <i class="icon-basket"></i>
+                Create Employers</a>
         </li>
         <li>
             <a href="ecommerce_orders_view.html">
@@ -58,10 +63,21 @@
                 Payouts</a>
         </li>
         <li>
-            <a href="ecommerce_products.html">
+            <a href="{{ route('job.create') }}">
                 <i class="icon-handbag"></i>
                 Job Management</a>
         </li>
+        <li>
+            <a href="{{ route('industry.create') }}">
+                <i class="icon-handbag"></i>
+                Industry</a>
+        </li>
+        <li>
+            <a href="{{ route('location.create') }}">
+                <i class="icon-handbag"></i>
+                Location</a>
+        </li>
+
         <li>
             <a href="ecommerce_products_edit.html">
                 <i class="icon-pencil"></i>

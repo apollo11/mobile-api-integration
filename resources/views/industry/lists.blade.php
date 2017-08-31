@@ -9,7 +9,7 @@
                     <div class="portlet box green">
                         <div class="portlet-title">
                             <div class="caption">
-                                <i class="fa fa-comments"></i>Employers
+                                <i class="fa fa-comments"></i>Industry
                             </div>
                         </div>
                         <div class="portlet-body">
@@ -19,21 +19,15 @@
                                     <tr>
                                         <th>Checkbox</th>
                                         <th>#</th>
-                                        <th>Business Manager</th>
-                                        <th>Company Name</th>
-                                        <th>Email</th>
+                                        <th>Name of Industry</th>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    @foreach($employers as $user)
+                                    @foreach($industry as $value)
                                         <tr>
                                             <td><input type="checkbox"/></td>
-                                            <td>{{ $user->id }}</td>
-                                            <td>{{ $user->business_manager }}</td>
-                                            <td>{{ $user->company_name }}</td>
-                                            <td>{{ $user->contact_no }}</td>
-                                            <td>{{ $user->email }}</td>
-                                            <td><span class="label label-sm label-info"> Pending </span></td>
+                                            <td>{{ $value->id }}</td>
+                                            <td>{{ $value->name }}</td>
                                         </tr>
                                     @endforeach
                                     </tbody>
