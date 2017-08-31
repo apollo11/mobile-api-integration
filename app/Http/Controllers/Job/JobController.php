@@ -13,6 +13,13 @@ use App\Http\Controllers\Controller;
 
 class JobController extends Controller
 {
+    private $request;
+
+    public function __construct(Request $request)
+    {
+        $this->request = $request;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -227,13 +234,51 @@ class JobController extends Controller
     {
         $job = new Job();
 
-        $output = $job->jobLists();
+        $industry = (array) $this->request->get('industries');
+        $location= (array) $this->request->get('locations');
+        $date = $this->request->get('date');
+
+        if (count($industry) == 0 && count($location) == 0 && empty($date)) {
+
+            $output = $job->jobLists();
+
+        } elseif (empty($location) && empty($date)) {
+
+            $output = $job->filterJobsByIndustry($industry);
+
+        } elseif (empty($industry) && empty($date)) {
+
+            $output = $job->filterJobsByLocation($location);
+
+        } else if (empty($industry) && empty($location)) {
+
+            $output = $job->filterByDate($date);
+
+        } elseif (!empty($industry) && !empty($location)) {
+
+            $output = $job->filterbyLocationAndIndustry($location, $industry);
+
+        } elseif (!empty($industry) && !empty($location) && !empty($date)) {
+
+            $output = $job->multipleFilter($location, $industry, $date);
+
+        } elseif (!empty($location) && !empty($date)) {
+
+            $output = $job->filterByLocationDate($location, $date);
+
+        } elseif (!empty($industry) && !empty($date)) {
+
+            $output = $job->filterByIndustryDate($industry, $date);
+
+        } else {
+
+            $output = $job->jobLists();
+        }
 
         foreach ($output as $value) {
 
             $start_date = $date = date_create($value->start_date, timezone_open('UTC'));
             $end_date = $date = date_create($value->end_date, timezone_open('UTC'));
-
 
             $data[] = [
                 'id' => $value->id,
@@ -254,7 +299,9 @@ class JobController extends Controller
             ];
         }
 
-        return response()->json(['jobs' => $data]);
+        $dataUndefined = !empty($data) ? $data : '';
+
+        return response()->json(['jobs' => $dataUndefined]);
     }
 
     /**
@@ -272,6 +319,27 @@ class JobController extends Controller
         $value = $job->multipleFilter($splitLocation,$splitIndustry, $date);
 
         return $value;
+
+    }
+
+    /**
+     * Filter by Industry
+     */
+    public function filterbyIndustry(array $industry)
+    {
+        $test = $industry;
+
+        return $test;
+
+        $job = new Job();
+        if(empty($location) && empty($date)) {
+
+            $splitId = explode('&', $industry);
+            $output = $job->filterJobsByIndustry($industry);
+
+        }
+        return response()->json(['jobs' => $output]);
+
 
     }
 }
