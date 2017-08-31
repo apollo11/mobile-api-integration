@@ -13,6 +13,13 @@ use App\Http\Controllers\Controller;
 
 class JobController extends Controller
 {
+    private $request;
+
+    public function __construct(Request $request)
+    {
+        $this->request = $request;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -227,7 +234,18 @@ class JobController extends Controller
     {
         $job = new Job();
 
-        $output = $job->jobLists();
+        $industry =  $this->request->get('industry');
+        $location = $this->request->get('location');
+        $date = $this->request->get('date');
+
+        if(empty($location) && empty($date)) {
+            $output = $job->filterJobsByIndustry($industry);
+        }elseif(empty($industry) && empty($date)) {
+            $output = $job->filterJobsByLocation($location);
+        }else{
+            $output = $job->jobLists();
+        }
+
 
         foreach ($output as $value) {
 
@@ -272,6 +290,27 @@ class JobController extends Controller
         $value = $job->multipleFilter($splitLocation,$splitIndustry, $date);
 
         return $value;
+
+    }
+
+    /**
+     * Filter by Industry
+     */
+    public function filterbyIndustry(array $industry)
+    {
+        $test = $industry;
+
+        return $test;
+
+        $job = new Job();
+        if(empty($location) && empty($date)) {
+
+            $splitId = explode('&', $industry);
+            $output = $job->filterJobsByIndustry($industry);
+
+        }
+        return response()->json(['jobs' => $output]);
+
 
     }
 }

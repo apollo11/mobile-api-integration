@@ -76,7 +76,18 @@ class Job extends Model
     public function filterJobsByIndustry(array $id)
     {
         $value = DB::table('jobs')
+            ->select('id', 'employer'
+                , 'location'
+                , 'location_id'
+                , 'industry'
+                , 'industry_id'
+                , 'job_date as start_date'
+                , 'end_date'
+                , 'contact_no'
+                , 'rate'
+                , 'job_image_path')
             ->whereIn('industry_id', $id)
+            ->orderBy('created_at', 'desc')
             ->get();
 
         return $value;
@@ -88,7 +99,18 @@ class Job extends Model
     public function filterJobsByLocation(array $id)
     {
         $value = DB::table('jobs')
+            ->select('id', 'employer'
+                , 'location'
+                , 'location_id'
+                , 'industry'
+                , 'industry_id'
+                , 'job_date as start_date'
+                , 'end_date'
+                , 'contact_no'
+                , 'rate'
+                , 'job_image_path')
             ->whereIn('location_id', $id)
+            ->orderBy('created_at', 'desc')
             ->get();
 
         return $value;
@@ -100,7 +122,18 @@ class Job extends Model
     public function filterByDate($date)
     {
         $value = DB::table('jobs')
+            ->select('id', 'employer'
+                , 'location'
+                , 'location_id'
+                , 'industry'
+                , 'industry_id'
+                , 'job_date as start_date'
+                , 'end_date'
+                , 'contact_no'
+                , 'rate'
+                , 'job_image_path')
             ->whereDate('job_date', $date)
+            ->orderBy('created_at', 'desc')
             ->get();
 
         return $value;
@@ -111,7 +144,6 @@ class Job extends Model
      */
     public function multipleFilter($location, $industry, $date)
     {
-
         $jobs = DB::table('jobs')
             ->select('id', 'employer'
                 , 'location'
@@ -127,7 +159,7 @@ class Job extends Model
             ->whereIn('location_id', $location)
             ->where('job_date','>=', date($date))
             ->orderBy('created_at', 'desc')
-        ->get();
+             ->get();
 
         return $jobs;
     }

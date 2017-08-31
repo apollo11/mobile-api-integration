@@ -67,6 +67,5 @@ Route::prefix('v1/')->group(function () {
 
 });
 
-Route::get('v1/job/lists', 'Job\JobController@jobApiLists')->middleware('auth:api');
-
-Route::get('v1/job/filter/{location?}/{industry?}/{date?}','Job\JobController@filterJobs');
+Route::get('v1/job/lists', 'Job\JobController@jobApiLists');
+//Route::get('v1/job/lists/?industry={industry?}','Job\JobController@filterbyIndustry');
