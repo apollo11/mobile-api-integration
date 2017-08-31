@@ -62,8 +62,9 @@ class Job extends Model
                 , 'contact_no'
                 , 'rate'
                 , 'job_image_path')
-            ->orderBy('created_at', 'desc')
+            ->orderBy('job_date', 'desc')
             ->orderBy('employer', 'asc')
+            ->orderBy('created_at', 'desc')
             ->get();
 
         return $joblist;
@@ -87,8 +88,9 @@ class Job extends Model
                 , 'rate'
                 , 'job_image_path')
             ->whereIn('industry_id', $id)
-            ->orderBy('created_at', 'desc')
+            ->orderBy('job_date', 'desc')
             ->orderBy('employer', 'asc')
+            ->orderBy('created_at', 'desc')
             ->get();
 
         return $value;
@@ -111,8 +113,9 @@ class Job extends Model
                 , 'rate'
                 , 'job_image_path')
             ->whereIn('location_id', $id)
-            ->orderBy('created_at', 'desc')
+            ->orderBy('job_date', 'desc')
             ->orderBy('employer', 'asc')
+            ->orderBy('created_at', 'desc')
             ->get();
 
         return $value;
@@ -135,8 +138,9 @@ class Job extends Model
                 , 'rate'
                 , 'job_image_path')
             ->where('job_date', '>=', date($date))
-            ->orderBy('created_at', 'desc')
+            ->orderBy('job_date', 'desc')
             ->orderBy('employer', 'asc')
+            ->orderBy('created_at', 'desc')
             ->get();
         return $value;
     }
@@ -160,7 +164,10 @@ class Job extends Model
             ->whereIn('industry_id', $industry)
             ->whereIn('location_id', $location)
             ->where('job_date', '>=', date($date))
+            ->orderBy('job_date', 'desc')
+            ->orderBy('employer', 'asc')
             ->orderBy('created_at', 'desc')
+
             ->get();
 
         return $jobs;
@@ -185,6 +192,8 @@ class Job extends Model
                 , 'job_image_path')
             ->whereIn('industry_id', $industry)
             ->whereIn('location_id', $location)
+            ->orderBy('job_date', 'desc')
+            ->orderBy('employer', 'asc')
             ->orderBy('created_at', 'desc')
             ->get();
 
@@ -211,8 +220,9 @@ class Job extends Model
                 , 'job_image_path')
             ->whereIn('location_id', $location)
             ->where('job_date', '>=', date($date))
-            ->orderBy('created_at', 'desc')
+            ->orderBy('job_date', 'desc')
             ->orderBy('employer', 'asc')
+            ->orderBy('created_at', 'asc')
             ->get();
 
         return $jobs;
@@ -238,8 +248,9 @@ class Job extends Model
                 , 'job_image_path')
             ->whereIn('industry_id', $industry)
             ->where('job_date', '>=', date($date))
-            ->orderBy('created_at', 'desc')
+            ->orderBy('job_date', 'desc')
             ->orderBy('employer', 'asc')
+            ->orderBy('created_at', 'asc')
             ->get();
 
         return $jobs;

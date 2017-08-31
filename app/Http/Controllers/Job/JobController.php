@@ -234,11 +234,15 @@ class JobController extends Controller
     {
         $job = new Job();
 
-        $industry = $this->request->get('industries');
-        $location = $this->request->get('locations');
+        $industry = (array) $this->request->get('industries');
+        $location= (array) $this->request->get('locations');
         $date = $this->request->get('date');
 
-        if (empty($location) && empty($date)) {
+        if (count($industry) == 0 && count($location) == 0 && empty($date)) {
+
+            $output = $job->jobLists();
+
+        } elseif (empty($location) && empty($date)) {
 
             $output = $job->filterJobsByIndustry($industry);
 
