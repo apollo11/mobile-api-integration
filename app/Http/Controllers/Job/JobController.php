@@ -299,7 +299,7 @@ class JobController extends Controller
             ];
         }
 
-        $dataUndefined = !empty($data) ? $data : '';
+        $dataUndefined = !empty($data) ? $data : [];
 
         return response()->json(['jobs' => $dataUndefined]);
     }
@@ -322,24 +322,4 @@ class JobController extends Controller
 
     }
 
-    /**
-     * Filter by Industry
-     */
-    public function filterbyIndustry(array $industry)
-    {
-        $test = $industry;
-
-        return $test;
-
-        $job = new Job();
-        if(empty($location) && empty($date)) {
-
-            $splitId = explode('&', $industry);
-            $output = $job->filterJobsByIndustry($industry);
-
-        }
-        return response()->json(['jobs' => $output]);
-
-
-    }
 }
