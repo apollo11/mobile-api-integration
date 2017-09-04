@@ -49,7 +49,7 @@ class User extends Authenticatable
 
     public function job()
     {
-       return  $this->hasMany('App\Job');
+       return  $this->hasMany('\App\Job');
     }
 
     /**

@@ -27,7 +27,13 @@ class Job extends Model
         'job_date',
         'rate',
         'notes',
-        'status'
+        'status',
+        'industry',
+        'industry_id',
+        'location',
+        'location_id',
+        'end_date',
+        'job_id'
     ];
 
     /**
@@ -38,20 +44,12 @@ class Job extends Model
     protected $table = 'jobs';
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function user()
-    {
-        return $this->belongsTo('App\User', 'job_id');
-    }
-
-    /**
      * List of users for homepage
      */
 
     public function jobLists()
     {
-        $joblist = DB::table('jobs')
+        $jobLists =  DB::table('jobs')
             ->select('id', 'employer'
                 , 'location'
                 , 'location_id'
@@ -63,11 +61,11 @@ class Job extends Model
                 , 'rate'
                 , 'job_image_path')
             ->orderBy('job_date', 'desc')
-            ->orderBy('employer', 'asc')
             ->orderBy('created_at', 'desc')
             ->get();
 
-        return $joblist;
+       return $jobLists;
+
     }
 
     /**
@@ -89,7 +87,6 @@ class Job extends Model
                 , 'job_image_path')
             ->whereIn('industry_id', $id)
             ->orderBy('job_date', 'desc')
-            ->orderBy('employer', 'asc')
             ->orderBy('created_at', 'desc')
             ->get();
 
@@ -114,7 +111,6 @@ class Job extends Model
                 , 'job_image_path')
             ->whereIn('location_id', $id)
             ->orderBy('job_date', 'desc')
-            ->orderBy('employer', 'asc')
             ->orderBy('created_at', 'desc')
             ->get();
 
@@ -137,9 +133,8 @@ class Job extends Model
                 , 'contact_no'
                 , 'rate'
                 , 'job_image_path')
-            ->where('job_date', '>=', date($date))
+            ->whereDate('job_date', date($date))
             ->orderBy('job_date', 'desc')
-            ->orderBy('employer', 'asc')
             ->orderBy('created_at', 'desc')
             ->get();
         return $value;
@@ -148,7 +143,7 @@ class Job extends Model
     /**
      * Filter by location, date and jobs
      */
-    public function multipleFilter($location, $industry, $date)
+    public function multipleFilter(array $location, array $industry, $date)
     {
         $jobs = DB::table('jobs')
             ->select('id', 'employer'
@@ -163,9 +158,8 @@ class Job extends Model
                 , 'job_image_path')
             ->whereIn('industry_id', $industry)
             ->whereIn('location_id', $location)
-            ->where('job_date', '>=', date($date))
+            ->whereDate('job_date', date($date))
             ->orderBy('job_date', 'desc')
-            ->orderBy('employer', 'asc')
             ->orderBy('created_at', 'desc')
 
             ->get();
@@ -193,17 +187,16 @@ class Job extends Model
             ->whereIn('industry_id', $industry)
             ->whereIn('location_id', $location)
             ->orderBy('job_date', 'desc')
-            ->orderBy('employer', 'asc')
             ->orderBy('created_at', 'desc')
             ->get();
 
         return $jobs;
     }
 
+
     /**
      * Filter by industry and date
      */
-
     public function filterByLocationDate($location, $date)
     {
 
@@ -219,10 +212,9 @@ class Job extends Model
                 , 'rate'
                 , 'job_image_path')
             ->whereIn('location_id', $location)
-            ->where('job_date', '>=', date($date))
+            ->whereDate('job_date', date($date))
             ->orderBy('job_date', 'desc')
-            ->orderBy('employer', 'asc')
-            ->orderBy('created_at', 'asc')
+            ->orderBy('created_at', 'desc')
             ->get();
 
         return $jobs;
@@ -232,7 +224,6 @@ class Job extends Model
     /**
      * Filter by indutry and date
      */
-
     public function filterByIndustryDate($industry, $date)
     {
         $jobs = DB::table('jobs')
@@ -247,14 +238,39 @@ class Job extends Model
                 , 'rate'
                 , 'job_image_path')
             ->whereIn('industry_id', $industry)
-            ->where('job_date', '>=', date($date))
+            ->whereDate('job_date', date($date))
             ->orderBy('job_date', 'desc')
-            ->orderBy('employer', 'asc')
-            ->orderBy('created_at', 'asc')
+            ->orderBy('created_at', 'desc')
             ->get();
 
         return $jobs;
     }
 
+    /**
+     * Filter by limit, start date, end date
+     */
+    public function filterByLimitStartEnd($limit, $start, $created)
+    {
+        $jobs = DB::table('jobs')
+            ->select('id', 'employer'
+                , 'location'
+                , 'location_id'
+                , 'industry'
+                , 'industry_id'
+                , 'job_date as start_date'
+                , 'created_at'
+                , 'end_date'
+                , 'contact_no'
+                , 'rate'
+                , 'job_image_path')
+            ->where('job_date','<=', date($start))
+            ->where('created_at','<=' ,date($created))
+            ->orderBy('job_date', 'desc')
+            ->orderBy('created_at', 'desc')
+            ->limit($limit)
+            ->get();
+
+        return $jobs;
+    }
 
 }
