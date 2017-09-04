@@ -31,6 +31,18 @@ trait OauthTrait
 
     }
 
+    /**
+     * @param $mobile
+     * @return \Illuminate\Database\Eloquent\Model|null|static
+     */
+    public function getUserByMobile($mobile)
+    {
+        $details = \App\User::where('mobile_no', $mobile)
+            ->first();
+
+        return $details;
+    }
+
     public function ouathResponse(array $data)
     {
         $details = $this->getUserNric($data['nric_no']);
@@ -149,6 +161,38 @@ trait OauthTrait
 
                 ]
             ]);
+            return [
+                'user' => $details
+                , 'oauth' =>  json_decode((string) $response->getBody(), true)
+            ];
+
+        } catch (RequestException $e) {
+
+            if ($e->hasResponse()) {
+
+                return $this->errorResponse(['Invalid Social Account'],'Invalid Credentials', 110004, 401);
+            }
+        }
+
+    }
+
+    public function mobileOauthResponse(array $data)
+    {
+
+        $details = $this->getUserByMobile($data['mobile_no']);
+        $http = new Client();
+
+        try {
+            $response = $http->post($this->endpoint(),['form_params' =>
+                [
+                    'grant_type' => 'client_credentials',
+                    'client_id' => $data['client_id'],
+                    'client_secret' => $data['client_secret'],
+                    'scope' => '*'
+
+                ]
+            ]);
+
             return [
                 'user' => $details
                 , 'oauth' =>  json_decode((string) $response->getBody(), true)
