@@ -66,7 +66,7 @@ Route::prefix('v1/')->group(function () {
 
 });
 
-Route::group(['middleware' => ['auth_client', 'auth:api']], function() {
+Route::group(['middleware' => ['auth_client']], function() {
 
     Route::get('v1/job/lists', 'Job\JobController@jobApiLists');
 
