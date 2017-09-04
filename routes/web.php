@@ -44,9 +44,11 @@ Route::group(['middleware' => ['auth']], function () {
     Route::prefix('job')->group(function() {
        Route::get('/create','Job\JobController@create')->name('job.create');
        Route::get('/lists','Job\JobController@index')->name('job.lists');
+       Route::get('/test','Job\JobController@testRelationship')->name('job.test');
        Route::post('/add','Job\JobController@store')->name('job.add');
     });
 
 });
 
 Route::get('/home', 'HomeController@index')->name('home');
+

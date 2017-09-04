@@ -14,6 +14,7 @@ use App\Http\Controllers\Controller;
 class JobController extends Controller
 {
     private $request;
+    protected $data;
 
     public function __construct(Request $request)
     {
@@ -49,26 +50,26 @@ class JobController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
         $data = $request->all();
 
-        $location = explode('.',$request->input('job_location'));
+        $location = explode('.', $request->input('job_location'));
         $industry = explode('.', $request->input('industry'));
 
         $splitJobAndIndustry = [
             'location_id' => $location[0],
-            'job_location' =>  $location[1],
+            'job_location' => $location[1],
             'industry_id' => $industry[0],
             'industry' => $industry[1]
         ];
 
         $validator = $this->rules($data);
 
-        if($validator->fails()) {
+        if ($validator->fails()) {
 
             return redirect('job/create')
                 ->withErrors($validator)
@@ -78,47 +79,47 @@ class JobController extends Controller
             $profile['job_image'] = $request->file('job_image')->store('jobs');
             $mergeData = array_merge($data, $profile, $splitJobAndIndustry);
 
-
             $this->saveData($mergeData);
 
             return redirect('job/lists');
-     }
+        }
 
     }
 
     public function saveData(array $data)
     {
-        $query = new Job();
-        $query->job_id = Auth::user()->id;
-        $query->job_title = $data['job_title'];
-        $query->location_id = $data['location_id'];
-        $query->location = $data['job_location'];
-        $query->description = $data['job_description'];
-        $query->role = $data['job_role'];
-        $query->choices = $data['gender'];
-        $query->job_image_path = $data['job_image'];
-        $query->no_of_person = $data['no_of_person'];
-        $query->contact_person = $data['contact_person'];
-        $query->contact_no = $data['contact_no'];
-        $query->business_manager = $data['business_manager'];
-        $query->employer = $data['job_employer'];
-        $query->rate = $data['hourly_rate'];
-        $query->language = $data['preferred_language'];
-        $query->job_date = $data['date'];
-        $query->end_date = $data['end_date'];
-        $query->industry_id = $data['industry_id'];
-        $query->industry = $data['industry'];
-        $query->notes = $data['notes'];
-        $query->status = $data['job_status'];
+        $user = \App\User::find(Auth::user()->id);
 
-        $query->save();
+        $user->job()->create([
+            'job_title' => $data['job_title'],
+            'job_id' => Auth::user()->id,
+            'location_id' => $data['location_id'],
+            'location' => $data['job_location'],
+            'description' => $data['job_description'],
+            'role' => $data['job_role'],
+            'gender' => $data['gender'],
+            'job_image_path' => $data['job_image'],
+            'no_of_person' => $data['no_of_person'],
+            'contact_person' => $data['contact_person'],
+            'contact_no' => $data['contact_no'],
+            'business_manager' => $data['business_manager'],
+            'employer' => $data['job_employer'],
+            'rate' => $data['hourly_rate'],
+            'language' => $data['preferred_language'],
+            'job_date' => $data['date'],
+            'end_date' => $data['end_date'],
+            'industry_id' => $data['industry_id'],
+            'industry' => 'Testing industry',
+            'notes' => $data['notes'],
+            'job_status' => $data['job_status']
+        ]);
 
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -129,7 +130,7 @@ class JobController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -140,8 +141,8 @@ class JobController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request $request
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -152,7 +153,7 @@ class JobController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
@@ -166,7 +167,7 @@ class JobController extends Controller
     public function rules(array $data)
     {
         return Validator::make($data, [
-           'job_title' => 'required',
+            'job_title' => 'required',
             'job_description' => 'required|string',
             'job_role' => 'required|string',
             'job_image' => 'required',
@@ -232,11 +233,17 @@ class JobController extends Controller
 
     public function jobApiLists()
     {
+
         $job = new Job();
 
-        $industry = (array) $this->request->get('industries');
-        $location= (array) $this->request->get('locations');
+        $industry = (array)$this->request->get('industries');
+        $location = (array)$this->request->get('locations');
+        $limit = (int) $this->request->get('limit');
+
+        $start = $this->request->get('start');
+        $created = $this->request->get('created');
         $date = $this->request->get('date');
+
 
         if (count($industry) == 0 && count($location) == 0 && empty($date)) {
 
@@ -270,6 +277,10 @@ class JobController extends Controller
 
             $output = $job->filterByIndustryDate($industry, $date);
 
+        }elseif(!empty($limit) && !empty($start) && !empty($end)) {
+
+            $output = $job->filterByLimitStartEnd($limit, $start, $created);
+
         } else {
 
             $output = $job->jobLists();
@@ -301,7 +312,7 @@ class JobController extends Controller
 
         $dataUndefined = !empty($data) ? $data : [];
 
-        return response()->json(['jobs' => $dataUndefined]);
+        return response()->json(['jobs' => $dataUndefined ]);
     }
 
     /**
@@ -310,13 +321,13 @@ class JobController extends Controller
      * @param $date
      * @return mixed
      */
-    public function filterJobs($location = null, $industry = null, $date=null)
+    public function filterJobs($location = null, $industry = null, $date = null)
     {
-       $splitLocation =  explode(',',$location);
-       $splitIndustry = explode(',', $industry);
+        $splitLocation = explode(',', $location);
+        $splitIndustry = explode(',', $industry);
 
         $job = new Job();
-        $value = $job->multipleFilter($splitLocation,$splitIndustry, $date);
+        $value = $job->multipleFilter($splitLocation, $splitIndustry, $date);
 
         return $value;
 
