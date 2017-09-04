@@ -28,8 +28,7 @@ Route::prefix('v1/')->group(function () {
 
 Route::prefix('v1')->group(function () {
 
-    Route::post('mobile/login', 'Mobile\MobileFireBaseController@checkIfValidToken');
-    Route::post('mobile/validate', 'Mobile\MobileFireBaseController@fireBaseValidation');
+    Route::post('mobile/login', 'Mobile\MobileFireBaseController@fireBaseValidation');
 
 });
 
@@ -67,4 +66,16 @@ Route::prefix('v1/')->group(function () {
 
 });
 
-Route::get('v1/job/lists', 'Job\JobController@jobApiLists')->middleware('auth:api');
+Route::group(['middleware' => ['auth:api']], function() {
+
+    Route::get('v1/job/lists', 'Job\JobController@jobApiLists');
+
+});
+
+Route::group(['middleware' => ['auth_client']], function() {
+
+    Route::get('v1/job/lists', 'Job\JobController@jobApiLists');
+
+});
+
+

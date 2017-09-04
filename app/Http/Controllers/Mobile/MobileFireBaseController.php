@@ -20,7 +20,9 @@ class MobileFireBaseController extends Controller
     {
         $data = [
            'firebase_token' => $value['firebase_token'],
-            'mobile_no' => $value['mobile_no']
+            'mobile_no' => $value['mobile_no'],
+            'client_id' => $value['client_id'],
+            'client_secret' => $value['client_secret'],
         ];
 
         return $data;
@@ -48,7 +50,7 @@ class MobileFireBaseController extends Controller
 
             if ($getMobileNo && $uid) {
 
-                return $uid = $idToken->getClaim('sub');
+                return  $this->mobileOauthResponse($data);
 
             } else {
 
