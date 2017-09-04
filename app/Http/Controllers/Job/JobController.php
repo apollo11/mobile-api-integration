@@ -315,22 +315,4 @@ class JobController extends Controller
         return response()->json(['jobs' => $dataUndefined ]);
     }
 
-    /**
-     * @param array $location
-     * @param array $industry
-     * @param $date
-     * @return mixed
-     */
-    public function filterJobs($location = null, $industry = null, $date = null)
-    {
-        $splitLocation = explode(',', $location);
-        $splitIndustry = explode(',', $industry);
-
-        $job = new Job();
-        $value = $job->multipleFilter($splitLocation, $splitIndustry, $date);
-
-        return $value;
-
-    }
-
 }
