@@ -109,7 +109,7 @@ class JobController extends Controller
             'job_date' => $data['date'],
             'end_date' => $data['end_date'],
             'industry_id' => $data['industry_id'],
-            'industry' => 'Testing industry',
+            'industry' => $data['industry'],
             'notes' => $data['notes'],
             'job_status' => $data['job_status']
         ]);
@@ -124,7 +124,11 @@ class JobController extends Controller
      */
     public function show($id)
     {
-        //
+        $job = new Job();
+
+        $output = $job::find($id);
+
+        return ['job_details' => $output];
     }
 
     /**
@@ -234,6 +238,7 @@ class JobController extends Controller
     public function jobApiLists()
     {
 
+
         $job = new Job();
 
         $industry = (array)$this->request->get('industries');
@@ -249,47 +254,48 @@ class JobController extends Controller
 
             $output = $job->jobLists();
 
-        } elseif (empty($location) && empty($date)) {
+        } elseif (count($industry) != 0 && count($location) != 0 && !empty($date)) {
 
-            $output = $job->filterJobsByIndustry($industry);
+            $output = $job->multipleFilter($location, $industry, $date, $limit);
 
-        } elseif (empty($industry) && empty($date)) {
+        } elseif (!empty($industry)) {
 
-            $output = $job->filterJobsByLocation($location);
+            $output = $job->filterJobsByIndustry($industry, $limit);
 
-        } else if (empty($industry) && empty($location)) {
+        } elseif (!empty($location)) {
 
-            $output = $job->filterByDate($date);
+            $output = $job->filterJobsByLocation($location, $limit);
+
+        }elseif (!empty($date)) {
+
+            $output = $job->filterByDate($date, $limit);
 
         } elseif (!empty($industry) && !empty($location)) {
 
-            $output = $job->filterbyLocationAndIndustry($location, $industry);
-
-        } elseif (!empty($industry) && !empty($location) && !empty($date)) {
-
-            $output = $job->multipleFilter($location, $industry, $date);
+            $output = $job->filterbyLocationAndIndustry($location, $industry, $limit);
 
         } elseif (!empty($location) && !empty($date)) {
 
-            $output = $job->filterByLocationDate($location, $date);
+           $output = $job->filterByLocationDate($location, $date);
 
-        } elseif (!empty($industry) && !empty($date)) {
+        } elseif (empty($industry) && !empty($date)) {
 
             $output = $job->filterByIndustryDate($industry, $date);
 
-        }elseif(!empty($limit) && !empty($start) && !empty($end)) {
+        } elseif (!empty($limit) && !empty($start) && !empty($end)) {
 
             $output = $job->filterByLimitStartEnd($limit, $start, $created);
 
         } else {
 
-            $output = $job->jobLists();
+          $output = $job->jobLists();
         }
 
         foreach ($output as $value) {
 
             $start_date = $date = date_create($value->start_date, timezone_open('UTC'));
             $end_date = $date = date_create($value->end_date, timezone_open('UTC'));
+            $created = $date = date_create($value->created_at, timezone_open('UTC'));
 
             $data[] = [
                 'id' => $value->id,
@@ -302,6 +308,7 @@ class JobController extends Controller
                     'id' => $value->location_id,
                     'name' => $value->location,
                 ],
+                'created_date' => date_format($created, 'Y-m-d H:i:sP'),
                 'start_date' => date_format($start_date, 'Y-m-d H:i:sP'),
                 'end_date' => date_format($end_date, 'Y-m-d H:i:sP'),
                 'contact_no' => $value->contact_no,
