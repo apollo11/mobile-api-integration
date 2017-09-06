@@ -33,7 +33,9 @@ class Job extends Model
         'location',
         'location_id',
         'end_date',
-        'job_id'
+        'job_id',
+        'nationality',
+        'age'
     ];
 
     /**
@@ -49,7 +51,7 @@ class Job extends Model
 
     public function jobLists($limit)
     {
-        $jobLists =  DB::table('jobs')
+        $jobLists = DB::table('jobs')
             ->select('id', 'employer'
                 , 'location'
                 , 'location_id'
@@ -60,13 +62,17 @@ class Job extends Model
                 , 'end_date'
                 , 'contact_no'
                 , 'rate'
-                , 'job_image_path')
+                , 'job_image_path'
+                , 'nationality'
+                , 'choices as gender'
+                , 'age'
+            )
             ->orderBy('job_date', 'desc')
             ->orderBy('created_at', 'desc')
             ->limit($limit)
             ->get();
 
-       return $jobLists;
+        return $jobLists;
 
     }
 
@@ -87,7 +93,11 @@ class Job extends Model
                 , 'end_date'
                 , 'contact_no'
                 , 'rate'
-                , 'job_image_path')
+                , 'job_image_path'
+                , 'nationality'
+                , 'choices as gender'
+                , 'age'
+            )
             ->whereIn('industry_id', $id)
             ->orderBy('job_date', 'desc')
             ->orderBy('created_at', 'desc')
@@ -113,7 +123,11 @@ class Job extends Model
                 , 'end_date'
                 , 'contact_no'
                 , 'rate'
-                , 'job_image_path')
+                , 'job_image_path'
+                , 'nationality'
+                , 'choices as gender'
+                , 'age'
+            )
             ->whereIn('location_id', $id)
             ->orderBy('job_date', 'desc')
             ->orderBy('created_at', 'desc')
@@ -139,7 +153,11 @@ class Job extends Model
                 , 'end_date'
                 , 'contact_no'
                 , 'rate'
-                , 'job_image_path')
+                , 'job_image_path'
+                , 'nationality'
+                , 'choices as gender'
+                , 'age'
+            )
             ->whereDate('job_date', date($date))
             ->orderBy('job_date', 'desc')
             ->orderBy('created_at', 'desc')
@@ -151,7 +169,7 @@ class Job extends Model
     /**
      * Filter by location, date and jobs
      */
-    public function multipleFilter($location,$industry, $date, $limit)
+    public function multipleFilter($location, $industry, $date, $limit)
     {
         $jobs = DB::table('jobs')
             ->select('id', 'employer'
@@ -164,7 +182,11 @@ class Job extends Model
                 , 'end_date'
                 , 'contact_no'
                 , 'rate'
-                , 'job_image_path')
+                , 'job_image_path'
+                , 'nationality'
+                , 'choices as gender'
+                , 'age'
+            )
             ->whereDate('job_date', date($date))
             ->whereIn('industry_id', $industry)
             ->whereIn('location_id', $location)
@@ -193,7 +215,11 @@ class Job extends Model
                 , 'end_date'
                 , 'contact_no'
                 , 'rate'
-                , 'job_image_path')
+                , 'job_image_path'
+                , 'nationality'
+                , 'choices as gender'
+                , 'age'
+            )
             ->whereIn('industry_id', $industry)
             ->whereIn('location_id', $location)
             ->orderBy('job_date', 'desc')
@@ -210,7 +236,6 @@ class Job extends Model
      */
     public function filterByLocationDate($location, $date, $limit)
     {
-
         $jobs = DB::table('jobs')
             ->select('id', 'employer'
                 , 'location'
@@ -222,7 +247,11 @@ class Job extends Model
                 , 'end_date'
                 , 'contact_no'
                 , 'rate'
-                , 'job_image_path')
+                , 'job_image_path'
+                , 'nationality'
+                , 'choices as gender'
+                , 'age'
+            )
             ->whereIn('location_id', $location)
             ->whereDate('job_date', $date)
             ->orderBy('job_date', 'desc')
@@ -250,7 +279,11 @@ class Job extends Model
                 , 'end_date'
                 , 'contact_no'
                 , 'rate'
-                , 'job_image_path')
+                , 'job_image_path'
+                , 'nationality'
+                , 'choices as gender'
+                , 'age'
+            )
             ->whereIn('industry_id', $industry)
             ->whereDate('job_date', date($date))
             ->orderBy('job_date', 'desc')
@@ -264,10 +297,12 @@ class Job extends Model
     /**
      * Filter by limit, start date, end date
      */
-    public function filterByLimitStartEnd($limit, $start, $created)
+    public function filterByLimitStartEnd($limit = 20, array $param)
     {
+
         $jobs = DB::table('jobs')
-            ->select('id', 'employer'
+            ->select('id'
+                , 'employer'
                 , 'location'
                 , 'location_id'
                 , 'industry'
@@ -277,9 +312,29 @@ class Job extends Model
                 , 'end_date'
                 , 'contact_no'
                 , 'rate'
-                , 'job_image_path')
-            ->where('job_date','<=', date($start))
-            ->where('created_at','<=' ,date($created))
+                , 'job_image_path'
+                , 'nationality'
+                , 'choices as gender'
+                , 'age')
+            ->when(!empty($param['industries']), function($query) use ($param) {
+
+                return $query->whereIn('industry_id', $param['industries']);
+            })
+            ->when(!empty($param['locations']), function($query) use ($param) {
+
+                return $query->whereIn('location_id', $param['locations']);
+            })
+            ->when(!empty($param['date_from']) && !empty($param['date_to']) , function($query) use ($param) {
+
+                return $query->whereBetween('job_date', [$param['date_from'], $param['date_to']]);
+            })
+            ->when(!empty($param['start']) && !empty($param['created']), function($query) use ($param) {
+
+                return  $query->whereRaw("CASE WHEN job_date = '" . $param['start'].
+                    "' THEN created_at < '" . $param['created'] .
+                    "' ELSE job_date <= '" . $param['start'] . "' END");
+
+            })
             ->orderBy('job_date', 'desc')
             ->orderBy('created_at', 'desc')
             ->limit($limit)
@@ -288,5 +343,33 @@ class Job extends Model
         return $jobs;
     }
 
+
+    /**
+     * Job Details
+     */
+    public function jobDetails($id)
+    {
+        $jobDetails = DB::table('jobs')
+            ->select('id'
+                , 'employer'
+                , 'location'
+                , 'location_id'
+                , 'industry'
+                , 'industry_id'
+                , 'job_date as start_date'
+                , 'created_at'
+                , 'end_date'
+                , 'contact_no'
+                , 'rate'
+                , 'job_image_path'
+                , 'nationality'
+                , 'choices as gender'
+                , 'age'
+            )
+            ->where('id', '=', $id)
+            ->get();
+
+        return $jobDetails;
+    }
 
 }

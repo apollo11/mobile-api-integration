@@ -88,6 +88,8 @@ class JobController extends Controller
 
     public function saveData(array $data)
     {
+
+
         $user = \App\User::find(Auth::user()->id);
 
         $user->job()->create([
@@ -98,6 +100,8 @@ class JobController extends Controller
             'description' => $data['job_description'],
             'role' => $data['job_role'],
             'gender' => $data['gender'],
+            'age' => $data['age'],
+            'nationality' => $data['nationality'],
             'job_image_path' => $data['job_image'],
             'no_of_person' => $data['no_of_person'],
             'contact_person' => $data['contact_person'],
@@ -126,9 +130,9 @@ class JobController extends Controller
     {
         $job = new Job();
 
-        $output = $job::find($id);
+        $output = $job->jobDetails($id);
 
-        return ['job_details' => $output];
+        return $this->jobInfoOutput($output);
     }
 
     /**
@@ -189,7 +193,8 @@ class JobController extends Controller
             'job_location' => 'required|string',
             'contact_no' => 'required|string',
             'industry' => 'required|string',
-
+            'age' => 'required|numeric',
+            'nationality' => 'required|string'
         ]);
     }
 
@@ -245,12 +250,68 @@ class JobController extends Controller
 
         $start = $this->request->get('start');
         $created = $this->request->get('created');
-        $date = $this->request->get('date');
+        $date_from = $this->request->get('date_from');
+        $date_to = $this->request->get('date_to');
+
+        $param = [
+            'industries' => $industry,
+            'locations' => $location,
+            'start' => $start,
+            'created' => $created,
+            'limit' => $limit,
+            'date_from' => $date_from,
+            'date_to' => $date_to
+        ];
+
+        $output = $job->filterByLimitStartEnd($limit, $param);
+
+        return $this->jobInfoOutput($output);
+
+    }
+
+    function jobInfoOutput($output)
+    {
+        foreach ($output as $value) {
+
+            $start_date = $date = date_create($value->start_date, timezone_open('UTC'));
+            $end_date = $date = date_create($value->end_date, timezone_open('UTC'));
+            $created = $date = date_create($value->created_at, timezone_open('UTC'));
+
+            $data[] = [
+                'id' => $value->id,
+                'employer' => $value->employer,
+                'industry' => [
+                    'id' => $value->industry_id,
+                    'name' => $value->industry
+                ],
+                'location' => [
+                    'id' => $value->location_id,
+                    'name' => $value->location,
+                ],
+                'created_date' => date_format($created, 'Y-m-d H:i:sP'),
+                'start_date' => date_format($start_date, 'Y-m-d H:i:sP'),
+                'end_date' => date_format($end_date, 'Y-m-d H:i:sP'),
+                'contact_no' => $value->contact_no,
+                'rate' => $value->rate,
+                'thumbnail_url' => $value->job_image_path,
+                'age' => $value->age,
+                'nationality' => ucfirst($value->nationality)
+            ];
+        }
+
+        $dataUndefined = !empty($data) ? $data : [];
+
+        return response()->json(['jobs' => $dataUndefined]);
+
+    }
+
+    public function jobFilter($industry, $location, $date, $limit)
+    {
+        $job = new Job();
 
         if (count($industry) == 0 && count($location) == 0 && empty($date)) {
 
             $output = $job->jobLists($limit);
-
 
         } elseif (count($industry) != 0 && count($location) != 0 && !empty($date)) {
 
@@ -285,41 +346,7 @@ class JobController extends Controller
             $output = $job->jobLists($limit);
         }
 
-        if ($limit != 0 && !empty($start) && !empty($created)) {
-
-            $output = $job->filterByLimitStartEnd($limit, $start, $created);
-
-        }
-
-        foreach ($output as $value) {
-
-            $start_date = $date = date_create($value->start_date, timezone_open('UTC'));
-            $end_date = $date = date_create($value->end_date, timezone_open('UTC'));
-            $created = $date = date_create($value->created_at, timezone_open('UTC'));
-
-            $data[] = [
-                'id' => $value->id,
-                'employer' => $value->employer,
-                'industry' => [
-                    'id' => $value->industry_id,
-                    'name' => $value->industry
-                ],
-                'location' => [
-                    'id' => $value->location_id,
-                    'name' => $value->location,
-                ],
-                'created_date' => date_format($created, 'Y-m-d H:i:sP'),
-                'start_date' => date_format($start_date, 'Y-m-d H:i:sP'),
-                'end_date' => date_format($end_date, 'Y-m-d H:i:sP'),
-                'contact_no' => $value->contact_no,
-                'rate' => $value->rate,
-                'thumbnail_url' => $value->job_image_path
-            ];
-        }
-
-        $dataUndefined = !empty($data) ? $data : [];
-
-        return response()->json(['jobs' => $dataUndefined]);
+        return $output;
     }
 
 }
