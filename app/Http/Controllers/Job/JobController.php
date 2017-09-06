@@ -237,58 +237,58 @@ class JobController extends Controller
 
     public function jobApiLists()
     {
-
-
         $job = new Job();
 
         $industry = (array)$this->request->get('industries');
         $location = (array)$this->request->get('locations');
-        $limit = (int) $this->request->get('limit');
+        $limit = (int)$this->request->get('limit');
 
         $start = $this->request->get('start');
         $created = $this->request->get('created');
         $date = $this->request->get('date');
 
-
         if (count($industry) == 0 && count($location) == 0 && empty($date)) {
 
-            $output = $job->jobLists();
+            $output = $job->jobLists($limit);
+
 
         } elseif (count($industry) != 0 && count($location) != 0 && !empty($date)) {
 
             $output = $job->multipleFilter($location, $industry, $date, $limit);
 
-        } elseif (!empty($industry)) {
+        } elseif (count($industry) != 0 && count($location) == 0 && empty($date)) {
 
             $output = $job->filterJobsByIndustry($industry, $limit);
 
-        } elseif (!empty($location)) {
+        } elseif (count($industry) == 0 && count($location) != 0 && empty($date)) {
 
             $output = $job->filterJobsByLocation($location, $limit);
 
-        }elseif (!empty($date)) {
+        } elseif (count($industry) == 0 && count($location) == 0 && !empty($date)) {
 
             $output = $job->filterByDate($date, $limit);
 
-        } elseif (!empty($industry) && !empty($location)) {
+        } elseif (count($industry) != 0 && count($location) != 0 && empty($date)) {
 
             $output = $job->filterbyLocationAndIndustry($location, $industry, $limit);
 
-        } elseif (!empty($location) && !empty($date)) {
+        } elseif (count($industry) == 0 && count($location) != 0 && !empty($date)) {
 
-           $output = $job->filterByLocationDate($location, $date);
+            $output = $job->filterByLocationDate($location, $date, $limit);
 
-        } elseif (empty($industry) && !empty($date)) {
+        } elseif (count($industry) != 0 && count($location) == 0 && !empty($date)) {
 
-            $output = $job->filterByIndustryDate($industry, $date);
-
-        } elseif (!empty($limit) && !empty($start) && !empty($end)) {
-
-            $output = $job->filterByLimitStartEnd($limit, $start, $created);
+            $output = $job->filterByIndustryDate($industry, $date, $limit);
 
         } else {
 
-          $output = $job->jobLists();
+            $output = $job->jobLists($limit);
+        }
+
+        if ($limit != 0 && !empty($start) && !empty($created)) {
+
+            $output = $job->filterByLimitStartEnd($limit, $start, $created);
+
         }
 
         foreach ($output as $value) {
@@ -319,7 +319,7 @@ class JobController extends Controller
 
         $dataUndefined = !empty($data) ? $data : [];
 
-        return response()->json(['jobs' => $dataUndefined ]);
+        return response()->json(['jobs' => $dataUndefined]);
     }
 
 }

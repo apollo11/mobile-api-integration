@@ -47,7 +47,7 @@ class Job extends Model
      * List of users for homepage
      */
 
-    public function jobLists()
+    public function jobLists($limit)
     {
         $jobLists =  DB::table('jobs')
             ->select('id', 'employer'
@@ -63,6 +63,7 @@ class Job extends Model
                 , 'job_image_path')
             ->orderBy('job_date', 'desc')
             ->orderBy('created_at', 'desc')
+            ->limit($limit)
             ->get();
 
        return $jobLists;
@@ -150,7 +151,7 @@ class Job extends Model
     /**
      * Filter by location, date and jobs
      */
-    public function multipleFilter($location,$industry, $date,$limit)
+    public function multipleFilter($location,$industry, $date, $limit)
     {
         $jobs = DB::table('jobs')
             ->select('id', 'employer'
@@ -207,7 +208,7 @@ class Job extends Model
     /**
      * Filter by industry and date
      */
-    public function filterByLocationDate($location, $date)
+    public function filterByLocationDate($location, $date, $limit)
     {
 
         $jobs = DB::table('jobs')
@@ -223,9 +224,10 @@ class Job extends Model
                 , 'rate'
                 , 'job_image_path')
             ->whereIn('location_id', $location)
-            ->whereDate('job_date', date($date))
+            ->whereDate('job_date', $date)
             ->orderBy('job_date', 'desc')
             ->orderBy('created_at', 'desc')
+            ->limit($limit)
             ->get();
 
         return $jobs;
@@ -235,7 +237,7 @@ class Job extends Model
     /**
      * Filter by indutry and date
      */
-    public function filterByIndustryDate(array $industry, $date)
+    public function filterByIndustryDate($industry, $date, $limit)
     {
         $jobs = DB::table('jobs')
             ->select('id', 'employer'
@@ -253,6 +255,7 @@ class Job extends Model
             ->whereDate('job_date', date($date))
             ->orderBy('job_date', 'desc')
             ->orderBy('created_at', 'desc')
+            ->limit($limit)
             ->get();
 
         return $jobs;
@@ -279,61 +282,11 @@ class Job extends Model
             ->where('created_at','<=' ,date($created))
             ->orderBy('job_date', 'desc')
             ->orderBy('created_at', 'desc')
-            ->get();
-
-        return $jobs;
-    }
-
-    /**
-     * Limit of job lists
-     */
-    public function limitJobLists($limit)
-    {
-        $jobs = DB::table('jobs')
-            ->select('id', 'employer'
-                , 'location'
-                , 'location_id'
-                , 'industry'
-                , 'industry_id'
-                , 'job_date as start_date'
-                , 'created_at'
-                , 'end_date'
-                , 'contact_no'
-                , 'rate'
-                , 'job_image_path')
             ->limit($limit)
-            ->orderBy('job_date', 'desc')
-            ->orderBy('created_at', 'desc')
             ->get();
 
         return $jobs;
-
     }
 
-    /**
-     * List of users for homepage
-     */
-
-    public function listWithoutLimit()
-    {
-        $jobLists =  DB::table('jobs')
-            ->select('id', 'employer'
-                , 'location'
-                , 'location_id'
-                , 'industry'
-                , 'industry_id'
-                , 'created_at'
-                , 'job_date as start_date'
-                , 'end_date'
-                , 'contact_no'
-                , 'rate'
-                , 'job_image_path')
-            ->orderBy('job_date', 'desc')
-            ->orderBy('created_at', 'desc')
-            ->get();
-
-        return $jobLists;
-
-    }
 
 }
