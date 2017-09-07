@@ -19,8 +19,8 @@ class BugisAdministrativeSeeder extends Seeder
 
             DB::table('jobs')->insert([
                 'job_title' => 'Teller',
-                'user_id' => 1,
-                'job_id' => 1,
+                'user_id' => 13,
+                'job_id' => 13,
                 'location_id' => 1,
                 'location' => 'Woodlands',
                 'role' => 'Manager',

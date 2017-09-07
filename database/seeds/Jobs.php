@@ -19,8 +19,8 @@ class Jobs extends Seeder
 
             DB::table('jobs')->insert([
                 'job_title' => 'Cleaner',
-                'user_id' => 1,
-                'job_id' => 1,
+                'user_id' => 13,
+                'job_id' => 13,
                 'location_id' => 3,
                 'location' => 'Yew Tee',
                 'role' => 'Supervisor',

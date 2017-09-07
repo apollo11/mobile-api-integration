@@ -19,8 +19,8 @@ class DentalYishunSeeder extends Seeder
 
             DB::table('jobs')->insert([
                 'job_title' => 'Receptionist',
-                'user_id' => 1,
-                'job_id' => 1,
+                'user_id' => 13,
+                'job_id' => 13,
                 'location_id' => 2,
                 'location' => 'Yishun',
                 'role' => 'Manager',
