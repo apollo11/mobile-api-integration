@@ -310,6 +310,11 @@ class JobController extends Controller
 
     }
 
+    /**
+     * Adding response output for lists
+     * @param $output
+     * @return \Illuminate\Http\JsonResponse
+     */
     function jobInfoOutput($output)
     {
         foreach ($output as $value) {
