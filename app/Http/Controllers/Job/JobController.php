@@ -100,6 +100,7 @@ class JobController extends Controller
             'location_id' => $data['location_id'],
             'location' => $data['job_location'],
             'description' => $data['job_description'],
+            'job_requirements' => $data['job_requirements'],
             'role' => $data['job_role'],
             'gender' => $data['gender'],
             'nationality' => $data['nationality'],
@@ -132,41 +133,44 @@ class JobController extends Controller
     {
         $job = new Job();
 
-       $output = $job->jobDetails($id);
-
+        $output = $job->jobDetails($id);
 
         $start_date = $date = date_create($output->start_date, timezone_open('UTC'));
         $end_date = $date = date_create($output->end_date, timezone_open('UTC'));
         $created = $date = date_create($output->created_at, timezone_open('UTC'));
 
-       $details = [
-           'job_details' => [
-               'id' => $output->id,
-               'employer' => $output->employer,
-               'industry' => [
-                   'id' => $output->industry_id,
-                   'name' => $output->industry
-               ],
-               'location' => [
-                   'id' => $output->location_id,
-                   'name' => $output->location,
-               ],
-               'created_date' => date_format($created, 'Y-m-d H:i:sP'),
-               'start_date' => date_format($start_date, 'Y-m-d H:i:sP'),
-               'end_date' => date_format($end_date, 'Y-m-d H:i:sP'),
-               'contact_no' => $output->contact_no,
-               'rate' => $output->rate,
-               'thumbnail_url' => $output->job_image_path,
-               'nationality' => ucfirst($output->nationality),
-               'description' => $output->description,
-               'min_age' => $output->min_age,
-               'max_age' => $output->max_age,
-               'role' => $output->role,
-               'remarks' => $output->notes,
-               'language' => $output->language,
-               'gender' => $output->gender,
-           ]
-       ];
+        $details = [
+            'job_details' => [
+                'id' => $output->id,
+                'employer' => [
+                    'name' => $output->company_name,
+                    'description' => $output->company_description
+                ],
+                'industry' => [
+                    'id' => $output->industry_id,
+                    'name' => $output->industry
+                ],
+                'location' => [
+                    'id' => $output->location_id,
+                    'name' => $output->location,
+                ],
+                'created_date' => date_format($created, 'Y-m-d H:i:sP'),
+                'start_date' => date_format($start_date, 'Y-m-d H:i:sP'),
+                'end_date' => date_format($end_date, 'Y-m-d H:i:sP'),
+                'contact_no' => $output->contact_no,
+                'rate' => $output->rate,
+                'thumbnail_url' => $output->job_image_path,
+                'nationality' => ucfirst($output->nationality),
+                'description' => $output->description,
+                'min_age' => $output->min_age,
+                'max_age' => $output->max_age,
+                'role' => $output->role,
+                'remarks' => $output->notes,
+                'language' => $output->language,
+                'gender' => $output->gender,
+                'job_requirements' => $output->job_requirements,
+            ]
+        ];
 
         return response()->json($details);
     }
@@ -213,6 +217,7 @@ class JobController extends Controller
         return Validator::make($data, [
             'job_title' => 'required',
             'job_description' => 'required|string',
+            'job_requirements' => 'required|string',
             'job_role' => 'required|string',
             'job_image' => 'required',
             'no_of_person' => 'required|numeric',
@@ -315,7 +320,10 @@ class JobController extends Controller
 
             $data[] = [
                 'id' => $value->id,
-                'employer' => $value->employer,
+                'employer' => [
+                    'name' => $value->company_name,
+                    'description' => $value->company_description
+                ],
                 'industry' => [
                     'id' => $value->industry_id,
                     'name' => $value->industry
@@ -383,6 +391,5 @@ class JobController extends Controller
 
         return $output;
     }
-
 
 }
