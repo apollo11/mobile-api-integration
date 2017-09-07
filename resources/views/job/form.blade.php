@@ -73,8 +73,12 @@
                                     <div class="form-group{{ $errors->has('age') ? ' has-error' : '' }}">
                                         <label class="col-md-3 control-label">Age</label>
                                         <div class="col-md-7">
-                                            <input type="text" class="form-control" placeholder="Enter your age"
-                                                   value="{{ old('age') }}" name="age">
+                                            <select class="form-control" name="age">
+                                                <option value="16-20">16-20</option>
+                                                <option value="21-30">21-30</option>
+                                                <option value="41-50">41-50</option>
+                                                <option value="50">above 50</option>
+                                            </select>
 
                                             @if ($errors->has('age'))
                                                 <span class="help-block">
@@ -548,7 +552,6 @@
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
