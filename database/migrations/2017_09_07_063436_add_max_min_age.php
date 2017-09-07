@@ -16,7 +16,6 @@ class AddMaxMinAge extends Migration
         Schema::table('jobs', function (Blueprint $table) {
             $table->integer('min_age');
             $table->integer('max_age');
-            $table->dropColumn(['age']);
         });
     }
 
