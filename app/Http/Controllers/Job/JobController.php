@@ -59,12 +59,15 @@ class JobController extends Controller
 
         $location = explode('.', $request->input('job_location'));
         $industry = explode('.', $request->input('industry'));
+        $age = explode('-', $request->input('age'));
 
-        $splitJobAndIndustry = [
+        $split = [
             'location_id' => $location[0],
             'job_location' => $location[1],
             'industry_id' => $industry[0],
-            'industry' => $industry[1]
+            'industry' => $industry[1],
+            'min_age' => $age[0],
+            'max_age' => $age[1]
         ];
 
         $validator = $this->rules($data);
@@ -77,7 +80,7 @@ class JobController extends Controller
         } else {
 
             $profile['job_image'] = $request->file('job_image')->store('jobs');
-            $mergeData = array_merge($data, $profile, $splitJobAndIndustry);
+            $mergeData = array_merge($data, $profile, $split);
 
             $this->saveData($mergeData);
 
@@ -89,7 +92,6 @@ class JobController extends Controller
     public function saveData(array $data)
     {
 
-
         $user = \App\User::find(Auth::user()->id);
 
         $user->job()->create([
@@ -100,7 +102,6 @@ class JobController extends Controller
             'description' => $data['job_description'],
             'role' => $data['job_role'],
             'gender' => $data['gender'],
-            'age' => $data['age'],
             'nationality' => $data['nationality'],
             'job_image_path' => $data['job_image'],
             'no_of_person' => $data['no_of_person'],
@@ -115,9 +116,10 @@ class JobController extends Controller
             'industry_id' => $data['industry_id'],
             'industry' => $data['industry'],
             'notes' => $data['notes'],
-            'job_status' => $data['job_status']
+            'job_status' => $data['job_status'],
+            'min_age' => $data['min_age'],
+            'max_age' => $data['max_age']
         ]);
-
     }
 
     /**
@@ -130,9 +132,43 @@ class JobController extends Controller
     {
         $job = new Job();
 
-        $output = $job->jobDetails($id);
+       $output = $job->jobDetails($id);
 
-        return $this->jobInfoOutput($output);
+
+        $start_date = $date = date_create($output->start_date, timezone_open('UTC'));
+        $end_date = $date = date_create($output->end_date, timezone_open('UTC'));
+        $created = $date = date_create($output->created_at, timezone_open('UTC'));
+
+       $details = [
+           'job_details' => [
+               'id' => $output->id,
+               'employer' => $output->employer,
+               'industry' => [
+                   'id' => $output->industry_id,
+                   'name' => $output->industry
+               ],
+               'location' => [
+                   'id' => $output->location_id,
+                   'name' => $output->location,
+               ],
+               'created_date' => date_format($created, 'Y-m-d H:i:sP'),
+               'start_date' => date_format($start_date, 'Y-m-d H:i:sP'),
+               'end_date' => date_format($end_date, 'Y-m-d H:i:sP'),
+               'contact_no' => $output->contact_no,
+               'rate' => $output->rate,
+               'thumbnail_url' => $output->job_image_path,
+               'nationality' => ucfirst($output->nationality),
+               'description' => $output->description,
+               'min_age' => $output->min_age,
+               'max_age' => $output->max_age,
+               'role' => $output->role,
+               'remarks' => $output->notes,
+               'language' => $output->language,
+               'gender' => $output->gender,
+           ]
+       ];
+
+        return response()->json($details);
     }
 
     /**
@@ -193,7 +229,7 @@ class JobController extends Controller
             'job_location' => 'required|string',
             'contact_no' => 'required|string',
             'industry' => 'required|string',
-            'age' => 'required|numeric',
+            'age' => 'required',
             'nationality' => 'required|string'
         ]);
     }
@@ -294,7 +330,6 @@ class JobController extends Controller
                 'contact_no' => $value->contact_no,
                 'rate' => $value->rate,
                 'thumbnail_url' => $value->job_image_path,
-                'age' => $value->age,
                 'nationality' => ucfirst($value->nationality)
             ];
         }
@@ -348,5 +383,6 @@ class JobController extends Controller
 
         return $output;
     }
+
 
 }

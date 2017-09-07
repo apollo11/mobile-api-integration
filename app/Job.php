@@ -35,7 +35,8 @@ class Job extends Model
         'end_date',
         'job_id',
         'nationality',
-        'age'
+        'min_age',
+        'max_age'
     ];
 
     /**
@@ -65,7 +66,6 @@ class Job extends Model
                 , 'job_image_path'
                 , 'nationality'
                 , 'choices as gender'
-                , 'age'
             )
             ->orderBy('job_date', 'desc')
             ->orderBy('created_at', 'desc')
@@ -96,7 +96,6 @@ class Job extends Model
                 , 'job_image_path'
                 , 'nationality'
                 , 'choices as gender'
-                , 'age'
             )
             ->whereIn('industry_id', $id)
             ->orderBy('job_date', 'desc')
@@ -126,7 +125,6 @@ class Job extends Model
                 , 'job_image_path'
                 , 'nationality'
                 , 'choices as gender'
-                , 'age'
             )
             ->whereIn('location_id', $id)
             ->orderBy('job_date', 'desc')
@@ -156,7 +154,6 @@ class Job extends Model
                 , 'job_image_path'
                 , 'nationality'
                 , 'choices as gender'
-                , 'age'
             )
             ->whereDate('job_date', date($date))
             ->orderBy('job_date', 'desc')
@@ -185,7 +182,6 @@ class Job extends Model
                 , 'job_image_path'
                 , 'nationality'
                 , 'choices as gender'
-                , 'age'
             )
             ->whereDate('job_date', date($date))
             ->whereIn('industry_id', $industry)
@@ -218,7 +214,6 @@ class Job extends Model
                 , 'job_image_path'
                 , 'nationality'
                 , 'choices as gender'
-                , 'age'
             )
             ->whereIn('industry_id', $industry)
             ->whereIn('location_id', $location)
@@ -250,7 +245,6 @@ class Job extends Model
                 , 'job_image_path'
                 , 'nationality'
                 , 'choices as gender'
-                , 'age'
             )
             ->whereIn('location_id', $location)
             ->whereDate('job_date', $date)
@@ -282,7 +276,6 @@ class Job extends Model
                 , 'job_image_path'
                 , 'nationality'
                 , 'choices as gender'
-                , 'age'
             )
             ->whereIn('industry_id', $industry)
             ->whereDate('job_date', date($date))
@@ -314,8 +307,7 @@ class Job extends Model
                 , 'rate'
                 , 'job_image_path'
                 , 'nationality'
-                , 'choices as gender'
-                , 'age')
+                , 'choices as gender')
             ->when(!empty($param['industries']), function($query) use ($param) {
 
                 return $query->whereIn('industry_id', $param['industries']);
@@ -364,10 +356,16 @@ class Job extends Model
                 , 'job_image_path'
                 , 'nationality'
                 , 'choices as gender'
-                , 'age'
+                , 'description'
+                , 'min_age'
+                , 'max_age'
+                , 'role'
+                , 'notes'
+                , 'language'
+                , 'choices'
             )
             ->where('id', '=', $id)
-            ->get();
+            ->first();
 
         return $jobDetails;
     }
