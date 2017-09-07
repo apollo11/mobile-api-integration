@@ -36,7 +36,8 @@ class Job extends Model
         'job_id',
         'nationality',
         'min_age',
-        'max_age'
+        'max_age',
+        'job_requirements'
     ];
 
     /**
@@ -293,42 +294,54 @@ class Job extends Model
     public function filterByLimitStartEnd($limit = 20, array $param)
     {
 
-        $jobs = DB::table('jobs')
-            ->select('id'
-                , 'employer'
-                , 'location'
-                , 'location_id'
-                , 'industry'
-                , 'industry_id'
-                , 'job_date as start_date'
-                , 'created_at'
-                , 'end_date'
-                , 'contact_no'
-                , 'rate'
-                , 'job_image_path'
-                , 'nationality'
-                , 'choices as gender')
-            ->when(!empty($param['industries']), function($query) use ($param) {
+        $jobs = DB::table('users')
+            ->join('jobs', 'users.id', '=', 'jobs.user_id')
+            ->select(
+                'jobs.id'
+                , 'users.company_description'
+                , 'users.company_name'
+                , 'jobs.description as job_description'
+                , 'jobs.location'
+                , 'jobs.location_id'
+                , 'jobs.industry'
+                , 'jobs.industry_id'
+                , 'jobs.job_date as start_date'
+                , 'jobs.created_at'
+                , 'jobs.end_date'
+                , 'jobs.contact_no'
+                , 'jobs.rate'
+                , 'jobs.job_image_path'
+                , 'jobs.nationality'
+                , 'jobs.choices as gender'
+                , 'jobs.description'
+                , 'jobs.min_age'
+                , 'jobs.max_age'
+                , 'jobs.role'
+                , 'jobs.notes'
+                , 'jobs.language'
+                , 'jobs.choices'
+            )
+            ->when(!empty($param['industries']), function ($query) use ($param) {
 
-                return $query->whereIn('industry_id', $param['industries']);
+                return $query->whereIn('jobs.industry_id', $param['industries']);
             })
-            ->when(!empty($param['locations']), function($query) use ($param) {
+            ->when(!empty($param['locations']), function ($query) use ($param) {
 
-                return $query->whereIn('location_id', $param['locations']);
+                return $query->whereIn('jobs.location_id', $param['locations']);
             })
-            ->when(!empty($param['date_from']) && !empty($param['date_to']) , function($query) use ($param) {
+            ->when(!empty($param['date_from']) && !empty($param['date_to']), function ($query) use ($param) {
 
-                return $query->whereBetween('job_date', [$param['date_from'], $param['date_to']]);
+                return $query->whereBetween('jobs.job_date', [$param['date_from'], $param['date_to']]);
             })
-            ->when(!empty($param['start']) && !empty($param['created']), function($query) use ($param) {
+            ->when(!empty($param['start']) && !empty($param['created']), function ($query) use ($param) {
 
-                return  $query->whereRaw("CASE WHEN job_date = '" . $param['start'].
-                    "' THEN created_at < '" . $param['created'] .
-                    "' ELSE job_date <= '" . $param['start'] . "' END");
+                return $query->whereRaw("CASE WHEN jobs.job_date = '" . $param['start'] .
+                    "' THEN jobs.created_at < '" . $param['created'] .
+                    "' ELSE jobs.job_date <= '" . $param['start'] . "' END");
 
             })
-            ->orderBy('job_date', 'desc')
-            ->orderBy('created_at', 'desc')
+            ->orderBy('jobs.job_date', 'desc')
+            ->orderBy('jobs.created_at', 'desc')
             ->limit($limit)
             ->get();
 
@@ -341,30 +354,35 @@ class Job extends Model
      */
     public function jobDetails($id)
     {
-        $jobDetails = DB::table('jobs')
-            ->select('id'
-                , 'employer'
-                , 'location'
-                , 'location_id'
-                , 'industry'
-                , 'industry_id'
-                , 'job_date as start_date'
-                , 'created_at'
-                , 'end_date'
-                , 'contact_no'
-                , 'rate'
-                , 'job_image_path'
-                , 'nationality'
-                , 'choices as gender'
-                , 'description'
-                , 'min_age'
-                , 'max_age'
-                , 'role'
-                , 'notes'
-                , 'language'
-                , 'choices'
+        $jobDetails = DB::table('users')
+            ->join('jobs', 'users.id', '=', 'jobs.user_id')
+            ->select(
+                'jobs.id'
+                , 'users.company_description'
+                , 'users.company_name'
+                , 'jobs.description as job_description'
+                , 'jobs.location'
+                , 'jobs.location_id'
+                , 'jobs.industry'
+                , 'jobs.industry_id'
+                , 'jobs.job_date as start_date'
+                , 'jobs.created_at'
+                , 'jobs.end_date'
+                , 'jobs.contact_no'
+                , 'jobs.rate'
+                , 'jobs.job_image_path'
+                , 'jobs.nationality'
+                , 'jobs.choices as gender'
+                , 'jobs.description'
+                , 'jobs.min_age'
+                , 'jobs.max_age'
+                , 'jobs.role'
+                , 'jobs.notes'
+                , 'jobs.language'
+                , 'jobs.choices'
+                ,'jobs.job_requirements'
             )
-            ->where('id', '=', $id)
+            ->where('jobs.id', '=', $id)
             ->first();
 
         return $jobDetails;
