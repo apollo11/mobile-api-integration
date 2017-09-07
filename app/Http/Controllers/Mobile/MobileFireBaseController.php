@@ -6,6 +6,7 @@ use Kreait\Firebase\Factory;
 use Kreait\Firebase\ServiceAccount;
 use App\Http\Traits\OauthTrait;
 use App\Http\Traits\HttpResponse;
+use Validator;
 use App\User;
 use Illuminate\Http\Request;
 
@@ -54,8 +55,7 @@ class MobileFireBaseController extends Controller
 
             } else {
 
-                return $this->ValidUseSuccessResp(400, false);
-
+                return $this->errorResponse(['Mobile number not found'],'Invalid Credentials', 110007, 401);
             }
 
         } catch (\Firebase\Auth\Token\Exception\ExpiredToken $e) {
@@ -95,6 +95,59 @@ class MobileFireBaseController extends Controller
         }
 
         return !isset($output) ? '': (array) $output;
+    }
+
+    /**
+     * Validation rules
+     */
+
+    public function rules()
+    {
+       $validate = [
+           'mobile_no' => 'required|unique:users'
+       ];
+
+       return $validate;
+    }
+
+    /**
+     * Instantiate Validator
+     */
+    public function validator($data)
+    {
+        $validator = Validator::make($data, $this->rules());
+
+        return $validator;
+
+    }
+
+    /**
+     * Validate mobile No
+     */
+
+    public function validateMobile(Request $request)
+    {
+        $data = $request->all();
+        $validate = $this->validator($data);
+
+        $errorMsg  = $validate->errors()->all();
+
+        if($validate->fails()) {
+
+            return $this->ValidUseSuccessResp(200, true);
+
+        } else {
+
+            return $this->mapValidator($errorMsg);
+
+        }
+
+    }
+
+    public function mapValidator()
+    {
+        return $this->errorResponse(['Mobile number not found'], 'Validation Error',110001,400 );
+
     }
 
 }
