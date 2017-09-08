@@ -79,6 +79,7 @@ class Job extends Model
                 , 'jobs.notes'
                 , 'jobs.language'
                 , 'jobs.choices'
+                ,'jobs.job_requirements'
             )
             ->when(!empty($param['industries']), function ($query) use ($param) {
 
@@ -109,7 +110,9 @@ class Job extends Model
 
 
     /**
-     * Job Details
+     * Get job details with
+     * @param $id
+     * @return mixed
      */
     public function jobDetails($id)
     {

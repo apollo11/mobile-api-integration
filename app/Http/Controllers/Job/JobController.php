@@ -135,44 +135,9 @@ class JobController extends Controller
 
         $output = $job->jobDetails($id);
 
-        $start_date = $date = date_create($output->start_date, timezone_open('UTC'));
-        $end_date = $date = date_create($output->end_date, timezone_open('UTC'));
-        $created = $date = date_create($output->created_at, timezone_open('UTC'));
+        $details = $this->jobDetailsoutput($output);
 
-        $details = [
-            'job_details' => [
-                'id' => $output->id,
-                'employer' => [
-                    'name' => $output->company_name,
-                    'description' => $output->company_description
-                ],
-                'industry' => [
-                    'id' => $output->industry_id,
-                    'name' => $output->industry
-                ],
-                'location' => [
-                    'id' => $output->location_id,
-                    'name' => $output->location,
-                ],
-                'created_date' => date_format($created, 'Y-m-d H:i:sP'),
-                'start_date' => date_format($start_date, 'Y-m-d H:i:sP'),
-                'end_date' => date_format($end_date, 'Y-m-d H:i:sP'),
-                'contact_no' => $output->contact_no,
-                'rate' => $output->rate,
-                'thumbnail_url' => $output->job_image_path,
-                'nationality' => ucfirst($output->nationality),
-                'description' => $output->description,
-                'min_age' => $output->min_age,
-                'max_age' => $output->max_age,
-                'role' => $output->role,
-                'remarks' => $output->notes,
-                'language' => $output->language,
-                'gender' => $output->gender,
-                'job_requirements' => $output->job_requirements,
-            ]
-        ];
-
-        return response()->json($details);
+        return response()->json(['job_details' => $details]);
     }
 
     /**
@@ -285,26 +250,17 @@ class JobController extends Controller
     {
         $job = new Job();
 
-        $industry = (array)$this->request->get('industries');
-        $location = (array)$this->request->get('locations');
-        $limit = (int)$this->request->get('limit');
-
-        $start = $this->request->get('start');
-        $created = $this->request->get('created');
-        $date_from = $this->request->get('date_from');
-        $date_to = $this->request->get('date_to');
-
         $param = [
-            'industries' => $industry,
-            'locations' => $location,
-            'start' => $start,
-            'created' => $created,
-            'limit' => $limit,
-            'date_from' => $date_from,
-            'date_to' => $date_to
+            'industries' => (array) $this->request->get('industries'),
+            'locations' => (array) $this->request->get('locations'),
+            'start' => $this->request->get('start'),
+            'created' =>$this->request->get('created'),
+            'limit' => (int) $this->request->get('limit'),
+            'date_from' => $this->request->get('date_from'),
+            'date_to' => $this->request->get('date_to'),
         ];
 
-        $output = $job->filterByLimitStartEnd($limit, $param);
+        $output = $job->filterByLimitStartEnd($param['limit'], $param);
 
         return $this->jobInfoOutput($output);
 
@@ -319,37 +275,53 @@ class JobController extends Controller
     {
         foreach ($output as $value) {
 
-            $start_date = $date = date_create($value->start_date, timezone_open('UTC'));
-            $end_date = $date = date_create($value->end_date, timezone_open('UTC'));
-            $created = $date = date_create($value->created_at, timezone_open('UTC'));
-
-            $data[] = [
-                'id' => $value->id,
-                'employer' => [
-                    'name' => $value->company_name,
-                    'description' => $value->company_description
-                ],
-                'industry' => [
-                    'id' => $value->industry_id,
-                    'name' => $value->industry
-                ],
-                'location' => [
-                    'id' => $value->location_id,
-                    'name' => $value->location,
-                ],
-                'created_date' => date_format($created, 'Y-m-d H:i:sP'),
-                'start_date' => date_format($start_date, 'Y-m-d H:i:sP'),
-                'end_date' => date_format($end_date, 'Y-m-d H:i:sP'),
-                'contact_no' => $value->contact_no,
-                'rate' => $value->rate,
-                'thumbnail_url' => $value->job_image_path,
-                'nationality' => ucfirst($value->nationality)
-            ];
+            $data[] = $this->jobDetailsoutput($value);
         }
 
         $dataUndefined = !empty($data) ? $data : [];
 
         return response()->json(['jobs' => $dataUndefined]);
+
+    }
+
+    public function jobDetailsoutput($output)
+    {
+        $start_date = $date = date_create($output->start_date, timezone_open('UTC'));
+        $end_date = $date = date_create($output->end_date, timezone_open('UTC'));
+        $created = $date = date_create($output->created_at, timezone_open('UTC'));
+
+        $details = [
+            'id' => $output->id,
+            'employer' => [
+                'name' => $output->company_name,
+                'description' => $output->company_description
+            ],
+            'industry' => [
+                'id' => $output->industry_id,
+                'name' => $output->industry
+            ],
+            'location' => [
+                'id' => $output->location_id,
+                'name' => $output->location,
+            ],
+            'created_date' => date_format($created, 'Y-m-d H:i:sP'),
+            'start_date' => date_format($start_date, 'Y-m-d H:i:sP'),
+            'end_date' => date_format($end_date, 'Y-m-d H:i:sP'),
+            'contact_no' => $output->contact_no,
+            'rate' => $output->rate,
+            'thumbnail_url' => $output->job_image_path,
+            'nationality' => ucfirst($output->nationality),
+            'description' => $output->description,
+            'min_age' => $output->min_age,
+            'max_age' => $output->max_age,
+            'role' => $output->role,
+            'remarks' => $output->notes,
+            'language' => $output->language,
+            'gender' => $output->gender,
+            'job_requirements' => $output->job_requirements,
+        ];
+
+        return $details;
 
     }
 
