@@ -57,6 +57,19 @@
                                         </div>
                                     </div>
 
+                                    <div class="form-group{{ $errors->has('job_requirements') ? ' has-error' : '' }}">
+                                        <label class="col-md-3 control-label">Job Requirements</label>
+                                        <div class="col-md-7">
+                                            <textarea class="form-control" name="job_requirements"
+                                                      rows="3">{{ old('job_requirements') }}</textarea>
+                                            @if ($errors->has('job_requirements'))
+                                                <span class="help-block">
+                                                {{ $errors->first('job_requirements') }}
+                                               </span>
+                                            @endif
+                                        </div>
+                                    </div>
+
                                     <div class="form-group{{ $errors->has('job_role') ? ' has-error' : '' }}">
                                         <label class="col-md-3 control-label">Job Function / Role</label>
                                         <div class="col-md-7">
@@ -511,7 +524,6 @@
                                                         <option value="none">None</option>
                                                     @else
                                                         <option value="{{ $value->id.'.'.$value->name}}">{{ $value->name }}</option>
-                                                        {{--<option value="{{ $value->name }}">{{ $value->name }}</option>--}}
                                                     @endif
                                                 @endforeach
                                             </select>

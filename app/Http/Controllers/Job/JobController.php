@@ -100,6 +100,7 @@ class JobController extends Controller
             'location_id' => $data['location_id'],
             'location' => $data['job_location'],
             'description' => $data['job_description'],
+            'job_requirements' => $data['job_requirements'],
             'role' => $data['job_role'],
             'gender' => $data['gender'],
             'nationality' => $data['nationality'],
@@ -132,43 +133,11 @@ class JobController extends Controller
     {
         $job = new Job();
 
-       $output = $job->jobDetails($id);
+        $output = $job->jobDetails($id);
 
+        $details = $this->jobDetailsoutput($output);
 
-        $start_date = $date = date_create($output->start_date, timezone_open('UTC'));
-        $end_date = $date = date_create($output->end_date, timezone_open('UTC'));
-        $created = $date = date_create($output->created_at, timezone_open('UTC'));
-
-       $details = [
-           'job_details' => [
-               'id' => $output->id,
-               'employer' => $output->employer,
-               'industry' => [
-                   'id' => $output->industry_id,
-                   'name' => $output->industry
-               ],
-               'location' => [
-                   'id' => $output->location_id,
-                   'name' => $output->location,
-               ],
-               'created_date' => date_format($created, 'Y-m-d H:i:sP'),
-               'start_date' => date_format($start_date, 'Y-m-d H:i:sP'),
-               'end_date' => date_format($end_date, 'Y-m-d H:i:sP'),
-               'contact_no' => $output->contact_no,
-               'rate' => $output->rate,
-               'thumbnail_url' => $output->job_image_path,
-               'nationality' => ucfirst($output->nationality),
-               'description' => $output->description,
-               'min_age' => $output->min_age,
-               'max_age' => $output->max_age,
-               'role' => $output->role,
-               'remarks' => $output->notes,
-               'language' => $output->language,
-               'gender' => $output->gender,
-           ]
-       ];
-
-        return response()->json($details);
+        return response()->json(['job_details' => $details]);
     }
 
     /**
@@ -213,6 +182,7 @@ class JobController extends Controller
         return Validator::make($data, [
             'job_title' => 'required',
             'job_description' => 'required|string',
+            'job_requirements' => 'required|string',
             'job_role' => 'required|string',
             'job_image' => 'required',
             'no_of_person' => 'required|numeric',
@@ -280,63 +250,78 @@ class JobController extends Controller
     {
         $job = new Job();
 
-        $industry = (array)$this->request->get('industries');
-        $location = (array)$this->request->get('locations');
-        $limit = (int)$this->request->get('limit');
-
-        $start = $this->request->get('start');
-        $created = $this->request->get('created');
-        $date_from = $this->request->get('date_from');
-        $date_to = $this->request->get('date_to');
-
         $param = [
-            'industries' => $industry,
-            'locations' => $location,
-            'start' => $start,
-            'created' => $created,
-            'limit' => $limit,
-            'date_from' => $date_from,
-            'date_to' => $date_to
+            'industries' => (array) $this->request->get('industries'),
+            'locations' => (array) $this->request->get('locations'),
+            'start' => $this->request->get('start'),
+            'created' =>$this->request->get('created'),
+            'limit' => (int) $this->request->get('limit'),
+            'date_from' => $this->request->get('date_from'),
+            'date_to' => $this->request->get('date_to'),
         ];
 
-        $output = $job->filterByLimitStartEnd($limit, $param);
+        $output = $job->filterByLimitStartEnd($param['limit'], $param);
 
         return $this->jobInfoOutput($output);
 
     }
 
+    /**
+     * Adding response output for lists
+     * @param $output
+     * @return \Illuminate\Http\JsonResponse
+     */
     function jobInfoOutput($output)
     {
         foreach ($output as $value) {
 
-            $start_date = $date = date_create($value->start_date, timezone_open('UTC'));
-            $end_date = $date = date_create($value->end_date, timezone_open('UTC'));
-            $created = $date = date_create($value->created_at, timezone_open('UTC'));
-
-            $data[] = [
-                'id' => $value->id,
-                'employer' => $value->employer,
-                'industry' => [
-                    'id' => $value->industry_id,
-                    'name' => $value->industry
-                ],
-                'location' => [
-                    'id' => $value->location_id,
-                    'name' => $value->location,
-                ],
-                'created_date' => date_format($created, 'Y-m-d H:i:sP'),
-                'start_date' => date_format($start_date, 'Y-m-d H:i:sP'),
-                'end_date' => date_format($end_date, 'Y-m-d H:i:sP'),
-                'contact_no' => $value->contact_no,
-                'rate' => $value->rate,
-                'thumbnail_url' => $value->job_image_path,
-                'nationality' => ucfirst($value->nationality)
-            ];
+            $data[] = $this->jobDetailsoutput($value);
         }
 
         $dataUndefined = !empty($data) ? $data : [];
 
         return response()->json(['jobs' => $dataUndefined]);
+
+    }
+
+    public function jobDetailsoutput($output)
+    {
+        $start_date = $date = date_create($output->start_date, timezone_open('UTC'));
+        $end_date = $date = date_create($output->end_date, timezone_open('UTC'));
+        $created = $date = date_create($output->created_at, timezone_open('UTC'));
+
+        $details = [
+            'id' => $output->id,
+            'employer' => [
+                'name' => $output->company_name,
+                'description' => $output->company_description
+            ],
+            'industry' => [
+                'id' => $output->industry_id,
+                'name' => $output->industry
+            ],
+            'location' => [
+                'id' => $output->location_id,
+                'name' => $output->location,
+            ],
+            'created_date' => date_format($created, 'Y-m-d H:i:sP'),
+            'start_date' => date_format($start_date, 'Y-m-d H:i:sP'),
+            'end_date' => date_format($end_date, 'Y-m-d H:i:sP'),
+            'contact_no' => $output->contact_no,
+            'rate' => $output->rate,
+            'thumbnail_url' => $output->job_image_path,
+            'nationality' => ucfirst($output->nationality),
+            'description' => $output->description,
+            'min_age' => $output->min_age,
+            'max_age' => $output->max_age,
+            'role' => $output->role,
+            'remarks' => $output->notes,
+            'language' => $output->language,
+            'gender' => $output->gender,
+            'job_requirements' => $output->job_requirements,
+        ];
+
+        return $details;
 
     }
 
@@ -383,6 +368,5 @@ class JobController extends Controller
 
         return $output;
     }
-
 
 }
