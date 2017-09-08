@@ -216,7 +216,4 @@ class EmployeeController extends Controller
         return $this->ouathResponse($data);
     }
 
-
-
-
 }

@@ -25,7 +25,7 @@ class EmployerController extends Controller
     {
         $employers = $this->userList();
 
-        return view('dashboard.employer', ['employers' => $employers]);
+        return view('employer.lists', ['employers' => $employers]);
     }
 
     /**
@@ -182,4 +182,6 @@ class EmployerController extends Controller
         return $output;
 
     }
+
+
 }

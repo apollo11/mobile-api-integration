@@ -35,9 +35,11 @@ Route::prefix('v1')->group(function () {
 
 Route::prefix('v1/register/')->group(function () {
 
-    Route::post('employee','EmployeeController@store');
+    Route::post('employee','Employee\EmployeeController@store');
+    Route::post('validate/user', 'Employee\EmployeeController@validateUser');
+
     Route::post('employer', 'EmployerController@store');
-    Route::post('validate/user', 'EmployeeController@validateUser');
+
     Route::post('password/email','Auth\EmailResetController@sendResetLinkEmailControl');
     Route::post('social', 'Social\SocialController@store');
 
@@ -78,6 +80,8 @@ Route::group(['middleware' => ['auth_client']], function() {
 
     Route::get('v1/job/lists', 'Job\JobController@jobApiLists');
     Route::get('v1/job/lists/{id}','Job\JobController@show');
+
+    Route::get('v1/apply/job/{id}', 'Employee\EmployeeController@apply');
 
 });
 
