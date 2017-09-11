@@ -245,7 +245,6 @@ class JobController extends Controller
     /**
      * API List for jobs
      */
-
     public function jobApiLists()
     {
         $job = new Job();

@@ -48,6 +48,25 @@ class Job extends Model
     protected $table = 'jobs';
 
     /**
+     * Relationship with jobs
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function users()
+    {
+        return $this->belongsToMany('\App\User')->withTimestamps();
+    }
+
+    /**
+     * job schedule
+     */
+    public function jobSchedule()
+    {
+        return $this->hasMany('\App\JobSchedule');
+    }
+
+
+
+    /**
      * Filter by limit, start date, end date
      */
     public function filterByLimitStartEnd($limit = 20, array $param)

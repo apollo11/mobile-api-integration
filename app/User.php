@@ -54,6 +54,15 @@ class User extends Authenticatable
     }
 
     /**
+     * job schedule
+     */
+    public function jobSchedule()
+    {
+        return $this->hasMany('\App\JobSchedule');
+    }
+
+
+    /**
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
     public function employeeProfile()
