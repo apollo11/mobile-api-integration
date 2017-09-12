@@ -16,7 +16,6 @@ class AddNationalityField extends Migration
         Schema::table('jobs', function (Blueprint $table) {
 
             $table->string('nationality');
-            $table->string('age');
         });
     }
 

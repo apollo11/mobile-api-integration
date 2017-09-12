@@ -19,10 +19,10 @@ class BugisAdministrativeSeeder extends Seeder
 
             DB::table('jobs')->insert([
                 'job_title' => 'Teller',
-                'user_id' => 13,
-                'job_id' => 13,
+                'user_id' => 2,
+                'job_id' => 2,
                 'location_id' => 1,
-                'location' => 'Woodlands',
+                'location' => 'Bishan',
                 'role' => 'Manager',
                 'choices' => 'male',
                 'job_image_path' => 'jobs/0jV7hV6wKg0gKn1DrpTL3q6gZS1TorTGDk7gtcU3.jpeg',
@@ -33,16 +33,18 @@ class BugisAdministrativeSeeder extends Seeder
                 'employer' => 'Maryna Bay Sands',
                 'rate' => 20,
                 'language' => 'English',
-                'job_date' => $faker->dateTime,
-                'end_date' => $faker->dateTime,
+                'job_date' => $faker->dateTimeBetween($startDate = '-1 year', $endDate = 'now'),
+                'end_date' => $faker->dateTimeBetween($startDate = '-1 year', $endDate = 'now'),
                 'industry_id' => 1,
                 'industry' => 'Administrative',
                 'notes' => $faker->paragraph,
                 'status' => 'Active',
-                'created_at' =>$faker->dateTime,
-                'updated_at' => $faker->dateTime,
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s'),
                 'nationality' => 'singaporean',
-                'age' =>  20
+                'min_age' =>  16,
+                'max_age' => 20,
+                'job_requirements' => $faker->paragraph
             ]);
         }
     }
