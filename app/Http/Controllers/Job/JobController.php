@@ -292,6 +292,7 @@ class JobController extends Controller
 
         $details = [
             'id' => $output->id,
+            'job_title' => $output->job_title,
             'employer' => [
                 'name' => $output->company_name,
                 'description' => $output->company_description
