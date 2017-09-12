@@ -25,7 +25,7 @@ class YewTeeBusinessSeeder extends Seeder
                 'location' => 'Woodlands',
                 'role' => 'Manager',
                 'choices' => 'female',
-                'job_image_path' => 'jobs/QVb3sva8QcIx816KQMAmz13H4iATz4vsc99bnstL.jpeg',
+                'job_image_path' => 'jobs/kIiO01kZqeURCVZBH24J65kCwEImjzczxuv4QNts.jpeg',
                 'no_of_person' => 11,
                 'contact_person' => $faker->name,
                 'contact_no' => $faker->phoneNumber,
