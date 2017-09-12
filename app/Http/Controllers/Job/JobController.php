@@ -318,12 +318,23 @@ class JobController extends Controller
             'language' => $output->language,
             'gender' => $output->gender,
             'job_requirements' => $output->job_requirements,
+            'is_assigned' => 0,
+            'status' => 0
         ];
 
         return $details;
 
     }
 
+    /**
+     *
+     * Filter condition
+     * @param $industry
+     * @param $location
+     * @param $date
+     * @param $limit
+     * @return mixed
+     */
     public function jobFilter($industry, $location, $date, $limit)
     {
         $job = new Job();
