@@ -25,7 +25,7 @@ class Jobs extends Seeder
                 'location' => 'Tampines',
                 'role' => 'Manager',
                 'choices' => 'male',
-                'job_image_path' => 'jobs/0UyQDH5JVMfQl55FPLdJ7ao7I2QSm3my392bE61D.jpeg',
+                'job_image_path' => 'jobs/kIiO01kZqeURCVZBH24J65kCwEImjzczxuv4QNts.jpeg',
                 'no_of_person' => 11,
                 'contact_person' => $faker->name,
                 'contact_no' => $faker->phoneNumber,

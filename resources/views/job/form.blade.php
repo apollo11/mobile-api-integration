@@ -152,7 +152,7 @@
                                     </div>
 
                                     <div class="form-group{{ $errors->has('nationality') ? ' has-error' : '' }}">
-                                        <label class="col-md-3 control-label">Location</label>
+                                        <label class="col-md-3 control-label">Nationality</label>
                                         <div class="col-md-7">
                                             <select class="form-control" name="nationality">
                                                 <option value="">-- select one --</option>

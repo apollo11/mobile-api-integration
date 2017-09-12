@@ -25,7 +25,7 @@ class DentalYishunSeeder extends Seeder
                 'location' => 'Bugis',
                 'role' => 'Manager',
                 'choices' => 'male',
-                'job_image_path' => 'jobs/MjdPoZqa9YlFF1kwANKRhTvDu7E5PCwRf2frCXjj.jpeg',
+                'job_image_path' => 'jobs/kIiO01kZqeURCVZBH24J65kCwEImjzczxuv4QNts.jpeg',
                 'no_of_person' => 11,
                 'contact_person' => $faker->name,
                 'contact_no' => $faker->phoneNumber,

@@ -25,7 +25,7 @@ class BugisAdministrativeSeeder extends Seeder
                 'location' => 'Bishan',
                 'role' => 'Manager',
                 'choices' => 'male',
-                'job_image_path' => 'jobs/0jV7hV6wKg0gKn1DrpTL3q6gZS1TorTGDk7gtcU3.jpeg',
+                'job_image_path' => 'jobs/kIiO01kZqeURCVZBH24J65kCwEImjzczxuv4QNts.jpeg',
                 'no_of_person' => 11,
                 'contact_person' => $faker->name,
                 'contact_no' => $faker->phoneNumber,
