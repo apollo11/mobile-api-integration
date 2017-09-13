@@ -215,13 +215,25 @@ class EmployeeController extends Controller
     }
 
     /**
-     * Approve Employee user
+     * Reject Employee User
+     * 0 Pending
      */
-    public function approveUser($id)
+    public function pendingStatus($id)
     {
-
         $user = \App\User::find($id);
-        $user->is_approved = 1;
+        $user->status = "0";
+        $user->save();
+
+        return back();
+
+    }
+    /**
+     * 1 Approve Employee user
+     */
+    public function approveStatus($id)
+    {
+        $user = \App\User::find($id);
+        $user->status = "1";
         $user->save();
 
         return back();
@@ -229,17 +241,32 @@ class EmployeeController extends Controller
     }
 
     /**
-     * Reject Employee User
+     * 2 Upload Info
      */
-    public function rejectUser($id)
+    public function uploadInfoUser($id)
     {
         $user = \App\User::find($id);
-        $user->is_approved = 0;
+        $user->status = "2";
         $user->save();
 
         return back();
 
     }
+
+    /**
+     * 3 Reject user
+     */
+    public function rejectUser($id)
+    {
+        $user = \App\User::find($id);
+
+        $user->status = "3";
+        $user->save();
+
+        return back();
+
+    }
+
 
 
 }

@@ -20,8 +20,10 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::prefix('employee')->group(function () {
         Route::get('/lists', 'Employee\EmployeeController@index')->name('employee.lists');
-        Route::post('/approve/{id}', 'Employee\EmployeeController@approveUser')->name('employee.approve');
+        Route::post('/pending/{id}', 'Employee\EmployeeController@pendingStatus')->name('employee.pending');
+        Route::post('/approve/{id}', 'Employee\EmployeeController@approveStatus')->name('employee.approve');
         Route::post('/reject/{id}', 'Employee\EmployeeController@rejectUser')->name('employee.reject');
+        Route::post('/upload/{id}', 'Employee\EmployeeController@uploadInfoUser')->name('employee.upload');
 
     });
 

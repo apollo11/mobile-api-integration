@@ -27,7 +27,7 @@ class User extends Authenticatable
         , 'business_name'
         , 'school'
         , 'mobile_no'
-        , 'is_approved'
+        , 'status'
     ];
 
     /**
