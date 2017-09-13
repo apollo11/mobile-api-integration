@@ -42,13 +42,12 @@ class JobScheduleController extends Controller
     }
 
     /**
-     * @param $userId
-     * @param $jobId
+     * @param Request $request
      * @return mixed
      */
-    public function store($userId, $jobId)
+    public function store(Request $request)
     {
-        $user = \App\User::find($userId);
+        $user = \App\User::find($request->input('user_id'));
 
         if($user['employee_status'] == 'pending' || $user['employee_status'] == 'reject' ) {
 
@@ -56,7 +55,7 @@ class JobScheduleController extends Controller
 
         } else {
 
-            $user->jobSchedule()->create(['name' => null, 'job_id' => $jobId]);
+            $user->jobSchedule()->create(['name' => null, 'job_id' => $request->input('job_id')]);
 
             return $this->ValidUseSuccessResp(200, true);
         }
@@ -178,7 +177,7 @@ class JobScheduleController extends Controller
             'language' => $output->language,
             'gender' => $output->gender,
             'job_requirements' => $output->job_requirements,
-            'status' => $output->status,
+            'status' => $output->job_status,
             'is_assigned' => $output->is_assigned
         ];
 
