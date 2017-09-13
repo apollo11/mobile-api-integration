@@ -37,7 +37,8 @@ class Job extends Model
         'nationality',
         'min_age',
         'max_age',
-        'job_requirements'
+        'job_requirements',
+        'employee_status'
     ];
 
     /**
@@ -79,7 +80,7 @@ class Job extends Model
                 , 'users.company_description'
                 , 'users.company_name'
                 , 'users.profile_image_path'
-                , 'users.status'
+                , 'users.employee_status as status'
                 , 'jobs.description as job_description'
                 , 'jobs.location'
                 , 'jobs.job_title'
@@ -145,7 +146,7 @@ class Job extends Model
                 , 'users.company_description'
                 , 'users.company_name'
                 , 'users.profile_image_path'
-                , 'users.status'
+                , 'users.employee_status as status'
                 , 'jobs.description as job_description'
                 , 'jobs.job_title'
                 , 'jobs.location'

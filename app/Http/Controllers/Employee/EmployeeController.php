@@ -221,7 +221,7 @@ class EmployeeController extends Controller
     public function pendingStatus($id)
     {
         $user = \App\User::find($id);
-        $user->status = "0";
+        $user->employee_status = "pending";
         $user->save();
 
         return back();
@@ -233,7 +233,7 @@ class EmployeeController extends Controller
     public function approveStatus($id)
     {
         $user = \App\User::find($id);
-        $user->status = "1";
+        $user->employee_status = "approve";
         $user->save();
 
         return back();
@@ -246,7 +246,7 @@ class EmployeeController extends Controller
     public function uploadInfoUser($id)
     {
         $user = \App\User::find($id);
-        $user->status = "2";
+        $user->employee_status = "upload";
         $user->save();
 
         return back();
@@ -260,11 +260,10 @@ class EmployeeController extends Controller
     {
         $user = \App\User::find($id);
 
-        $user->status = "3";
+        $user->employee_status = "reject";
         $user->save();
 
         return back();
-
     }
 
 

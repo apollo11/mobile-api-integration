@@ -320,7 +320,8 @@ class JobController extends Controller
             'language' => $output->language,
             'gender' => $output->gender,
             'job_requirements' => $output->job_requirements,
-            'status' => $output->status
+            'status' => $output->status,
+            'is_assigned' => 0
         ];
 
         return $details;
