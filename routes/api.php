@@ -99,7 +99,7 @@ Route::group(['middleware' => ['auth_client']], function() {
     Route::prefix('v1/job/schedule/')->group(function () {
 
         Route::get('lists', 'JobSchedule\JobScheduleController@jobScheduleLists');
-        Route::post('apply/{userId}/{jobId}', 'JobSchedule\JobScheduleController@store');
+        Route::post('apply', 'JobSchedule\JobScheduleController@store');
 
     });
 
