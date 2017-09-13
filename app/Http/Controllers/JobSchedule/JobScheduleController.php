@@ -50,9 +50,9 @@ class JobScheduleController extends Controller
     {
         $user = \App\User::find($userId);
 
-        if($user['status'] == 0) {
+        if($user['employee_status'] == 'pending' || $user['employee_status'] == 'reject' ) {
 
-            return $this->errorResponse(['Your account status is pending'], 'User Verification', 110008, 400);
+            return $this->errorResponse(['Your account status is pending or blocked'], 'User Verification', 110008, 400);
 
         } else {
 
@@ -178,7 +178,8 @@ class JobScheduleController extends Controller
             'language' => $output->language,
             'gender' => $output->gender,
             'job_requirements' => $output->job_requirements,
-            'status' => $output->status
+            'status' => $output->status,
+            'is_assigned' => $output->is_assigned
         ];
 
         return $details;
