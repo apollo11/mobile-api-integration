@@ -1,17 +1,19 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Employee;
 
 use App\Http\Traits\OauthTrait;
 use App\Http\Traits\HttpResponse;
 use Validator;
 use App\User;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class EmployeeController extends Controller
 {
     use OauthTrait;
     use HttpResponse;
+
     /**
      * Display a listing of the resource.
      *
@@ -19,11 +21,11 @@ class EmployeeController extends Controller
      */
     public function index()
     {
-            $employee = \App\User::where('role_id', 2)
-                ->orderBy('created_at', 'desc')
-                ->get();
+        $employee = \App\User::where('role_id', 2)
+            ->orderBy('created_at', 'desc')
+            ->get();
 
-            return view('dashboard.employee', ['employees' => $employee]);
+        return view('employee.lists', ['employees' => $employee]);
     }
 
     /**
@@ -39,16 +41,16 @@ class EmployeeController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
         $data = $request->all();
         $validate = $this->validator($data);
-        $errorMsg  = $validate->errors()->all();
+        $errorMsg = $validate->errors()->all();
 
-        if($validate->fails()) {
+        if ($validate->fails()) {
 
             return $this->mapValidator($errorMsg);
 
@@ -76,9 +78,9 @@ class EmployeeController extends Controller
     {
         $data = $request->all();
         $validate = $this->userValidator($data);
-        $errorMsg  = $validate->errors()->all();
+        $errorMsg = $validate->errors()->all();
 
-        if($validate->fails()) {
+        if ($validate->fails()) {
 
             return $this->mapValidator($errorMsg);
 
@@ -89,10 +91,8 @@ class EmployeeController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param $email
+     * @return \Illuminate\Database\Eloquent\Model|null|static
      */
     public function show($email)
     {
@@ -106,7 +106,7 @@ class EmployeeController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -117,8 +117,8 @@ class EmployeeController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request $request
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -129,7 +129,7 @@ class EmployeeController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
@@ -202,9 +202,7 @@ class EmployeeController extends Controller
 
     public function mapValidator($data)
     {
-        return $this->errorResponse($data, 'Validation Error',110001,400 );
-
-
+        return $this->errorResponse($data, 'Validation Error', 110001, 400);
     }
 
     /**
@@ -215,5 +213,33 @@ class EmployeeController extends Controller
     {
         return $this->ouathResponse($data);
     }
+
+    /**
+     * Approve Employee user
+     */
+    public function approveUser($id)
+    {
+
+        $user = \App\User::find($id);
+        $user->is_approved = 1;
+        $user->save();
+
+        return back();
+
+    }
+
+    /**
+     * Reject Employee User
+     */
+    public function rejectUser($id)
+    {
+        $user = \App\User::find($id);
+        $user->is_approved = 0;
+        $user->save();
+
+        return back();
+
+    }
+
 
 }

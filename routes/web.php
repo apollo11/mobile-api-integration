@@ -18,8 +18,10 @@ Route::get('/', function () {
 Auth::routes();
 Route::group(['middleware' => ['auth']], function () {
 
-    Route::prefix('dashboard')->group(function () {
-        Route::get('/employee', 'EmployeeController@index');
+    Route::prefix('employee')->group(function () {
+        Route::get('/lists', 'Employee\EmployeeController@index')->name('employee.lists');
+        Route::post('/approve/{id}', 'Employee\EmployeeController@approveUser')->name('employee.approve');
+        Route::post('/reject/{id}', 'Employee\EmployeeController@rejectUser')->name('employee.reject');
 
     });
 

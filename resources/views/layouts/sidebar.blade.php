@@ -36,7 +36,7 @@
             </a>
         </li>
         <li>
-            <a href="/dashboard/employee">
+            <a href="{{ route('employee.lists') }}">
                 <i class="icon-basket"></i>
                 <span class="title">Employees</span>
                 <span class="arrow "></span>

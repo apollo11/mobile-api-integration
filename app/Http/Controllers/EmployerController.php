@@ -57,7 +57,7 @@ class EmployerController extends Controller
             $user = new User();
             $user->name = $request->input('name');
             $user->email = $request->input('email');
-            $user->role = $request->input('role');
+            $user->role = 'employer';
             $user->role_id = 1;
             $user->platform = $request->input('platform');
             $user->mobile_no = $request->input('mobile_no');
@@ -70,51 +70,7 @@ class EmployerController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
-
-    /**
+     * Rules for validation
      * @return array
      */
     public function rules()
@@ -129,6 +85,11 @@ class EmployerController extends Controller
         return $validate;
     }
 
+    /**
+     * Validation instantiation
+     * @param $data
+     * @return mixed
+     */
     public function validator($data)
     {
         $validator = Validator::make($data, $this->rules());
@@ -137,13 +98,21 @@ class EmployerController extends Controller
 
     }
 
-
+    /**
+     * Error response API
+     * @param $data
+     * @return mixed
+     */
     public function mapValidator($data)
     {
         return $this->errorResponse($data, 'Validation Error',110001,400 );
 
     }
 
+    /**
+     * Success Response API
+     * @return mixed
+     */
     public function successResponse()
     {
         return $this->ValidUseSuccessResp(200, true);

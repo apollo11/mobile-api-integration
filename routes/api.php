@@ -35,9 +35,11 @@ Route::prefix('v1')->group(function () {
 
 Route::prefix('v1/register/')->group(function () {
 
-    Route::post('employee','EmployeeController@store');
+    Route::post('employee','Employee\EmployeeController@store');
+    Route::post('validate/user', 'Employee\EmployeeController@validateUser');
+
     Route::post('employer', 'EmployerController@store');
-    Route::post('validate/user', 'EmployeeController@validateUser');
+
     Route::post('password/email','Auth\EmailResetController@sendResetLinkEmailControl');
     Route::post('social', 'Social\SocialController@store');
 
@@ -69,15 +71,37 @@ Route::prefix('v1/')->group(function () {
 
 Route::group(['middleware' => ['auth:api']], function() {
 
-    Route::get('v1/job/lists', 'Job\JobController@jobApiLists');
-    Route::get('v1/job/lists/{id}','Job\JobController@show');
+    Route::prefix('v1/job/')->group(function () {
+
+        Route::get('lists', 'Job\JobController@jobApiLists');
+        Route::get('lists/{id}','Job\JobController@show');
+
+    });
+
+    Route::prefix('v1/job/schedule/')->group(function () {
+
+        Route::get('lists', 'JobSchedule\JobScheduleController@jobScheduleLists');
+        Route::post('apply/{userId}/{jobId}', 'JobSchedule\JobScheduleController@store');
+
+    });
 
 });
 
 Route::group(['middleware' => ['auth_client']], function() {
 
-    Route::get('v1/job/lists', 'Job\JobController@jobApiLists');
-    Route::get('v1/job/lists/{id}','Job\JobController@show');
+    Route::prefix('v1/job/')->group(function () {
+
+        Route::get('lists', 'Job\JobController@jobApiLists');
+        Route::get('lists/{id}','Job\JobController@show');
+
+    });
+
+    Route::prefix('v1/job/schedule/')->group(function () {
+
+        Route::get('lists', 'JobSchedule\JobScheduleController@jobScheduleLists');
+        Route::post('apply/{userId}/{jobId}', 'JobSchedule\JobScheduleController@store');
+
+    });
 
 });
 

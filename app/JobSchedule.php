@@ -5,77 +5,45 @@ namespace App;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
 
-class Job extends Model
+class JobSchedule extends Model
 {
-    /**
-     * The attribues are mass assignable
-     */
-
     protected $fillable = [
-        'job_title',
-        'description',
-        'role',
-        'choices',
-        'location',
-        'job_image_path',
-        'no_of_person',
-        'contact_person',
-        'contact_no',
-        'business_manager',
-        'employer',
-        'language',
-        'job_date',
-        'rate',
-        'notes',
-        'status',
-        'industry',
-        'industry_id',
-        'location',
-        'location_id',
-        'end_date',
-        'job_id',
-        'nationality',
-        'min_age',
-        'max_age',
-        'job_requirements'
+        'name'
+        , 'job_id'
     ];
 
     /**
-     * The table associated with the model.
+     * The table associated with the model
+     */
+    protected $table = 'job_schedules';
+
+    /**
+     * Indicates if the model should be timestamped.
      *
-     * @var string
+     * @var bool
      */
-    protected $table = 'jobs';
+    public $timestamps = false;
 
     /**
-     * Relationship with jobs
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * Implement has many through relationship related to jobs nd users
      */
-    public function users()
+    public function jobScheduleLists()
     {
-        return $this->belongsToMany('\App\User')->withTimestamps();
+        return $this->belongsTo('\App\User');
     }
 
     /**
-     * job schedule
+     * Implementation of job schedule via user
      */
-    public function jobSchedule()
+    public function getJobByUserSchedule(array $param)
     {
-        return $this->hasMany('\App\JobSchedule');
-    }
-
-
-
-    /**
-     * Filter by limit, start date, end date
-     */
-    public function filterByLimitStartEnd($limit = 20, array $param)
-    {
-
         $jobs = DB::table('users')
-            ->join('jobs', 'users.id', '=', 'jobs.user_id')
+            ->join('job_schedules', 'job_schedules.user_id', '=', 'users.id')
+            ->join('jobs', 'jobs.id', '=', 'job_schedules.job_id')
             ->select(
                 'jobs.id'
+                , 'job_schedules.user_id'
+                , 'job_schedules.job_id'
                 , 'users.company_description'
                 , 'users.company_name'
                 , 'jobs.description as job_description'
@@ -108,10 +76,6 @@ class Job extends Model
 
                 return $query->whereIn('jobs.location_id', $param['locations']);
             })
-            ->when(!empty($param['date_from']) && !empty($param['date_to']), function ($query) use ($param) {
-
-                return $query->whereBetween('jobs.job_date', [$param['date_from'], $param['date_to']]);
-            })
             ->when(!empty($param['start']) && !empty($param['created']), function ($query) use ($param) {
 
                 return $query->whereRaw("CASE WHEN jobs.job_date = '" . $param['start'] .
@@ -119,26 +83,33 @@ class Job extends Model
                     "' ELSE jobs.job_date <= '" . $param['start'] . "' END");
 
             })
+            ->when(!empty($param['id']), function ($query) use ($param) {
+
+                $query->where('users.id', '=', $param['id']);
+            })
+            ->when(empty($param['limit']), function ($query) use ($param) {
+
+                $query->limit(20);
+            })
             ->orderBy('jobs.job_date', 'desc')
             ->orderBy('jobs.created_at', 'desc')
-            ->limit($limit)
             ->get();
 
         return $jobs;
     }
 
-
     /**
-     * Get job details with
-     * @param $id
-     * @return mixed
+     * Implementation of job schedule via user
      */
-    public function jobDetails($id)
+    public function getJobScheduleDetails($id)
     {
-        $jobDetails = DB::table('users')
-            ->join('jobs', 'users.id', '=', 'jobs.user_id')
+        $jobs = DB::table('users')
+            ->join('job_schedules', 'job_schedules.user_id', '=', 'users.id')
+            ->join('jobs', 'jobs.id', '=', 'job_schedules.job_id')
             ->select(
                 'jobs.id'
+                , 'job_schedules.user_id'
+                , 'job_schedules.job_id'
                 , 'users.company_description'
                 , 'users.company_name'
                 , 'jobs.description as job_description'
@@ -166,7 +137,8 @@ class Job extends Model
             ->where('jobs.id', '=', $id)
             ->first();
 
-        return $jobDetails;
+        return $jobs;
     }
+
 
 }
