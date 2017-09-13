@@ -19,13 +19,13 @@ class YewTeeBusinessSeeder extends Seeder
 
             DB::table('jobs')->insert([
                 'job_title' => 'Agogo Dancer',
-                'user_id' => 13,
-                'job_id' => 13,
+                'user_id' => 2,
+                'job_id' => 2,
                 'location_id' => 4,
-                'location' => 'Bishan',
+                'location' => 'Woodlands',
                 'role' => 'Manager',
                 'choices' => 'female',
-                'job_image_path' => 'jobs/QVb3sva8QcIx816KQMAmz13H4iATz4vsc99bnstL.jpeg',
+                'job_image_path' => 'jobs/kIiO01kZqeURCVZBH24J65kCwEImjzczxuv4QNts.jpeg',
                 'no_of_person' => 11,
                 'contact_person' => $faker->name,
                 'contact_no' => $faker->phoneNumber,
@@ -33,16 +33,18 @@ class YewTeeBusinessSeeder extends Seeder
                 'employer' => 'Maryna Bay Sands',
                 'rate' => 20,
                 'language' => 'English',
-                'job_date' => $faker->dateTime,
-                'end_date' => $faker->dateTime,
+                'job_date' => $faker->dateTimeBetween($startDate = '-1 year', $endDate = 'now'),
+                'end_date' => $faker->dateTimeBetween($startDate = '-1 year', $endDate = 'now'),
                 'industry_id' => 4,
-                'industry' => 'Recruitment',
+                'industry' => 'Finance',
                 'notes' => $faker->paragraph,
                 'status' => 'Active',
-                 'created_at' =>$faker->dateTime,
-                'updated_at' => $faker->dateTime,
+                 'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s'),
                 'nationality' => 'singaporean',
-                'age' =>  50
+                'min_age' =>  21,
+                'max_age' => 30,
+                'job_requirements' => $faker->paragraph
 
             ]);
         }

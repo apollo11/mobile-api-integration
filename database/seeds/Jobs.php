@@ -19,13 +19,13 @@ class Jobs extends Seeder
 
             DB::table('jobs')->insert([
                 'job_title' => 'HRM',
-                'user_id' => 1,
-                'job_id' => 1,
-                'location_id' => 5,
-                'location' => 'Bishan',
+                'user_id' => 2,
+                'job_id' => 2,
+                'location_id' => 3,
+                'location' => 'Tampines',
                 'role' => 'Manager',
                 'choices' => 'male',
-                'job_image_path' => 'jobs/0UyQDH5JVMfQl55FPLdJ7ao7I2QSm3my392bE61D.jpeg',
+                'job_image_path' => 'jobs/kIiO01kZqeURCVZBH24J65kCwEImjzczxuv4QNts.jpeg',
                 'no_of_person' => 11,
                 'contact_person' => $faker->name,
                 'contact_no' => $faker->phoneNumber,
@@ -33,18 +33,18 @@ class Jobs extends Seeder
                 'employer' => 'Maryna Bay Sands',
                 'rate' => 20,
                 'language' => 'English',
-                'job_date' => $faker->dateTime,
-                'end_date' => $faker->dateTime,
-                'industry_id' => 5,
+                'job_date' => $faker->dateTimeBetween($startDate = '-1 year', $endDate = 'now'),
+                'end_date' => $faker->dateTimeBetween($startDate = '-1 year', $endDate = 'now'),
+                'industry_id' => 3,
                 'industry' => 'Dental',
                 'notes' => $faker->paragraph,
                 'status' => 'Active',
-                'created_at' =>$faker->dateTime,
-                'updated_at' => $faker->dateTime,
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s'),
                 'nationality' => 'singaporean',
-                'min_age' => 16,
-                'max_age' =>  20,
-                'description' => $faker->paragraph
+                'min_age' => 21,
+                'max_age' =>  30,
+                'job_requirements' => $faker->paragraph
             ]);
         }
     }
