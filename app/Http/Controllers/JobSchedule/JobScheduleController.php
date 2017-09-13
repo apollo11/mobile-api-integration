@@ -50,9 +50,9 @@ class JobScheduleController extends Controller
     {
         $user = \App\User::find($userId);
 
-        if($user['is_approved'] == 0) {
+        if($user['status'] == 0) {
 
-            return $this->errorResponse(['Your account is still not active'], 'User Verification', 110008, 400);
+            return $this->errorResponse(['Your account status is pending'], 'User Verification', 110008, 400);
 
         } else {
 
@@ -151,6 +151,7 @@ class JobScheduleController extends Controller
             'id' => $output->id,
             'user_id' => $output->user_id,
             'employer' => [
+                'image_url' => $output->profile_image_path,
                 'name' => $output->company_name,
                 'description' => $output->company_description
             ],
@@ -177,6 +178,7 @@ class JobScheduleController extends Controller
             'language' => $output->language,
             'gender' => $output->gender,
             'job_requirements' => $output->job_requirements,
+            'status' => $output->status
         ];
 
         return $details;

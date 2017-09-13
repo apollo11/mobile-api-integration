@@ -45,15 +45,23 @@
                                             <td>{{ $user->business_manager }}</td>
                                             <td>{{ 30 }}</td>
                                             <td>{{ 20 }}</td>
-                                            <td>{{ $user->is_approved == 0 ? 'Registered' : 'Approved' }}</td>
+                                            <td>{{ $user->status == 1 ? 'Approved' : 'Pending' }}</td>
                                             <td>
                                                 <form id="approve" action="{{ route('employee.approve',['id' => $user->id]) }}" method="POST">
                                                     {{ csrf_field() }}
                                                     <input type="submit" value="Approve">
                                                 </form>
+                                                <form id="reject" action="{{ route('employee.pending',['id' => $user->id]) }}" method="POST">
+                                                    {{ csrf_field() }}
+                                                    <input type="submit" value="Pending">
+                                                </form>
                                                 <form id="reject" action="{{ route('employee.reject',['id' => $user->id]) }}" method="POST">
                                                     {{ csrf_field() }}
                                                     <input type="submit" value="Reject">
+                                                </form>
+                                                <form id="reject" action="{{ route('employee.upload',['id' => $user->id]) }}" method="POST">
+                                                    {{ csrf_field() }}
+                                                    <input type="submit" value="Upload">
                                                 </form>
 
                                         </tr>

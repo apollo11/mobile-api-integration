@@ -293,6 +293,7 @@ class JobController extends Controller
             'id' => $output->id,
             'job_title' => $output->job_title,
             'employer' => [
+                'image_url' => $output->profile_image_path,
                 'name' => $output->company_name,
                 'description' => $output->company_description
             ],
@@ -319,8 +320,7 @@ class JobController extends Controller
             'language' => $output->language,
             'gender' => $output->gender,
             'job_requirements' => $output->job_requirements,
-            'is_assigned' => 0,
-            'status' => 0
+            'status' => $output->status
         ];
 
         return $details;
