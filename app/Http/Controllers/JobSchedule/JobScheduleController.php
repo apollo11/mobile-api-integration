@@ -52,15 +52,21 @@ class JobScheduleController extends Controller
 
             $output = $this->errorResponse(['Your account status is pending or blocked'], 'User Verification', 110008, 400);
 
-        } elseif ($this->isJobExist($request->input('job_id')) == 1) {
-
-            $output = $this->errorResponse(['Job already exist'], 'Job Verification', 110009, 400);
-
         } else {
 
-            $user->jobSchedule()->create(['name' => null, 'job_id' => $request->input('job_id'), 'is_assigned' => 1]);
+            $checkJob = $this->isJobExist($request->input('job_id'), $request->input('user_id'));
 
-            $output = $this->show($request->input('job_id'));
+            if ($checkJob != null) {
+                $output = $this->errorResponse(['This job is already on your scheduled job list.'], 'Apply Failure', 110009, 400);
+
+            } else {
+
+                $user->jobSchedule()->create(['name' => null, 'job_id' => $request->input('job_id'), 'is_assigned' => 1]);
+
+                $output = $this->show($request->input('job_id'));
+
+            }
+
         }
 
         return $output;
@@ -70,11 +76,13 @@ class JobScheduleController extends Controller
     /**
      * Condition if account exist in schedule
      */
-    public function isJobExist($jobId)
+    public function isJobExist($jobId, $userId)
     {
-        $jobSched = \App\JobSchedule::where('job_id', $jobId)->first();
+        $jobSched = \App\JobSchedule::where('job_id', $jobId)
+                    ->where('user_id', $userId)
+                    ->first();
 
-        return count($jobSched['job_id']);
+        return $jobSched;
 
     }
 
