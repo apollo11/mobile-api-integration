@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\JobSchedule;
 
 use Validator;
-use App\User;
 use App\JobSchedule;
 use App\Http\Traits\HttpResponse;
 use Illuminate\Http\Request;
@@ -49,28 +48,51 @@ class JobScheduleController extends Controller
     {
         $user = \App\User::find($request->input('user_id'));
 
-        if($user['employee_status'] == 'pending' || $user['employee_status'] == 'reject' ) {
+        if ($user['employee_status'] == 'pending' || $user['employee_status'] == 'reject') {
 
-            return $this->errorResponse(['Your account status is pending or blocked'], 'User Verification', 110008, 400);
+            $output = $this->errorResponse(['Your account status is pending or blocked'], 'User Verification', 110008, 400);
+
+        } elseif ($this->isJobExist($request->input('job_id')) == 1) {
+
+            $output = $this->errorResponse(['Job already exist'], 'Job Verification', 110009, 400);
 
         } else {
 
-            $user->jobSchedule()->create(['name' => null, 'job_id' => $request->input('job_id')]);
+            $user->jobSchedule()->create(['name' => null, 'job_id' => $request->input('job_id'), 'is_assigned' => 1]);
 
-            return $this->ValidUseSuccessResp(200, true);
+            $output = $this->show($request->input('job_id'));
         }
+
+        return $output;
+
+    }
+
+    /**
+     * Condition if account exist in schedule
+     */
+    public function isJobExist($jobId)
+    {
+        $jobSched = \App\JobSchedule::where('job_id', $jobId)->first();
+
+        return count($jobSched['job_id']);
 
     }
 
     /**
      * Display the specified resource.
-     *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
-        //
+        $job = new JobSchedule();
+
+        $output = $job->getJobScheduleDetails($id);
+
+        $details = $this->jobScheduleOutput($output);
+
+        return response()->json(['job_details' => $details, 'status' => ['status_code' => 200, 'success' => true]]);
+
     }
 
     /**

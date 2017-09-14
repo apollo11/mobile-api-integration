@@ -233,7 +233,7 @@ class EmployeeController extends Controller
     public function approveStatus($id)
     {
         $user = \App\User::find($id);
-        $user->employee_status = "approve";
+        $user->employee_status = "approved";
         $user->save();
 
         return back();
