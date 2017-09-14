@@ -27,6 +27,7 @@ class User extends Authenticatable
         , 'business_name'
         , 'school'
         , 'mobile_no'
+        , 'status'
     ];
 
     /**
@@ -51,6 +52,15 @@ class User extends Authenticatable
     {
        return  $this->hasMany('\App\Job');
     }
+
+    /**
+     * job schedule
+     */
+    public function jobSchedule()
+    {
+        return $this->hasMany('\App\JobSchedule');
+    }
+
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
@@ -83,6 +93,16 @@ class User extends Authenticatable
        $user =  DB::table('users')->where('nric_no', $nric)->first();
 
        return (array) $user;
+
+    }
+
+    public function testupdate($id)
+    {
+        $test = DB::table('users')
+            ->where('id', $id)
+            ->update(['is_approve' => 1]);
+
+        return $test;
 
     }
 }

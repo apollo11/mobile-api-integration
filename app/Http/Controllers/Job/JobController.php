@@ -245,7 +245,6 @@ class JobController extends Controller
     /**
      * API List for jobs
      */
-
     public function jobApiLists()
     {
         $job = new Job();
@@ -294,6 +293,7 @@ class JobController extends Controller
             'id' => $output->id,
             'job_title' => $output->job_title,
             'employer' => [
+                'image_url' => $output->profile_image_path,
                 'name' => $output->company_name,
                 'description' => $output->company_description
             ],
@@ -320,12 +320,23 @@ class JobController extends Controller
             'language' => $output->language,
             'gender' => $output->gender,
             'job_requirements' => $output->job_requirements,
+            'status' => $output->job_status,
+            'is_assigned' => 0
         ];
 
         return $details;
 
     }
 
+    /**
+     *
+     * Filter condition
+     * @param $industry
+     * @param $location
+     * @param $date
+     * @param $limit
+     * @return mixed
+     */
     public function jobFilter($industry, $location, $date, $limit)
     {
         $job = new Job();
