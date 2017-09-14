@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\JobSchedule;
 
 use Validator;
-use App\User;
 use App\JobSchedule;
 use App\Http\Traits\HttpResponse;
 use Illuminate\Http\Request;
@@ -55,9 +54,9 @@ class JobScheduleController extends Controller
 
         } else {
 
-            $user->jobSchedule()->create(['name' => null, 'job_id' => $request->input('job_id')]);
+            $user->jobSchedule()->firstOrCreate(['name' => null, 'job_id' => $request->input('job_id')]);
 
-            return $this->ValidUseSuccessResp(200, true);
+            return $this->show($request->input('job_id'));
         }
 
     }
@@ -70,7 +69,14 @@ class JobScheduleController extends Controller
      */
     public function show($id)
     {
-        //
+        $job = new JobSchedule();
+
+        $output = $job->getJobScheduleDetails($id);
+
+        $details = $this->jobScheduleOutput($output);
+
+        return response()->json(['job_details' => $details, 'status' => ['status_code' => 200, 'success' => true]]);
+
     }
 
     /**
