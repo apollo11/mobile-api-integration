@@ -111,15 +111,16 @@ class JobSchedule extends Model
         $jobs = DB::table('users')
             ->join('job_schedules', 'job_schedules.user_id', '=', 'users.id')
             ->join('jobs', 'jobs.id', '=', 'job_schedules.job_id')
+            ->join('users as employer', 'employer.id', '=', 'jobs.user_id')
             ->select(
                 'jobs.id'
                 , 'job_schedules.user_id'
                 , 'job_schedules.job_id'
                 , 'job_schedules.is_assigned'
-                , 'users.company_description'
-                , 'users.company_name'
-                , 'users.profile_image_path'
-                , 'users.employee_status as status'
+                , 'employer.company_description'
+                , 'employer.company_name'
+                , 'employer.profile_image_path'
+                , 'employer.employee_status as status'
                 , 'jobs.job_status'
                 , 'jobs.description as job_description'
                 , 'jobs.location'
