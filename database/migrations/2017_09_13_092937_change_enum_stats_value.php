@@ -15,7 +15,7 @@ class ChangeEnumStatsValue extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
 
-            $table->enum('employee_status', ['pending', 'upload', 'reject', 'approve'])->default('pending');
+            $table->enum('employee_status', ['pending', 'upload', 'reject', 'approved'])->default('pending');
         });
     }
 
