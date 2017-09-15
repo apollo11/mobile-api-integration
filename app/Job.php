@@ -38,7 +38,8 @@ class Job extends Model
         'min_age',
         'max_age',
         'job_requirements',
-        'employee_status'
+        'employee_status',
+        'job_status'
     ];
 
     /**

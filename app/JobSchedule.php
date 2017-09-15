@@ -94,10 +94,7 @@ class JobSchedule extends Model
 
                 $query->where('users.id', '=', $param['id']);
             })
-            ->when(empty($param['limit']), function ($query) use ($param) {
-
-                $query->limit(20);
-            })
+            ->limit($param['limit'])
             ->orderBy('jobs.job_date', 'desc')
             ->orderBy('jobs.created_at', 'desc')
             ->get();
