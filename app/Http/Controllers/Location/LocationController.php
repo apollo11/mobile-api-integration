@@ -66,6 +66,7 @@ class LocationController extends Controller
 
         $query = new Location();
         $query->name = $data['name'];
+        $query->zip_code = $data['zip_code'];
         $query->save();
 
     }
@@ -124,7 +125,8 @@ class LocationController extends Controller
     public function rules($data)
     {
         return Validator::make($data, [
-            'name' => 'required|string|unique:locations'
+            'name' => 'required|string|unique:locations',
+            'zip_code' => 'required|string|unique:locations',
         ]);
     }
 

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\JobSchedule;
 
 use Validator;
+use App\Job;
 use App\JobSchedule;
 use App\Http\Traits\HttpResponse;
 use Illuminate\Http\Request;
@@ -61,7 +62,9 @@ class JobScheduleController extends Controller
 
             } else {
 
-                $user->jobSchedule()->create(['name' => null, 'job_id' => $request->input('job_id'), 'is_assigned' => 1]);
+                $user->jobSchedule()->create(['name' => null, 'job_id' => $request->input('job_id'), 'is_assigned' => 1, 'job_status' =>"accepted"]);
+
+                $this->updateJobStatus($request->input('job_id'));
 
                 $output = $this->show($request->input('job_id'));
 
@@ -231,6 +234,16 @@ class JobScheduleController extends Controller
 
         return response()->json(['jobs' => $dataUndefined]);
 
+    }
+
+    /**
+     * Update Job lists status
+     */
+    public function updateJobStatus($id)
+    {
+        $job = \App\Job::find($id);
+        $job->job_status = "accepted";
+        $job->save();
     }
 
 

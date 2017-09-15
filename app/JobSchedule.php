@@ -8,8 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class JobSchedule extends Model
 {
     protected $fillable = [
-        'name'
+          'name'
         , 'job_id'
+        , 'is_assigned'
+        , 'job_status'
     ];
 
     /**
@@ -46,13 +48,13 @@ class JobSchedule extends Model
                 , 'job_schedules.user_id'
                 , 'job_schedules.job_id'
                 , 'job_schedules.is_assigned'
+                , 'job_schedules.job_status'
                 , 'employer.company_description'
                 , 'employer.company_name'
                 , 'employer.profile_image_path'
                 , 'employer.employee_status as status'
                 , 'jobs.description as job_description'
                 , 'jobs.location'
-                , 'jobs.job_status'
                 , 'jobs.location_id'
                 , 'jobs.industry'
                 , 'jobs.industry_id'
@@ -92,10 +94,7 @@ class JobSchedule extends Model
 
                 $query->where('users.id', '=', $param['id']);
             })
-            ->when(empty($param['limit']), function ($query) use ($param) {
-
-                $query->limit(20);
-            })
+            ->limit($param['limit'])
             ->orderBy('jobs.job_date', 'desc')
             ->orderBy('jobs.created_at', 'desc')
             ->get();
@@ -117,11 +116,11 @@ class JobSchedule extends Model
                 , 'job_schedules.user_id'
                 , 'job_schedules.job_id'
                 , 'job_schedules.is_assigned'
+                , 'job_schedules.job_status'
                 , 'employer.company_description'
                 , 'employer.company_name'
                 , 'employer.profile_image_path'
                 , 'employer.employee_status as status'
-                , 'jobs.job_status'
                 , 'jobs.description as job_description'
                 , 'jobs.location'
                 , 'jobs.location_id'
