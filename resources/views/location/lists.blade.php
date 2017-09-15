@@ -20,6 +20,7 @@
                                         <th>Checkbox</th>
                                         <th>#</th>
                                         <th>Location</th>
+                                        <th>Zip Code</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -28,6 +29,7 @@
                                             <td><input type="checkbox"/></td>
                                             <td>{{ $value->id }}</td>
                                             <td>{{ $value->name }}</td>
+                                            <td>{{ $value->zip_code }}</td>
                                         </tr>
                                     @endforeach
                                     </tbody>
