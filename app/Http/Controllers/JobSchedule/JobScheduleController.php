@@ -61,7 +61,7 @@ class JobScheduleController extends Controller
 
             } else {
 
-                $user->jobSchedule()->create(['name' => null, 'job_id' => $request->input('job_id'), 'is_assigned' => 1]);
+                $user->jobSchedule()->create(['name' => null, 'job_id' => $request->input('job_id'), 'is_assigned' => 1, 'job_status' =>"accepted"]);
 
                 $output = $this->show($request->input('job_id'));
 
