@@ -66,8 +66,6 @@ class Job extends Model
         return $this->hasMany('\App\JobSchedule');
     }
 
-
-
     /**
      * Filter by limit, start date, end date
      */

@@ -61,7 +61,6 @@ class User extends Authenticatable
         return $this->hasMany('\App\JobSchedule');
     }
 
-
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */

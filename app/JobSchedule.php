@@ -12,6 +12,9 @@ class JobSchedule extends Model
         , 'job_id'
         , 'is_assigned'
         , 'job_status'
+        , 'cancel_status'
+        , 'cancel_file_path'
+        , 'cancel_reason'
     ];
 
     /**
@@ -45,6 +48,7 @@ class JobSchedule extends Model
             ->join('users as employer', 'employer.id', '=', 'jobs.user_id')
             ->select(
                 'jobs.id'
+                , 'job_schedules.id as schedule_id'
                 , 'job_schedules.user_id'
                 , 'job_schedules.job_id'
                 , 'job_schedules.is_assigned'
@@ -95,6 +99,7 @@ class JobSchedule extends Model
                 $query->where('users.id', '=', $param['id']);
             })
             ->limit($param['limit'])
+            ->where('job_schedules.job_status', '=', 'accepted')
             ->orderBy('jobs.job_date', 'desc')
             ->orderBy('jobs.created_at', 'desc')
             ->get();
@@ -113,6 +118,7 @@ class JobSchedule extends Model
             ->join('users as employer', 'employer.id', '=', 'jobs.user_id')
             ->select(
                 'jobs.id'
+                , 'job_schedules.id as schedule_id'
                 , 'job_schedules.user_id'
                 , 'job_schedules.job_id'
                 , 'job_schedules.is_assigned'
