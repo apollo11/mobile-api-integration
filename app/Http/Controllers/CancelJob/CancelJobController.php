@@ -38,7 +38,7 @@ class CancelJobController extends Controller
 
             } else {
 
-                $file['cancel_file_path'] = $request->file('cancel_file_path')->store('cancelJobs');
+                $file['file'] = $request->file('file')->store('cancelJobs');
                 $merge = array_merge($data, $file);
 
                 $this->edit($merge);
@@ -116,9 +116,9 @@ class CancelJobController extends Controller
         $job = \App\JobSchedule::where('job_id', $data['id']);
 
         $job->update([
-            'cancel_status' => $data['cancel_status'],
-            'cancel_reason' => $data['cancel_reason'],
-            'cancel_file_path' => $data['cancel_file_path'],
+            'cancel_status' => $data['type'],
+            'cancel_reason' => $data['reason'],
+            'cancel_file_path' => $data['file'],
             'job_status' => "cancelled"
         ]);
 
@@ -155,7 +155,7 @@ class CancelJobController extends Controller
     {
         return Validator::make($data,
             [
-                'cancel_reason' => 'required'
+                'reason' => 'required'
             ]);
     }
 
