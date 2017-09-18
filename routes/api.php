@@ -76,6 +76,8 @@ Route::group(['middleware' => ['auth:api']], function() {
         Route::get('lists', 'Job\JobController@jobApiLists');
         Route::get('lists/{id}','Job\JobController@show');
 
+        Route::post('cancel', 'CancelJob\CancelJobController@index');
+
     });
 
     Route::prefix('v1/job/schedule/')->group(function () {
@@ -94,6 +96,8 @@ Route::group(['middleware' => ['auth_client']], function() {
         Route::get('lists', 'Job\JobController@jobApiLists');
         Route::get('lists/{id}','Job\JobController@show');
 
+        Route::post('cancel', 'CancelJob\CancelJobController@index');
+
     });
 
     Route::prefix('v1/job/schedule/')->group(function () {
@@ -102,6 +106,7 @@ Route::group(['middleware' => ['auth_client']], function() {
         Route::post('apply', 'JobSchedule\JobScheduleController@store');
 
     });
+
 
 });
 
