@@ -100,7 +100,7 @@ class JobSchedule extends Model
                 $query->where('users.id', '=', $param['id']);
             })
             ->limit($param['limit'])
-            //->where('job_schedules.job_status', '=', 'accepted')
+            ->where('job_schedules.job_status', '=', 'accepted')
             ->orderBy('jobs.job_date', 'desc')
             ->orderBy('jobs.created_at', 'desc')
             ->get();
