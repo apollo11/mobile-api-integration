@@ -178,12 +178,10 @@ class JobScheduleController extends Controller
         $start_date = $date = date_create($output->start_date, timezone_open('UTC'));
         $end_date = $date = date_create($output->end_date, timezone_open('UTC'));
         $created = $date = date_create($output->created_at, timezone_open('UTC'));
-        $scheduleId = $output->schedule_id;
         $details = [
-               'id' => $scheduleId,
+               'schedule_id' => $output->schedule_id,
                 'job' => [
                     'id' => $output->id,
-                    'user_id' => $output->user_id,
                     'employer' => [
                         'image_url' => $output->profile_image_path,
                         'name' => $output->company_name,

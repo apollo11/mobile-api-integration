@@ -74,8 +74,11 @@ class Job extends Model
 
         $jobs = DB::table('users')
             ->join('jobs', 'users.id', '=', 'jobs.user_id')
+            ->leftJoin('job_schedules','job_schedules.job_id', '=', 'jobs.id')
             ->select(
                 'jobs.id'
+                , 'job_schedules.id as schedule_id'
+                , 'job_schedules.user_id as user_id'
                 , 'users.company_description'
                 , 'users.company_name'
                 , 'users.profile_image_path'

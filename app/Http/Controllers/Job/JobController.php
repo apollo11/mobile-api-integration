@@ -289,10 +289,9 @@ class JobController extends Controller
         $created = $date = date_create($output->created_at, timezone_open('UTC'));
 
         $details = [
-            'id' => $output->schedule_id,
+            'schedule_id' => $output->schedule_id,
             'job' => [
                 'id' => $output->id,
-                'user_id' => $output->user_id,
                 'employer' => [
                     'image_url' => $output->profile_image_path,
                     'name' => $output->company_name,
@@ -327,7 +326,8 @@ class JobController extends Controller
         ];
 
         return $details;
-
     }
+
+
 
 }
