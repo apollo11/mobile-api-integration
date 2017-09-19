@@ -131,6 +131,7 @@ class Job extends Model
             ->orderBy('jobs.created_at', 'desc')
             ->limit($limit)
             ->distinct()
+            ->groupBy('jobs.id')
             ->get();
 
         return $jobs;
