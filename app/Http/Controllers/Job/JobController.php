@@ -129,16 +129,15 @@ class JobController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show()
     {
         $job = new Job();
 
-        $output = $job->jobDetails($id);
+        $output = $job->jobDetails($this->request->get('id'), $this->request->get('user_id'));
 
         $details = $this->jobDetailsoutput($output);
 
-        return response()->json(['job_details' => $details]);
-    }
+        return response()->json(['job_details' => $details]);    }
 
     /**
      * Show the form for editing the specified resource.
@@ -290,38 +289,41 @@ class JobController extends Controller
         $created = $date = date_create($output->created_at, timezone_open('UTC'));
 
         $details = [
-            'id' => $output->id,
-            'job_title' => $output->job_title,
-            'employer' => [
-                'image_url' => $output->profile_image_path,
-                'name' => $output->company_name,
-                'description' => $output->company_description
-            ],
-            'industry' => [
-                'id' => $output->industry_id,
-                'name' => $output->industry
-            ],
-            'location' => [
-                'id' => $output->location_id,
-                'name' => $output->location,
-            ],
-            'created_date' => date_format($created, 'Y-m-d H:i:sP'),
-            'start_date' => date_format($start_date, 'Y-m-d H:i:sP'),
-            'end_date' => date_format($end_date, 'Y-m-d H:i:sP'),
-            'contact_no' => $output->contact_no,
-            'rate' => $output->rate,
-            'thumbnail_url' => $output->job_image_path,
-            'nationality' => ucfirst($output->nationality),
-            'description' => $output->description,
-            'min_age' => $output->min_age,
-            'max_age' => $output->max_age,
-            'role' => $output->role,
-            'remarks' => $output->notes,
-            'language' => $output->language,
-            'gender' => $output->gender,
-            'job_requirements' => $output->job_requirements,
-            'status' => $output->job_status,
-            'is_assigned' => 0
+            'id' => $output->schedule_id,
+            'job' => [
+                'id' => $output->id,
+                'user_id' => $output->user_id,
+                'employer' => [
+                    'image_url' => $output->profile_image_path,
+                    'name' => $output->company_name,
+                    'description' => $output->company_description
+                ],
+                'industry' => [
+                    'id' => $output->industry_id,
+                    'name' => $output->industry
+                ],
+                'location' => [
+                    'id' => $output->location_id,
+                    'name' => $output->location,
+                ],
+                'created_date' => date_format($created, 'Y-m-d H:i:sP'),
+                'start_date' => date_format($start_date, 'Y-m-d H:i:sP'),
+                'end_date' => date_format($end_date, 'Y-m-d H:i:sP'),
+                'contact_no' => $output->contact_no,
+                'rate' => $output->rate,
+                'thumbnail_url' => $output->job_image_path,
+                'nationality' => ucfirst($output->nationality),
+                'description' => $output->description,
+                'min_age' => $output->min_age,
+                'max_age' => $output->max_age,
+                'role' => $output->role,
+                'remarks' => $output->notes,
+                'language' => $output->language,
+                'gender' => $output->gender,
+                'job_requirements' => $output->job_requirements,
+                'status' => $output->job_status,
+                'is_assigned' => 0
+            ]
         ];
 
         return $details;

@@ -32,15 +32,21 @@ class CancelJobController extends Controller
 
             $IsjobCancelled = $this->isJobExist($data['id']);
 
-            if($IsjobCancelled != null ) {
+            if ($IsjobCancelled != null) {
 
                 $output = $this->errorResponse(['This job is already cancelled.'], 'Apply Failure', 1100012, 400);
 
             } else {
 
-                $file['file'] = $request->file('file')->store('cancelJobs');
-                $merge = array_merge($data, $file);
+                if ($request->hasFile('file')) {
 
+                    $file['file'] = $request->file('file')->store('cancelJobs');
+                } else {
+
+                    $file['file'] = null;
+                }
+
+                $merge = array_merge($data, $file);
                 $this->edit($merge);
 
                 $output = $this->show($request->input('id'));
@@ -155,7 +161,8 @@ class CancelJobController extends Controller
     {
         return Validator::make($data,
             [
-                'reason' => 'required'
+                'type' => 'required',
+                'file' => 'nullable'
             ]);
     }
 

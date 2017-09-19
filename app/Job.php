@@ -102,7 +102,7 @@ class Job extends Model
                 , 'jobs.notes'
                 , 'jobs.language'
                 , 'jobs.choices'
-                ,'jobs.job_requirements'
+                , 'jobs.job_requirements'
             )
             ->when(!empty($param['industries']), function ($query) use ($param) {
 
@@ -137,16 +137,22 @@ class Job extends Model
      * @param $id
      * @return mixed
      */
-    public function jobDetails($id)
+    public function jobDetails($id, $userId)
     {
-        $jobDetails = DB::table('users')
-            ->join('jobs', 'users.id', '=', 'jobs.user_id')
+        $jobDetails = DB::table('users as employer')
+            ->join('jobs', 'jobs.user_id', '=', 'employer.id')
+            ->leftJoin('job_schedules', function ($join) use ($userId) {
+                $join->on('job_schedules.job_id', '=', 'jobs.id')
+                    ->where('job_schedules.user_id', '=', $userId);
+            })
             ->select(
                 'jobs.id'
-                , 'users.company_description'
-                , 'users.company_name'
-                , 'users.profile_image_path'
-                , 'users.employee_status as status'
+                , 'job_schedules.id as schedule_id'
+                , 'job_schedules.user_id as user_id'
+                , 'employer.company_description'
+                , 'employer.company_name'
+                , 'employer.profile_image_path'
+                , 'employer.employee_status as status'
                 , 'jobs.description as job_description'
                 , 'jobs.job_title'
                 , 'jobs.job_status'
@@ -169,7 +175,7 @@ class Job extends Model
                 , 'jobs.notes'
                 , 'jobs.language'
                 , 'jobs.choices'
-                ,'jobs.job_requirements'
+                , 'jobs.job_requirements'
             )
             ->where('jobs.id', '=', $id)
             ->first();
