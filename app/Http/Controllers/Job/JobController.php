@@ -293,6 +293,7 @@ class JobController extends Controller
             'schedule_id' => $output->schedule_id,
             'job' => [
                 'id' => $output->id,
+                'job_title' => $output->job_title,
                 'employer' => [
                     'image_url' => $output->profile_image_path,
                     'name' => $output->company_name,

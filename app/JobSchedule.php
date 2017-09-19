@@ -59,6 +59,7 @@ class JobSchedule extends Model
                 , 'employer.employee_status as status'
                 , 'jobs.description as job_description'
                 , 'jobs.location'
+                , 'jobs.job_title'
                 , 'jobs.location_id'
                 , 'jobs.industry'
                 , 'jobs.industry_id'
@@ -99,7 +100,7 @@ class JobSchedule extends Model
                 $query->where('users.id', '=', $param['id']);
             })
             ->limit($param['limit'])
-            ->where('job_schedules.job_status', '=', 'accepted')
+            //->where('job_schedules.job_status', '=', 'accepted')
             ->orderBy('jobs.job_date', 'desc')
             ->orderBy('jobs.created_at', 'desc')
             ->get();
@@ -129,6 +130,7 @@ class JobSchedule extends Model
                 , 'employer.employee_status as status'
                 , 'jobs.description as job_description'
                 , 'jobs.location'
+                , 'jobs.job_title'
                 , 'jobs.location_id'
                 , 'jobs.industry'
                 , 'jobs.industry_id'
