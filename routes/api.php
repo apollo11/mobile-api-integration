@@ -76,7 +76,7 @@ Route::group(['middleware' => ['auth:api']], function() {
         Route::get('lists', 'Job\JobController@jobApiLists');
         Route::get('details','Job\JobController@show');
 
-        Route::post('apply/{userId}/{jobId}', 'JobSchedule\JobScheduleController@store');
+        Route::post('apply', 'JobSchedule\JobScheduleController@store');
 
     });
 
