@@ -181,6 +181,7 @@ class JobScheduleController extends Controller
         $details = [
                'schedule_id' => $output->schedule_id,
                 'job' => [
+                    'job_title' => $output->job_title,
                     'id' => $output->id,
                     'employer' => [
                         'image_url' => $output->profile_image_path,
