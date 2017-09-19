@@ -127,11 +127,10 @@ class Job extends Model
                     "' ELSE jobs.job_date <= '" . $param['start'] . "' END");
 
             })
+            ->distinct('jobs.id')
             ->orderBy('jobs.job_date', 'desc')
             ->orderBy('jobs.created_at', 'desc')
             ->limit($limit)
-            ->distinct()
-            ->groupBy('jobs.id')
             ->get();
 
         return $jobs;
