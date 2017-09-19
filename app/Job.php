@@ -130,6 +130,7 @@ class Job extends Model
             ->orderBy('jobs.job_date', 'desc')
             ->orderBy('jobs.created_at', 'desc')
             ->limit($limit)
+            ->distinct()
             ->get();
 
         return $jobs;

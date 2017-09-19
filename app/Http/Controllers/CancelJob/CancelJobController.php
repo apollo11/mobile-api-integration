@@ -103,7 +103,7 @@ class CancelJobController extends Controller
     {
         $job = new JobSchedule();
 
-        $output = $job->getJobScheduleDetails($id);
+        $output = $job->getJobScheduleDetails($id, 'job_schedules.id');
 
         $details = $this->jobScheduleOutput($output);
 

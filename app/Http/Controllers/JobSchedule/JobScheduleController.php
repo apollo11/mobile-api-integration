@@ -98,7 +98,7 @@ class JobScheduleController extends Controller
     {
         $job = new JobSchedule();
 
-        $output = $job->getJobScheduleDetails($id);
+        $output = $job->getJobScheduleDetails($id, 'jobs.id');
 
         $details = $this->jobScheduleOutput($output);
 
