@@ -2,12 +2,17 @@
 
 namespace App\Http\Controllers\EmployeeProfile;
 
-use App\User;
+use App\EmployeeProfile;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 class EmployeeProfileController extends Controller
 {
+    public function  __construct()
+    {
+
+
+    }
     /**
      * Display a listing of the resource.
      *
@@ -15,7 +20,7 @@ class EmployeeProfileController extends Controller
      */
     public function index()
     {
-        //
+
     }
 
     /**
@@ -45,10 +50,13 @@ class EmployeeProfileController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request)
     {
-        $user = new User();
+        $query = new EmployeeProfile();
 
+        $output = $query->getEmployeeDetails($request->get('id'));
+
+        return response()->json(['user_details' => $output]);
     }
 
     /**
