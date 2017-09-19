@@ -111,7 +111,7 @@ class JobSchedule extends Model
     /**
      * Implementation of job schedule via user
      */
-    public function getJobScheduleDetails($id)
+    public function getJobScheduleDetails($id, $columName)
     {
         $jobs = DB::table('users')
             ->join('job_schedules', 'job_schedules.user_id', '=', 'users.id')
@@ -151,7 +151,7 @@ class JobSchedule extends Model
                 , 'jobs.choices'
                 ,'jobs.job_requirements'
             )
-            ->where('jobs.id', '=', $id)
+            ->where($columName , '=', $id)
             ->first();
 
         return $jobs;
