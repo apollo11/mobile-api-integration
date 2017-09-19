@@ -287,6 +287,7 @@ class JobController extends Controller
         $start_date = $date = date_create($output->start_date, timezone_open('UTC'));
         $end_date = $date = date_create($output->end_date, timezone_open('UTC'));
         $created = $date = date_create($output->created_at, timezone_open('UTC'));
+        $assigned = is_null($output->schedule_status) ? 'available' : $output->schedule_status;
 
         $details = [
             'schedule_id' => $output->schedule_id,
@@ -320,7 +321,7 @@ class JobController extends Controller
                 'language' => $output->language,
                 'gender' => $output->gender,
                 'job_requirements' => $output->job_requirements,
-                'status' => $output->job_status,
+                'status' => $assigned,
                 'is_assigned' => 0
             ]
         ];
