@@ -32,9 +32,10 @@ class CancelJobController extends Controller
 
             $IsjobCancelled = $this->isJobExist($data['id']);
 
+
             if ($IsjobCancelled != null) {
 
-                $output = $this->errorResponse(['This job is already cancelled.'], 'Apply Failure', 1100012, 400);
+                $output = $this->errorResponse(['This job is already cancelled.'], 'Cancel Failure', 1100012, 400);
 
             } else {
 
@@ -62,7 +63,7 @@ class CancelJobController extends Controller
      */
     public function isJobExist($id)
     {
-        $jobSched = \App\JobSchedule::where('job_id', $id)
+        $jobSched = \App\JobSchedule::where('id','=', $id)
             ->where('job_status', 'cancelled')
             ->first();
 
@@ -119,7 +120,7 @@ class CancelJobController extends Controller
     public function edit(array $data)
     {
 
-        $job = \App\JobSchedule::where('job_id', $data['id']);
+        $job = \App\JobSchedule::where('id', $data['id']);
 
         $job->update([
             'cancel_status' => $data['type'],
@@ -179,40 +180,42 @@ class CancelJobController extends Controller
         $start_date = $date = date_create($output->start_date, timezone_open('UTC'));
         $end_date = $date = date_create($output->end_date, timezone_open('UTC'));
         $created = $date = date_create($output->created_at, timezone_open('UTC'));
-
         $details = [
-            'id' => $output->id,
-            'user_id' => $output->user_id,
-            'employer' => [
-                'image_url' => $output->profile_image_path,
-                'name' => $output->company_name,
-                'description' => $output->company_description
-            ],
-            'industry' => [
-                'id' => $output->industry_id,
-                'name' => $output->industry
-            ],
-            'location' => [
-                'id' => $output->location_id,
-                'name' => $output->location,
-            ],
-            'created_date' => date_format($created, 'Y-m-d H:i:sP'),
-            'start_date' => date_format($start_date, 'Y-m-d H:i:sP'),
-            'end_date' => date_format($end_date, 'Y-m-d H:i:sP'),
-            'contact_no' => $output->contact_no,
-            'rate' => $output->rate,
-            'thumbnail_url' => $output->job_image_path,
-            'nationality' => ucfirst($output->nationality),
-            'description' => $output->description,
-            'min_age' => $output->min_age,
-            'max_age' => $output->max_age,
-            'role' => $output->role,
-            'remarks' => $output->notes,
-            'language' => $output->language,
-            'gender' => $output->gender,
-            'job_requirements' => $output->job_requirements,
-            'status' => $output->job_status,
-            'is_assigned' => $output->is_assigned
+            'schedule_id' => $output->schedule_id,
+            'job' => [
+                'job_title' => $output->job_title,
+                'id' => $output->id,
+                'employer' => [
+                    'image_url' => $output->profile_image_path,
+                    'name' => $output->company_name,
+                    'description' => $output->company_description
+                ],
+                'industry' => [
+                    'id' => $output->industry_id,
+                    'name' => $output->industry
+                ],
+                'location' => [
+                    'id' => $output->location_id,
+                    'name' => $output->location,
+                ],
+                'created_date' => date_format($created, 'Y-m-d H:i:sP'),
+                'start_date' => date_format($start_date, 'Y-m-d H:i:sP'),
+                'end_date' => date_format($end_date, 'Y-m-d H:i:sP'),
+                'contact_no' => $output->contact_no,
+                'rate' => $output->rate,
+                'thumbnail_url' => $output->job_image_path,
+                'nationality' => ucfirst($output->nationality),
+                'description' => $output->description,
+                'min_age' => $output->min_age,
+                'max_age' => $output->max_age,
+                'role' => $output->role,
+                'remarks' => $output->notes,
+                'language' => $output->language,
+                'gender' => $output->gender,
+                'job_requirements' => $output->job_requirements,
+                'status' => $output->job_status,
+                'is_assigned' => $output->is_assigned
+            ]
         ];
 
         return $details;
