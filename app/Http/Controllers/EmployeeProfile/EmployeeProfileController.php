@@ -153,7 +153,7 @@ class EmployeeProfileController extends Controller
             'employee_status' => $output->employee_status,
             'schedule_count' => $count,
             'money_earned' => 0,
-            'completed' => 0
+            'completed_job_count' => 0
         ];
 
         return $data;
