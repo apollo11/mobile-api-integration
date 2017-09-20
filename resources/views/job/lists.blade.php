@@ -4,24 +4,24 @@
     <div class="page-content-wrapper">
         <div class="page-content">
             <div class="row">
-                    <div class="form-group float-left">
-                        <div class="col-md-4">
-                            <div class="input-group">
-                                <div class="input-icon right">
-                                    <i class="fa fa-search"></i>
-                                    <input type="text" class="form-control" placeholder="Search">
-                                </div>
-                                <span class="input-group-btn">
-                                <button class="btn blue left">Advance Filter</button>
-                            </span>
+                <div class="form-group float-left">
+                    <div class="col-md-4">
+                        <div class="input-group">
+                            <div class="input-icon right">
+                                <i class="fa fa-search"></i>
+                                <input type="text" class="form-control" placeholder="Search">
                             </div>
-                        </div>
-                        <div class="col-md-3 col-md-offset-5 float-right">
-                            <a class="btn blue right">Delete</a>
-                            <a class="btn blue right">Export</a>
-                            <a href="{{ route('job.create') }}" class="btn blue right">Add New Post</a>
+                            <span class="input-group-btn">
+                            <button class="btn blue left">Advance Filter</button>
+                        </span>
                         </div>
                     </div>
+                    <div class="col-md-3 col-md-offset-5 float-right">
+                        <a class="btn blue right">Delete</a>
+                        <a class="btn blue right">Export</a>
+                        <a href="{{ route('job.create') }}" class="btn blue right">Add New Post</a>
+                    </div>
+                </div>
             </div>
             <br />
             <div class="row">
