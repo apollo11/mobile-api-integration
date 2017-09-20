@@ -125,6 +125,8 @@ class EmployeeProfileController extends Controller
             'nric_no' => $output->nric_no,
             'email' => $output->email,
             'school' => $output->school,
+            'points' => 10,
+            'image_url' => null,
             'additional_info' => [
                 'birthdate' => $output->date_of_birth,
                 'nationality' => null,

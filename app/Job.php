@@ -189,4 +189,49 @@ class Job extends Model
         return $jobDetails;
     }
 
+    /**
+     * Filter by limit, start date, end date
+     */
+    public function jobList()
+    {
+
+        $jobs = DB::table('users')
+            ->join('jobs', 'users.id', '=', 'jobs.user_id')
+            ->select(
+                'jobs.id'
+                , 'users.company_description'
+                , 'users.company_name'
+                , 'users.profile_image_path'
+                , 'users.employee_status as status'
+                , 'jobs.description as job_description'
+                , 'jobs.status'
+                , 'jobs.location'
+                , 'jobs.no_of_person'
+                , 'jobs.job_title'
+                , 'jobs.location_id'
+                , 'jobs.industry'
+                , 'jobs.industry_id'
+                , 'jobs.job_date as start_date'
+                , 'jobs.created_at'
+                , 'jobs.end_date'
+                , 'jobs.contact_no'
+                , 'jobs.rate'
+                , 'jobs.job_image_path'
+                , 'jobs.nationality'
+                , 'jobs.choices as gender'
+                , 'jobs.description'
+                , 'jobs.min_age'
+                , 'jobs.max_age'
+                , 'jobs.role'
+                , 'jobs.notes'
+                , 'jobs.language'
+                , 'jobs.choices'
+                , 'jobs.job_requirements'
+            )
+            ->orderBy('jobs.id', 'asc')
+            ->get();
+
+        return $jobs;
+    }
+
 }
