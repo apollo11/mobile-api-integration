@@ -63,7 +63,7 @@
                 Payouts</a>
         </li>
         <li>
-            <a href="{{ route('job.create') }}">
+            <a href="{{ route('job.lists') }}">
                 <i class="icon-handbag"></i>
                 Job Management</a>
         </li>

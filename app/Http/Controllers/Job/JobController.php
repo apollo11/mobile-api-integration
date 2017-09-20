@@ -209,7 +209,7 @@ class JobController extends Controller
     public function jobLists()
     {
         $jobs = new Job();
-        $jobLists = $jobs::all();
+        $jobLists = $jobs->jobList();
 
         return $jobLists;
 
