@@ -54,9 +54,11 @@ class EmployeeProfileController extends Controller
     {
         $query = new EmployeeProfile();
 
+        $count = $query->countPendingJobs($request->get('id'));
+
         $output = $query->getEmployeeDetails($request->get('id'));
 
-        return response()->json(['user_details' => $output]);
+        return $this->profileIteration($output, $count);
     }
 
     /**
@@ -91,5 +93,66 @@ class EmployeeProfileController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    /**
+     * Iteration of profile output
+     */
+    public function profileIteration($output, $count)
+    {
+        $data = $this->output($output, $count);
+
+        return response()->json(['user_detail' => $data]);
+
+    }
+
+    /**
+     * Response output for User Profile
+     */
+
+    public function output($output, $count)
+    {
+        $data = [
+            'id' => $output->id,
+            'name' => $output->name,
+            'mobile_no' => $output->mobile_no,
+            'nric_no' => $output->nric_no,
+            'email' => $output->email,
+            'school' => $output->school,
+            'additional_info' => [
+                'birthdate' => $output->date_of_birth,
+                'nationality' => null,
+                'religion' => null,
+                'address' => null,
+                'school_pass_expiry_date' => null,
+                'emergency_contact' => [
+                    'name' => null,
+                    'contact_no' => null,
+                    'relationship' => null,
+                    'address' => null,
+                ],
+                'contact_method' => null,
+                'criminal_record' => [
+                    'has_record' => null,
+                    'reason' => null,
+                ],
+                'medical_condition' => [
+                    'has_medical_condition' => null,
+                    'condition' => null
+                ],
+                'availability' => [
+                    'day' => null,
+                    'start_time' => null,
+                    'end_time' => null
+                ],
+            ],
+            'created_at' => $output->created_at,
+            'updated_at' => $output->updated_at,
+            'employee_status' => $output->employee_status,
+            'schedule_count' => $count
+        ];
+
+        return $data;
+
     }
 }
