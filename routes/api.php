@@ -80,6 +80,12 @@ Route::group(['middleware' => ['auth:api']], function() {
 
     });
 
+    Route::prefix('v1/user/')->group(function () {
+
+        Route::get('details', 'EmployeeProfile\EmployeeProfileController@show');
+
+    });
+
     Route::prefix('v1/job/schedule/')->group(function () {
 
         Route::get('lists', 'JobSchedule\JobScheduleController@jobScheduleLists');
@@ -99,7 +105,11 @@ Route::group(['middleware' => ['auth_client']], function() {
 
         Route::post('apply', 'JobSchedule\JobScheduleController@store');
 
+    });
 
+    Route::prefix('v1/user/')->group(function () {
+
+       Route::get('details', 'EmployeeProfile\EmployeeProfileController@show');
 
     });
 

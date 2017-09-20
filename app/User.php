@@ -95,13 +95,5 @@ class User extends Authenticatable
 
     }
 
-    public function testupdate($id)
-    {
-        $test = DB::table('users')
-            ->where('id', $id)
-            ->update(['is_approve' => 1]);
 
-        return $test;
-
-    }
 }

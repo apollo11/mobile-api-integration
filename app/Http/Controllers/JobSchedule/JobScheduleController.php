@@ -58,11 +58,12 @@ class JobScheduleController extends Controller
             $checkJob = $this->isJobExist($request->input('job_id'), $request->input('user_id'));
 
             if ($checkJob != null) {
+
                 $output = $this->errorResponse(['This job is already on your scheduled job list.'], 'Apply Failure', 110009, 400);
 
             } else {
 
-                $user->jobSchedule()->create(['name' => null, 'job_id' => $request->input('job_id'), 'is_assigned' => 1, 'job_status' =>"accepted"]);
+                $user->jobSchedule()->create(['name' => null, 'job_id' => $request->input('job_id'), 'job_status' =>"accepted"]);
 
                 $this->updateJobStatus($request->input('job_id'));
 
