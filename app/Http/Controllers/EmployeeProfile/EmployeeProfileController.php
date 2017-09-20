@@ -112,6 +112,12 @@ class EmployeeProfileController extends Controller
 
     public function output($output, $count)
     {
+       $availability[] =  [
+            'day' => null,
+            'start_time' => null,
+            'end_time' => null
+        ];
+
         $data = [
             'id' => $output->id,
             'name' => $output->name,
@@ -140,16 +146,14 @@ class EmployeeProfileController extends Controller
                     'has_medical_condition' => null,
                     'condition' => null
                 ],
-                'availability' => [
-                    'day' => null,
-                    'start_time' => null,
-                    'end_time' => null
-                ],
+                'availabilities' => $availability,
             ],
             'created_at' => $output->created_at,
             'updated_at' => $output->updated_at,
             'employee_status' => $output->employee_status,
-            'schedule_count' => $count
+            'schedule_count' => $count,
+            'money_earned' => 0,
+            'completed' => 0
         ];
 
         return $data;
