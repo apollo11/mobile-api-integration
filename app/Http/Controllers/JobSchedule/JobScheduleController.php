@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\JobSchedule;
 
 use Validator;
+use App\Job;
 use App\JobSchedule;
 use App\Http\Traits\HttpResponse;
 use Illuminate\Http\Request;
@@ -57,11 +58,14 @@ class JobScheduleController extends Controller
             $checkJob = $this->isJobExist($request->input('job_id'), $request->input('user_id'));
 
             if ($checkJob != null) {
+
                 $output = $this->errorResponse(['This job is already on your scheduled job list.'], 'Apply Failure', 110009, 400);
 
             } else {
 
-                $user->jobSchedule()->create(['name' => null, 'job_id' => $request->input('job_id'), 'is_assigned' => 1]);
+                $user->jobSchedule()->create(['name' => null, 'job_id' => $request->input('job_id'), 'job_status' =>"accepted"]);
+
+                $this->updateJobStatus($request->input('job_id'));
 
                 $output = $this->show($request->input('job_id'));
 
@@ -95,7 +99,7 @@ class JobScheduleController extends Controller
     {
         $job = new JobSchedule();
 
-        $output = $job->getJobScheduleDetails($id);
+        $output = $job->getJobScheduleDetails($id, 'jobs.id');
 
         $details = $this->jobScheduleOutput($output);
 
@@ -175,40 +179,42 @@ class JobScheduleController extends Controller
         $start_date = $date = date_create($output->start_date, timezone_open('UTC'));
         $end_date = $date = date_create($output->end_date, timezone_open('UTC'));
         $created = $date = date_create($output->created_at, timezone_open('UTC'));
-
         $details = [
-            'id' => $output->id,
-            'user_id' => $output->user_id,
-            'employer' => [
-                'image_url' => $output->profile_image_path,
-                'name' => $output->company_name,
-                'description' => $output->company_description
-            ],
-            'industry' => [
-                'id' => $output->industry_id,
-                'name' => $output->industry
-            ],
-            'location' => [
-                'id' => $output->location_id,
-                'name' => $output->location,
-            ],
-            'created_date' => date_format($created, 'Y-m-d H:i:sP'),
-            'start_date' => date_format($start_date, 'Y-m-d H:i:sP'),
-            'end_date' => date_format($end_date, 'Y-m-d H:i:sP'),
-            'contact_no' => $output->contact_no,
-            'rate' => $output->rate,
-            'thumbnail_url' => $output->job_image_path,
-            'nationality' => ucfirst($output->nationality),
-            'description' => $output->description,
-            'min_age' => $output->min_age,
-            'max_age' => $output->max_age,
-            'role' => $output->role,
-            'remarks' => $output->notes,
-            'language' => $output->language,
-            'gender' => $output->gender,
-            'job_requirements' => $output->job_requirements,
-            'status' => $output->job_status,
-            'is_assigned' => $output->is_assigned
+               'schedule_id' => $output->schedule_id,
+                'job' => [
+                    'job_title' => $output->job_title,
+                    'id' => $output->id,
+                    'employer' => [
+                        'image_url' => $output->profile_image_path,
+                        'name' => $output->company_name,
+                        'description' => $output->company_description
+                    ],
+                    'industry' => [
+                        'id' => $output->industry_id,
+                        'name' => $output->industry
+                    ],
+                    'location' => [
+                        'id' => $output->location_id,
+                        'name' => $output->location,
+                    ],
+                    'created_date' => date_format($created, 'Y-m-d H:i:sP'),
+                    'start_date' => date_format($start_date, 'Y-m-d H:i:sP'),
+                    'end_date' => date_format($end_date, 'Y-m-d H:i:sP'),
+                    'contact_no' => $output->contact_no,
+                    'rate' => $output->rate,
+                    'thumbnail_url' => $output->job_image_path,
+                    'nationality' => ucfirst($output->nationality),
+                    'description' => $output->description,
+                    'min_age' => $output->min_age,
+                    'max_age' => $output->max_age,
+                    'role' => $output->role,
+                    'remarks' => $output->notes,
+                    'language' => $output->language,
+                    'gender' => $output->gender,
+                    'job_requirements' => $output->job_requirements,
+                    'status' => $output->job_status,
+                    'is_assigned' => $output->is_assigned
+                ]
         ];
 
         return $details;
@@ -224,12 +230,35 @@ class JobScheduleController extends Controller
     {
         foreach ($output as $value) {
 
-            $data[] = $this->jobScheduleOutput($value);
+            $data[] =  $this->jobScheduleOutput($value);
         }
 
         $dataUndefined = !empty($data) ? $data : [];
 
-        return response()->json(['jobs' => $dataUndefined]);
+        return response()->json(['schedules' => $dataUndefined]);
+
+    }
+
+    /**
+     * Update Job lists status
+     */
+    public function updateJobStatus($id)
+    {
+        $job = \App\Job::find($id);
+        $job->job_status = "accepted";
+        $job->save();
+    }
+
+    /**
+     * Cancel Job
+     */
+    public function cancelJob(Request $request)
+    {
+        $data = $request->all();
+
+        $job = new JobSchedule();
+        $job::find($data);
+        $job->job_status = "cancelled";
 
     }
 

@@ -30,6 +30,20 @@
                                   enctype="multipart/form-data">
                                 {{ csrf_field() }}
                                 <div class="form-body">
+
+                                    <div class="form-group{{ $errors->has('zip_code') ? ' has-error' : '' }}">
+                                        <label class="col-md-3 control-label">Zip Code</label>
+                                        <div class="col-md-7">
+                                            <input type="text" class="form-control" placeholder="Enter Zip Code"
+                                                   value="{{ old('zip_code') }}" name="zip_code">
+                                            @if ($errors->has('zip_code'))
+                                                <span class="help-block">
+                                            {{ $errors->first('zip_code') }}
+                                           </span>
+                                            @endif
+                                        </div>
+                                    </div>
+
                                     <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
                                         <label class="col-md-3 control-label">Location</label>
                                         <div class="col-md-7">
@@ -43,6 +57,7 @@
                                         </div>
                                     </div>
                                 </div>
+
 
                                 <div class="form-actions">
                                     <div class="row">

@@ -74,14 +74,23 @@ Route::group(['middleware' => ['auth:api']], function() {
     Route::prefix('v1/job/')->group(function () {
 
         Route::get('lists', 'Job\JobController@jobApiLists');
-        Route::get('lists/{id}','Job\JobController@show');
+        Route::get('details','Job\JobController@show');
+
+        Route::post('apply', 'JobSchedule\JobScheduleController@store');
+
+    });
+
+    Route::prefix('v1/user/')->group(function () {
+
+        Route::get('details', 'EmployeeProfile\EmployeeProfileController@show');
 
     });
 
     Route::prefix('v1/job/schedule/')->group(function () {
 
         Route::get('lists', 'JobSchedule\JobScheduleController@jobScheduleLists');
-        Route::post('apply/{userId}/{jobId}', 'JobSchedule\JobScheduleController@store');
+
+        Route::post('cancel', 'CancelJob\CancelJobController@index');
 
     });
 
@@ -94,14 +103,24 @@ Route::group(['middleware' => ['auth_client']], function() {
         Route::get('lists', 'Job\JobController@jobApiLists');
         Route::get('lists/{id}','Job\JobController@show');
 
+        Route::post('apply', 'JobSchedule\JobScheduleController@store');
+
+    });
+
+    Route::prefix('v1/user/')->group(function () {
+
+       Route::get('details', 'EmployeeProfile\EmployeeProfileController@show');
+
     });
 
     Route::prefix('v1/job/schedule/')->group(function () {
 
         Route::get('lists', 'JobSchedule\JobScheduleController@jobScheduleLists');
-        Route::post('apply', 'JobSchedule\JobScheduleController@store');
+
+        Route::post('cancel', 'CancelJob\CancelJobController@index');
 
     });
+
 
 });
 

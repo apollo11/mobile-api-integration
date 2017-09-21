@@ -129,16 +129,15 @@ class JobController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show()
     {
         $job = new Job();
 
-        $output = $job->jobDetails($id);
+        $output = $job->jobDetails($this->request->get('id'), $this->request->get('user_id'));
 
         $details = $this->jobDetailsoutput($output);
 
-        return response()->json(['job_details' => $details]);
-    }
+        return response()->json(['job_details' => $details]);    }
 
     /**
      * Show the form for editing the specified resource.
@@ -210,7 +209,7 @@ class JobController extends Controller
     public function jobLists()
     {
         $jobs = new Job();
-        $jobLists = $jobs::all();
+        $jobLists = $jobs->jobList();
 
         return $jobLists;
 
@@ -257,6 +256,7 @@ class JobController extends Controller
             'limit' => (int) $this->request->get('limit'),
             'date_from' => $this->request->get('date_from'),
             'date_to' => $this->request->get('date_to'),
+            'user_id' => $this->request->get('user_id')
         ];
 
         $output = $job->filterByLimitStartEnd($param['limit'], $param);
@@ -288,97 +288,49 @@ class JobController extends Controller
         $start_date = $date = date_create($output->start_date, timezone_open('UTC'));
         $end_date = $date = date_create($output->end_date, timezone_open('UTC'));
         $created = $date = date_create($output->created_at, timezone_open('UTC'));
+        $assigned = is_null($output->schedule_status) ? 'available' : $output->schedule_status;
 
         $details = [
-            'id' => $output->id,
-            'job_title' => $output->job_title,
-            'employer' => [
-                'image_url' => $output->profile_image_path,
-                'name' => $output->company_name,
-                'description' => $output->company_description
-            ],
-            'industry' => [
-                'id' => $output->industry_id,
-                'name' => $output->industry
-            ],
-            'location' => [
-                'id' => $output->location_id,
-                'name' => $output->location,
-            ],
-            'created_date' => date_format($created, 'Y-m-d H:i:sP'),
-            'start_date' => date_format($start_date, 'Y-m-d H:i:sP'),
-            'end_date' => date_format($end_date, 'Y-m-d H:i:sP'),
-            'contact_no' => $output->contact_no,
-            'rate' => $output->rate,
-            'thumbnail_url' => $output->job_image_path,
-            'nationality' => ucfirst($output->nationality),
-            'description' => $output->description,
-            'min_age' => $output->min_age,
-            'max_age' => $output->max_age,
-            'role' => $output->role,
-            'remarks' => $output->notes,
-            'language' => $output->language,
-            'gender' => $output->gender,
-            'job_requirements' => $output->job_requirements,
-            'status' => $output->job_status,
-            'is_assigned' => 0
+            'schedule_id' => $output->schedule_id,
+            'job' => [
+                'id' => $output->id,
+                'job_title' => $output->job_title,
+                'employer' => [
+                    'image_url' => $output->profile_image_path,
+                    'name' => $output->company_name,
+                    'description' => $output->company_description
+                ],
+                'industry' => [
+                    'id' => $output->industry_id,
+                    'name' => $output->industry
+                ],
+                'location' => [
+                    'id' => $output->location_id,
+                    'name' => $output->location,
+                ],
+                'created_date' => date_format($created, 'Y-m-d H:i:sP'),
+                'start_date' => date_format($start_date, 'Y-m-d H:i:sP'),
+                'end_date' => date_format($end_date, 'Y-m-d H:i:sP'),
+                'contact_no' => $output->contact_no,
+                'rate' => $output->rate,
+                'thumbnail_url' => $output->job_image_path,
+                'nationality' => ucfirst($output->nationality),
+                'description' => $output->description,
+                'min_age' => $output->min_age,
+                'max_age' => $output->max_age,
+                'role' => $output->role,
+                'remarks' => $output->notes,
+                'language' => $output->language,
+                'gender' => $output->gender,
+                'job_requirements' => $output->job_requirements,
+                'status' => $assigned,
+                'is_assigned' => 0
+            ]
         ];
 
         return $details;
-
     }
 
-    /**
-     *
-     * Filter condition
-     * @param $industry
-     * @param $location
-     * @param $date
-     * @param $limit
-     * @return mixed
-     */
-    public function jobFilter($industry, $location, $date, $limit)
-    {
-        $job = new Job();
 
-        if (count($industry) == 0 && count($location) == 0 && empty($date)) {
-
-            $output = $job->jobLists($limit);
-
-        } elseif (count($industry) != 0 && count($location) != 0 && !empty($date)) {
-
-            $output = $job->multipleFilter($location, $industry, $date, $limit);
-
-        } elseif (count($industry) != 0 && count($location) == 0 && empty($date)) {
-
-            $output = $job->filterJobsByIndustry($industry, $limit);
-
-        } elseif (count($industry) == 0 && count($location) != 0 && empty($date)) {
-
-            $output = $job->filterJobsByLocation($location, $limit);
-
-        } elseif (count($industry) == 0 && count($location) == 0 && !empty($date)) {
-
-            $output = $job->filterByDate($date, $limit);
-
-        } elseif (count($industry) != 0 && count($location) != 0 && empty($date)) {
-
-            $output = $job->filterbyLocationAndIndustry($location, $industry, $limit);
-
-        } elseif (count($industry) == 0 && count($location) != 0 && !empty($date)) {
-
-            $output = $job->filterByLocationDate($location, $date, $limit);
-
-        } elseif (count($industry) != 0 && count($location) == 0 && !empty($date)) {
-
-            $output = $job->filterByIndustryDate($industry, $date, $limit);
-
-        } else {
-
-            $output = $job->jobLists($limit);
-        }
-
-        return $output;
-    }
 
 }

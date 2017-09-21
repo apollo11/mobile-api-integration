@@ -8,8 +8,13 @@ use Illuminate\Database\Eloquent\Model;
 class JobSchedule extends Model
 {
     protected $fillable = [
-        'name'
+          'name'
         , 'job_id'
+        , 'is_assigned'
+        , 'job_status'
+        , 'cancel_status'
+        , 'cancel_file_path'
+        , 'cancel_reason'
     ];
 
     /**
@@ -43,16 +48,18 @@ class JobSchedule extends Model
             ->join('users as employer', 'employer.id', '=', 'jobs.user_id')
             ->select(
                 'jobs.id'
+                , 'job_schedules.id as schedule_id'
                 , 'job_schedules.user_id'
                 , 'job_schedules.job_id'
                 , 'job_schedules.is_assigned'
+                , 'job_schedules.job_status'
                 , 'employer.company_description'
                 , 'employer.company_name'
                 , 'employer.profile_image_path'
                 , 'employer.employee_status as status'
                 , 'jobs.description as job_description'
                 , 'jobs.location'
-                , 'jobs.job_status'
+                , 'jobs.job_title'
                 , 'jobs.location_id'
                 , 'jobs.industry'
                 , 'jobs.industry_id'
@@ -92,10 +99,8 @@ class JobSchedule extends Model
 
                 $query->where('users.id', '=', $param['id']);
             })
-            ->when(empty($param['limit']), function ($query) use ($param) {
-
-                $query->limit(20);
-            })
+            ->limit($param['limit'])
+            ->where('job_schedules.job_status', '=', 'accepted')
             ->orderBy('jobs.job_date', 'desc')
             ->orderBy('jobs.created_at', 'desc')
             ->get();
@@ -106,7 +111,7 @@ class JobSchedule extends Model
     /**
      * Implementation of job schedule via user
      */
-    public function getJobScheduleDetails($id)
+    public function getJobScheduleDetails($id, $columName)
     {
         $jobs = DB::table('users')
             ->join('job_schedules', 'job_schedules.user_id', '=', 'users.id')
@@ -114,16 +119,18 @@ class JobSchedule extends Model
             ->join('users as employer', 'employer.id', '=', 'jobs.user_id')
             ->select(
                 'jobs.id'
+                , 'job_schedules.id as schedule_id'
                 , 'job_schedules.user_id'
                 , 'job_schedules.job_id'
                 , 'job_schedules.is_assigned'
+                , 'job_schedules.job_status'
                 , 'employer.company_description'
                 , 'employer.company_name'
                 , 'employer.profile_image_path'
                 , 'employer.employee_status as status'
-                , 'jobs.job_status'
                 , 'jobs.description as job_description'
                 , 'jobs.location'
+                , 'jobs.job_title'
                 , 'jobs.location_id'
                 , 'jobs.industry'
                 , 'jobs.industry_id'
@@ -144,11 +151,13 @@ class JobSchedule extends Model
                 , 'jobs.choices'
                 ,'jobs.job_requirements'
             )
-            ->where('jobs.id', '=', $id)
+            ->where($columName , '=', $id)
             ->first();
 
         return $jobs;
     }
+
+
 
 
 }
