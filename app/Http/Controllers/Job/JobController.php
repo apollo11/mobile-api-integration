@@ -256,6 +256,7 @@ class JobController extends Controller
             'limit' => (int) $this->request->get('limit'),
             'date_from' => $this->request->get('date_from'),
             'date_to' => $this->request->get('date_to'),
+            'user_id' => $this->request->get('user_id')
         ];
 
         $output = $job->filterByLimitStartEnd($param['limit'], $param);
