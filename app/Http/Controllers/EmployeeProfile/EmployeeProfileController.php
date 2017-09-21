@@ -149,6 +149,7 @@ class EmployeeProfileController extends Controller
                     'condition' => null
                 ],
                 'availabilities' => $availability,
+                'language' => null,
             ],
             'created_at' => $output->created_at,
             'updated_at' => $output->updated_at,
