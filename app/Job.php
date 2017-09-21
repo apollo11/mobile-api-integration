@@ -78,13 +78,7 @@ class Job extends Model
 
                 return $query->leftJoin('job_schedules', function ($join) use ($param) {
                     $join->on('job_schedules.job_id', '=', 'jobs.id')
-                        ->where('job_schedules.user_id', '=', $param['user_id'])
-                        ->where('job_schedules.job_status', '=', null);
-                });
-            })
-            ->when(empty($param['user_id']), function ($query) use ($param) {
-                return $query->leftJoin('job_schedules', function ($join) use ($param) {
-                    $join->on('job_schedules.job_id', '=', 'jobs.id');
+                        ->where('job_schedules.user_id', '=', $param['user_id']);
                 });
             })
             ->select(
@@ -139,6 +133,7 @@ class Job extends Model
                     "' ELSE jobs.job_date <= '" . $param['start'] . "' END");
 
             })
+            ->where('job_schedules.job_status', '=', null)
             ->distinct('jobs.id')
             ->orderBy('jobs.job_date', 'desc')
             ->orderBy('jobs.created_at', 'desc')
