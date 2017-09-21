@@ -234,4 +234,76 @@ class Job extends Model
         return $jobs;
     }
 
+    /**
+     *Count active jobs
+     */
+    public function countActiveJobs()
+    {
+        $job = DB::table('users')
+            ->join('jobs', 'users.id', '=', 'jobs.user_id')
+            ->where('jobs.status', 'active')
+            ->count();
+
+        return $job;
+    }
+
+    /**
+     * count inactive jobs
+     */
+    public function countInactiveJobs()
+    {
+        $job = DB::table('users')
+            ->join('jobs', 'users.id', '=', 'jobs.user_id')
+            ->where('jobs.status', 'inactive')
+            ->count();
+
+        return $job;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function unAssignedJobs()
+    {
+        $job = DB::table('users')
+            ->join('jobs', 'users.id', '=', 'jobs.user_id')
+            ->leftJoin('job_schedules', 'job_schedules.user_id', '=', 'users.id')
+            ->where('job_schedules.is_assigned', '=', null)
+            ->count();
+
+        return $job;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function cancelledJobs()
+    {
+        $job = DB::table('users')
+            ->join('job_schedules', 'job_schedules.user_id', '=', 'users.id')
+            ->join('jobs', 'jobs.id', '=', 'job_schedules.job_id')
+            ->select('job_schedules.job_status')
+            ->where('job_schedules.job_status', '=', 'cancelled')
+            ->count();
+
+        return $job;
+    }
+
+    /**
+     * Registered employers from mobile
+     */
+    public function registeredEmployersviaMobile()
+    {
+        $job = DB::table('users')
+            ->orWhere(function ($query) {
+                $query->where('platform', '=', 'ios')
+                    ->where('platform', '=', 'android');
+            })
+        ->where('role_id', '=', 1)
+        ->count();
+
+        return $job;
+
+    }
+
 }
