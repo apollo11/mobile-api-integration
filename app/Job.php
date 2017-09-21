@@ -288,7 +288,6 @@ class Job extends Model
 
         return $job;
     }
-
     /**
      * Registered employers from mobile
      */
@@ -305,5 +304,4 @@ class Job extends Model
         return $job;
 
     }
-
 }

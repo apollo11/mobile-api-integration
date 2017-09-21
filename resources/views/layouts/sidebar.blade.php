@@ -29,7 +29,7 @@
             <!-- END RESPONSIVE QUICK SEARCH FORM -->
         </li>
         <li class="start active ">
-            <a href="'">
+            <a href="/home">
                 <i class="icon-home"></i>
                 <span class="title">Dashboard</span>
                 <span class="selected"></span>
@@ -51,11 +51,6 @@
             <a href="{{ route('employer.lists') }}">
                 <i class="icon-basket"></i>
                 Employers</a>
-        </li>
-        <li>
-            <a href="{{ route('employer.create') }}">
-                <i class="icon-basket"></i>
-                Create Employers</a>
         </li>
         <li>
             <a href="ecommerce_orders_view.html">
