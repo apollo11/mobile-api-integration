@@ -74,7 +74,13 @@ class Job extends Model
 
         $jobs = DB::table('users')
             ->join('jobs', 'users.id', '=', 'jobs.user_id')
-            ->leftJoin('job_schedules','job_schedules.job_id', '=', 'jobs.id')
+            ->when(!empty($param['user_id']), function ($query) use ($param) {
+
+                return $query->leftJoin('job_schedules', function ($join) use ($param) {
+                    $join->on('job_schedules.job_id', '=', 'jobs.id')
+                        ->where('job_schedules.user_id', '=', $param['user_id']);
+                });
+            })
             ->select(
                 'jobs.id'
                 , 'job_schedules.id as schedule_id'
@@ -127,6 +133,7 @@ class Job extends Model
                     "' ELSE jobs.job_date <= '" . $param['start'] . "' END");
 
             })
+            ->where('job_schedules.job_status', '=', null)
             ->distinct('jobs.id')
             ->orderBy('jobs.job_date', 'desc')
             ->orderBy('jobs.created_at', 'desc')
@@ -288,6 +295,7 @@ class Job extends Model
 
         return $job;
     }
+
     /**
      * Registered employers from mobile
      */
@@ -302,6 +310,5 @@ class Job extends Model
         ->count();
 
         return $job;
-
     }
 }
