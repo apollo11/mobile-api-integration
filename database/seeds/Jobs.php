@@ -29,7 +29,7 @@ class Jobs extends Seeder
                 'location' => 'Queenstown, Tiong Bahru',
                 'role' => 'Manager',
                 'choices' => 'male',
-                'job_image_path' => 'jobs/bs8vIEMqFmVdjC84TInyHJzqGvPMxBILJhcvaYLV.jpeg',
+                'job_image_path' => 'jobs/t7DgPNDCWQHQYffgkV8wZl2LZa4tw2oUms3QSmCO.jpeg',
                 'no_of_person' => 11,
                 'contact_person' => $faker->name,
                 'contact_no' => $faker->phoneNumber,
