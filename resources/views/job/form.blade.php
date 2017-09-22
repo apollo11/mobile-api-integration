@@ -536,16 +536,16 @@
                                     </div>
 
 
-                                    <div class="form-group{{ $errors->has('job_status') ? ' has-error' : '' }}">
+                                    <div class="form-group{{ $errors->has('status') ? ' has-error' : '' }}">
                                         <label class="col-md-3 control-label">Job Status</label>
                                         <div class="col-md-7">
-                                            <select class="form-control" name="job_status">
+                                            <select class="form-control" name="status">
                                                 <option value="active">Active</option>
                                                 <option value="inactive">Inactive</option>
                                             </select>
-                                            @if ($errors->has('job_status'))
+                                            @if ($errors->has('status'))
                                                 <span class="help-block">
-                                               {{ $errors->first('job_status') }}
+                                               {{ $errors->first('status') }}
                                                </span>
                                             @endif
                                         </div>

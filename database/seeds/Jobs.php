@@ -1,5 +1,6 @@
 <?php
 
+Use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 
 class Jobs extends Seeder
@@ -13,9 +14,12 @@ class Jobs extends Seeder
     {
         $faker = Faker\Factory::create();
 
-        $limit = 20;
+        $limit = 30;
 
         for($i = 0; $i < $limit; $i++) {
+            $start = $faker->dateTimeBetween($startDate = 'now', $endDate = '+3 months');
+            $dt = Carbon::instance($start);
+
 
             DB::table('jobs')->insert([
                 'job_title' => 'HRM',
@@ -30,11 +34,11 @@ class Jobs extends Seeder
                 'contact_person' => $faker->name,
                 'contact_no' => $faker->phoneNumber,
                 'business_manager' => $faker->name,
-                'employer' => 'Maryna Bay Sands',
+                'employer' => 'Marina Bay Sands',
                 'rate' => 20,
                 'language' => 'English',
-                'job_date' => $faker->dateTimeBetween($startDate = '-1 year', $endDate = 'now'),
-                'end_date' => $faker->dateTimeBetween($startDate = '-1 year', $endDate = 'now'),
+                'job_date' => $start,
+                'end_date' => $dt->addHours(3),
                 'industry_id' => 3,
                 'industry' => 'Dental',
                 'notes' => $faker->paragraph,
