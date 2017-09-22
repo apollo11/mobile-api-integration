@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
 
@@ -101,6 +102,7 @@ class JobSchedule extends Model
             })
             ->limit($param['limit'])
             ->where('job_schedules.job_status', '=', 'accepted')
+            ->where('jobs.job_date', '>=', Carbon::now())
             ->orderBy('jobs.job_date', 'desc')
             ->orderBy('jobs.created_at', 'desc')
             ->get();
