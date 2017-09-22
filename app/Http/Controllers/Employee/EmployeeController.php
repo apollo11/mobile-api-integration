@@ -92,6 +92,7 @@ class EmployeeController extends Controller
      */
     public function save(array $data)
     {
+        $school = !empty($data['school']) ? $data['school'] : null;
         $user = new User();
         $user->name = $data['name'];
         $user->email = $data['email'];
@@ -101,7 +102,7 @@ class EmployeeController extends Controller
         $user->platform = $data['platform'];
         $user->mobile_no = $data['mobile_no'];
         $user->nric_no = $data['nric_no'];
-        $user->school = $data['school'];
+        $user->school = $school;
 
         $user->save();
     }
