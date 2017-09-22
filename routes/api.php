@@ -49,7 +49,7 @@ Route::prefix('v1/register/')->group(function () {
 });
 
 Route::prefix('v1/social')->group(function () {
-//    Route::post('login', '')
+
     Route::post('validate/user', 'Social\SocialController@socialUserValidate');
 
 });
