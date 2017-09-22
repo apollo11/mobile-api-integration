@@ -14,7 +14,7 @@ class Jobs extends Seeder
     {
         $faker = Faker\Factory::create();
 
-        $limit = 30;
+        $limit = 50;
 
         for($i = 0; $i < $limit; $i++) {
             $start = $faker->dateTimeBetween($startDate = 'now', $endDate = '+3 months');
@@ -29,7 +29,7 @@ class Jobs extends Seeder
                 'location' => 'Queenstown, Tiong Bahru',
                 'role' => 'Manager',
                 'choices' => 'male',
-                'job_image_path' => 'jobs/UIkbZBIFNWoxNyuMaTT3kDuxuBkVqN2eGsLUnTVi.jpeg',
+                'job_image_path' => 'jobs/bs8vIEMqFmVdjC84TInyHJzqGvPMxBILJhcvaYLV.jpeg',
                 'no_of_person' => 11,
                 'contact_person' => $faker->name,
                 'contact_no' => $faker->phoneNumber,

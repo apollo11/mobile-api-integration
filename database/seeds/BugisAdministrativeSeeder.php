@@ -31,7 +31,7 @@ class BugisAdministrativeSeeder extends Seeder
                 'location' => 'Raffles Place, Cecil, Marina, People\'s Park',
                 'role' => 'Manager',
                 'choices' => 'male',
-                'job_image_path' => 'jobs/frWsoCoHAoZQPrQDh0AD0gsriLj1r9z4DWnBG4Bw.jpeg',
+                'job_image_path' => 'jobs/bs8vIEMqFmVdjC84TInyHJzqGvPMxBILJhcvaYLV.jpeg',
                 'no_of_person' => 11,
                 'contact_person' => $faker->name,
                 'contact_no' => $faker->phoneNumber,

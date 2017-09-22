@@ -14,7 +14,7 @@ class DentalYishunSeeder extends Seeder
     {
         $faker = Faker\Factory::create();
 
-        $limit = 30;
+        $limit = 50;
 
         for ($i = 0; $i < $limit; $i++) {
 
@@ -30,7 +30,7 @@ class DentalYishunSeeder extends Seeder
                 'location' => 'Anson, Tanjong Pagar',
                 'role' => 'Manager',
                 'choices' => 'male',
-                'job_image_path' => 'jobs/frWsoCoHAoZQPrQDh0AD0gsriLj1r9z4DWnBG4Bw.jpeg',
+                'job_image_path' => 'jobs/bs8vIEMqFmVdjC84TInyHJzqGvPMxBILJhcvaYLV.jpeg',
                 'no_of_person' => 11,
                 'contact_person' => $faker->name,
                 'contact_no' => $faker->phoneNumber,
