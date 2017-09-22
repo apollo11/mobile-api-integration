@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
 
@@ -133,7 +134,8 @@ class Job extends Model
                     "' ELSE jobs.job_date <= '" . $param['start'] . "' END");
 
             })
-            ->where('job_schedules.job_status', '=', null)
+            ->whereNull('job_schedules.job_status')
+            ->where('jobs.job_date', '>=', Carbon::now())
             ->distinct('jobs.id')
             ->orderBy('jobs.job_date', 'desc')
             ->orderBy('jobs.created_at', 'desc')

@@ -117,7 +117,7 @@ class JobController extends Controller
             'industry_id' => $data['industry_id'],
             'industry' => $data['industry'],
             'notes' => $data['notes'],
-            'job_status' => $data['job_status'],
+            'status' => $data['status'],
             'min_age' => $data['min_age'],
             'max_age' => $data['max_age']
         ]);
@@ -193,7 +193,7 @@ class JobController extends Controller
             'date' => 'required|date',
             'end_date' => 'required|date',
             'notes' => 'required|string',
-            'job_status' => 'required|string',
+            'status' => 'required|string',
             'gender' => 'required|string',
             'job_location' => 'required|string',
             'contact_no' => 'required|string',
