@@ -18,7 +18,8 @@ trait ProfileTrait
             'school' => $output->school,
             'additional_info' => [
                 'birthdate' => $output->birthdate,
-                'nationality' => null,
+                'nationality' => $output->nationality,
+                'language' => $output->language,
                 'religion' => $output->religion,
                 'address' => $output->religion,
                 'school_pass_expiry_date' => $output->school_pass_expiry_date,

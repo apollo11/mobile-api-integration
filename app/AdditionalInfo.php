@@ -73,6 +73,9 @@ class AdditionalInfo extends Model
                 , 'info.contact_method'
                 , 'info.criminal_record'
                 , 'info.medication'
+                , 'info.language'
+                , 'info.nationality'
+                , 'info.bank_statement'
             )
             ->where('users.id', '=', $id)
             ->first();

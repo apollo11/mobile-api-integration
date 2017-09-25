@@ -43,6 +43,7 @@ class AdditionalInfoController extends Controller
     public function store(Request $request)
     {
         $data = $request->all();
+        $id = $data['user_id'];
 
         $validator = $this->rules($data);
         $errorMsg = $validator->errors()->all();
@@ -53,18 +54,17 @@ class AdditionalInfoController extends Controller
 
         } else {
 
-            $isupdated = $this->isUserExist($data['user_id']);
+            $isupdated = $this->isUserExist($id);
 
             if($isupdated != null) {
 
                 $this->updateData($data);
+                $result = $output = $this->show($id);
 
             } else {
-
                 $this->saveData($data);
+                $result = $output = $this->show($id);
             }
-
-            $result = $output = $this->show($data['user_id']);
         }
 
         return $result;
@@ -95,7 +95,10 @@ class AdditionalInfoController extends Controller
             'emergency_address' => $data['emergency_address'],
             'contact_method' => $data['contact_method'],
             'criminal_record' => $data['criminal_record'],
-            'medication' => $data['medication']
+            'medication' => $data['medication'],
+            'nationality' => $data['nationality'],
+            'bank_statement' => $data['bank_statement'],
+            'language' => $data['language']
         ]);
     }
 
@@ -120,11 +123,13 @@ class AdditionalInfoController extends Controller
                     'emergency_address' => $data['emergency_address'],
                     'contact_method' => $data['contact_method'],
                     'criminal_record' => $data['criminal_record'],
-                    'medication' => $data['medication']
-                ]);
+                    'medication' => $data['medication'],
+                    'nationality' => $data['nationality'],
+                    'bank_statement' => $data['bank_statement'],
+                    'language' => $data['language']
+            ]);
 
         return $update;
-
     }
 
     /**
@@ -135,7 +140,7 @@ class AdditionalInfoController extends Controller
     {
         $isUpdated = new AdditionalInfo();
 
-        return response()->json($isUpdated->isUserExist($id));
+        return $isUpdated->isUserExist($id);
     }
 
     /**
@@ -209,6 +214,9 @@ class AdditionalInfoController extends Controller
             'contact_method' => 'required|string',
             'criminal_record' => 'required| string',
             'medication' => 'required|string',
+            'bank_statement' => 'required',
+            'nationality' => 'required|string',
+            'language' => 'required|string'
         ]);
     }
 
