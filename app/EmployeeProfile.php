@@ -34,7 +34,7 @@ class EmployeeProfile extends Model
     public function countPendingJobs($userid)
     {
         $count = DB::table('users')
-            ->join('job_schedules', 'job_schedules.user_id', '=', 'users.id')
+            ->leftJoin('job_schedules', 'job_schedules.user_id', '=', 'users.id')
             ->where('users.id', '=',  $userid)
            ->where('job_schedules.job_status', '=', 'accepted')
             ->count();

@@ -64,9 +64,9 @@ class User extends Authenticatable
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
-    public function employeeProfile()
+    public function additionalInfo()
     {
-        return $this->hasOne('YYJobs\Employee');
+        return $this->hasOne('\App\AdditionalInfo');
     }
 
     /**

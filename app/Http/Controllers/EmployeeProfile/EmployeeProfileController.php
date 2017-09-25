@@ -3,11 +3,15 @@
 namespace App\Http\Controllers\EmployeeProfile;
 
 use App\EmployeeProfile;
+use App\AdditionalInfo;
+use App\Http\Traits\ProfileTrait;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 class EmployeeProfileController extends Controller
 {
+    use ProfileTrait;
+
     public function  __construct()
     {
 
@@ -45,18 +49,16 @@ class EmployeeProfileController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
      */
     public function show(Request $request)
     {
-        $query = new EmployeeProfile();
+        $additional = new AdditionalInfo();
 
-        $count = $query->countPendingJobs($request->get('id'));
+        $count = $additional->countPendingJobs($request->get('id'));
 
-        $output = $query->getEmployeeDetails($request->get('id'));
+        $output = $additional->userInfo($request->get('id'));
 
         return $this->profileIteration($output, $count);
     }
@@ -100,7 +102,7 @@ class EmployeeProfileController extends Controller
      */
     public function profileIteration($output, $count)
     {
-        $data = $this->output($output, $count);
+        $data = $this->userDetailsOutput($output, $count);
 
         return response()->json(['user_detail' => $data]);
 
@@ -109,7 +111,6 @@ class EmployeeProfileController extends Controller
     /**
      * Response output for User Profile
      */
-
     public function output($output, $count)
     {
        $availability[] =  [
@@ -160,6 +161,5 @@ class EmployeeProfileController extends Controller
         ];
 
         return $data;
-
     }
 }
