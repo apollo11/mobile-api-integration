@@ -54,15 +54,17 @@ class AdditionalInfoController extends Controller
 
         } else {
 
+            $file = $this->uploadingFile($request);
+            $merge = array_merge($data, $file);
+
             $isupdated = $this->isUserExist($id);
 
-            if($isupdated != null) {
-
-                $this->updateData($data);
+            if ($isupdated != null) {
+                $this->updateData($merge);
                 $result = $output = $this->show($id);
 
             } else {
-                $this->saveData($data);
+                $this->saveData($merge);
                 $result = $output = $this->show($id);
             }
         }
@@ -130,6 +132,30 @@ class AdditionalInfoController extends Controller
             ]);
 
         return $update;
+    }
+
+    /**
+     * Upload file
+     */
+    function uploadingFile(Request $request)
+    {
+        if ($request->hasFile('front_ic_path')) {
+
+            $file['front_ic_path'] = $request->file('front_ic_path')->store('additional_info');
+
+        }
+        if ($request->hasFile('back_ic_path')) {
+
+            $file['back_ic_path'] = $request->file('back_ic_path')->store('additional_info');
+
+        }
+
+        if ($request->hasFile('back_ic_path')) {
+
+            $file['back_ic_path'] = $request->file('back_ic_path')->store('additional_info');
+        }
+
+        return $file;
     }
 
     /**
@@ -205,8 +231,8 @@ class AdditionalInfoController extends Controller
             'contact_no' => 'required|string',
             'school' => 'required',
             'school_pass_expiry_date' => 'required|date',
-            'front_ic_path' => 'required|string',
-            'back_ic_path' => 'required|string',
+            'front_ic_path' => 'required|file',
+            'back_ic_path' => 'required|file',
             'emergency_name' => 'required|string',
             'emergency_contact_no' => 'required|string',
             'emergency_relationship' => 'required|string',
@@ -214,7 +240,7 @@ class AdditionalInfoController extends Controller
             'contact_method' => 'required|string',
             'criminal_record' => 'required| string',
             'medication' => 'required|string',
-            'bank_statement' => 'required',
+            'bank_statement' => 'required|file',
             'nationality' => 'required|string',
             'language' => 'required|string'
         ]);

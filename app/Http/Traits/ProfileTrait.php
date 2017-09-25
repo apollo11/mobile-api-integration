@@ -1,9 +1,6 @@
 <?php
 namespace App\Http\Traits;
 
-use App\EmployeeProfile;
-use App\AdditionalInfo;
-use Illuminate\Http\Response;
 trait ProfileTrait
 {
     public function userDetailsOutput($output, $count)
