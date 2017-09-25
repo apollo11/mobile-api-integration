@@ -199,7 +199,11 @@ class EmployeeController extends Controller
 
     }
 
-
+    /**
+     * Map Validation
+     * @param $data
+     * @return mixed
+     */
     public function mapValidator($data)
     {
         return $this->errorResponse($data, 'Validation Error', 110001, 400);

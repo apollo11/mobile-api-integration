@@ -14,6 +14,7 @@ class CreateAdditionalInfosTable extends Migration
     public function up()
     {
         Schema::create('additional_infos', function (Blueprint $table) {
+
             $table->increments('id');
             $table->string('name');
             $table->enum('gender', ['male', 'female']);
@@ -33,8 +34,10 @@ class CreateAdditionalInfosTable extends Migration
             $table->enum('contact_method', ['sms', 'phone', 'email', 'other']);
             $table->string('criminal_record')->nullable();
             $table->string('medication')->nullable();
-
+            $table->integer('user_id')->unsigned()->nullable();
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');;
             $table->timestamps();
+
         });
     }
 

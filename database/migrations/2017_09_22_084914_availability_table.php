@@ -14,7 +14,13 @@ class AvailabilityTable extends Migration
     public function up()
     {
         Schema::create('availabilities', function (Blueprint $table) {
+
             $table->increments('id');
+            $table->date('day');
+            $table->time('start_time');
+            $table->time('end_time');
+            $table->integer('user_id')->unsigned()->nullable();
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
         });
     }

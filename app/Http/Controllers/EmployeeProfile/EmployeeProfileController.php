@@ -46,7 +46,7 @@ class EmployeeProfileController extends Controller
 
     /**
      * @param Request $request
-     * @return \Illuminate\Http\JsonResponse\
+     * @return \Illuminate\Http\JsonResponse
      */
     public function show(Request $request)
     {
