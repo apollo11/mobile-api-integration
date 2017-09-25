@@ -137,7 +137,8 @@ class JobController extends Controller
 
         $details = $this->jobDetailsoutput($output);
 
-        return response()->json(['job_details' => $details]);    }
+        return response()->json(['job_details' => $details]);
+    }
 
     /**
      * Show the form for editing the specified resource.
