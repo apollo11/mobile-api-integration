@@ -8,11 +8,11 @@ trait ProfileTrait
         $data = [
             'id' => $output->id,
             'profile_id' => $output->profile_id,
-            'name' => $output->name,
-            'mobile_no' => $output->mobile_no,
+            'name' => $output->userName,
+            'mobile_no' => $output->userMobile,
             'nric_no' => $output->nric_no,
-            'email' => $output->email,
-            'school' => $output->school,
+            'email' => $output->userEmail,
+            'school' => $output->userScool,
             'additional_info' => [
                 'birthdate' => $output->birthdate,
                 'nationality' => $output->nationality,
