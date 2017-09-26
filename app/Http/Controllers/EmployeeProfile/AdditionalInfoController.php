@@ -61,11 +61,11 @@ class AdditionalInfoController extends Controller
 
             if ($isupdated != null) {
                 $this->updateData($merge);
-                $result = $output = $this->show($id);
+                $result =  $this->show($id);
 
             } else {
                 $this->saveData($merge);
-                $result = $output = $this->show($id);
+                $result =  $this->show($id);
             }
         }
 
@@ -108,13 +108,11 @@ class AdditionalInfoController extends Controller
     {
         $update = \App\AdditionalInfo::where('user_id', $data['user_id'])
             ->update([
-                    'name' => $data['name'],
                     'gender' => $data['gender'],
                     'birthdate' => $data['birthdate'],
                     'religion' => $data['religion'],
                     'address' => $data['address'],
                     'email' => $data['email'],
-                    'contact_no' => $data['contact_no'],
                     'school' => $data['school'],
                     'school_pass_expiry_date' => $data['school_pass_expiry_date'],
                     'front_ic_path' => $data['front_ic_path'],
@@ -126,7 +124,6 @@ class AdditionalInfoController extends Controller
                     'contact_method' => $data['contact_method'],
                     'criminal_record' => $data['criminal_record'],
                     'medication' => $data['medication'],
-                    'nationality' => $data['nationality'],
                     'bank_statement' => $data['bank_statement'],
                     'language' => $data['language']
             ]);
@@ -222,13 +219,11 @@ class AdditionalInfoController extends Controller
     public function rules(array $data)
     {
         return Validator::make($data, [
-            'name' => 'required|string',
             'gender' => 'required|string',
             'birthdate' => 'date|string',
             'religion' => 'required|string',
             'address' => 'required|string',
             'email' => 'required|email',
-            'contact_no' => 'required|string',
             'school' => 'required',
             'school_pass_expiry_date' => 'required|date',
             'front_ic_path' => 'required|file',
@@ -241,7 +236,6 @@ class AdditionalInfoController extends Controller
             'criminal_record' => 'required| string',
             'medication' => 'required|string',
             'bank_statement' => 'required|file',
-            'nationality' => 'required|string',
             'language' => 'required|string'
         ]);
     }
@@ -264,7 +258,6 @@ class AdditionalInfoController extends Controller
         $data = $this->userDetailsOutput($output, $count);
 
         return response()->json(['user_detail' => $data]);
-
     }
 
 }
