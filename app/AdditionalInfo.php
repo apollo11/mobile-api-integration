@@ -41,14 +41,14 @@ class AdditionalInfo extends Model
     public function userInfo($id)
     {
         $additionalInfo = DB::table('users')
-            ->leftJoin('additional_infos as info', 'info.user_id', 'users.id')
+            ->leftJoin('additional_infos as info', 'info.user_id', '=', 'users.id')
             ->select(
                 'users.id'
-                , 'users.name'
-                , 'users.email'
-                , 'users.mobile_no'
+                , 'users.name as userName'
+                , 'users.email as userEmail'
+                , 'users.mobile_no as userMobile'
                 , 'users.nric_no'
-                , 'users.school'
+                , 'users.school as userScool'
                 , 'users.date_of_birth'
                 , 'users.contact_no'
                 , 'users.created_at'
