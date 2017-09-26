@@ -5,6 +5,12 @@ trait ProfileTrait
 {
     public function userDetailsOutput($output, $count)
     {
+        $availability[] = [
+                'day' => null,
+                'start_time' => null,
+                'end_time' => null
+        ];
+
         $data = [
             'id' => $output->id,
             'profile_id' => $output->profile_id,
@@ -35,11 +41,7 @@ trait ProfileTrait
                     'has_medical_condition' => null,
                     'condition' => $output->medication
                 ],
-                'availability' => [
-                    'day' => null,
-                    'start_time' => null,
-                    'end_time' => null
-                ],
+                'availability' => $availability,
             ],
             'created_at' => $output->created_at,
             'updated_at' => $output->updated_at,
