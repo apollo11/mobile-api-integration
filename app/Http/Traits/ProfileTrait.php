@@ -26,6 +26,7 @@ trait ProfileTrait
                 'religion' => $output->religion,
                 'address' => $output->religion,
                 'school_pass_expiry_date' => $output->school_pass_expiry_date,
+                'gender' => $output->gender,
                 'emergency_contact' => [
                     'name' => $output->emergency_name,
                     'contact_no' => $output->emergency_contact_no,

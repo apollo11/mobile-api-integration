@@ -70,6 +70,14 @@ class User extends Authenticatable
     }
 
     /**
+     * Has one relationship availability
+     */
+    public function availability()
+    {
+        return $this->hasOne('\App\Availability');
+    }
+
+    /**
      * @param $mobile
      * @return mixed
      */
