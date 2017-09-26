@@ -138,8 +138,6 @@ class BasicInfoController extends Controller
                 'end_time' => $output['end_time']
             ]);
         }
-
-
     }
 
     /**

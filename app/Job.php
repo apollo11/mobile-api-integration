@@ -137,8 +137,8 @@ class Job extends Model
             ->whereNull('job_schedules.job_status')
             ->where('jobs.job_date', '>=', Carbon::now())
             ->distinct('jobs.id')
-            ->orderBy('jobs.job_date', 'desc')
-            ->orderBy('jobs.created_at', 'desc')
+            ->orderBy('jobs.job_date', 'asc')
+            ->orderBy('jobs.created_at', 'asc')
             ->limit($limit)
             ->get();
 
