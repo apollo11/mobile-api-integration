@@ -20,6 +20,8 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::prefix('employee')->group(function () {
         Route::get('/lists', 'Employee\EmployeeController@index')->name('employee.lists');
+        Route::get('/create', 'Employee\EmployeeController@create')->name('employee.create');
+        Route::post('/signup', 'Employee\EmployeeController@signup')->name('employee.signup');
         Route::post('/pending/{id}', 'Employee\EmployeeController@pendingStatus')->name('employee.pending');
         Route::post('/approve/{id}', 'Employee\EmployeeController@approveStatus')->name('employee.approve');
         Route::post('/reject/{id}', 'Employee\EmployeeController@rejectUser')->name('employee.reject');
@@ -54,4 +56,6 @@ Route::group(['middleware' => ['auth']], function () {
 });
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+Route::get('/test', 'HomeController@countCancelledJobs')->name('test');
 

@@ -29,7 +29,7 @@
             <!-- END RESPONSIVE QUICK SEARCH FORM -->
         </li>
         <li class="start active ">
-            <a href="'">
+            <a href="/home">
                 <i class="icon-home"></i>
                 <span class="title">Dashboard</span>
                 <span class="selected"></span>
@@ -53,17 +53,12 @@
                 Employers</a>
         </li>
         <li>
-            <a href="{{ route('employer.create') }}">
-                <i class="icon-basket"></i>
-                Create Employers</a>
-        </li>
-        <li>
             <a href="ecommerce_orders_view.html">
                 <i class="icon-tag"></i>
                 Payouts</a>
         </li>
         <li>
-            <a href="{{ route('job.create') }}">
+            <a href="{{ route('job.lists') }}">
                 <i class="icon-handbag"></i>
                 Job Management</a>
         </li>

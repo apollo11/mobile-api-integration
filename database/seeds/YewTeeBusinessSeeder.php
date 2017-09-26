@@ -1,5 +1,6 @@
 <?php
 
+use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 
 class YewTeeBusinessSeeder extends Seeder
@@ -13,9 +14,12 @@ class YewTeeBusinessSeeder extends Seeder
     {
         $faker = Faker\Factory::create();
 
-        $limit = 30;
+        $limit = 50;
 
         for ($i = 0; $i < $limit; $i++) {
+
+            $start = $faker->dateTimeBetween($startDate = 'now', $endDate = '+3 months');
+            $dt = Carbon::instance($start);
 
             DB::table('jobs')->insert([
                 'job_title' => 'Agogo Dancer',
@@ -25,7 +29,7 @@ class YewTeeBusinessSeeder extends Seeder
                 'location' => 'Telok Blangah, Harbourfront',
                 'role' => 'Manager',
                 'choices' => 'female',
-                'job_image_path' => 'jobs/UIkbZBIFNWoxNyuMaTT3kDuxuBkVqN2eGsLUnTVi.jpeg',
+                'job_image_path' => 'jobs/t7DgPNDCWQHQYffgkV8wZl2LZa4tw2oUms3QSmCO.jpeg',
                 'no_of_person' => 11,
                 'contact_person' => $faker->name,
                 'contact_no' => $faker->phoneNumber,
@@ -33,8 +37,8 @@ class YewTeeBusinessSeeder extends Seeder
                 'employer' => 'Maryna Bay Sands',
                 'rate' => 20,
                 'language' => 'English',
-                'job_date' => $faker->dateTimeBetween($startDate = '-1 year', $endDate = 'now'),
-                'end_date' => $faker->dateTimeBetween($startDate = '-1 year', $endDate = 'now'),
+                'job_date' => $start,
+                'end_date' => $dt->addHours(3),
                 'industry_id' => 4,
                 'industry' => 'Finance',
                 'notes' => $faker->paragraph,

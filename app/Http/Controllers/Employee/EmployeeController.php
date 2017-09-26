@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\Employee;
 
+use App\Employee;
+use App\User;
+use Validator;
 use App\Http\Traits\OauthTrait;
 use App\Http\Traits\HttpResponse;
-use Validator;
-use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -21,11 +22,9 @@ class EmployeeController extends Controller
      */
     public function index()
     {
-        $employee = \App\User::where('role_id', 2)
-            ->orderBy('created_at', 'desc')
-            ->get();
+        $employee = new Employee();
 
-        return view('employee.lists', ['employees' => $employee]);
+        return view('employee.lists', ['employees' => $employee->employeeLists()]);
     }
 
     /**
@@ -35,7 +34,7 @@ class EmployeeController extends Controller
      */
     public function create()
     {
-        //
+        return view('employee.form');
     }
 
     /**
@@ -56,22 +55,56 @@ class EmployeeController extends Controller
 
         } else {
 
-            $user = new User();
-            $user->name = $request->input('name');
-            $user->email = $request->input('email');
-            $user->password = bcrypt($request->input('password'));
-            $user->role = $request->input('role');
-            $user->role_id = 2;
-            $user->platform = $request->input('platform');
-            $user->mobile_no = $request->input('mobile_no');
-            $user->nric_no = $request->input('nric_no');
-            $user->school = $request->input('school');
-            $user->save();
+            $this->save($data);
 
             return $this->successResponse($data);
 
         }
 
+    }
+
+    /**
+     * Sign up new Employee
+     */
+    public function signup(Request $request)
+    {
+        $data = $request->all();
+        $validate = $this->validator($data);
+
+        if ($validate->fails()) {
+
+            return redirect('employee/create')
+                ->withErrors($validate)
+                ->withInput();
+
+        } else {
+
+            $this->save($data);
+
+            return redirect('employee/lists');
+
+        }
+    }
+
+    /**
+     * Sign Up new Employee
+     * @param array $data
+     */
+    public function save(array $data)
+    {
+        $school = !empty($data['school']) ? $data['school'] : null;
+        $user = new User();
+        $user->name = $data['name'];
+        $user->email = $data['email'];
+        $user->password = bcrypt($data['password']);
+        $user->role_id = 2;
+        $user->role = 'employee';
+        $user->platform = $data['platform'];
+        $user->mobile_no = $data['mobile_no'];
+        $user->nric_no = $data['nric_no'];
+        $user->school = $school;
+
+        $user->save();
     }
 
     public function validateUser(Request $request)
