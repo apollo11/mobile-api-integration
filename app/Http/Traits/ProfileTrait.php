@@ -41,7 +41,7 @@ trait ProfileTrait
                     'has_medical_condition' => null,
                     'condition' => $output->medication
                 ],
-                'availability' => $availability,
+                'availabilities' => $availability,
             ],
             'created_at' => $output->created_at,
             'updated_at' => $output->updated_at,
