@@ -80,13 +80,11 @@ class AdditionalInfoController extends Controller
         $user = \App\User::find($data['user_id']);
 
         $user->additionalInfo()->create([
-            'name' => $data['name'],
             'gender' => $data['gender'],
             'birthdate' => $data['birthdate'],
             'religion' => $data['religion'],
             'address' => $data['address'],
             'email' => $data['email'],
-            'contact_no' => $data['contact_no'],
             'school' => $data['school'],
             'school_pass_expiry_date' => $data['school_pass_expiry_date'],
             'front_ic_path' => $data['front_ic_path'],
@@ -98,7 +96,6 @@ class AdditionalInfoController extends Controller
             'contact_method' => $data['contact_method'],
             'criminal_record' => $data['criminal_record'],
             'medication' => $data['medication'],
-            'nationality' => $data['nationality'],
             'bank_statement' => $data['bank_statement'],
             'language' => $data['language']
         ]);
