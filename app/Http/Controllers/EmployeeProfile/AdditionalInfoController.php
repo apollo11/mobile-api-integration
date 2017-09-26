@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers\EmployeeProfile;
 
+use App\AdditionalInfo;
+use App\Availability;
 use Validator;
 use App\Http\Traits\ProfileTrait;
-use App\AdditionalInfo;
 use Illuminate\Http\Request;
 use App\Http\Traits\HttpResponse;
 use App\Http\Controllers\Controller;
@@ -178,7 +179,6 @@ class AdditionalInfoController extends Controller
 
     /**
      * Show the form for editing the specified resource.
-     *
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
