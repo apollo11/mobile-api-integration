@@ -16,13 +16,11 @@ class CreateAdditionalInfosTable extends Migration
         Schema::create('additional_infos', function (Blueprint $table) {
 
             $table->increments('id');
-            $table->string('name');
             $table->enum('gender', ['male', 'female']);
             $table->date('birthdate');
             $table->string('religion');
             $table->longText('address');
             $table->string('email');
-            $table->string('contact_no');
             $table->string('school');
             $table->date('school_pass_expiry_date');
             $table->string('front_ic_path');

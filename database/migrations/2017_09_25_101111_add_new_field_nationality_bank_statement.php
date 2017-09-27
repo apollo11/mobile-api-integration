@@ -14,7 +14,6 @@ class AddNewFieldNationalityBankStatement extends Migration
     public function up()
     {
         Schema::table('additional_infos', function (Blueprint $table) {
-            $table->string('nationality')->nullable();
             $table->string('bank_statement')->nullable();
         });
     }
