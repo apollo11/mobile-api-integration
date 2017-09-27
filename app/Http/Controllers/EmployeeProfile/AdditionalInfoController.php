@@ -78,6 +78,9 @@ class AdditionalInfoController extends Controller
      */
     public function saveData(array $data)
     {
+        $criminal = !empty($data['criminal_record']) ? $data['criminal_record'] : '';
+        $medical = !empty($data['medication']) ? $data['medication'] : '';
+
         $user = \App\User::find($data['user_id']);
 
         $user->additionalInfo()->create([
@@ -95,8 +98,8 @@ class AdditionalInfoController extends Controller
             'emergency_relationship' => $data['emergency_relationship'],
             'emergency_address' => $data['emergency_address'],
             'contact_method' => $data['contact_method'],
-            'criminal_record' => $data['criminal_record'],
-            'medication' => $data['medication'],
+            'criminal_record' => $criminal,
+            'medication' => $medical,
             'bank_statement' => $data['bank_statement'],
             'language' => $data['language']
         ]);
@@ -104,6 +107,9 @@ class AdditionalInfoController extends Controller
 
     public function updateData(array $data)
     {
+        $criminal = !empty($data['criminal_record']) ? $data['criminal_record'] : '';
+        $medical = !empty($data['medication']) ? $data['medication'] : '';
+
         $update = \App\AdditionalInfo::where('user_id', $data['user_id'])
             ->update([
                     'gender' => $data['gender'],
@@ -120,8 +126,8 @@ class AdditionalInfoController extends Controller
                     'emergency_relationship' => $data['emergency_relationship'],
                     'emergency_address' => $data['emergency_address'],
                     'contact_method' => $data['contact_method'],
-                    'criminal_record' => $data['criminal_record'],
-                    'medication' => $data['medication'],
+                    'criminal_record' => $criminal,
+                    'medication' => $medical,
                     'bank_statement' => $data['bank_statement'],
                     'language' => $data['language']
             ]);
