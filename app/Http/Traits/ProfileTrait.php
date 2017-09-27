@@ -48,7 +48,7 @@ trait ProfileTrait
             'updated_at' => $output->updated_at,
             'employee_status' => $output->employee_status,
             'schedule_count' => $count,
-            'is_uploaded' => $output->is_uploaded
+            'is_uploaded' => is_null($output->is_uploaded) ? 0 : $output->is_uploaded
         ];
 
         return $data;
