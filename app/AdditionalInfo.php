@@ -55,13 +55,11 @@ class AdditionalInfo extends Model
                 , 'users.updated_at'
                 , 'users.employee_status'
                 , 'info.id as profile_id'
-                , 'info.name'
                 , 'info.gender'
                 , 'info.birthdate'
                 , 'info.religion'
                 , 'info.address'
                 , 'info.email'
-                , 'info.contact_no'
                 , 'info.school'
                 , 'info.school_pass_expiry_date'
                 , 'info.front_ic_path'
@@ -74,7 +72,6 @@ class AdditionalInfo extends Model
                 , 'info.criminal_record'
                 , 'info.medication'
                 , 'info.language'
-                , 'info.nationality'
                 , 'info.bank_statement'
             )
             ->where('users.id', '=', $id)

@@ -21,7 +21,7 @@ trait ProfileTrait
             'school' => $output->userScool,
             'additional_info' => [
                 'birthdate' => $output->birthdate,
-                'nationality' => $output->nationality,
+                'nationality' => null,
                 'language' => $output->language,
                 'religion' => $output->religion,
                 'address' => $output->religion,
