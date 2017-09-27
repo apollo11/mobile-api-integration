@@ -2,7 +2,6 @@
 
 namespace App;
 
-use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
 
@@ -92,8 +91,8 @@ class JobSchedule extends Model
             ->when(!empty($param['start']) && !empty($param['created']), function ($query) use ($param) {
 
                 return $query->whereRaw("CASE WHEN jobs.job_date = '" . $param['start'] .
-                    "' THEN jobs.created_at < '" . $param['created'] .
-                    "' ELSE jobs.job_date <= '" . $param['start'] . "' END");
+                    "' THEN jobs.created_at > '" . $param['created'] .
+                    "' ELSE jobs.job_date >= '" . $param['start'] . "' END");
 
             })
             ->when(!empty($param['id']), function ($query) use ($param) {
@@ -102,8 +101,8 @@ class JobSchedule extends Model
             })
             ->limit($param['limit'])
             ->where('job_schedules.job_status', '=', 'accepted')
-            ->orderBy('jobs.job_date', 'desc')
-            ->orderBy('jobs.created_at', 'desc')
+            ->orderBy('jobs.job_date', 'asc')
+            ->orderBy('jobs.created_at', 'asc')
             ->get();
 
         return $jobs;
@@ -157,8 +156,5 @@ class JobSchedule extends Model
 
         return $jobs;
     }
-
-
-
 
 }

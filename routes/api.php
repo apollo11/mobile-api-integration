@@ -49,7 +49,7 @@ Route::prefix('v1/register/')->group(function () {
 });
 
 Route::prefix('v1/social')->group(function () {
-//    Route::post('login', '')
+
     Route::post('validate/user', 'Social\SocialController@socialUserValidate');
 
 });
@@ -84,6 +84,11 @@ Route::group(['middleware' => ['auth:api']], function() {
 
         Route::get('details', 'EmployeeProfile\EmployeeProfileController@show');
 
+        Route::post('edit/info', 'EmployeeProfile\AdditionalInfoController@store');
+        Route::post('edit/basic/info', 'EmployeeProfile\BasicInfoController@update');
+
+        Route::get('edit/test', 'EmployeeProfile\AdditionalInfoController@show');
+
     });
 
     Route::prefix('v1/job/schedule/')->group(function () {
@@ -110,6 +115,8 @@ Route::group(['middleware' => ['auth_client']], function() {
     Route::prefix('v1/user/')->group(function () {
 
        Route::get('details', 'EmployeeProfile\EmployeeProfileController@show');
+
+        Route::post('edit/info', 'EmployeeProfile\AdditionalInfoController@store');
 
     });
 
