@@ -47,7 +47,8 @@ trait ProfileTrait
             'created_at' => $output->created_at,
             'updated_at' => $output->updated_at,
             'employee_status' => $output->employee_status,
-            'schedule_count' => $count
+            'schedule_count' => $count,
+            'is_uploaded' => $output->is_uploaded
         ];
 
         return $data;

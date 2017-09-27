@@ -73,6 +73,7 @@ class AdditionalInfo extends Model
                 , 'info.medication'
                 , 'info.language'
                 , 'info.bank_statement'
+                , 'info.is_uploaded'
             )
             ->where('users.id', '=', $id)
             ->first();

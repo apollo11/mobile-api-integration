@@ -101,7 +101,8 @@ class AdditionalInfoController extends Controller
             'criminal_record' => $criminal,
             'medication' => $medical,
             'bank_statement' => $data['bank_statement'],
-            'language' => $data['language']
+            'language' => $data['language'],
+            'is_uploaded' => true,
         ]);
     }
 
@@ -129,7 +130,8 @@ class AdditionalInfoController extends Controller
                     'criminal_record' => $criminal,
                     'medication' => $medical,
                     'bank_statement' => $data['bank_statement'],
-                    'language' => $data['language']
+                    'language' => $data['language'],
+                    'is_uploaded' => true,
             ]);
 
         return $update;
