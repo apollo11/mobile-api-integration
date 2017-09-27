@@ -232,7 +232,7 @@ class AdditionalInfoController extends Controller
             'contact_method' => 'required|string',
             'criminal_record' => 'nullable',
             'medication' => 'nullable',
-            'bank_statement' => 'required|file',
+            //'bank_statement' => 'required|file',
             'language' => 'required|string'
         ]);
     }
