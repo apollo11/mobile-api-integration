@@ -29,7 +29,7 @@ class CreateAdditionalInfosTable extends Migration
             $table->string('emergency_contact_no');
             $table->string('emergency_relationship');
             $table->longText('emergency_address');
-            $table->enum('contact_method', ['sms', 'phone', 'email', 'other']);
+            $table->string('contact_method');
             $table->string('criminal_record')->nullable();
             $table->string('medication')->nullable();
             $table->integer('user_id')->unsigned()->nullable();
