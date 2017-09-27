@@ -18,13 +18,13 @@ trait ProfileTrait
             'mobile_no' => $output->userMobile,
             'nric_no' => $output->nric_no,
             'email' => $output->userEmail,
-            'school' => $output->userScool,
+            'school' => $output->school,
             'additional_info' => [
                 'birthdate' => $output->birthdate,
                 'nationality' => null,
                 'language' => $output->language,
                 'religion' => $output->religion,
-                'address' => $output->religion,
+                'address' => $output->address,
                 'school_pass_expiry_date' => $output->school_pass_expiry_date,
                 'gender' => $output->gender,
                 'emergency_contact' => [

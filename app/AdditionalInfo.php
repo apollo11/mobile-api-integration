@@ -48,7 +48,7 @@ class AdditionalInfo extends Model
                 , 'users.email as userEmail'
                 , 'users.mobile_no as userMobile'
                 , 'users.nric_no'
-                , 'users.school as userScool'
+                , 'users.school as userSchool'
                 , 'users.date_of_birth'
                 , 'users.contact_no'
                 , 'users.created_at'
