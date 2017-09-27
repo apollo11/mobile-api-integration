@@ -61,6 +61,7 @@ class AdditionalInfoController extends Controller
             $isupdated = $this->isUserExist($id);
 
             if ($isupdated != null) {
+
                 $this->updateData($merge);
                 $result =  $this->show($id);
 

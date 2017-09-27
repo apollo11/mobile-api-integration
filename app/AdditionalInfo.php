@@ -27,6 +27,7 @@ class AdditionalInfo extends Model
         , 'criminal_record'
         , 'medication'
         , 'is_uploaded'
+        , 'language'
     ];
 
     /**
