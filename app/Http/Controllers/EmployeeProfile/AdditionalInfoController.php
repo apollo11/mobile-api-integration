@@ -102,7 +102,7 @@ class AdditionalInfoController extends Controller
             'medication' => $medical,
             'bank_statement' => $data['bank_statement'],
             'language' => $data['language'],
-            'is_uploaded' => true,
+            'is_uploaded' => 1
         ]);
     }
 
@@ -131,7 +131,7 @@ class AdditionalInfoController extends Controller
                     'medication' => $medical,
                     'bank_statement' => $data['bank_statement'],
                     'language' => $data['language'],
-                    'is_uploaded' => true,
+                    'is_uploaded' => 1
             ]);
 
         return $update;

@@ -26,6 +26,7 @@ class AdditionalInfo extends Model
         , 'contact_method'
         , 'criminal_record'
         , 'medication'
+        , 'is_uploaded'
     ];
 
     /**

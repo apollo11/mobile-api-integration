@@ -14,7 +14,7 @@ class AddFlagAdditional extends Migration
     public function up()
     {
         Schema::table('additional_infos', function (Blueprint $table) {
-            $table->boolean('is_uploaded')->default(false);
+            $table->boolean('is_uploaded')->default(0);
         });
     }
 
