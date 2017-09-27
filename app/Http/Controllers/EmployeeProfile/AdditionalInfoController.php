@@ -151,9 +151,9 @@ class AdditionalInfoController extends Controller
 
         }
 
-        if ($request->hasFile('back_ic_path')) {
+        if ($request->hasFile('bank_statement')) {
 
-            $file['back_ic_path'] = $request->file('back_ic_path')->store('additional_info');
+            $file['bank_statement'] = $request->file('bank_statement')->store('additional_info');
         }
 
         return $file;
@@ -229,8 +229,8 @@ class AdditionalInfoController extends Controller
             'email' => 'required|email',
             'school' => 'required',
             'school_pass_expiry_date' => 'required|date',
-            //'front_ic_path' => 'required|file',
-            //'back_ic_path' => 'required|file',
+            'front_ic_path' => 'required|file',
+            'back_ic_path' => 'required|file',
             'emergency_name' => 'required|string',
             'emergency_contact_no' => 'required|string',
             'emergency_relationship' => 'required|string',
@@ -238,7 +238,7 @@ class AdditionalInfoController extends Controller
             'contact_method' => 'required|string',
             'criminal_record' => 'nullable',
             'medication' => 'nullable',
-            //'bank_statement' => 'required|file',
+            'bank_statement' => 'required|file',
             'language' => 'required|string'
         ]);
     }
