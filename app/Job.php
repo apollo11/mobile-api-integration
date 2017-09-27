@@ -130,8 +130,8 @@ class Job extends Model
             ->when(!empty($param['start']) && !empty($param['created']), function ($query) use ($param) {
 
                 return $query->whereRaw("CASE WHEN jobs.job_date = '" . $param['start'] .
-                    "' THEN jobs.created_at < '" . $param['created'] .
-                    "' ELSE jobs.job_date <= '" . $param['start'] . "' END");
+                    "' THEN jobs.created_at > '" . $param['created'] .
+                    "' ELSE jobs.job_date >= '" . $param['start'] . "' END");
 
             })
             ->whereNull('job_schedules.job_status')
