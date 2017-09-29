@@ -28,6 +28,7 @@ class User extends Authenticatable
         , 'school'
         , 'mobile_no'
         , 'status'
+        , 'profile_image_path'
     ];
 
     /**
