@@ -79,7 +79,7 @@ class BasicInfoController extends Controller
     public function update(Request $request)
     {
         $data = $request->all(); //Http request
-        $file = !$request->file('profile_photo') ? null: $request->file('profile_photo');
+        $file = !$request->file('profile_photo') ? null : $request->file('profile_photo');
 
         $value = [
             'old_password' => !empty($data['old_password']) ? $data['old_password'] : null,
@@ -112,13 +112,7 @@ class BasicInfoController extends Controller
             $file = $this->uploadingFile($request);
             $merge = array_merge($value, $file);
 
-
-
-            if ($value['password'] != null) {
-                $this->updateMobilePassword($merge);
-            } else {
-                $this->updateMobileNo($merge);
-            }
+            $this->updateMobileNo($merge);
 
             $this->storeAvailability($availability, $id);
             $result = $this->show($id);
@@ -148,15 +142,58 @@ class BasicInfoController extends Controller
      */
     public function updateMobileNo(array $data)
     {
-        $update = \App\User::find($data['user_id'])
-            ->update([
+        $update = \App\User::find($data['user_id']);
+
+        //return $update;
+
+        if ($data['mobile_no'] != null) {
+
+            $update->update([
+                'mobile_no' => $data['mobile_no']
+            ]);
+        }
+
+        if ($data['profile_photo'] != null) {
+            $update->update([
+                'profile_image_path' => $data['profile_photo']
+            ]);
+        }
+
+        if ($data['password'] != null) {
+            $update->update([
+                'password' => bcrypt($data['password'])
+            ]);
+        }
+
+        if ($data['mobile_no'] != null && $data['profile_photo'] != null) {
+            $update->update([
                 'mobile_no' => $data['mobile_no'],
                 'profile_image_path' => $data['profile_photo']
             ]);
+        }
 
-        return $update;
+        if (!empty($data['profile_photo']) && !empty($data['password'])) {
+            $update->update([
+                'profile_image_path' => $data['profile_photo'],
+                'password' => bcrypt($data['password'])
+            ]);
 
+        }
 
+        if (!empty($data['mobile_no']) && !empty($data['password'])) {
+            $update->update([
+                'mobile_no' => $data['mobile_no'],
+                'password' => bcrypt($data['password'])
+            ]);
+        }
+
+        if (!empty($data['mobile_no']) && !empty($data['password']) && !empty($data['profile_photo'])) {
+            $update->update([
+                'mobile_no' => $data['mobile_no'],
+                'password' => bcrypt($data['password']),
+                'profile_image_path' => $data['profile_photo']
+            ]);
+        }
     }
 
     /**
