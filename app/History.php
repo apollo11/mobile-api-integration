@@ -196,4 +196,5 @@ class History extends Model
         return $jobs;
     }
 
+
 }
