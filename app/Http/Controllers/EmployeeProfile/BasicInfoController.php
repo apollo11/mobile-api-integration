@@ -79,26 +79,47 @@ class BasicInfoController extends Controller
     public function update(Request $request)
     {
         $data = $request->all(); //Http request
-        $oldPasswd = $this->oldPasswordValidation($data); // Validation of password
+        $file = !$request->file('profile_photo') ? null: $request->file('profile_photo');
+
+        $value = [
+            'old_password' => !empty($data['old_password']) ? $data['old_password'] : null,
+            'password' => !empty($data['password']) ? $data['password'] : null,
+            'user_id' => $data['user_id'],
+            'mobile_no' => !empty($data['mobile_no']) ? $data['mobile_no'] : null,
+            'profile_photo' => $file,
+        ];
+
+//        if ($oldPasswd == 0) {
+//
+//            $result = $this->mapValidator(['The specified password does not match the database password']);
+//
+//        }
+//        $oldPasswd = $this->oldPasswordValidation($value); // Validation of password
 
         $availability = empty($data['availabilities']) ? [] : $data['availabilities'];
 
-        $id = $data['user_id'];
+        $id = $value['user_id'];
 
         $validator = $this->rules($data);
         $errorMsg = $validator->errors()->all();
 
-        if ($oldPasswd == 0) {
-
-            $result = $this->mapValidator(['The specified password does not match the database password']);
-
-        } elseif ($validator->fails()) {
+        if ($validator->fails()) {
 
             $result = $this->mapValidator($errorMsg);
 
         } else {
 
-            $this->updateData($data);
+            $file = $this->uploadingFile($request);
+            $merge = array_merge($value, $file);
+
+
+
+            if ($value['password'] != null) {
+                $this->updateMobilePassword($merge);
+            } else {
+                $this->updateMobileNo($merge);
+            }
+
             $this->storeAvailability($availability, $id);
             $result = $this->show($id);
         }
@@ -107,19 +128,34 @@ class BasicInfoController extends Controller
     }
 
     /**
-     * Updating Basic Info
+     * Updating Mobile and Password
      */
-
-    public function updateData(array $data)
+    public function updateMobilePassword(array $data)
     {
         $update = \App\User::find($data['user_id'])
             ->update([
-               'name' => $data['name'],
                 'password'=> bcrypt($data['password']),
-                'mobile_no' => $data['mobile_no']
+                'mobile_no' => $data['mobile_no'],
+                'profile_image_path' => $data['profile_photo']
             ]);
 
         return $update;
+
+    }
+
+    /**
+     * Updating Mobile Number
+     */
+    public function updateMobileNo(array $data)
+    {
+        $update = \App\User::find($data['user_id'])
+            ->update([
+                'mobile_no' => $data['mobile_no'],
+                'profile_image_path' => $data['profile_photo']
+            ]);
+
+        return $update;
+
 
     }
 
@@ -130,7 +166,6 @@ class BasicInfoController extends Controller
     {
         $user = \App\User::find($id);
 
-
         foreach ($data as $value => $output) {
             $user->availability()->create([
                 'day' => $output['day'],
@@ -138,6 +173,19 @@ class BasicInfoController extends Controller
                 'end_time' => $output['end_time']
             ]);
         }
+    }
+
+    /**
+     * Upload file
+     */
+    function uploadingFile(Request $request)
+    {
+        if ($request->hasFile('profile_photo')) {
+
+            $file['profile_photo'] = $request->file('profile_photo')->store('avatars');
+        }
+
+        return !empty($file) ? $file : [];
     }
 
     /**
@@ -157,10 +205,10 @@ class BasicInfoController extends Controller
     public function rules(array $data)
     {
         return Validator::make($data, [
-            'old_password' => 'required',
-            'password_confirmation' => 'required|min:8',
-            'password' => 'required||min:8|confirmed',
-            'mobile_no' => 'required'
+            'old_password' => 'nullable',
+            'password_confirmation' => 'nullable',
+            'password' => 'min:8|confirmed',
+            'mobile_no' => 'nullable'
             ]);
     }
 

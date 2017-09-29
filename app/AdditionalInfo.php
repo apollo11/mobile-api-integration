@@ -56,6 +56,7 @@ class AdditionalInfo extends Model
                 , 'users.created_at'
                 , 'users.updated_at'
                 , 'users.employee_status'
+                , 'users.profile_image_path as profile_photo'
                 , 'info.id as profile_id'
                 , 'info.gender'
                 , 'info.birthdate'
