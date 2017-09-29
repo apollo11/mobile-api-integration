@@ -18,6 +18,7 @@ trait ProfileTrait
             'mobile_no' => $output->userMobile,
             'nric_no' => $output->nric_no,
             'email' => $output->userEmail,
+            'profile_photo' => $output->profile_photo,
             'school' => is_null($output->school) ? $output->userSchool : $output->school,
             'additional_info' => [
                 'birthdate' => $output->birthdate,
