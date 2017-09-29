@@ -20,7 +20,6 @@ class History extends Model
                 , 'job_schedules.user_id'
                 , 'job_schedules.job_id'
                 , 'job_schedules.is_assigned'
-                , 'job_schedules.id as schedule_id'
                 , 'job_schedules.job_status as schedule_status'
                 , 'job_schedules.payment_status'
                 , 'employer.company_description'
@@ -70,7 +69,7 @@ class History extends Model
                 $query->where('users.id', '=', $param['id']);
             })
             ->limit($param['limit'])
-            //->where('job_schedules.job_status', '=', 'accepted')
+            ->where('job_schedules.job_status', '=', 'accepted')
             ->orderBy('jobs.job_date', 'asc')
             ->orderBy('jobs.created_at', 'asc')
             ->get();
@@ -90,7 +89,6 @@ class History extends Model
                 , 'job_schedules.user_id'
                 , 'job_schedules.job_id'
                 , 'job_schedules.is_assigned'
-                , 'job_schedules.id as schedule_id'
                 , 'job_schedules.job_status as schedule_status'
                 , 'job_schedules.payment_status'
                 , 'employer.company_description'
@@ -140,8 +138,7 @@ class History extends Model
                 $query->where('users.id', '=', $param['id']);
             })
             ->limit($param['limit'])
-            ->whereIn('job_schedules.job_status',['completed'])
-            ->where('job_status.payment_status','=','Pending')
+            ->where('job_schedules.job_status', '=', 'accepted')
             ->orderBy('jobs.job_date', 'asc')
             ->orderBy('jobs.created_at', 'asc')
             ->get();
@@ -165,6 +162,7 @@ class History extends Model
                 , 'job_schedules.job_id'
                 , 'job_schedules.is_assigned'
                 , 'job_schedules.job_status as schedule_status'
+                , 'job_schedules.payment_status'
                 , 'employer.company_description'
                 , 'employer.company_name'
                 , 'employer.profile_image_path'
@@ -197,6 +195,5 @@ class History extends Model
 
         return $jobs;
     }
-
 
 }

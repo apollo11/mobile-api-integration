@@ -10,6 +10,7 @@ use App\Http\Controllers\Controller;
 class HistoryController extends Controller
 {
     use JobDetailsOutputTrait;
+
     private $request;
 
     public function __construct(Request $request)
@@ -84,9 +85,9 @@ class HistoryController extends Controller
             'id' => $this->request->get('user_id'),
         ];
 
-        $output = $history->getCompletedCacelledJobs($param);
+        $output = $history->getCompletedCancelledJobs($param);
 
-        return $this->jobDetailsoutput($output, 'Pending');
+        return $this->jobInfoOutput($output);
     }
 
     /**
@@ -126,53 +127,53 @@ class HistoryController extends Controller
     /**
      * Job Schedule output
      */
-    public function jobHistoryOutput($output, $status)
-    {
-        $start_date = $date = date_create($output->start_date, timezone_open('UTC'));
-        $end_date = $date = date_create($output->end_date, timezone_open('UTC'));
-        $created = $date = date_create($output->created_at, timezone_open('UTC'));
-        $details = [
-            'schedule_id' => $output->schedule_id,
-            'job' => [
-                'job_title' => $output->job_title,
-                'id' => $output->id,
-                'employer' => [
-                    'image_url' => $output->profile_image_path,
-                    'name' => $output->company_name,
-                    'description' => $output->company_description
-                ],
-                'industry' => [
-                    'id' => $output->industry_id,
-                    'name' => $output->industry
-                ],
-                'location' => [
-                    'id' => $output->location_id,
-                    'name' => $output->location,
-                ],
-                'created_date' => date_format($created, 'Y-m-d H:i:sP'),
-                'start_date' => date_format($start_date, 'Y-m-d H:i:sP'),
-                'end_date' => date_format($end_date, 'Y-m-d H:i:sP'),
-                'contact_no' => $output->contact_no,
-                'rate' => $output->rate,
-                'thumbnail_url' => $output->job_image_path,
-                'nationality' => ucfirst($output->nationality),
-                'description' => $output->description,
-                'min_age' => $output->min_age,
-                'max_age' => $output->max_age,
-                'role' => $output->role,
-                'remarks' => $output->notes,
-                'language' => $output->language,
-                'gender' => $output->gender,
-                'job_requirements' => $output->job_requirements,
-                'status' => $output->job_status,
-                'payment_status' => $status,
-                'is_assigned' => $output->is_assigned
-            ]
-        ];
-
-        return $details;
-
-    }
+//    public function jobHistoryOutput($output, $status)
+//    {
+//        $start_date = $date = date_create($output->start_date, timezone_open('UTC'));
+//        $end_date = $date = date_create($output->end_date, timezone_open('UTC'));
+//         $created = $date = date_create($output->created_at, timezone_open('UTC'));
+//        $details = [
+//            'schedule_id' => $output->schedule_id,
+//            'job' => [
+//                'job_title' => $output->job_title,
+//                'id' => $output->id,
+//                'employer' => [
+//                    'image_url' => $output->profile_image_path,
+//                    'name' => $output->company_name,
+//                    'description' => $output->company_description
+//                ],
+//                'industry' => [
+//                    'id' => $output->industry_id,
+//                    'name' => $output->industry
+//                ],
+//                'location' => [
+//                    'id' => $output->location_id,
+//                    'name' => $output->location,
+//                ],
+//                'created_date' => date_format($created, 'Y-m-d H:i:sP'),
+//                'start_date' => date_format($start_date, 'Y-m-d H:i:sP'),
+//                'end_date' => date_format($end_date, 'Y-m-d H:i:sP'),
+//                'contact_no' => $output->contact_no,
+//                'rate' => $output->rate,
+//                'thumbnail_url' => $output->job_image_path,
+//                'nationality' => ucfirst($output->nationality),
+//                'description' => $output->description,
+//                'min_age' => $output->min_age,
+//                'max_age' => $output->max_age,
+//                'role' => $output->role,
+//                'remarks' => $output->notes,
+//                'language' => $output->language,
+//                'gender' => $output->gender,
+//                'job_requirements' => $output->job_requirements,
+//                'status' => $output->job_status,
+//                'payment_status' => $status,
+//                'is_assigned' => $output->is_assigned
+//            ]
+//        ];
+//
+//       return $details;
+//
+//    }
 
     /**
      * Adding response output for lists
@@ -183,7 +184,7 @@ class HistoryController extends Controller
     {
         foreach ($output as $value) {
 
-            $data[] =  $this->jobHistoryOutput($value, 'Pending');
+            $data[] =  $this->jobDetailsoutput($value, 'Pending');
         }
 
         $dataUndefined = !empty($data) ? $data : [];
