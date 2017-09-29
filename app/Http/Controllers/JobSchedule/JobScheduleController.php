@@ -5,12 +5,14 @@ namespace App\Http\Controllers\JobSchedule;
 use Validator;
 use App\Job;
 use App\JobSchedule;
+use App\Http\Traits\JobDetailsOutputTrait;
 use App\Http\Traits\HttpResponse;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 class JobScheduleController extends Controller
 {
+    use JobDetailsOutputTrait;
     use HttpResponse;
 
     private $request;
@@ -101,7 +103,7 @@ class JobScheduleController extends Controller
 
         $output = $job->getJobScheduleDetails($id, 'jobs.id');
 
-        $details = $this->jobScheduleOutput($output);
+        $details = $this->jobDetailsoutput($output, 'Pending');
 
         return response()->json(['job_details' => $details, 'status' => ['status_code' => 200, 'success' => true]]);
 
@@ -171,55 +173,55 @@ class JobScheduleController extends Controller
 
     }
 
-    /**
-     * Job Schedule output
-     */
-    public function jobScheduleOutput($output)
-    {
-        $start_date = $date = date_create($output->start_date, timezone_open('UTC'));
-        $end_date = $date = date_create($output->end_date, timezone_open('UTC'));
-        $created = $date = date_create($output->created_at, timezone_open('UTC'));
-        $details = [
-               'schedule_id' => $output->schedule_id,
-                'job' => [
-                    'job_title' => $output->job_title,
-                    'id' => $output->id,
-                    'employer' => [
-                        'image_url' => $output->profile_image_path,
-                        'name' => $output->company_name,
-                        'description' => $output->company_description
-                    ],
-                    'industry' => [
-                        'id' => $output->industry_id,
-                        'name' => $output->industry
-                    ],
-                    'location' => [
-                        'id' => $output->location_id,
-                        'name' => $output->location,
-                    ],
-                    'created_date' => date_format($created, 'Y-m-d H:i:sP'),
-                    'start_date' => date_format($start_date, 'Y-m-d H:i:sP'),
-                    'end_date' => date_format($end_date, 'Y-m-d H:i:sP'),
-                    'contact_no' => $output->contact_no,
-                    'rate' => $output->rate,
-                    'thumbnail_url' => $output->job_image_path,
-                    'nationality' => ucfirst($output->nationality),
-                    'description' => $output->description,
-                    'min_age' => $output->min_age,
-                    'max_age' => $output->max_age,
-                    'role' => $output->role,
-                    'remarks' => $output->notes,
-                    'language' => $output->language,
-                    'gender' => $output->gender,
-                    'job_requirements' => $output->job_requirements,
-                    'status' => $output->job_status,
-                    'is_assigned' => $output->is_assigned
-                ]
-        ];
-
-        return $details;
-
-    }
+//    /**
+//     * Job Schedule output
+//     */
+//    public function jobScheduleOutput($output)
+//    {
+//        $start_date = $date = date_create($output->start_date, timezone_open('UTC'));
+//        $end_date = $date = date_create($output->end_date, timezone_open('UTC'));
+//        $created = $date = date_create($output->created_at, timezone_open('UTC'));
+//        $details = [
+//               'schedule_id' => $output->schedule_id,
+//                'job' => [
+//                    'job_title' => $output->job_title,
+//                    'id' => $output->id,
+//                    'employer' => [
+//                        'image_url' => $output->profile_image_path,
+//                        'name' => $output->company_name,
+//                        'description' => $output->company_description
+//                    ],
+//                    'industry' => [
+//                        'id' => $output->industry_id,
+//                        'name' => $output->industry
+//                    ],
+//                    'location' => [
+//                        'id' => $output->location_id,
+//                        'name' => $output->location,
+//                    ],
+//                    'created_date' => date_format($created, 'Y-m-d H:i:sP'),
+//                    'start_date' => date_format($start_date, 'Y-m-d H:i:sP'),
+//                    'end_date' => date_format($end_date, 'Y-m-d H:i:sP'),
+//                    'contact_no' => $output->contact_no,
+//                    'rate' => $output->rate,
+//                    'thumbnail_url' => $output->job_image_path,
+//                    'nationality' => ucfirst($output->nationality),
+//                    'description' => $output->description,
+//                    'min_age' => $output->min_age,
+//                    'max_age' => $output->max_age,
+//                    'role' => $output->role,
+//                    'remarks' => $output->notes,
+//                    'language' => $output->language,
+//                    'gender' => $output->gender,
+//                    'job_requirements' => $output->job_requirements,
+//                    'status' => $output->job_status,
+//                    'is_assigned' => $output->is_assigned
+//                ]
+//        ];
+//
+//        return $details;
+//
+//    }
 
     /**
      * Adding response output for lists
@@ -230,7 +232,7 @@ class JobScheduleController extends Controller
     {
         foreach ($output as $value) {
 
-            $data[] =  $this->jobScheduleOutput($value);
+            $data[] =  $this->jobDetailsoutput($value, 'Pending');
         }
 
         $dataUndefined = !empty($data) ? $data : [];
