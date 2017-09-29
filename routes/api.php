@@ -71,6 +71,13 @@ Route::prefix('v1/')->group(function () {
 
 Route::group(['middleware' => ['auth:api']], function() {
 
+    Route::prefix('v1/history/')->group(function () {
+
+       Route::get('completed', 'History\HistoryController@CompletedCancelledList');
+       Route::get('earned', 'History\EarnedController@earnedJobList');
+
+    });
+
     Route::prefix('v1/job/')->group(function () {
 
         Route::get('lists', 'Job\JobController@jobApiLists');

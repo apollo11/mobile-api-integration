@@ -54,13 +54,16 @@ class EmployeeProfileController extends Controller
      */
     public function show(Request $request)
     {
+        $id = $request->get('id');
         $additional = new AdditionalInfo();
 
-        $count = $additional->countPendingJobs($request->get('id'));
+        $count = $additional->countPendingJobs($id);
+        $complete = $additional->countCompletedJobs($id);
+        $earned = $additional->countEarnedJobs($id);
 
-        $output = $additional->userInfo($request->get('id'));
+        $output = $additional->userInfo($id);
 
-        return $this->profileIteration($output, $count);
+        return $this->profileIteration($output, $count, $complete);
     }
 
     /**
@@ -100,9 +103,10 @@ class EmployeeProfileController extends Controller
     /**
      * Iteration of profile output
      */
-    public function profileIteration($output, $count)
+    public function profileIteration($output, $count, $complete)
     {
         $data = $this->userDetailsOutput($output, $count);
+        $data['completed_job_count'] = $complete;
 
         return response()->json(['user_detail' => $data]);
 
@@ -111,7 +115,7 @@ class EmployeeProfileController extends Controller
     /**
      * Response output for User Profile
      */
-    public function output($output, $count)
+    public function output($output, $count, $complete)
     {
        $availability[] =  [
             'day' => null,
@@ -157,7 +161,7 @@ class EmployeeProfileController extends Controller
             'employee_status' => $output->employee_status,
             'schedule_count' => $count,
             'money_earned' => 0,
-            'completed_job_count' => 0
+            'completed_job_count' => $complete
         ];
 
         return $data;
