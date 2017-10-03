@@ -98,6 +98,7 @@ class AdditionalInfoController extends Controller
             'emergency_contact_no' => $data['emergency_contact_no'],
             'emergency_relationship' => $data['emergency_relationship'],
             'emergency_address' => $data['emergency_address'],
+            'signature_file_path' => $data['signature_file_path'],
             'contact_method' => $data['contact_method'],
             'criminal_record' => $criminal,
             'medication' => $medical,
@@ -127,6 +128,7 @@ class AdditionalInfoController extends Controller
                     'emergency_contact_no' => $data['emergency_contact_no'],
                     'emergency_relationship' => $data['emergency_relationship'],
                     'emergency_address' => $data['emergency_address'],
+                    'signature_file_path' => $data['signature_file_path'],
                     'contact_method' => $data['contact_method'],
                     'criminal_record' => $criminal,
                     'medication' => $medical,
@@ -157,6 +159,10 @@ class AdditionalInfoController extends Controller
         if ($request->hasFile('bank_statement')) {
 
             $file['bank_statement'] = $request->file('bank_statement')->store('additional_info');
+        }
+        if ($request->hasFile('signature_file_path')) {
+
+            $file['signature_file_path'] = $request->file('signature_file_path')->store('additional_info');
         }
 
         return $file;
@@ -242,7 +248,8 @@ class AdditionalInfoController extends Controller
             'criminal_record' => 'nullable',
             'medication' => 'nullable',
             'bank_statement' => 'required|file',
-            'language' => 'required|string'
+            'language' => 'required|string',
+            'signature_file_path' => 'required'
         ]);
     }
 

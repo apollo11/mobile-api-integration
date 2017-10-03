@@ -20,6 +20,8 @@ trait ProfileTrait
             'email' => $output->userEmail,
             'profile_photo' => $output->profile_photo,
             'school' => is_null($output->school) ? $output->userSchool : $output->school,
+            'social_google_id' => $output->social_google_id,
+            'social_fb_id' => $output->social_fb_id,
             'additional_info' => [
                 'birthdate' => $output->birthdate,
                 'nationality' => null,
