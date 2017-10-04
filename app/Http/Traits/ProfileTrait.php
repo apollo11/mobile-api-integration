@@ -3,7 +3,7 @@ namespace App\Http\Traits;
 
 trait ProfileTrait
 {
-    public function xuserDetailsOutput($output, $count)
+    public function userDetailsOutput($output, $count)
     {
         $availability[] = [
                 'day' => null,

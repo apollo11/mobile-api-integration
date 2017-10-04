@@ -106,8 +106,6 @@ class BasicInfoController extends Controller
 
         $id = $data['user_id'];
 
-        return $this->storeAvailability($availability, $id);
-
         $validator = $this->rules($data);
         $errorMsg = $validator->errors()->all();
 
@@ -209,6 +207,7 @@ class BasicInfoController extends Controller
      */
     public function storeAvailability($data, $id)
     {
+        $this->deleteAvailabilities($id); // Deleting availabilities and adding new again
 
         $user = \App\User::find($id);
 
@@ -224,10 +223,18 @@ class BasicInfoController extends Controller
             ]);
 
         }
-
-        return $user;
     }
-    
+
+    /**
+     * Delete User
+     */
+    public function deleteAvailabilities($userId)
+    {
+        $deleteRows = \App\Availability::where('user_id', $userId)->delete();
+
+        return $deleteRows;
+    }
+
 
     /**
      * Upload file
