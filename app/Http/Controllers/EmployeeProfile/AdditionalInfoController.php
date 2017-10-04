@@ -81,6 +81,8 @@ class AdditionalInfoController extends Controller
     {
         $criminal = !empty($data['criminal_record']) ? $data['criminal_record'] : '';
         $medical = !empty($data['medication']) ? $data['medication'] : '';
+        $school = !empty($data['school']) ? $data['school'] : '';
+        $schoolExpiry = !empty($data['school_pass_expiry_date']) ? $data['school_pass_expiry_date'] : '1970-01-01';
 
         $user = \App\User::find($data['user_id']);
 
@@ -90,8 +92,8 @@ class AdditionalInfoController extends Controller
             'religion' => $data['religion'],
             'address' => $data['address'],
             'email' => $data['email'],
-            'school' => $data['school'],
-            'school_pass_expiry_date' => $data['school_pass_expiry_date'],
+            'school' => $school,
+            'school_pass_expiry_date' => $schoolExpiry,
             'front_ic_path' => $data['front_ic_path'],
             'back_ic_path' => $data['back_ic_path'],
             'emergency_name' => $data['emergency_name'],
@@ -112,6 +114,9 @@ class AdditionalInfoController extends Controller
     {
         $criminal = !empty($data['criminal_record']) ? $data['criminal_record'] : '';
         $medical = !empty($data['medication']) ? $data['medication'] : '';
+        $school = !empty($data['school']) ? $data['school'] : '';
+        $schoolExpiry = !empty($data['school_pass_expiry_date']) ? $data['school_pass_expiry_date'] : '1970-01-01';
+
 
         $update = \App\AdditionalInfo::where('user_id', $data['user_id'])
             ->update([
@@ -120,8 +125,8 @@ class AdditionalInfoController extends Controller
                     'religion' => $data['religion'],
                     'address' => $data['address'],
                     'email' => $data['email'],
-                    'school' => $data['school'],
-                    'school_pass_expiry_date' => $data['school_pass_expiry_date'],
+                    'school' => $school,
+                    'school_pass_expiry_date' => $schoolExpiry,
                     'front_ic_path' => $data['front_ic_path'],
                     'back_ic_path' => $data['back_ic_path'],
                     'emergency_name' => $data['emergency_name'],
@@ -236,8 +241,8 @@ class AdditionalInfoController extends Controller
             'religion' => 'required|string',
             'address' => 'required|string',
             'email' => 'required|email',
-            'school' => 'required',
-            'school_pass_expiry_date' => 'required|date',
+            'school' => 'nullable',
+            'school_pass_expiry_date' => 'nullable',
             'front_ic_path' => 'required|file',
             'back_ic_path' => 'required|file',
             'emergency_name' => 'required|string',

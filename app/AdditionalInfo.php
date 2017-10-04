@@ -28,6 +28,8 @@ class AdditionalInfo extends Model
         , 'medication'
         , 'is_uploaded'
         , 'language'
+        , 'signature_file_path'
+        , 'bank_statement'
     ];
 
     /**
