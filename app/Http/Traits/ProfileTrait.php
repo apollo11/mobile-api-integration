@@ -1,15 +1,12 @@
 <?php
 namespace App\Http\Traits;
 
+use App\Availability;
 trait ProfileTrait
 {
     public function userDetailsOutput($output, $count)
     {
-        $availability[] = [
-                'day' => null,
-                'start_time' => null,
-                'end_time' => null
-        ];
+        $availability = $this->availability($output->id);
 
         $data = [
             'id' => $output->id,
@@ -57,5 +54,17 @@ trait ProfileTrait
 
         return $data;
     }
+
+    public function availability($id)
+    {
+        $avail = new Availability();
+
+        $output = $avail->userAvailability($id);
+
+        return $output;
+
+    }
+
+
 
 }

@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
 
 class Availability extends Model
@@ -28,22 +29,18 @@ class Availability extends Model
     /**
      * Print users availability
      */
-    public function userAvailability($id)
+    public function userAvailability($userId)
     {
         $availability = DB::table('availabilities')
             ->select(
-                'id'
-                , 'day'
+                  'day'
                 , 'start_time'
                 , 'end_time'
-                , 'user_id'
             )
-            ->where('user_id', '=', $id)
+            ->where('user_id', '=', $userId)
             ->get();
 
         return $availability;
     }
-
-
 
 }
