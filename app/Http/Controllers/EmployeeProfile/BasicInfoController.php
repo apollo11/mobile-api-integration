@@ -78,7 +78,14 @@ class BasicInfoController extends Controller
      */
     public function update(Request $request)
     {
+        $availability = [
+            'day' =>  $request->get('day'),
+            'start_time' =>  $request->get('start_time'),
+            'end_time' => $request->get('end_time')
+        ];
+
         $data = $request->all(); //Http request
+
         $file = !$request->file('profile_photo') ? null : $request->file('profile_photo');
 
         $value = [
@@ -96,9 +103,10 @@ class BasicInfoController extends Controller
 //        }
 //        $oldPasswd = $this->oldPasswordValidation($value); // Validation of password
 
-        $availability = empty($data['availabilities']) ? [] : $data['availabilities'];
 
-        $id = $value['user_id'];
+        $id = $data['user_id'];
+
+        return $this->storeAvailability($availability, $id);
 
         $validator = $this->rules($data);
         $errorMsg = $validator->errors()->all();
@@ -201,16 +209,25 @@ class BasicInfoController extends Controller
      */
     public function storeAvailability($data, $id)
     {
+
         $user = \App\User::find($id);
 
-        foreach ($data as $value => $output) {
+        for($i = 0; $i < count($data['day']); $i++) {
+            $days = $data['day'];
+            $startTimes = $data['start_time'];
+            $endTimes = $data['end_time'];
+
             $user->availability()->create([
-                'day' => $output['day'],
-                'start_time' => $output['start_time'],
-                'end_time' => $output['end_time']
+                'day' => $days[$i],
+                'start_time' => $startTimes[$i],
+                'end_time' => $endTimes[$i]
             ]);
+
         }
+
+        return $user;
     }
+    
 
     /**
      * Upload file
