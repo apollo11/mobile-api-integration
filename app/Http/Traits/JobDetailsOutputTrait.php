@@ -46,7 +46,9 @@ trait JobDetailsOutputTrait
                 'job_requirements' => $output->job_requirements,
                 'status' => $assigned,
                 'payment_status' => strtolower(is_null($output->payment_status) ? $status : $output->payment_status),
-                'is_assigned' => 0
+                'is_assigned' => 0,
+                'cancellation_fee' => 25,
+                'cancellation_charge' => 0
             ]
         ];
 
