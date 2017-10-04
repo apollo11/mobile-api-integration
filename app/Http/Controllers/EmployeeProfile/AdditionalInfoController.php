@@ -278,4 +278,5 @@ class AdditionalInfoController extends Controller
         return response()->json(['user_detail' => $data]);
     }
 
+
 }

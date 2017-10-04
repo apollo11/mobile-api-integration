@@ -138,4 +138,4 @@ Route::group(['middleware' => ['auth_client']], function() {
 
 });
 
-
+Route::get('edit/avail/{id}', 'EmployeeProfile\AdditionalInfoController@avail');
