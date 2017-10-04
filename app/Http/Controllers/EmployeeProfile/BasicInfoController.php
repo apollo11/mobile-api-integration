@@ -207,21 +207,23 @@ class BasicInfoController extends Controller
      */
     public function storeAvailability($data, $id)
     {
-        $this->deleteAvailabilities($id); // Deleting availabilities and adding new again
+        if (count($data['day']) > 0) {
+            $this->deleteAvailabilities($id); // Deleting availabilities and adding new again
 
-        $user = \App\User::find($id);
+            $user = \App\User::find($id);
 
-        for($i = 0; $i < count($data['day']); $i++) {
-            $days = $data['day'];
-            $startTimes = $data['start_time'];
-            $endTimes = $data['end_time'];
+            for($i = 0; $i < count($data['day']); $i++) {
+                $days = $data['day'];
+                $startTimes = $data['start_time'];
+                $endTimes = $data['end_time'];
 
-            $user->availability()->create([
-                'day' => $days[$i],
-                'start_time' => $startTimes[$i],
-                'end_time' => $endTimes[$i]
-            ]);
+                $user->availability()->create([
+                    'day' => $days[$i],
+                    'start_time' => $startTimes[$i],
+                    'end_time' => $endTimes[$i]
+                ]);
 
+            }
         }
     }
 
