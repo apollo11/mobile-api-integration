@@ -34,7 +34,7 @@ trait ProfileTrait
                     'name' => $output->emergency_name,
                     'contact_no' => $output->emergency_contact_no,
                     'relationship' => $output->emergency_relationship,
-                    'address' => $output->address,
+                    'address' => $output->emergency_address,
                 ],
                 'contact_method' => $output->contact_method,
                 'criminal_record' => [
