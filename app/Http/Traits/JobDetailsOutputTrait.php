@@ -45,7 +45,7 @@ trait JobDetailsOutputTrait
                 'gender' => $output->gender,
                 'job_requirements' => $output->job_requirements,
                 'status' => $assigned,
-                'payment_status' => $status,
+                'payment_status' => strtolower(is_null($output->payment_status) ? $status : $output->payment_status),
                 'is_assigned' => 0
             ]
         ];

@@ -79,9 +79,9 @@ class BasicInfoController extends Controller
     public function update(Request $request)
     {
         $availability = [
-            'day' =>  $request->get('day'),
-            'start_time' =>  $request->get('start_time'),
-            'end_time' => $request->get('end_time')
+            'day' =>  $request->get('days'),
+            'start_time' =>  $request->get('start_times'),
+            'end_time' => $request->get('end_times')
         ];
 
         $data = $request->all(); //Http request
