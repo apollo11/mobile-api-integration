@@ -93,9 +93,7 @@ Route::group(['middleware' => ['auth:api']], function() {
 
         Route::post('edit/info', 'EmployeeProfile\AdditionalInfoController@store');
         Route::post('edit/basic/info', 'EmployeeProfile\BasicInfoController@update');
-
-        Route::get('edit/test', 'EmployeeProfile\AdditionalInfoController@show');
-
+        
     });
 
     Route::prefix('v1/job/schedule/')->group(function () {
@@ -137,5 +135,3 @@ Route::group(['middleware' => ['auth_client']], function() {
 
 
 });
-
-Route::get('edit/avail/{id}', 'EmployeeProfile\AdditionalInfoController@avail');
