@@ -28,8 +28,8 @@ trait JobDetailsOutputTrait
                 'location' => [
                     'id' => $output->location_id,
                     'name' => $output->location,
-                    'latitude' => null,
-                    'longtitude' => null,
+                    'latitude' => 1.2836402,
+                    'longtitude' => 103.8603731,
                 ],
                 'working_details' => [
                     'check_in' =>[
@@ -37,8 +37,8 @@ trait JobDetailsOutputTrait
                         'location' => $output->checkin_location
                     ],
                     'check_out' => [
-                        'datetime' => $output->checkin_location,
-                        'location' => $output->checkout_datetime
+                        'datetime' => $output->checkout_datetime,
+                        'location' => $output->checkout_location
                     ],
                     'working_hours' => $output->working_hours,
                     'job_salary' => $output->job_salary,

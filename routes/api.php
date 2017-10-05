@@ -104,6 +104,12 @@ Route::group(['middleware' => ['auth:api']], function() {
 
     });
 
+    Route::prefix('v1/job/checkin')->group(function() {
+
+       Route::get('list', 'Checkin\CheckinController@index');
+
+    });
+
 });
 
 Route::group(['middleware' => ['auth_client']], function() {
@@ -133,7 +139,11 @@ Route::group(['middleware' => ['auth_client']], function() {
 
     });
 
-    Route::get('map', 'Checkin\CheckinController@getAddress');
+    Route::prefix('v1/job/check-in')->group(function() {
 
+        Route::get('list', 'Checkin\CheckinController@index');
+        Route::post('apply', 'Checkin\CheckinController@update');
+
+    });
 
 });
