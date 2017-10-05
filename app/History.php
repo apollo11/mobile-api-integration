@@ -140,7 +140,7 @@ class History extends Model
                 $query->where('users.id', '=', $param['id']);
             })
             ->limit($param['limit'])
-            ->orWhere('job_schedules.job_status', '=','completed')
+            ->where('job_schedules.job_status', '=','completed')
             ->where('job_schedules.payment_status', 'Pending')
             ->orWhere('job_schedules.payment_status', 'Processing')
             ->orderBy('jobs.job_date', 'asc')
