@@ -27,6 +27,9 @@ class AdditionalInfo extends Model
         , 'criminal_record'
         , 'medication'
         , 'is_uploaded'
+        , 'language'
+        , 'signature_file_path'
+        , 'bank_statement'
     ];
 
     /**
@@ -55,6 +58,9 @@ class AdditionalInfo extends Model
                 , 'users.created_at'
                 , 'users.updated_at'
                 , 'users.employee_status'
+                , 'users.social_google_id'
+                , 'users.social_fb_id'
+                , 'users.profile_image_path as profile_photo'
                 , 'info.id as profile_id'
                 , 'info.gender'
                 , 'info.birthdate'
@@ -103,8 +109,26 @@ class AdditionalInfo extends Model
         return $profileExist;
 
     }
+    public function countCompletedJobs($userid)
+    {
+        $count = DB::table('users')
+            ->leftJoin('job_schedules', 'job_schedules.user_id', '=', 'users.id')
+            ->where('users.id', '=',  $userid)
+            ->where('job_schedules.job_status', '=', 'completed')
+            ->count();
 
+        return $count;
+    }
+    public function countEarnedJobs($userid)
+    {
+        $count = DB::table('users')
+            ->leftJoin('job_schedules', 'job_schedules.user_id', '=', 'users.id')
+            ->where('users.id', '=',  $userid)
+            ->where('job_schedules.job_status', '=', 'completed')
+            ->where('job_schedules.payment_status', '=', 'Completed')
+            ->count();
 
-
+        return $count;
+    }
 
 }

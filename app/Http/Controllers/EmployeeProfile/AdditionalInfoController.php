@@ -61,6 +61,7 @@ class AdditionalInfoController extends Controller
             $isupdated = $this->isUserExist($id);
 
             if ($isupdated != null) {
+
                 $this->updateData($merge);
                 $result =  $this->show($id);
 
@@ -80,6 +81,8 @@ class AdditionalInfoController extends Controller
     {
         $criminal = !empty($data['criminal_record']) ? $data['criminal_record'] : '';
         $medical = !empty($data['medication']) ? $data['medication'] : '';
+        $school = !empty($data['school']) ? $data['school'] : '';
+        $schoolExpiry = !empty($data['school_pass_expiry_date']) ? $data['school_pass_expiry_date'] : '1970-01-01';
 
         $user = \App\User::find($data['user_id']);
 
@@ -89,14 +92,15 @@ class AdditionalInfoController extends Controller
             'religion' => $data['religion'],
             'address' => $data['address'],
             'email' => $data['email'],
-            'school' => $data['school'],
-            'school_pass_expiry_date' => $data['school_pass_expiry_date'],
+            'school' => $school,
+            'school_pass_expiry_date' => $schoolExpiry,
             'front_ic_path' => $data['front_ic_path'],
             'back_ic_path' => $data['back_ic_path'],
             'emergency_name' => $data['emergency_name'],
             'emergency_contact_no' => $data['emergency_contact_no'],
             'emergency_relationship' => $data['emergency_relationship'],
             'emergency_address' => $data['emergency_address'],
+            'signature_file_path' => $data['signature_file_path'],
             'contact_method' => $data['contact_method'],
             'criminal_record' => $criminal,
             'medication' => $medical,
@@ -110,6 +114,9 @@ class AdditionalInfoController extends Controller
     {
         $criminal = !empty($data['criminal_record']) ? $data['criminal_record'] : '';
         $medical = !empty($data['medication']) ? $data['medication'] : '';
+        $school = !empty($data['school']) ? $data['school'] : '';
+        $schoolExpiry = !empty($data['school_pass_expiry_date']) ? $data['school_pass_expiry_date'] : '1970-01-01';
+
 
         $update = \App\AdditionalInfo::where('user_id', $data['user_id'])
             ->update([
@@ -118,14 +125,15 @@ class AdditionalInfoController extends Controller
                     'religion' => $data['religion'],
                     'address' => $data['address'],
                     'email' => $data['email'],
-                    'school' => $data['school'],
-                    'school_pass_expiry_date' => $data['school_pass_expiry_date'],
+                    'school' => $school,
+                    'school_pass_expiry_date' => $schoolExpiry,
                     'front_ic_path' => $data['front_ic_path'],
                     'back_ic_path' => $data['back_ic_path'],
                     'emergency_name' => $data['emergency_name'],
                     'emergency_contact_no' => $data['emergency_contact_no'],
                     'emergency_relationship' => $data['emergency_relationship'],
                     'emergency_address' => $data['emergency_address'],
+                    'signature_file_path' => $data['signature_file_path'],
                     'contact_method' => $data['contact_method'],
                     'criminal_record' => $criminal,
                     'medication' => $medical,
@@ -156,6 +164,10 @@ class AdditionalInfoController extends Controller
         if ($request->hasFile('bank_statement')) {
 
             $file['bank_statement'] = $request->file('bank_statement')->store('additional_info');
+        }
+        if ($request->hasFile('signature_file_path')) {
+
+            $file['signature_file_path'] = $request->file('signature_file_path')->store('additional_info');
         }
 
         return $file;
@@ -229,8 +241,8 @@ class AdditionalInfoController extends Controller
             'religion' => 'required|string',
             'address' => 'required|string',
             'email' => 'required|email',
-            'school' => 'required',
-            'school_pass_expiry_date' => 'required|date',
+            'school' => 'nullable',
+            'school_pass_expiry_date' => 'nullable',
             'front_ic_path' => 'required|file',
             'back_ic_path' => 'required|file',
             'emergency_name' => 'required|string',
@@ -241,7 +253,8 @@ class AdditionalInfoController extends Controller
             'criminal_record' => 'nullable',
             'medication' => 'nullable',
             'bank_statement' => 'required|file',
-            'language' => 'required|string'
+            'language' => 'required|string',
+            'signature_file_path' => 'required'
         ]);
     }
 
@@ -264,5 +277,6 @@ class AdditionalInfoController extends Controller
 
         return response()->json(['user_detail' => $data]);
     }
+
 
 }

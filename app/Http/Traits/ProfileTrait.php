@@ -1,15 +1,12 @@
 <?php
 namespace App\Http\Traits;
 
+use App\Availability;
 trait ProfileTrait
 {
     public function userDetailsOutput($output, $count)
     {
-        $availability[] = [
-                'day' => null,
-                'start_time' => null,
-                'end_time' => null
-        ];
+        $availability = $this->availability($output->id);
 
         $data = [
             'id' => $output->id,
@@ -18,7 +15,10 @@ trait ProfileTrait
             'mobile_no' => $output->userMobile,
             'nric_no' => $output->nric_no,
             'email' => $output->userEmail,
-            'school' => $output->school,
+            'profile_photo' => $output->profile_photo,
+            'school' => is_null($output->school) ? $output->userSchool : $output->school,
+            'social_google_id' => $output->social_google_id,
+            'social_fb_id' => $output->social_fb_id,
             'additional_info' => [
                 'birthdate' => $output->birthdate,
                 'nationality' => null,
@@ -31,7 +31,7 @@ trait ProfileTrait
                     'name' => $output->emergency_name,
                     'contact_no' => $output->emergency_contact_no,
                     'relationship' => $output->emergency_relationship,
-                    'address' => $output->address,
+                    'address' => $output->emergency_address,
                 ],
                 'contact_method' => $output->contact_method,
                 'criminal_record' => [
@@ -48,10 +48,23 @@ trait ProfileTrait
             'updated_at' => $output->updated_at,
             'employee_status' => $output->employee_status,
             'schedule_count' => $count,
-            'is_uploaded' => is_null($output->is_uploaded) ? 0 : $output->is_uploaded
+            'is_uploaded' => is_null($output->is_uploaded) ? 0 : $output->is_uploaded,
+            'money_earned' => 0,
         ];
 
         return $data;
     }
+
+    public function availability($id)
+    {
+        $avail = new Availability();
+
+        $output = $avail->userAvailability($id);
+
+        return $output;
+
+    }
+
+
 
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Job;
 
 use Validator;
+use App\Http\Traits\JobDetailsOutputTrait;
 use App\Job;
 use App\Location;
 use App\Industry;
@@ -13,6 +14,8 @@ use App\Http\Controllers\Controller;
 
 class JobController extends Controller
 {
+    use JobDetailsOutputTrait;
+
     private $request;
     protected $data;
 
@@ -135,7 +138,7 @@ class JobController extends Controller
 
         $output = $job->jobDetails($this->request->get('id'), $this->request->get('user_id'));
 
-        $details = $this->jobDetailsoutput($output);
+        $details = $this->jobDetailsoutput($output, 'Pending');
 
         return response()->json(['job_details' => $details]);
     }
@@ -275,7 +278,7 @@ class JobController extends Controller
     {
         foreach ($output as $value) {
 
-            $data[] = $this->jobDetailsoutput($value);
+            $data[] = $this->jobDetailsoutput($value, 'Pending');
         }
 
         $dataUndefined = !empty($data) ? $data : [];
@@ -284,53 +287,53 @@ class JobController extends Controller
 
     }
 
-    public function jobDetailsoutput($output)
-    {
-        $start_date = $date = date_create($output->start_date, timezone_open('UTC'));
-        $end_date = $date = date_create($output->end_date, timezone_open('UTC'));
-        $created = $date = date_create($output->created_at, timezone_open('UTC'));
-        $assigned = is_null($output->schedule_status) ? 'available' : $output->schedule_status;
-
-        $details = [
-            'schedule_id' => $output->schedule_id,
-            'job' => [
-                'id' => $output->id,
-                'job_title' => $output->job_title,
-                'employer' => [
-                    'image_url' => $output->profile_image_path,
-                    'name' => $output->company_name,
-                    'description' => $output->company_description
-                ],
-                'industry' => [
-                    'id' => $output->industry_id,
-                    'name' => $output->industry
-                ],
-                'location' => [
-                    'id' => $output->location_id,
-                    'name' => $output->location,
-                ],
-                'created_date' => date_format($created, 'Y-m-d H:i:sP'),
-                'start_date' => date_format($start_date, 'Y-m-d H:i:sP'),
-                'end_date' => date_format($end_date, 'Y-m-d H:i:sP'),
-                'contact_no' => $output->contact_no,
-                'rate' => $output->rate,
-                'thumbnail_url' => $output->job_image_path,
-                'nationality' => ucfirst($output->nationality),
-                'description' => $output->description,
-                'min_age' => $output->min_age,
-                'max_age' => $output->max_age,
-                'role' => $output->role,
-                'remarks' => $output->notes,
-                'language' => $output->language,
-                'gender' => $output->gender,
-                'job_requirements' => $output->job_requirements,
-                'status' => $assigned,
-                'is_assigned' => 0
-            ]
-        ];
-
-        return $details;
-    }
+//    public function jobDetailsoutput($output)
+//    {
+//        $start_date = $date = date_create($output->start_date, timezone_open('UTC'));
+//        $end_date = $date = date_create($output->end_date, timezone_open('UTC'));
+//        $created = $date = date_create($output->created_at, timezone_open('UTC'));
+//        $assigned = is_null($output->schedule_status) ? 'available' : $output->schedule_status;
+//
+//        $details = [
+//            'schedule_id' => $output->schedule_id,
+//            'job' => [
+//                'id' => $output->id,
+//                'job_title' => $output->job_title,
+//                'employer' => [
+//                    'image_url' => $output->profile_image_path,
+//                    'name' => $output->company_name,
+//                    'description' => $output->company_description
+//                ],
+//                'industry' => [
+//                    'id' => $output->industry_id,
+//                    'name' => $output->industry
+//                ],
+//                'location' => [
+//                    'id' => $output->location_id,
+//                    'name' => $output->location,
+//                ],
+//                'created_date' => date_format($created, 'Y-m-d H:i:sP'),
+//                'start_date' => date_format($start_date, 'Y-m-d H:i:sP'),
+//                'end_date' => date_format($end_date, 'Y-m-d H:i:sP'),
+//                'contact_no' => $output->contact_no,
+//                'rate' => $output->rate,
+//                'thumbnail_url' => $output->job_image_path,
+//                'nationality' => ucfirst($output->nationality),
+//                'description' => $output->description,
+//                'min_age' => $output->min_age,
+//                'max_age' => $output->max_age,
+//                'role' => $output->role,
+//                'remarks' => $output->notes,
+//                'language' => $output->language,
+//                'gender' => $output->gender,
+//                'job_requirements' => $output->job_requirements,
+//                'status' => $assigned,
+//                'is_assigned' => 0
+//            ]
+//        ];
+//
+//        return $details;
+//    }
 
 
 

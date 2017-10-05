@@ -213,7 +213,7 @@ class CancelJobController extends Controller
                 'language' => $output->language,
                 'gender' => $output->gender,
                 'job_requirements' => $output->job_requirements,
-                'status' => $output->job_status,
+                'status' => $output->schedule_status,
                 'is_assigned' => $output->is_assigned
             ]
         ];
