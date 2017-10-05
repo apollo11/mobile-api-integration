@@ -109,10 +109,7 @@ class CheckinController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param Request $request
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request)
@@ -120,20 +117,22 @@ class CheckinController extends Controller
         $data = $request->all();
         $jobSched = \App\JobSchedule::find($data['schedule_id']);
 
+        $jobDetails = $this->getJob($jobSched['user_id'], $jobSched['job_id']);
         $geolocation = $this->getAddress($data['latitude'], $data['longtitude']);
 
+        if ($this->compareDates($jobDetails->start_date) == 1) {
 
+            $jobSched->update([
+                'checkin_datetime' => Carbon::now(),
+                'checkin_location' => $geolocation
+            ]);
 
-        $jobDetails = $this->getJob($jobSched['user_id'],$jobSched['job_id']);
+            $result = $this->show($data['schedule_id']);
 
-        $startDate = Carbon::createFromFormat('Y-m-d H', $jobDetails->start_date)->toDateTimeString();
-        return $startDate;
-        $jobSched->update([
-            'checkin_datetime' => Carbon::now(),
-            'checkin_location' => $geolocation
-        ]);
-
-        return $this->show($data['schedule_id']);
+        } else {
+            $result = $this->errorResponse(['You can only check in an hour before the start of your job.'], 'Validation Error', 110001, 400);
+        }
+        return $result;
     }
 
     /**
@@ -146,6 +145,19 @@ class CheckinController extends Controller
 
         return $result;
     }
+
+    /**
+     * Different in Hours
+     */
+    public function compareDates($date)
+    {
+        $start = Carbon::parse($date);
+        $now = Carbon::now();
+
+        return $now->diffInHours($start);
+
+    }
+
 
     /**
      * Remove the specified resource from storage.

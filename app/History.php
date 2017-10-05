@@ -200,5 +200,37 @@ class History extends Model
         return $jobs;
     }
 
+    public function countCompletedJobs($userId)
+    {
+        $count = DB::table('users')
+            ->join('job_schedules', 'job_schedules.user_id', '=', 'users.id')
+            ->join('jobs', 'jobs.id', '=', 'job_schedules.job_id')
+            ->join('users as employer', 'employer.id', '=', 'jobs.user_id')
+            ->where('job_schedules.job_status', '=', 'cancelled')
+            //->orWhere('job_schedules.job_status', '=','completed')
+            ->where('job_schedules.payment_status', 'Pending')
+            ->where('users.id', '=', $userId)
+            ->get();
+
+        return $count;
+
+    }
+
+    public function countEarnedJobs($userId)
+    {
+        $jobs = DB::table('users')
+            ->join('job_schedules', 'job_schedules.user_id', '=', 'users.id')
+            ->join('jobs', 'jobs.id', '=', 'job_schedules.job_id')
+            ->join('users as employer', 'employer.id', '=', 'jobs.user_id')
+            ->where('job_schedules.job_status', '=','completed')
+            ->where('job_schedules.payment_status', 'Pending')
+            ->orWhere('job_schedules.payment_status', 'Processing')
+            ->where('users.id', '=', $userId)
+            ->count();
+
+        return $jobs;
+
+    }
+
 
 }
