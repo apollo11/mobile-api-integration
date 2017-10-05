@@ -3,10 +3,11 @@
 namespace App\Http\Controllers\Checkin;
 
 use Carbon\Carbon;
-use App\Http\Traits\JobDetailsOutputTrait;
 use App\CheckIn;
 use App\Job;
 use App\JobSchedule;
+use App\Http\Traits\HttpResponse;
+use App\Http\Traits\JobDetailsOutputTrait;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
 use Illuminate\Http\Request;
@@ -14,6 +15,7 @@ use App\Http\Controllers\Controller;
 
 class CheckinController extends Controller
 {
+    use HttpResponse;
     use JobDetailsOutputTrait;
 
     protected $googleMap;
@@ -116,21 +118,22 @@ class CheckinController extends Controller
     public function update(Request $request)
     {
         $data = $request->all();
+        $jobSched = \App\JobSchedule::find($data['schedule_id']);
 
-        //$geolocation = $this->getAddress($data['latitude'], $data['longtitude']);
+        $geolocation = $this->getAddress($data['latitude'], $data['longtitude']);
 
-        $jobSched = \App\JobSchedule::find($data['id']);
+
 
         $jobDetails = $this->getJob($jobSched['user_id'],$jobSched['job_id']);
 
-        return response()->json(['test' => $jobDetails]);
-
+        $startDate = Carbon::createFromFormat('Y-m-d H', $jobDetails->start_date)->toDateTimeString();
+        return $startDate;
         $jobSched->update([
             'checkin_datetime' => Carbon::now(),
-            'checkin_location' => '10 Bayfront Ave, Singapore 018956'
+            'checkin_location' => $geolocation
         ]);
 
-        return $this->show($data['id']);
+        return $this->show($data['schedule_id']);
     }
 
     /**
