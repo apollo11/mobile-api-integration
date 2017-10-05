@@ -133,5 +133,7 @@ Route::group(['middleware' => ['auth_client']], function() {
 
     });
 
+    Route::get('map', 'Checkin\CheckinController@getAddress');
+
 
 });
