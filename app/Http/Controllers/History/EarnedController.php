@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\History;
 
 use App\History;
+use App\AdditionalInfo;
 use App\Http\Traits\JobDetailsOutputTrait;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -114,8 +115,9 @@ class EarnedController extends Controller
         ];
 
         $output = $history->getEarnedJobs($param);
+        $earned = $this->earnedJobs($param['id']);
 
-        return $this->jobInfoOutput($output);
+        return $this->jobInfoOutput($output, $earned);
     }
 
     /**
@@ -123,18 +125,31 @@ class EarnedController extends Controller
      * @param $output
      * @return \Illuminate\Http\JsonResponse
      */
-    function jobInfoOutput($output)
+    function jobInfoOutput($output,$earned)
     {
 
         foreach ($output as $value) {
 
-            $data[] = $this->jobDetailsoutput($value, 'Completed');
+            $data[] = $this->jobDetailsoutput($value);
 
         }
         $dataUndefined = !empty($data) ? $data : [];
 
-        return response()->json(['earned_jobs' => $dataUndefined]);
+        return response()->json(['earned_jobs' => $dataUndefined, 'total_amount_earned' => $earned]);
 
+    }
+
+    /**
+     * @param $id
+     * @return mixed
+     */
+    public function earnedJobs($id)
+    {
+        $earned = new AdditionalInfo();
+
+        $output = $earned->countEarnedJobs($id);
+
+        return $output;
     }
 
 }

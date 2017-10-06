@@ -4,7 +4,7 @@ namespace App\Http\Traits;
 
 trait JobDetailsOutputTrait
 {
-    public function jobDetailsoutput($output, $status)
+    public function jobDetailsoutput($output)
     {
         $start_date = date_create($output->start_date, timezone_open('UTC'));
         $end_date = date_create($output->end_date, timezone_open('UTC'));
@@ -29,7 +29,7 @@ trait JobDetailsOutputTrait
                     'id' => $output->location_id,
                     'name' => $output->location,
                     'latitude' => 1.2836402,
-                    'longtitude' => 103.8603731,
+                    'longitude' => 103.8603731,
                 ],
                 'working_details' => [
                     'check_in' =>[
@@ -61,7 +61,7 @@ trait JobDetailsOutputTrait
                 'gender' => $output->gender,
                 'job_requirements' => $output->job_requirements,
                 'status' => $assigned,
-                'payment_status' => strtolower(is_null($output->payment_status) ? $status : $output->payment_status),
+                'payment_status' => $output->payment_status,
                 'is_assigned' => 0,
                 'cancellation_fee' => 25,
                 'cancellation_charge' => 0

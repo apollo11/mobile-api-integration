@@ -138,7 +138,7 @@ class JobController extends Controller
 
         $output = $job->jobDetails($this->request->get('id'), $this->request->get('user_id'));
 
-        $details = $this->jobDetailsoutput($output, 'Pending');
+        $details = $this->jobDetailsoutput($output);
 
         return response()->json(['job_details' => $details]);
     }
@@ -278,7 +278,7 @@ class JobController extends Controller
     {
         foreach ($output as $value) {
 
-            $data[] = $this->jobDetailsoutput($value, 'Pending');
+            $data[] = $this->jobDetailsoutput($value);
         }
 
         $dataUndefined = !empty($data) ? $data : [];

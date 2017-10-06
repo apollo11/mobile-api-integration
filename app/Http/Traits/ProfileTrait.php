@@ -8,8 +8,6 @@ trait ProfileTrait
     public function userDetailsOutput($output, $count)
     {
         $availability = $this->availability($output->id);
-        $earnedJobRate = $this->earnedJobs($output->id);
-        $countCompletedJob = $this->countCompletedJob($output->id);
 
         $data = [
             'id' => $output->id,
@@ -53,8 +51,6 @@ trait ProfileTrait
             'schedule_count' => $count,
             'is_uploaded' => is_null($output->is_uploaded) ? 0 : $output->is_uploaded,
             'money_earned' => 0,
-            'total_completed_jobs' => $countCompletedJob,
-            'total_amount_earned' => $earnedJobRate
         ];
 
         return $data;
@@ -69,26 +65,6 @@ trait ProfileTrait
         return $output;
 
     }
-
-    public function earnedJobs($id)
-    {
-        $earned = new AdditionalInfo();
-
-        $output = $earned->countEarnedJobs($id);
-
-        return $output;
-    }
-
-    public function countCompletedJob($id)
-    {
-        $history = new AdditionalInfo();
-
-        $output = $history->countCompletedJobs($id);
-
-        return $output;
-
-    }
-
 
 
 }
