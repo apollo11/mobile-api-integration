@@ -79,7 +79,7 @@ class History extends Model
             ->limit($param['limit'])
             ->where('job_schedules.job_status', '=', 'cancelled')
             //->orWhere('job_schedules.job_status', '=','completed')
-            ->where('job_schedules.payment_status', 'Pending')
+            ->whereNull('job_schedules.payment_status')
             ->orderBy('jobs.job_date', 'asc')
             ->orderBy('jobs.created_at', 'asc')
             ->get();
@@ -232,7 +232,7 @@ class History extends Model
             ->join('users as employer', 'employer.id', '=', 'jobs.user_id')
             ->where('job_schedules.job_status', '=', 'cancelled')
             //->orWhere('job_schedules.job_status', '=','completed')
-            ->where('job_schedules.payment_status', 'Pending')
+            ->whereNull('job_schedules.payment_status')
             ->where('users.id', '=', $userId)
             ->get();
 
