@@ -58,11 +58,10 @@ class EmployeeProfileController extends Controller
         $additional = new AdditionalInfo();
 
         $count = $additional->countPendingJobs($id);
-        $complete = $additional->countCompletedJobs($id);
 
         $output = $additional->userInfo($id);
 
-        return $this->profileIteration($output, $count, $complete);
+        return $this->profileIteration($output, $count);
     }
 
     /**
@@ -102,10 +101,9 @@ class EmployeeProfileController extends Controller
     /**
      * Iteration of profile output
      */
-    public function profileIteration($output, $count, $complete)
+    public function profileIteration($output, $count)
     {
         $data = $this->userDetailsOutput($output, $count);
-        $data['completed_job_count'] = $complete;
 
         return response()->json(['user_detail' => $data]);
 
