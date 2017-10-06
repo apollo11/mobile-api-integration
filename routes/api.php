@@ -104,14 +104,14 @@ Route::group(['middleware' => ['auth:api']], function () {
 
     });
 
-    Route::prefix('v1/job/check-in')->group(function () {
+    Route::prefix('v1/job/check-in/')->group(function () {
 
-        Route::get('list', 'Checkin\CheckinController@index');
+        Route::get('details', 'Checkin\CheckinController@index');
         Route::post('apply', 'Checkin\CheckinController@update');
 
     });
 
-    Route::prefix('v1/job/checkout')->group(function () {
+    Route::prefix('v1/job/checkout/')->group(function () {
 
         Route::post('apply', 'Checkout\CheckoutController@update');
 
@@ -140,15 +140,15 @@ Route::group(['middleware' => ['auth_client']], function () {
 
     Route::prefix('v1/job/schedule/')->group(function () {
 
-        Route::get('details', 'JobSchedule\JobScheduleController@jobScheduleLists');
+        Route::get('lists', 'JobSchedule\JobScheduleController@jobScheduleLists');
 
         Route::post('cancel', 'CancelJob\CancelJobController@index');
 
     });
 
-    Route::prefix('v1/job/check-in')->group(function () {
+    Route::prefix('v1/job/check-in/')->group(function () {
 
-        Route::get('list', 'Checkin\CheckinController@index');
+        Route::get('details', 'Checkin\CheckinController@index');
         Route::post('apply', 'Checkin\CheckinController@update');
 
     });
