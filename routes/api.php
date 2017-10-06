@@ -20,7 +20,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::prefix('v1/')->group(function () {
 
-    Route::post('login','Auth\LoginController@oauthLogin');
+    Route::post('login', 'Auth\LoginController@oauthLogin');
     Route::post('social/fb/login', 'Auth\LoginController@socialFBLogin');
     Route::post('social/google/login', 'Auth\LoginController@socialGoogleLogin');
 
@@ -35,12 +35,12 @@ Route::prefix('v1')->group(function () {
 
 Route::prefix('v1/register/')->group(function () {
 
-    Route::post('employee','Employee\EmployeeController@store');
+    Route::post('employee', 'Employee\EmployeeController@store');
     Route::post('validate/user', 'Employee\EmployeeController@validateUser');
 
     Route::post('employer', 'EmployerController@store');
 
-    Route::post('password/email','Auth\EmailResetController@sendResetLinkEmailControl');
+    Route::post('password/email', 'Auth\EmailResetController@sendResetLinkEmailControl');
     Route::post('social', 'Social\SocialController@store');
 
     Route::post('fb', 'Social\FaceBookController@store');
@@ -69,19 +69,19 @@ Route::prefix('v1/')->group(function () {
 
 });
 
-Route::group(['middleware' => ['auth:api']], function() {
+Route::group(['middleware' => ['auth:api']], function () {
 
     Route::prefix('v1/history/')->group(function () {
 
-       Route::get('completed', 'History\HistoryController@CompletedCancelledList');
-       Route::get('earned', 'History\EarnedController@earnedJobList');
+        Route::get('completed', 'History\HistoryController@CompletedCancelledList');
+        Route::get('earned', 'History\EarnedController@earnedJobList');
 
     });
 
     Route::prefix('v1/job/')->group(function () {
 
         Route::get('lists', 'Job\JobController@jobApiLists');
-        Route::get('details','Job\JobController@show');
+        Route::get('details', 'Job\JobController@show');
 
         Route::post('apply', 'JobSchedule\JobScheduleController@store');
 
@@ -93,7 +93,7 @@ Route::group(['middleware' => ['auth:api']], function() {
 
         Route::post('edit/info', 'EmployeeProfile\AdditionalInfoController@store');
         Route::post('edit/basic/info', 'EmployeeProfile\BasicInfoController@update');
-        
+
     });
 
     Route::prefix('v1/job/schedule/')->group(function () {
@@ -104,22 +104,27 @@ Route::group(['middleware' => ['auth:api']], function() {
 
     });
 
-    Route::prefix('v1/job/check-in')->group(function() {
+    Route::prefix('v1/job/check-in')->group(function () {
 
         Route::get('list', 'Checkin\CheckinController@index');
         Route::post('apply', 'Checkin\CheckinController@update');
 
     });
 
+    Route::prefix('v1/job/checkout')->group(function () {
+
+        Route::post('apply', 'Checkout\CheckoutController@update');
+
+    });
 
 });
 
-Route::group(['middleware' => ['auth_client']], function() {
+Route::group(['middleware' => ['auth_client']], function () {
 
     Route::prefix('v1/job/')->group(function () {
 
         Route::get('lists', 'Job\JobController@jobApiLists');
-        Route::get('lists/{id}','Job\JobController@show');
+        Route::get('lists/{id}', 'Job\JobController@show');
 
         Route::post('apply', 'JobSchedule\JobScheduleController@store');
 
@@ -127,7 +132,7 @@ Route::group(['middleware' => ['auth_client']], function() {
 
     Route::prefix('v1/user/')->group(function () {
 
-       Route::get('details', 'EmployeeProfile\EmployeeProfileController@show');
+        Route::get('details', 'EmployeeProfile\EmployeeProfileController@show');
 
         Route::post('edit/info', 'EmployeeProfile\AdditionalInfoController@store');
 
@@ -141,11 +146,18 @@ Route::group(['middleware' => ['auth_client']], function() {
 
     });
 
-    Route::prefix('v1/job/check-in')->group(function() {
+    Route::prefix('v1/job/check-in')->group(function () {
 
         Route::get('list', 'Checkin\CheckinController@index');
         Route::post('apply', 'Checkin\CheckinController@update');
 
     });
+
+    Route::prefix('v1/job/checkout')->group(function () {
+
+        Route::post('apply', 'Checkout\CheckoutController@update');
+
+    });
+
 
 });

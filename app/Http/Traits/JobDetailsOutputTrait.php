@@ -29,7 +29,7 @@ trait JobDetailsOutputTrait
                     'id' => $output->location_id,
                     'name' => $output->location,
                     'latitude' => 1.2836402,
-                    'longtitude' => 103.8603731,
+                    'longitude' => 103.8603731,
                 ],
                 'working_details' => [
                     'check_in' =>[

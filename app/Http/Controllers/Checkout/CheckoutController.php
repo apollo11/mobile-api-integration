@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Http\Controllers\Checkin;
+namespace App\Http\Controllers\Checkout;
 
 use Carbon\Carbon;
-use App\CheckIn;
+use App\Checkout;
 use App\Job;
 use App\JobSchedule;
 use App\Http\Traits\HttpResponse;
@@ -13,7 +13,7 @@ use GuzzleHttp\Exception\RequestException;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
-class CheckinController extends Controller
+class CheckoutController extends Controller
 {
     use HttpResponse;
     use JobDetailsOutputTrait;
@@ -25,37 +25,15 @@ class CheckinController extends Controller
         $this->googleMap = constant('GOOGLE_MAP_ENDPOINT');
     }
 
+
     /**
-     *
      * Display a listing of the resource.
-     * @return \Illuminate\Http\Response
      *
+     * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index()
     {
-        $param = [
-            'id' => $request->get('user_id')
-        ];
 
-        $checkin = new CheckIn();
-
-        $output = $checkin->getCheckInJob($param);
-
-        return $this->jobInfoOutput($output);
-    }
-
-    /**
-     * Output response for the schedule
-     * @param $output
-     * @return \Illuminate\Http\JsonResponse
-     */
-    function jobInfoOutput($output)
-    {
-        $data[] = $this->jobDetailsoutput($output, 'Pending');
-
-        $dataUndefined = !empty($data) ? $data : [];
-
-        return response()->json(['jobs' => $dataUndefined]);
     }
 
     /**
@@ -109,7 +87,10 @@ class CheckinController extends Controller
     }
 
     /**
-     * @param Request $request
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request)
@@ -117,22 +98,35 @@ class CheckinController extends Controller
         $data = $request->all();
         $jobSched = \App\JobSchedule::find($data['schedule_id']);
 
+
         $jobDetails = $this->getJob($jobSched['user_id'], $jobSched['job_id']);
         $geolocation = $this->getAddress($data['latitude'], $data['longitude']);
+        $hours = $this->compareDates($jobSched->checkin_datetime);
+        $salaryRate = $this->salaryRate($hours, $jobDetails->rate);
 
-        if ($this->compareDates($jobDetails->start_date) == 1) {
-
-            $jobSched->update([
-                'checkin_datetime' => Carbon::now(),
-                'checkin_location' => $geolocation
-            ]);
+        $jobSched->update([
+            'checkout_datetime' => Carbon::now(),
+            'checkout_location' => $geolocation,
+            'working_hours' => $hours,
+            'job_salary' => $salaryRate,
+            'job_status' => 'completed'
+        ]);
 
             $result = $this->show($data['schedule_id']);
 
-        } else {
-            $result = $this->errorResponse(['You can only check in an hour before the start of your job.'], 'Validation Error', 110001, 400);
-        }
         return $result;
+
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
+    {
+        //
     }
 
     /**
@@ -149,26 +143,22 @@ class CheckinController extends Controller
     /**
      * Different in Hours
      */
-    public function compareDates($date)
+    public function compareDates($start)
     {
-        $start = Carbon::parse($date);
+        $start = Carbon::parse($start);
         $now = Carbon::now();
 
         return $now->diffInHours($start);
-
     }
 
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
+    public function salaryRate($hours, $rate)
     {
+        $salary = $hours * $rate;
 
+        return $salary;
     }
+
+
 
     /**
      * Get the exact address by getting latitude and longtitude

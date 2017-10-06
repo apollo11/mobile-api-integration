@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\History;
 
 use App\History;
+use App\AdditionalInfo;
 use App\Http\Traits\JobDetailsOutputTrait;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -86,8 +87,9 @@ class HistoryController extends Controller
         ];
 
         $output = $history->getCompletedCancelledJobs($param);
+        $count = $this->countCompletedJob($param['id']);
 
-        return $this->jobInfoOutput($output);
+        return $this->jobInfoOutput($output, $count);
     }
 
     /**
@@ -129,7 +131,7 @@ class HistoryController extends Controller
      * @param $output
      * @return \Illuminate\Http\JsonResponse
      */
-    function jobInfoOutput($output)
+    function jobInfoOutput($output, $count)
     {
         foreach ($output as $value) {
 
@@ -138,8 +140,20 @@ class HistoryController extends Controller
 
         $dataUndefined = !empty($data) ? $data : [];
 
-        return response()->json(['completed_jobs' => $dataUndefined]);
+        return response()->json(['completed_jobs' => $dataUndefined, 'completed_job_count' =>$count]);
 
     }
+
+
+    public function countCompletedJob($id)
+    {
+        $history = new AdditionalInfo();
+
+        $output = $history->countCompletedJobs($id);
+
+        return $output;
+
+    }
+
 
 }
