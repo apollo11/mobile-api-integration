@@ -109,6 +109,7 @@ class AdditionalInfo extends Model
         return $profileExist;
 
     }
+
     public function countCompletedJobs($userid)
     {
         $count = DB::table('users')
@@ -119,14 +120,16 @@ class AdditionalInfo extends Model
 
         return $count;
     }
+
     public function countEarnedJobs($userid)
     {
         $count = DB::table('users')
-            ->leftJoin('job_schedules', 'job_schedules.user_id', '=', 'users.id')
-            ->where('users.id', '=',  $userid)
-            ->where('job_schedules.job_status', '=', 'completed')
+            ->join('job_schedules', 'job_schedules.user_id', '=', 'users.id')
+            ->join('jobs', 'jobs.id', '=', 'job_schedules.job_id')
+           ->where('job_schedules.job_status', '=', 'completed')
             ->where('job_schedules.payment_status', '=', 'Completed')
-            ->count();
+            ->where('users.id', '=', $userid)
+            ->sum('jobs.rate');
 
         return $count;
     }

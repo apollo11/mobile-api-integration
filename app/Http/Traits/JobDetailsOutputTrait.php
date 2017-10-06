@@ -28,6 +28,22 @@ trait JobDetailsOutputTrait
                 'location' => [
                     'id' => $output->location_id,
                     'name' => $output->location,
+                    'latitude' => 1.2836402,
+                    'longtitude' => 103.8603731,
+                ],
+                'working_details' => [
+                    'check_in' =>[
+                        'datetime' => $output->checkin_datetime,
+                        'location' => $output->checkin_location
+                    ],
+                    'check_out' => [
+                        'datetime' => $output->checkout_datetime,
+                        'location' => $output->checkout_location
+                    ],
+                    'working_hours' => $output->working_hours,
+                    'job_salary' => $output->job_salary,
+                    'processed_date' => $output->process_date,
+                    'payment_method' => $output->payment_methods
                 ],
                 'created_date' => date_format($created, 'Y-m-d H:i:sP'),
                 'start_date' => date_format($start_date, 'Y-m-d H:i:sP'),

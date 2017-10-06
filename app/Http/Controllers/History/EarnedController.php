@@ -101,6 +101,7 @@ class EarnedController extends Controller
     public function earnedJobList()
     {
         $history = new History();
+
         $param = [
             'industries' => (array) $this->request->get('industries'),
             'locations' => (array) $this->request->get('locations'),
@@ -112,9 +113,11 @@ class EarnedController extends Controller
             'id' => $this->request->get('user_id'),
         ];
 
+        $countHistory = $history->countEarnedJobs($param['id']);
+
         $output = $history->getEarnedJobs($param);
 
-        return $this->jobInfoOutput($output);
+        return $this->jobInfoOutput($output,$countHistory);
     }
 
     /**
@@ -122,16 +125,17 @@ class EarnedController extends Controller
      * @param $output
      * @return \Illuminate\Http\JsonResponse
      */
-    function jobInfoOutput($output)
+    function jobInfoOutput($output, $earned)
     {
+
         foreach ($output as $value) {
 
             $data[] =  $this->jobDetailsoutput($value, 'Completed');
+
         }
+        $dataUndefined = !empty($merge) ? $merge : [];
 
-        $dataUndefined = !empty($data) ? $data : [];
-
-        return response()->json(['earned_jobs' => $dataUndefined]);
+        return response()->json(['earned_jobs' => $dataUndefined, 'earned_points' =>$earned]);
 
     }
 
