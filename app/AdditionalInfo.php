@@ -93,7 +93,7 @@ class AdditionalInfo extends Model
     {
         $count = DB::table('users')
             ->leftJoin('job_schedules', 'job_schedules.user_id', '=', 'users.id')
-            ->where('users.id', '=',  $userid)
+            ->where('users.id', '=', $userid)
             ->where('job_schedules.job_status', '=', 'accepted')
             ->count();
 
@@ -109,6 +109,5 @@ class AdditionalInfo extends Model
         return $profileExist;
 
     }
-
 
 }

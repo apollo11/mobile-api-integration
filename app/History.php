@@ -237,6 +237,7 @@ class History extends Model
         return $count;
     }
 
+
     public function countEarnedJobs($userid)
     {
         $count = DB::table('users')
