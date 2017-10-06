@@ -140,7 +140,7 @@ Route::group(['middleware' => ['auth_client']], function () {
 
     Route::prefix('v1/job/schedule/')->group(function () {
 
-        Route::get('lists', 'JobSchedule\JobScheduleController@jobScheduleLists');
+        Route::get('details', 'JobSchedule\JobScheduleController@jobScheduleLists');
 
         Route::post('cancel', 'CancelJob\CancelJobController@index');
 
