@@ -116,6 +116,7 @@ class AdditionalInfo extends Model
             ->leftJoin('job_schedules', 'job_schedules.user_id', '=', 'users.id')
             ->where('users.id', '=',  $userid)
             ->where('job_schedules.job_status', '=', 'cancelled')
+            ->where('job_schedules.payment_status', 'Pending')
             //->orWhere('job_schedules.job_status', '=','completed')
             ->count();
 
