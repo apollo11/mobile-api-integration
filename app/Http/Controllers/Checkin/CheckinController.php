@@ -51,11 +51,9 @@ class CheckinController extends Controller
      */
     function jobInfoOutput($output)
     {
-        $data[] = $this->jobDetailsoutput($output, 'Pending');
-
-        $dataUndefined = !empty($data) ? $data : [];
-
-        return response()->json(['jobs' => $dataUndefined]);
+        $data = $this->jobDetailsoutput($output, 'Pending');
+        
+        return response()->json(['jobs' => $data]);
     }
 
     /**
