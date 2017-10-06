@@ -42,7 +42,7 @@ class EarnedController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -53,7 +53,7 @@ class EarnedController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -64,7 +64,7 @@ class EarnedController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -75,8 +75,8 @@ class EarnedController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request $request
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -87,7 +87,7 @@ class EarnedController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
@@ -103,21 +103,19 @@ class EarnedController extends Controller
         $history = new History();
 
         $param = [
-            'industries' => (array) $this->request->get('industries'),
-            'locations' => (array) $this->request->get('locations'),
+            'industries' => (array)$this->request->get('industries'),
+            'locations' => (array)$this->request->get('locations'),
             'start' => $this->request->get('start'),
-            'created' =>$this->request->get('created'),
-            'limit' => (int) $this->request->get('limit'),
+            'created' => $this->request->get('created'),
+            'limit' => (int)$this->request->get('limit'),
             'date_from' => $this->request->get('date_from'),
             'date_to' => $this->request->get('date_to'),
             'id' => $this->request->get('user_id'),
         ];
 
-        $countHistory = $history->countEarnedJobs($param['id']);
-
         $output = $history->getEarnedJobs($param);
 
-        return $this->jobInfoOutput($output,$countHistory);
+        return $this->jobInfoOutput($output);
     }
 
     /**
@@ -125,17 +123,17 @@ class EarnedController extends Controller
      * @param $output
      * @return \Illuminate\Http\JsonResponse
      */
-    function jobInfoOutput($output, $earned)
+    function jobInfoOutput($output)
     {
 
         foreach ($output as $value) {
 
-            $data[] =  $this->jobDetailsoutput($value, 'Completed');
+            $data[] = $this->jobDetailsoutput($value, 'Completed');
 
         }
-        $dataUndefined = !empty($merge) ? $merge : [];
+        $dataUndefined = !empty($data) ? $data : [];
 
-        return response()->json(['earned_jobs' => $dataUndefined, 'earned_points' =>$earned]);
+        return response()->json(['earned_jobs' => $dataUndefined]);
 
     }
 
