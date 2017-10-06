@@ -144,7 +144,10 @@ class HistoryController extends Controller
 
     }
 
-
+    /**
+     * @param $id
+     * @return mixed
+     */
     public function countCompletedJob($id)
     {
         $history = new AdditionalInfo();

@@ -130,7 +130,7 @@ class EarnedController extends Controller
 
         foreach ($output as $value) {
 
-            $data[] = $this->jobDetailsoutput($value, 'Completed');
+            $data[] = $this->jobDetailsoutput($value);
 
         }
         $dataUndefined = !empty($data) ? $data : [];
@@ -139,6 +139,10 @@ class EarnedController extends Controller
 
     }
 
+    /**
+     * @param $id
+     * @return mixed
+     */
     public function earnedJobs($id)
     {
         $earned = new AdditionalInfo();

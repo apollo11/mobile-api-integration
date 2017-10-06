@@ -51,7 +51,7 @@ class CheckinController extends Controller
      */
     function jobInfoOutput($output)
     {
-        $data = $this->jobDetailsoutput($output, 'Pending');
+        $data = $this->jobDetailsoutput($output);
 
         return response()->json(['jobs' => $data]);
     }
@@ -89,7 +89,7 @@ class CheckinController extends Controller
 
         $output = $job->getJobScheduleDetails($id, 'job_schedules.id');
 
-        $details = $this->jobDetailsoutput($output, 'Pending');
+        $details = $this->jobDetailsoutput($output);
 
         return response()->json(['job_details' => $details, 'status' => ['status_code' => 200, 'success' => true]]);
 

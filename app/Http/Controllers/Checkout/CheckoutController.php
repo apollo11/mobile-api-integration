@@ -69,7 +69,7 @@ class CheckoutController extends Controller
 
         $output = $job->getJobScheduleDetails($id, 'job_schedules.id');
 
-        $details = $this->jobDetailsoutput($output, 'Pending');
+        $details = $this->jobDetailsoutput($output);
 
         return response()->json(['job_details' => $details, 'status' => ['status_code' => 200, 'success' => true]]);
 
