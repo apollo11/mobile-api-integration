@@ -55,7 +55,7 @@ class History extends Model
                 , 'jobs.notes'
                 , 'jobs.language'
                 , 'jobs.choices'
-                ,'jobs.job_requirements'
+                , 'jobs.job_requirements'
             )
             ->when(!empty($param['industries']), function ($query) use ($param) {
 
@@ -134,7 +134,7 @@ class History extends Model
                 , 'jobs.notes'
                 , 'jobs.language'
                 , 'jobs.choices'
-                ,'jobs.job_requirements'
+                , 'jobs.job_requirements'
             )
             ->when(!empty($param['industries']), function ($query) use ($param) {
 
@@ -156,7 +156,7 @@ class History extends Model
                 $query->where('users.id', '=', $param['id']);
             })
             ->limit($param['limit'])
-            ->where('job_schedules.job_status', '=','completed')
+            ->where('job_schedules.job_status', '=', 'completed')
             ->where('job_schedules.payment_status', 'Pending')
             ->orWhere('job_schedules.payment_status', 'Processing')
             ->orderBy('jobs.job_date', 'asc')
@@ -216,45 +216,38 @@ class History extends Model
                 , 'jobs.notes'
                 , 'jobs.language'
                 , 'jobs.choices'
-                ,'jobs.job_requirements'
+                , 'jobs.job_requirements'
             )
-            ->where($columName , '=', $id)
+            ->where($columName, '=', $id)
             ->first();
 
         return $jobs;
     }
 
-    public function countCompletedJobs($userId)
+    public function countCompletedJobs($userid)
+    {
+        $count = DB::table('users')
+            ->leftJoin('job_schedules', 'job_schedules.user_id', '=', 'users.id')
+            ->where('users.id', '=', $userid)
+            ->where('job_schedules.job_status', '=', 'cancelled')
+            ->whereNull('job_schedules.payment_status')
+            //->orWhere('job_schedules.job_status', '=','completed')
+            ->count();
+
+        return $count;
+    }
+
+    public function countEarnedJobs($userid)
     {
         $count = DB::table('users')
             ->join('job_schedules', 'job_schedules.user_id', '=', 'users.id')
             ->join('jobs', 'jobs.id', '=', 'job_schedules.job_id')
-            ->join('users as employer', 'employer.id', '=', 'jobs.user_id')
-            ->where('job_schedules.job_status', '=', 'cancelled')
-            //->orWhere('job_schedules.job_status', '=','completed')
-            ->whereNull('job_schedules.payment_status')
-            ->where('users.id', '=', $userId)
-            ->get();
+            ->where('job_schedules.job_status', '=', 'completed')
+            ->where('job_schedules.payment_status', '=', 'Completed')
+            ->where('users.id', '=', $userid)
+            ->sum('jobs.rate');
 
         return $count;
-
     }
-
-    public function countEarnedJobs($userId)
-    {
-        $jobs = DB::table('users')
-            ->join('job_schedules', 'job_schedules.user_id', '=', 'users.id')
-            ->join('jobs', 'jobs.id', '=', 'job_schedules.job_id')
-            ->join('users as employer', 'employer.id', '=', 'jobs.user_id')
-            ->where('job_schedules.job_status', '=','completed')
-            ->where('job_schedules.payment_status', 'Pending')
-            ->orWhere('job_schedules.payment_status', 'Processing')
-            ->where('users.id', '=', $userId)
-            ->count();
-
-        return $jobs;
-
-    }
-
 
 }

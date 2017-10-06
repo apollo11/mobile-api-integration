@@ -44,7 +44,7 @@ class HistoryController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -55,7 +55,7 @@ class HistoryController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -63,7 +63,7 @@ class HistoryController extends Controller
         $history = new History();
         $output = $history->getHistoryDetails($id, 'jobs.id');
 
-        $details = $this->jobDetailsoutput($output, 'Pending');
+        $details = $this->jobDetailsoutput($output);
 
         return response()->json(['job_details' => $details, 'status' => ['status_code' => 200, 'success' => true]]);
 
@@ -76,11 +76,11 @@ class HistoryController extends Controller
     {
         $history = new History();
         $param = [
-            'industries' => (array) $this->request->get('industries'),
-            'locations' => (array) $this->request->get('locations'),
+            'industries' => (array)$this->request->get('industries'),
+            'locations' => (array)$this->request->get('locations'),
             'start' => $this->request->get('start'),
-            'created' =>$this->request->get('created'),
-            'limit' => (int) $this->request->get('limit'),
+            'created' => $this->request->get('created'),
+            'limit' => (int)$this->request->get('limit'),
             'date_from' => $this->request->get('date_from'),
             'date_to' => $this->request->get('date_to'),
             'id' => $this->request->get('user_id'),
@@ -95,7 +95,7 @@ class HistoryController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -106,8 +106,8 @@ class HistoryController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request $request
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -118,7 +118,7 @@ class HistoryController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
@@ -135,12 +135,12 @@ class HistoryController extends Controller
     {
         foreach ($output as $value) {
 
-            $data[] =  $this->jobDetailsoutput($value, 'Pending');
+            $data[] = $this->jobDetailsoutput($value);
         }
 
         $dataUndefined = !empty($data) ? $data : [];
 
-        return response()->json(['completed_jobs' => $dataUndefined, 'completed_job_count' =>$count]);
+        return response()->json(['completed_jobs' => $dataUndefined, 'completed_job_count' => $count]);
 
     }
 
@@ -150,7 +150,7 @@ class HistoryController extends Controller
      */
     public function countCompletedJob($id)
     {
-        $history = new AdditionalInfo();
+        $history = new History();
 
         $output = $history->countCompletedJobs($id);
 

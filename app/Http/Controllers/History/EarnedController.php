@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\History;
 
 use App\History;
-use App\AdditionalInfo;
 use App\Http\Traits\JobDetailsOutputTrait;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -145,7 +144,7 @@ class EarnedController extends Controller
      */
     public function earnedJobs($id)
     {
-        $earned = new AdditionalInfo();
+        $earned = new History();
 
         $output = $earned->countEarnedJobs($id);
 
