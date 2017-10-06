@@ -59,7 +59,6 @@ class EmployeeProfileController extends Controller
 
         $count = $additional->countPendingJobs($id);
         $complete = $additional->countCompletedJobs($id);
-        $earned = $additional->countEarnedJobs($id);
 
         $output = $additional->userInfo($id);
 
