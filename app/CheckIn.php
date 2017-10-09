@@ -60,10 +60,8 @@ class CheckIn extends Model
                 , 'jobs.choices'
                 ,'jobs.job_requirements'
             )
-            ->when(!empty($param['id']), function ($query) use ($param) {
 
-                $query->where('users.id', '=', $param['id']);
-            })
+            ->where('job_schedules.user_id', '=', $param['id'])
             ->where('job_schedules.job_status', '=', 'accepted')
             ->where('jobs.end_date', '>=', Carbon::now())
             ->first();

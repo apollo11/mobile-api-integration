@@ -31,7 +31,7 @@ class CustomerSupportController extends Controller
 
         }else {
 
-            Mail::to('apollomalapote@gmail.com')->send(new CustomerSupport($data));
+            Mail::to('wendy.wang@monstar-lab.com')->send(new CustomerSupport($data));
 
             return $this->successReponse();
 
