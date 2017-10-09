@@ -11,14 +11,19 @@ class CustomerSupport extends Mailable
 {
     use Queueable, SerializesModels;
 
+    public $subject;
+    protected $message;
+
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($data)
     {
-        //
+        $this->subject = $data['subject'];
+        $this->message = $data['message'];
+
     }
 
     /**
@@ -28,6 +33,8 @@ class CustomerSupport extends Mailable
      */
     public function build()
     {
-        return $this->view('view.name');
+        return $this->subject($this->subject)
+            ->view('emails.customer')
+            ->with(['bodyMsg' => $this->message ]);
     }
 }
