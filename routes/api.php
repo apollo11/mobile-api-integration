@@ -117,6 +117,12 @@ Route::group(['middleware' => ['auth:api']], function () {
 
     });
 
+    Route::prefix('v1/customer/support')->group(function () {
+
+        Route::post('send', 'CustomerSupport\CustomerSupportController@index');
+
+    });
+
 });
 
 Route::group(['middleware' => ['auth_client']], function () {
@@ -159,5 +165,10 @@ Route::group(['middleware' => ['auth_client']], function () {
 
     });
 
+    Route::prefix('v1/customer/support')->group(function () {
+
+        Route::post('send', 'CustomerSupport\CustomerSupportController@index');
+
+    });
 
 });
