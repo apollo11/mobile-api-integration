@@ -70,10 +70,17 @@ trait JobDetailsOutputTrait
 
     public function dateFormat($date)
     {
-        $format = date_create($date, timezone_open('UTC'));
-        $date = date_format($format, 'Y-m-d H:i:sP');
+        if (is_null($date)) {
 
-        return $date;
+            $return = null;
+        } else {
+
+            $format = date_create($date, timezone_open('UTC'));
+            $return = date_format($format, 'Y-m-d H:i:sO');
+
+        }
+
+        return $return;
 
     }
 
