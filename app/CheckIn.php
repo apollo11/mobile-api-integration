@@ -63,16 +63,22 @@ class CheckIn extends Model
 
             ->where('job_schedules.user_id', '=', $param['id'])
             ->where('job_schedules.job_status', '=', 'accepted')
-            ->orWhere(function ($query) {
-                $query->whereNotNull('job_schedules.checkin_datetime');
-                $query->whereNull('job_schedules.checkout_datetime');
+            ->where(function ($query) {
+                $query->where(function ($query) {
+                    $query->whereNotNull('job_schedules.checkin_datetime');
+                    $query->whereNull('job_schedules.checkout_datetime');
+
+                });
+
+                $query->orWhere(function ($query) {
+                    $query->whereNull('job_schedules.checkin_datetime');
+                    $query->whereRaw("jobs.job_date BETWEEN DATE_SUB(NOW(), INTERVAL 1 DAY ) AND NOW()");
+
+                });
 
             })
-            ->orWhere(function ($query) {
-                $query->whereNull('job_schedules.checkin_datetime');
-                $query->whereRaw("jobs.job_date BETWEEN DATE_SUB(NOW(), INTERVAL 1 DAY ) AND NOW()");
-
-            })
+            ->orderBy('jobs.job_date', 'asc')
+            ->orderBy('jobs.created_at', 'asc')
             ->first();
 
         return $jobs;
