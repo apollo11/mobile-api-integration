@@ -73,7 +73,7 @@ class CheckIn extends Model
                 $query->orWhere(function ($query) {
                     $query->whereNull('job_schedules.checkin_datetime');
                     //$query->whereRaw("jobs.job_date BETWEEN DATE_SUB(NOW(), INTERVAL 1 DAY ) AND NOW()");
-                    $query->whereRaw("TIMEDIFF(NOW(), jobs.job_date) < ‘24:00:00");
+                    $query->whereRaw("TIMEDIFF(NOW(), jobs.job_date) < '24:00:00'");
                 });
 
             })
