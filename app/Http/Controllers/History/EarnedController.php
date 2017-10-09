@@ -111,6 +111,7 @@ class EarnedController extends Controller
             'date_from' => $this->request->get('date_from'),
             'date_to' => $this->request->get('date_to'),
             'id' => $this->request->get('user_id'),
+            'status' => $this->request->get('status'),
         ];
 
         $output = $history->getEarnedJobs($param);
