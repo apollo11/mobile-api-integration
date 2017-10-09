@@ -119,7 +119,7 @@ class CheckinController extends Controller
         $jobDetails = $this->getJob($jobSched['user_id'], $jobSched['job_id']);
         $geolocation = $this->getAddress($data['latitude'], $data['longitude']);
 
-        if ($this->compareDates($jobDetails->start_date) == 1) {
+//        if ($this->compareDates($jobDetails->start_date) == 1) {
 
             $jobSched->update([
                 'checkin_datetime' => Carbon::now(),
@@ -128,9 +128,9 @@ class CheckinController extends Controller
 
             $result = $this->show($data['schedule_id']);
 
-        } else {
-            $result = $this->errorResponse(['You can only check in an hour before the start of your job.'], 'Validation Error', 110001, 400);
-        }
+//        } else {
+//            $result = $this->errorResponse(['You can only check in an hour before the start of your job.'], 'Validation Error', 110001, 400);
+//        }
         return $result;
     }
 
