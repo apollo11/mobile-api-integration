@@ -37,9 +37,9 @@ class CheckinController extends Controller
             'id' => $request->get('user_id')
         ];
 
-        $checkin = new CheckIn();
+        $checkIn = new CheckIn();
 
-        $output = $checkin->getCheckInJob($param);
+        $output = $checkIn->getCheckInJob($param);
 
         return $this->jobInfoOutput($output);
     }
@@ -51,9 +51,10 @@ class CheckinController extends Controller
      */
     function jobInfoOutput($output)
     {
-        $data = $this->jobDetailsoutput($output);
 
-        return response()->json(['jobs' => $data]);
+        $dataUndefined = empty($output) ? '' : $this->jobDetailsoutput($output);
+
+        return response()->json(['job' => $dataUndefined]);
     }
 
     /**
