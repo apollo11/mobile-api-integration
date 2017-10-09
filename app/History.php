@@ -65,6 +65,10 @@ class History extends Model
 
                 return $query->whereIn('jobs.location_id', $param['locations']);
             })
+            ->when(!empty($param['status']), function ($query) use ($param) {
+
+                return $query->whereIn('job_schedules.job_status', $param['status']);
+            })
             ->when(!empty($param['start']) && !empty($param['created']), function ($query) use ($param) {
 
                 return $query->whereRaw("CASE WHEN jobs.job_date = '" . $param['start'] .
@@ -143,6 +147,10 @@ class History extends Model
             ->when(!empty($param['locations']), function ($query) use ($param) {
 
                 return $query->whereIn('jobs.location_id', $param['locations']);
+            })
+            ->when(!empty($param['status']), function ($query) use ($param) {
+
+                return $query->whereIn('job_schedules.job_status', $param['status']);
             })
             ->when(!empty($param['start']) && !empty($param['created']), function ($query) use ($param) {
 
