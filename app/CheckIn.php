@@ -78,7 +78,7 @@ class CheckIn extends Model
                     // Job must have no check in time
                     $query->whereNull('job_schedules.checkin_datetime');
                     // Checking in is allow as long as the the job's end date has not ended yet
-                    $query->where('job_schedules.checkout_datetime', '>', Carbon::now());
+                    $query->where('jobs.end_date', '>', Carbon::now());
                 });
 
             })
