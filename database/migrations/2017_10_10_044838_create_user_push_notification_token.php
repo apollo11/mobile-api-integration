@@ -13,8 +13,12 @@ class CreateUserPushNotificationToken extends Migration
      */
     public function up()
     {
-        Schema::create('user_push_notification_token', function (Blueprint $table) {
+        Schema::create('user_push_notification_tokens', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('device_token')->nullable();
+            $table->integer('user_id')->unsigned()->nullable();
+            $table->foreign('user_id')->references('id')->on('users')
+            ->cascade()->delete();
             $table->timestamps();
         });
     }
@@ -26,6 +30,6 @@ class CreateUserPushNotificationToken extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('user_push_notification_token');
+        Schema::dropIfExists('user_push_notification_tokens');
     }
 }

@@ -64,16 +64,21 @@ class CheckIn extends Model
             ->where('job_schedules.user_id', '=', $param['id'])
             ->where('job_schedules.job_status', '=', 'accepted')
             ->where(function ($query) {
+                //Get currently checked Job
                 $query->where(function ($query) {
+                    // Job must have check in time but no check out date
                     $query->whereNotNull('job_schedules.checkin_datetime');
                     $query->whereNull('job_schedules.checkout_datetime');
+                    // Job without check out date will be auto-completed after 24 hours so exclude them
+                    $query->whereRaw("TIMEDIFF(NOW(), jobs.job_date) < '24:00:00'");
 
                 });
-
+                //Get upcoming job
                 $query->orWhere(function ($query) {
+                    // Job must have no check in time
                     $query->whereNull('job_schedules.checkin_datetime');
-                    //$query->whereRaw("jobs.job_date BETWEEN DATE_SUB(NOW(), INTERVAL 1 DAY ) AND NOW()");
-                    $query->whereRaw("TIMEDIFF(NOW(), jobs.job_date) < '24:00:00'");
+                    // Checking in is allow as long as the the job's end date has not ended yet
+                    $query->where('job_schedules.checkout_datetime', '>', Carbon::now());
                 });
 
             })

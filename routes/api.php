@@ -123,6 +123,13 @@ Route::group(['middleware' => ['auth:api']], function () {
 
     });
 
+    Route::prefix('v1/notif/')->group(function() {
+
+       Route::post('save', 'Notification\NotificationController@addNotification');
+       Route::get('list', 'Notification\NotificationController@notifList');
+
+    });
+
 });
 
 Route::group(['middleware' => ['auth_client']], function () {
@@ -170,5 +177,13 @@ Route::group(['middleware' => ['auth_client']], function () {
         Route::post('send', 'CustomerSupport\CustomerSupportController@index');
 
     });
+
+    Route::prefix('v1/notif/')->group(function() {
+
+        Route::post('save', 'Notification\NotificationController@addNotification');
+        Route::get('list', 'Notification\NotificationController@notifList');
+
+    });
+
 
 });

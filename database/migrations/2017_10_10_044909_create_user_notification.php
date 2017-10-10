@@ -13,8 +13,16 @@ class CreateUserNotification extends Migration
      */
     public function up()
     {
-        Schema::create('user_notification', function (Blueprint $table) {
+        Schema::create('user_notifications', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('job_id');
+            $table->boolean('is_read')->default(false);
+            $table->string('type');
+            $table->string('title')->nullable();
+            $table->longText('message')->nullable();
+            $table->integer('user_id')->unsigned()->nullable();
+            $table->foreign('user_id')->references('id')->on('users')
+            ->cascade()->delete();
             $table->timestamps();
         });
     }
@@ -26,6 +34,6 @@ class CreateUserNotification extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('user_notification');
+        Schema::dropIfExists('user_notifications');
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
 
@@ -117,10 +118,16 @@ class JobSchedule extends Model
 
                 $query->where('users.id', '=', $param['id']);
             })
-            ->limit($param['limit'])
             ->where('job_schedules.job_status', '=', 'accepted')
+            ->where(function ($query) {
+                // Job must have no check in time
+                $query->whereNull('job_schedules.checkin_datetime');
+                // Checking in is allow as long as the the job's end date has not ended yet
+                $query->where('job_schedules.checkout_datetime', '>', Carbon::now());
+            })
             ->orderBy('jobs.job_date', 'asc')
             ->orderBy('jobs.created_at', 'asc')
+            ->limit($param['limit'])
             ->get();
 
         return $jobs;
