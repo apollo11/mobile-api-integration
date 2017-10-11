@@ -65,6 +65,11 @@ class History extends Model
 
                 return $query->whereIn('jobs.location_id', $param['locations']);
             })
+            ->when(!empty($param['date_from']) && !empty($param['date_to']), function ($query) use ($param) {
+
+                return $query->whereBetween('jobs.job_date', [$param['date_from'], $param['date_to']]);
+            })
+
             ->when(!empty($param['statuses']), function ($query) use ($param) {
 
                 return $query->whereIn('job_schedules.job_status', $param['statuses']);
@@ -147,6 +152,11 @@ class History extends Model
 
                 return $query->whereIn('jobs.location_id', $param['locations']);
             })
+            ->when(!empty($param['date_from']) && !empty($param['date_to']), function ($query) use ($param) {
+
+                return $query->whereBetween('jobs.job_date', [$param['date_from'], $param['date_to']]);
+            })
+
             ->when(!empty($param['statuses']), function ($query) use ($param) {
 
                 return $query->whereIn('job_schedules.job_status', $param['statuses']);
