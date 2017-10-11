@@ -80,10 +80,13 @@ class History extends Model
 
                 $query->where('users.id', '=', $param['id']);
             })
-            ->limit($param['limit'])
             ->where('job_schedules.job_status', '=', 'cancelled')
-            //->orWhere('job_schedules.job_status', '=','completed')
+            ->orWhere('job_schedules.job_status', '=','completed')
+            ->orWhere('job_schedules.job_status', '=','auto_complete')
+            ->orWhere('job_schedules.job_status', '=','auto_cancel')
+            ->orWhere('job_schedules.job_status', '=','rejected')
             ->whereNull('job_schedules.payment_status')
+            ->limit($param['limit'])
             ->orderBy('jobs.job_date', 'asc')
             ->orderBy('jobs.created_at', 'asc')
             ->get();
@@ -163,10 +166,10 @@ class History extends Model
 
                 $query->where('users.id', '=', $param['id']);
             })
-            ->limit($param['limit'])
             ->where('job_schedules.job_status', '=', 'completed')
             ->where('job_schedules.payment_status', 'Pending')
             ->orWhere('job_schedules.payment_status', 'Processing')
+            ->limit($param['limit'])
             ->orderBy('jobs.job_date', 'asc')
             ->orderBy('jobs.created_at', 'asc')
             ->get();
