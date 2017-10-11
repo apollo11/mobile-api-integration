@@ -65,10 +65,20 @@ class History extends Model
 
                 return $query->whereIn('jobs.location_id', $param['locations']);
             })
-            ->when(!empty($param['statuses']), function ($query) use ($param) {
+            ->when(!empty($param['date_from']) && !empty($param['date_to']), function ($query) use ($param) {
 
-                return $query->whereIn('job_schedules.job_status', $param['statuses']);
+                return $query->whereBetween('jobs.job_date', [$param['date_from'], $param['date_to']]);
             })
+
+            ->when(!empty($param['job_statuses']), function ($query) use ($param) {
+
+                return $query->whereIn('job_schedules.job_status', $param['job_statuses']);
+            })
+            ->when(!empty($param['payment_statuses']), function ($query) use ($param) {
+
+                return $query->whereIn('job_schedules.payment_status', $param['payment_statuses']);
+            })
+
             ->when(!empty($param['start']) && !empty($param['created']), function ($query) use ($param) {
 
                 return $query->whereRaw("CASE WHEN jobs.job_date = '" . $param['start'] .
@@ -80,11 +90,7 @@ class History extends Model
 
                 $query->where('users.id', '=', $param['id']);
             })
-            ->where('job_schedules.job_status', '=', 'cancelled')
-            ->orWhere('job_schedules.job_status', '=','completed')
-            ->orWhere('job_schedules.job_status', '=','auto_complete')
-            ->orWhere('job_schedules.job_status', '=','auto_cancel')
-            ->orWhere('job_schedules.job_status', '=','rejected')
+            ->whereIn('job_schedules.job_status', ['cancelled', 'completed', 'auto_complete', 'auto_cancel', 'rejected'])
             ->whereNull('job_schedules.payment_status')
             ->limit($param['limit'])
             ->orderBy('jobs.job_date', 'asc')
@@ -151,9 +157,17 @@ class History extends Model
 
                 return $query->whereIn('jobs.location_id', $param['locations']);
             })
-            ->when(!empty($param['statuses']), function ($query) use ($param) {
+            ->when(!empty($param['date_from']) && !empty($param['date_to']), function ($query) use ($param) {
 
-                return $query->whereIn('job_schedules.job_status', $param['statuses']);
+                return $query->whereBetween('jobs.job_date', [$param['date_from'], $param['date_to']]);
+            })
+            ->when(!empty($param['job_statuses']), function ($query) use ($param) {
+
+                return $query->whereIn('job_schedules.job_status', $param['job_statuses']);
+            })
+            ->when(!empty($param['payment_statuses']), function ($query) use ($param) {
+
+                return $query->whereIn('job_schedules.payment_status', $param['payment_statuses']);
             })
             ->when(!empty($param['start']) && !empty($param['created']), function ($query) use ($param) {
 
@@ -240,12 +254,7 @@ class History extends Model
         $count = DB::table('users')
             ->leftJoin('job_schedules', 'job_schedules.user_id', '=', 'users.id')
             ->where('users.id', '=', $userid)
-            ->where('job_schedules.job_status', '=', 'cancelled')
-            ->orWhere('job_schedules.job_status', '=','completed')
-            ->orWhere('job_schedules.job_status', '=','auto_complete')
-            ->orWhere('job_schedules.job_status', '=','auto_cancel')
-            ->orWhere('job_schedules.job_status', '=','rejected')
-
+            ->whereIn('job_schedules.job_status', ['cancelled', 'completed', 'auto_complete', 'auto_cancel', 'rejected'])
             ->whereNull('job_schedules.payment_status')
             ->count();
 
