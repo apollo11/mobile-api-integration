@@ -127,6 +127,7 @@ Route::group(['middleware' => ['auth:api']], function () {
         Route::post('reject','Notification\NotificationController@rejectJob');
         Route::post('multiple/read','Notification\NotificationController@markAsAllRead');
         Route::post('read','Notification\NotificationController@markAsRead');
+        Route::post('delete/token','Notification\NotificationController@deleteToken');
 
     });
 
@@ -182,6 +183,7 @@ Route::group(['middleware' => ['auth_client']], function () {
         Route::post('reject','Notification\NotificationController@rejectJob');
         Route::post('multiple/read','Notification\NotificationController@markAsAllRead');
         Route::post('read','Notification\NotificationController@markAsRead');
+        Route::post('delete/token','Notification\NotificationController@deleteToken');
 
     });
 

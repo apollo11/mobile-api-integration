@@ -241,6 +241,34 @@ class NotificationController extends Controller
     }
 
     /**
+     * Delete Device Token for IOS
+     */
+    public function deleteToken(Request $request)
+    {
+        $token = $request->input('device_token');
+        $userId = $request->input('user_id');
+        $find = \App\DeviceToken::where('device_token', $token)
+            ->where('user_id', $userId)->first();
+
+        if (is_null($find)) {
+
+            $result = $this->mapValidator(['Token unavailable or invalid']);
+
+        } else {
+
+            \App\DeviceToken::where('user_id', $userId)
+                ->where('device_token', $token)
+                ->delete();
+
+            $result = $this->ValidUseSuccessResp(200, true);
+
+        }
+
+        return $result;
+
+    }
+
+    /**
      * Notification list by user
      */
     public function notifList(Request $request)
@@ -250,7 +278,7 @@ class NotificationController extends Controller
 
         $notifList = $notif->notificationByUser($userId);
 
-        return response()->json(['notifications' => $notifList]);
+        return $this->notifResponse($notifList);
     }
 
     /**
@@ -291,6 +319,17 @@ class NotificationController extends Controller
     public function mapValidator($data)
     {
         return $this->errorResponse($data, 'Validation Error', 110001, 400);
+    }
+
+    /**
+     * Notification response
+     */
+    public function notifResponse($notif)
+    {
+        $data = [
+            'notifications' => $notif
+        ];
+        return $data;
     }
 
 }

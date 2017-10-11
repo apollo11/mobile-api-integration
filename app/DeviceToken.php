@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
 
 class DeviceToken extends Model
@@ -21,5 +22,6 @@ class DeviceToken extends Model
     {
         return $this->belongsTo('\App\User');
     }
+
 
 }
