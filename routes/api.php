@@ -82,7 +82,6 @@ Route::group(['middleware' => ['auth:api']], function () {
 
         Route::get('lists', 'Job\JobController@jobApiLists');
         Route::get('details', 'Job\JobController@show');
-
         Route::post('apply', 'JobSchedule\JobScheduleController@store');
 
     });
@@ -90,7 +89,6 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::prefix('v1/user/')->group(function () {
 
         Route::get('details', 'EmployeeProfile\EmployeeProfileController@show');
-
         Route::post('edit/info', 'EmployeeProfile\AdditionalInfoController@store');
         Route::post('edit/basic/info', 'EmployeeProfile\BasicInfoController@update');
 
@@ -99,7 +97,6 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::prefix('v1/job/schedule/')->group(function () {
 
         Route::get('lists', 'JobSchedule\JobScheduleController@jobScheduleLists');
-
         Route::post('cancel', 'CancelJob\CancelJobController@index');
 
     });
@@ -125,8 +122,11 @@ Route::group(['middleware' => ['auth:api']], function () {
 
     Route::prefix('v1/notif/')->group(function() {
 
-       Route::post('save', 'Notification\NotificationController@addNotification');
-       Route::get('list', 'Notification\NotificationController@notifList');
+        Route::get('list', 'Notification\NotificationController@notifList');
+        Route::post('save', 'Notification\NotificationController@addNotification');
+        Route::post('reject','Notification\NotificationController@rejectJob');
+        Route::post('multiple/read','Notification\NotificationController@markAsAllRead');
+        Route::post('read','Notification\NotificationController@markAsRead');
 
     });
 
@@ -138,7 +138,6 @@ Route::group(['middleware' => ['auth_client']], function () {
 
         Route::get('lists', 'Job\JobController@jobApiLists');
         Route::get('lists/{id}', 'Job\JobController@show');
-
         Route::post('apply', 'JobSchedule\JobScheduleController@store');
 
     });
@@ -146,7 +145,6 @@ Route::group(['middleware' => ['auth_client']], function () {
     Route::prefix('v1/user/')->group(function () {
 
         Route::get('details', 'EmployeeProfile\EmployeeProfileController@show');
-
         Route::post('edit/info', 'EmployeeProfile\AdditionalInfoController@store');
 
     });
@@ -154,7 +152,6 @@ Route::group(['middleware' => ['auth_client']], function () {
     Route::prefix('v1/job/schedule/')->group(function () {
 
         Route::get('lists', 'JobSchedule\JobScheduleController@jobScheduleLists');
-
         Route::post('cancel', 'CancelJob\CancelJobController@index');
 
     });
@@ -182,6 +179,9 @@ Route::group(['middleware' => ['auth_client']], function () {
 
         Route::post('save', 'Notification\NotificationController@addNotification');
         Route::get('list', 'Notification\NotificationController@notifList');
+        Route::post('reject','Notification\NotificationController@rejectJob');
+        Route::post('multiple/read','Notification\NotificationController@markAsAllRead');
+        Route::post('read','Notification\NotificationController@markAsRead');
 
     });
 

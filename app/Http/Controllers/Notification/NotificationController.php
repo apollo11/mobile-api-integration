@@ -39,7 +39,7 @@ class NotificationController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -50,7 +50,7 @@ class NotificationController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -61,7 +61,7 @@ class NotificationController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -72,8 +72,8 @@ class NotificationController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request $request
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -84,7 +84,7 @@ class NotificationController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
@@ -102,17 +102,103 @@ class NotificationController extends Controller
         $validate = $this->validator($data);
         $error = $validate->errors()->all();
 
-        if($validate->fails()) {
+        if ($validate->fails()) {
 
             $result = $this->mapValidator($error);
 
-        }else {
+        } else {
 
             $this->pushNotif($data);
             $this->saveDeviceToken($data);
             $this->saveNotif($data);
 
             $result = $this->ValidUseSuccessResp(200, true);
+        }
+
+        return $result;
+
+    }
+
+    /**
+     * @param Request $request
+     * @return mixed
+     */
+    public function rejectJob(Request $request)
+    {
+        $jobId = $request->input('job_id');
+        $find = \App\JobSchedule::where('job_id', $jobId)->first();
+
+
+        if (is_null($find)) {
+
+            $result = $this->mapValidator(['Job is not available in schedule']);
+
+        } else {
+
+            \App\JobSchedule::where('job_id', $jobId)
+                ->update(['job_status' => 'available', 'is_assigned' => false]);
+
+            $result = $this->ValidUseSuccessResp(200, true);
+
+        }
+
+        return $result;
+
+    }
+
+    /**
+     * Mark as all read by user
+     * @param Request $request
+     * @return mixed
+     */
+    public function markAsAllRead(Request $request)
+    {
+        $userId = $request->input('user_id');
+        $find = \App\Notification::where('user_id', $userId)->first();
+
+        if (is_null($find)) {
+
+            $result = $this->mapValidator(['Notification is not available']);
+
+        } else {
+
+            \App\Notification::where('user_id', $userId)
+                ->update(['is_read' => true]);
+
+            $result = $this->ValidUseSuccessResp(200, true);
+
+        }
+
+        return $result;
+
+    }
+
+    /**
+     * Mark as read one by one
+     * @param Request $request
+     * @return mixed
+     */
+    public function markAsRead(Request $request)
+    {
+        $userId = $request->input('user_id');
+        $id = $request->input('id');
+
+        $find = \App\Notification::where('user_id', $userId)
+            ->where('id', $id)
+            ->first();
+
+        if (is_null($find)) {
+
+            $result = $this->mapValidator(['Notification is not available']);
+
+        } else {
+
+            \App\Notification::where('user_id', $userId)
+                ->where('id', $id)
+                ->update(['is_read' => true]);
+
+            $result = $this->ValidUseSuccessResp(200, true);
+
         }
 
         return $result;
@@ -143,7 +229,7 @@ class NotificationController extends Controller
      */
     public function saveDeviceToken(array $data)
     {
-        if(!empty($data['registration_ids'])) {
+        if (!empty($data['registration_ids'])) {
 
             $save = \App\User::find($data['user_id']);
             $save->deviceToken()->create([

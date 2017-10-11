@@ -144,6 +144,7 @@ class Job extends Model
 
             })
             ->whereNull('job_schedules.job_status')
+            ->orWhere('job_schedules.job_status', '=', 'available')
             ->where('jobs.job_date', '>=', Carbon::now())
             ->distinct('jobs.id')
             ->orderBy('jobs.job_date', 'asc')
