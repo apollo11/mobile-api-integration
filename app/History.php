@@ -80,11 +80,7 @@ class History extends Model
 
                 $query->where('users.id', '=', $param['id']);
             })
-            ->where('job_schedules.job_status', '=', 'cancelled')
-            ->orWhere('job_schedules.job_status', '=','completed')
-            ->orWhere('job_schedules.job_status', '=','auto_complete')
-            ->orWhere('job_schedules.job_status', '=','auto_cancel')
-            ->orWhere('job_schedules.job_status', '=','rejected')
+            ->whereIn('job_schedules.job_status', ['cancelled', 'completed', 'auto_complete', 'auto_cancel', 'rejected'])
             ->whereNull('job_schedules.payment_status')
             ->limit($param['limit'])
             ->orderBy('jobs.job_date', 'asc')
@@ -240,12 +236,7 @@ class History extends Model
         $count = DB::table('users')
             ->leftJoin('job_schedules', 'job_schedules.user_id', '=', 'users.id')
             ->where('users.id', '=', $userid)
-            ->where('job_schedules.job_status', '=', 'cancelled')
-            ->orWhere('job_schedules.job_status', '=','completed')
-            ->orWhere('job_schedules.job_status', '=','auto_complete')
-            ->orWhere('job_schedules.job_status', '=','auto_cancel')
-            ->orWhere('job_schedules.job_status', '=','rejected')
-
+            ->whereIn('job_schedules.job_status', ['cancelled', 'completed', 'auto_complete', 'auto_cancel', 'rejected'])
             ->whereNull('job_schedules.payment_status')
             ->count();
 
