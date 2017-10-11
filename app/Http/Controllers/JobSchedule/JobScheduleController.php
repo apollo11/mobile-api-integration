@@ -189,7 +189,7 @@ class JobScheduleController extends Controller
     {
         foreach ($output as $value) {
 
-            $data[] =  $this->jobDetailsoutput($value, 'Pending');
+            $data[] =  $this->jobDetailsoutput($value);
         }
 
         $dataUndefined = !empty($data) ? $data : [];
