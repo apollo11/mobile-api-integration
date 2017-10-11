@@ -241,8 +241,12 @@ class History extends Model
             ->leftJoin('job_schedules', 'job_schedules.user_id', '=', 'users.id')
             ->where('users.id', '=', $userid)
             ->where('job_schedules.job_status', '=', 'cancelled')
+            ->orWhere('job_schedules.job_status', '=','completed')
+            ->orWhere('job_schedules.job_status', '=','auto_complete')
+            ->orWhere('job_schedules.job_status', '=','auto_cancel')
+            ->orWhere('job_schedules.job_status', '=','rejected')
+
             ->whereNull('job_schedules.payment_status')
-            //->orWhere('job_schedules.job_status', '=','completed')
             ->count();
 
         return $count;
