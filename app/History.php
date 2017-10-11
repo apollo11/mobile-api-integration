@@ -70,10 +70,15 @@ class History extends Model
                 return $query->whereBetween('jobs.job_date', [$param['date_from'], $param['date_to']]);
             })
 
-            ->when(!empty($param['statuses']), function ($query) use ($param) {
+            ->when(!empty($param['job_statuses']), function ($query) use ($param) {
 
-                return $query->whereIn('job_schedules.job_status', $param['statuses']);
+                return $query->whereIn('job_schedules.job_status', $param['job_statuses']);
             })
+            ->when(!empty($param['payment_statuses']), function ($query) use ($param) {
+
+                return $query->whereIn('job_schedules.payment_status', $param['payment_statuses']);
+            })
+
             ->when(!empty($param['start']) && !empty($param['created']), function ($query) use ($param) {
 
                 return $query->whereRaw("CASE WHEN jobs.job_date = '" . $param['start'] .
@@ -156,10 +161,13 @@ class History extends Model
 
                 return $query->whereBetween('jobs.job_date', [$param['date_from'], $param['date_to']]);
             })
+            ->when(!empty($param['job_statuses']), function ($query) use ($param) {
 
-            ->when(!empty($param['statuses']), function ($query) use ($param) {
+                return $query->whereIn('job_schedules.job_status', $param['job_statuses']);
+            })
+            ->when(!empty($param['payment_statuses']), function ($query) use ($param) {
 
-                return $query->whereIn('job_schedules.job_status', $param['statuses']);
+                return $query->whereIn('job_schedules.payment_status', $param['payment_statuses']);
             })
             ->when(!empty($param['start']) && !empty($param['created']), function ($query) use ($param) {
 
