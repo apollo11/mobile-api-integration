@@ -163,7 +163,8 @@ var QuickSidebar = function () {
 
 }();
 
-
-jQuery(document).ready(function() {
-   QuickSidebar.init(); // init metronic core componets
-});
+if (App.isAngularJsApp() === false) { 
+    jQuery(document).ready(function() {    
+       QuickSidebar.init(); // init metronic core componets
+    });
+}
