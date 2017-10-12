@@ -24,7 +24,7 @@ class BugisAdministrativeSeeder extends Seeder
             $dt = Carbon::instance($start);
 
             DB::table('jobs')->insert([
-                'job_title' => 'Teller',git co
+                'job_title' => 'Teller',
                 'user_id' => 2,
                 'job_id' => 2,
                 'location_id' => 1,
