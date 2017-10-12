@@ -22,7 +22,7 @@ class Jobs extends Seeder
 
 
             DB::table('jobs')->insert([
-                'job_title' => 'HRM',
+                'job_title' => 'Cook',
                 'user_id' => 2,
                 'job_id' => 2,
                 'location_id' => 3,

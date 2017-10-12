@@ -22,7 +22,7 @@ class YewTeeBusinessSeeder extends Seeder
             $dt = Carbon::instance($start);
 
             DB::table('jobs')->insert([
-                'job_title' => 'Agogo Dancer',
+                'job_title' => 'Entertainer',
                 'user_id' => 2,
                 'job_id' => 2,
                 'location_id' => 4,

@@ -15,7 +15,7 @@ class AddPaymentStatusSchedule extends Migration
     {
         Schema::table('job_schedules', function (Blueprint $table) {
 
-            $table->enum('payment_status', ['pending', 'processing', 'completed'])->nullable();
+            $table->enum('payment_status', ['pending', 'processed'])->nullable();
 
         });
     }
