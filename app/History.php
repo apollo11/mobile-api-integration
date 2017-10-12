@@ -69,32 +69,32 @@ class History extends Model
 
                 return $query->whereBetween('jobs.job_date', [$param['date_from'], $param['date_to']]);
             })
+            ->when(!empty($param['payment_statuses']) && empty($param['job_statuses']), function ($query) use ($param) {
+                // If payment_statuses has value, return null. Job with payment statuses must be in the earned job list.
+                return $query->whereIn('job_schedules.job_status', []);
+            })
+            ->when(empty($param['payment_statuses']) && empty($param['job_statuses']), function ($query) use ($param) {
 
+                return $query->whereIn('job_schedules.job_status', ['cancelled', 'completed', 'auto_completed', 'auto_cancelled', 'rejected']);
+            })
             ->when(!empty($param['job_statuses']), function ($query) use ($param) {
 
                 return $query->whereIn('job_schedules.job_status', $param['job_statuses']);
             })
-            ->when(!empty($param['payment_statuses']), function ($query) use ($param) {
-
-                return $query->whereIn('job_schedules.payment_status', $param['payment_statuses']);
-            })
-
             ->when(!empty($param['start']) && !empty($param['created']), function ($query) use ($param) {
 
                 return $query->whereRaw("CASE WHEN jobs.job_date = '" . $param['start'] .
-                    "' THEN jobs.created_at > '" . $param['created'] .
-                    "' ELSE jobs.job_date >= '" . $param['start'] . "' END");
-
+                    "' THEN jobs.created_at < '" . $param['created'] .
+                    "' ELSE jobs.job_date <= '" . $param['start'] . "' END");
             })
             ->when(!empty($param['id']), function ($query) use ($param) {
 
                 $query->where('users.id', '=', $param['id']);
             })
-            ->whereIn('job_schedules.job_status', ['cancelled', 'completed', 'auto_complete', 'auto_cancel', 'rejected'])
             ->whereNull('job_schedules.payment_status')
             ->limit($param['limit'])
-            ->orderBy('jobs.job_date', 'asc')
-            ->orderBy('jobs.created_at', 'asc')
+            ->orderBy('jobs.job_date', 'desc')
+            ->orderBy('jobs.created_at', 'desc')
             ->get();
 
         return $jobs;
@@ -161,9 +161,13 @@ class History extends Model
 
                 return $query->whereBetween('jobs.job_date', [$param['date_from'], $param['date_to']]);
             })
-            ->when(!empty($param['job_statuses']), function ($query) use ($param) {
+            ->when(!empty($param['job_statuses']) && empty($param['payment_statuses']), function ($query) use ($param) {
+                // If job_statuses has value, return null. Job with job statuses must be in the completed job list.
+                return $query->whereIn('job_schedules.payment_status', []);
+            })
+            ->when(empty($param['payment_statuses']) && empty($param['job_statuses']), function ($query) use ($param) {
 
-                return $query->whereIn('job_schedules.job_status', $param['job_statuses']);
+                return $query->whereIn('job_schedules.payment_status', ['pending', 'processed']);
             })
             ->when(!empty($param['payment_statuses']), function ($query) use ($param) {
 
@@ -172,20 +176,17 @@ class History extends Model
             ->when(!empty($param['start']) && !empty($param['created']), function ($query) use ($param) {
 
                 return $query->whereRaw("CASE WHEN jobs.job_date = '" . $param['start'] .
-                    "' THEN jobs.created_at > '" . $param['created'] .
-                    "' ELSE jobs.job_date >= '" . $param['start'] . "' END");
-
+                    "' THEN jobs.created_at < '" . $param['created'] .
+                    "' ELSE jobs.job_date <= '" . $param['start'] . "' END");
             })
             ->when(!empty($param['id']), function ($query) use ($param) {
 
                 $query->where('users.id', '=', $param['id']);
             })
             ->where('job_schedules.job_status', '=', 'completed')
-            ->where('job_schedules.payment_status', 'Pending')
-            ->orWhere('job_schedules.payment_status', 'Processing')
             ->limit($param['limit'])
-            ->orderBy('jobs.job_date', 'asc')
-            ->orderBy('jobs.created_at', 'asc')
+            ->orderBy('jobs.job_date', 'desc')
+            ->orderBy('jobs.created_at', 'desc')
             ->get();
 
         return $jobs;
