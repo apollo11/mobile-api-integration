@@ -109,7 +109,6 @@ class NotificationController extends Controller
         } else {
 
             $this->pushNotif($data);
-            $this->saveDeviceToken($data);
             $this->saveNotif($data);
 
             $result = $this->ValidUseSuccessResp(200, true);
@@ -223,21 +222,31 @@ class NotificationController extends Controller
         return $save;
     }
 
+
+
     /**
      * @param array $data
      * @return mixed|static
      */
-    public function saveDeviceToken(array $data)
+    public function saveDeviceToken(Request $request)
     {
-        if (!empty($data['registration_ids'])) {
 
-            $save = \App\User::find($data['user_id']);
+        if (!empty($request->input('device_token'))) {
+
+            $save = \App\User::find($request->input('user_id'));
             $save->deviceToken()->create([
-                'device_token' => $data['registration_ids']
+                'device_token' => $request->input('device_token')
             ]);
 
-            return $save;
+
+            $result = $this->ValidUseSuccessResp(200, true);
+
+        } else {
+
+            $result = $result = $this->mapValidator(['Something went wrong']);
+
         }
+        return $result;
     }
 
     /**
@@ -267,6 +276,55 @@ class NotificationController extends Controller
         return $result;
 
     }
+
+    /**
+     * Delete Notification
+     */
+    public function deleteNotfif(Request $request)
+    {
+        $find = \App\Notification::find($request->input('id'));
+
+        if(is_null($find)) {
+
+            $result = $this->mapValidator(['Something went wrong']);
+
+        } else {
+
+            \App\Notification::find($request->input('id'))
+                ->delete();
+
+            $result = $this->ValidUseSuccessResp(200, true);
+        }
+
+        return $result;
+
+    }
+
+    /**
+     * Multiple Delete Notification
+     */
+    public function deleteMultipleNotfif(Request $request)
+    {
+        $userid = $request->input('user_id');
+
+        $find = \App\Notification::where('user_id', $userid);
+
+        if(is_null($find)) {
+
+            $result = $this->mapValidator(['Something went wrong']);
+
+        } else {
+
+            \App\Notification::where('user_id', $userid)
+                ->delete();
+
+            $result = $this->ValidUseSuccessResp(200, true);
+        }
+
+        return $result;
+
+    }
+
 
     /**
      * Notification list by user
