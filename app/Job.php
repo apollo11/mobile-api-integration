@@ -88,6 +88,14 @@ class Job extends Model
                 , 'job_schedules.user_id as user_id'
                 , 'job_schedules.job_status as schedule_status'
                 , 'job_schedules.payment_status'
+                , 'job_schedules.checkin_datetime'
+                , 'job_schedules.checkin_location'
+                , 'job_schedules.checkout_datetime'
+                , 'job_schedules.checkout_location'
+                , 'job_schedules.working_hours'
+                , 'job_schedules.job_salary'
+                , 'job_schedules.process_date'
+                , 'job_schedules.payment_methods'
                 , 'users.company_description'
                 , 'users.company_name'
                 , 'users.profile_image_path'
@@ -136,6 +144,7 @@ class Job extends Model
 
             })
             ->whereNull('job_schedules.job_status')
+            ->orWhere('job_schedules.job_status', '=', 'available')
             ->where('jobs.job_date', '>=', Carbon::now())
             ->distinct('jobs.id')
             ->orderBy('jobs.job_date', 'asc')
@@ -166,6 +175,14 @@ class Job extends Model
                 , 'job_schedules.user_id as user_id'
                 , 'job_schedules.job_status as schedule_status'
                 , 'job_schedules.payment_status'
+                , 'job_schedules.checkin_datetime'
+                , 'job_schedules.checkin_location'
+                , 'job_schedules.checkout_datetime'
+                , 'job_schedules.checkout_location'
+                , 'job_schedules.working_hours'
+                , 'job_schedules.job_salary'
+                , 'job_schedules.process_date'
+                , 'job_schedules.payment_methods'
                 , 'employer.company_description'
                 , 'employer.company_name'
                 , 'employer.profile_image_path'

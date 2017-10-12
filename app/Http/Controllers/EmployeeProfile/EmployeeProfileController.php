@@ -4,6 +4,7 @@ namespace App\Http\Controllers\EmployeeProfile;
 
 use App\EmployeeProfile;
 use App\AdditionalInfo;
+use App\History;
 use App\Http\Traits\ProfileTrait;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -12,11 +13,12 @@ class EmployeeProfileController extends Controller
 {
     use ProfileTrait;
 
-    public function  __construct()
+    public function __construct()
     {
 
 
     }
+
     /**
      * Display a listing of the resource.
      *
@@ -40,7 +42,7 @@ class EmployeeProfileController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -56,20 +58,21 @@ class EmployeeProfileController extends Controller
     {
         $id = $request->get('id');
         $additional = new AdditionalInfo();
+        $history = new History();
 
         $count = $additional->countPendingJobs($id);
-        $complete = $additional->countCompletedJobs($id);
-        $earned = $additional->countEarnedJobs($id);
+        $complete = $history->countCompletedJobs($id);
+        $money = $history->countEarnedJobs($id);
 
         $output = $additional->userInfo($id);
 
-        return $this->profileIteration($output, $count, $complete);
+        return $this->profileIteration($output, $count, $complete, $money);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -80,8 +83,8 @@ class EmployeeProfileController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request $request
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -92,7 +95,7 @@ class EmployeeProfileController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
@@ -103,10 +106,11 @@ class EmployeeProfileController extends Controller
     /**
      * Iteration of profile output
      */
-    public function profileIteration($output, $count, $complete)
+    public function profileIteration($output, $count, $complete, $money)
     {
         $data = $this->userDetailsOutput($output, $count);
         $data['completed_job_count'] = $complete;
+        $data['money_earned'] = $money;
 
         return response()->json(['user_detail' => $data]);
 
@@ -117,7 +121,7 @@ class EmployeeProfileController extends Controller
      */
     public function output($output, $count, $complete)
     {
-       $availability[] =  [
+        $availability[] = [
             'day' => null,
             'start_time' => null,
             'end_time' => null
@@ -160,7 +164,6 @@ class EmployeeProfileController extends Controller
             'updated_at' => $output->updated_at,
             'employee_status' => $output->employee_status,
             'schedule_count' => $count,
-            'money_earned' => 0,
             'completed_job_count' => $complete
         ];
 

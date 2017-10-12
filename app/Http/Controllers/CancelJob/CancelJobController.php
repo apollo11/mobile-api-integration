@@ -10,7 +10,7 @@ use App\Http\Controllers\Controller;
 
 class CancelJobController extends Controller
 {
-    use HttpResponse;
+
 
     /**
      * Display a listing of the resource.

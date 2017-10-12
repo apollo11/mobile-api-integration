@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
 
@@ -16,6 +17,14 @@ class JobSchedule extends Model
         , 'cancel_file_path'
         , 'cancel_reason'
         , 'payment_status'
+        , 'checkin_datetime'
+        , 'checkin_location'
+        , 'checkout_datetime'
+        , 'checkout_location'
+        , 'working_hours'
+        , 'job_salary'
+        , 'process_date'
+        , 'payment_methods'
     ];
 
     /**
@@ -55,6 +64,14 @@ class JobSchedule extends Model
                 , 'job_schedules.is_assigned'
                 , 'job_schedules.job_status as schedule_status'
                 , 'job_schedules.payment_status'
+                , 'job_schedules.checkin_datetime'
+                , 'job_schedules.checkin_location'
+                , 'job_schedules.checkout_datetime'
+                , 'job_schedules.checkout_location'
+                , 'job_schedules.working_hours'
+                , 'job_schedules.job_salary'
+                , 'job_schedules.process_date'
+                , 'job_schedules.payment_methods'
                 , 'employer.company_description'
                 , 'employer.company_name'
                 , 'employer.profile_image_path'
@@ -101,10 +118,16 @@ class JobSchedule extends Model
 
                 $query->where('users.id', '=', $param['id']);
             })
-            ->limit($param['limit'])
             ->where('job_schedules.job_status', '=', 'accepted')
+            ->where(function ($query) {
+                // Job must have no check in time
+                $query->whereNull('job_schedules.checkin_datetime');
+                // Checking in is allow as long as the the job's end date has not ended yet
+                $query->where('jobs.end_date', '>', Carbon::now());
+            })
             ->orderBy('jobs.job_date', 'asc')
             ->orderBy('jobs.created_at', 'asc')
+            ->limit($param['limit'])
             ->get();
 
         return $jobs;
@@ -127,6 +150,14 @@ class JobSchedule extends Model
                 , 'job_schedules.is_assigned'
                 , 'job_schedules.job_status as schedule_status'
                 , 'job_schedules.payment_status'
+                , 'job_schedules.checkin_datetime'
+                , 'job_schedules.checkin_location'
+                , 'job_schedules.checkout_datetime'
+                , 'job_schedules.checkout_location'
+                , 'job_schedules.working_hours'
+                , 'job_schedules.job_salary'
+                , 'job_schedules.process_date'
+                , 'job_schedules.payment_methods'
                 , 'employer.company_description'
                 , 'employer.company_name'
                 , 'employer.profile_image_path'

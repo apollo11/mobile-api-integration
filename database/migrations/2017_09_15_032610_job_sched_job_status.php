@@ -14,7 +14,9 @@ class JobSchedJobStatus extends Migration
     public function up()
     {
         Schema::table('job_schedules', function (Blueprint $table) {
-            $table->enum('job_status', ["available", "accepted", "cancelled", "completed"])->default("available");
+
+            $table->enum('job_status', ["available", "accepted", "cancelled", "completed", "rejected", "auto_completed", "auto_cancelled"])
+                ->default("available");
         });
     }
 

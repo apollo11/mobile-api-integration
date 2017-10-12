@@ -79,6 +79,23 @@ class User extends Authenticatable
     }
 
     /**
+     * Has many lists
+     */
+    public function userNotification()
+    {
+        return $this->hasMany('\App\Notification');
+    }
+
+    /**
+     * Has many deviceToken
+     */
+    public function deviceToken()
+    {
+        return $this->hasMany('\App\DeviceToken');
+    }
+
+
+    /**
      * @param $mobile
      * @return mixed
      */

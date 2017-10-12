@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\History;
 
 use App\History;
+use App\AdditionalInfo;
 use App\Http\Traits\JobDetailsOutputTrait;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -43,7 +44,7 @@ class HistoryController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -54,7 +55,7 @@ class HistoryController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -62,38 +63,41 @@ class HistoryController extends Controller
         $history = new History();
         $output = $history->getHistoryDetails($id, 'jobs.id');
 
-        $details = $this->jobDetailsoutput($output, 'Pending');
+        $details = $this->jobDetailsoutput($output);
 
         return response()->json(['job_details' => $details, 'status' => ['status_code' => 200, 'success' => true]]);
 
     }
 
     /**
-     * History List Completed and Camncelled
+     * History List Completed and Cancelled
      */
     public function CompletedCancelledList()
     {
         $history = new History();
         $param = [
-            'industries' => (array) $this->request->get('industries'),
-            'locations' => (array) $this->request->get('locations'),
+            'industries' => (array)$this->request->get('industries'),
+            'locations' => (array)$this->request->get('locations'),
             'start' => $this->request->get('start'),
-            'created' =>$this->request->get('created'),
-            'limit' => (int) $this->request->get('limit'),
+            'created' => $this->request->get('created'),
+            'limit' => (int)$this->request->get('limit'),
             'date_from' => $this->request->get('date_from'),
             'date_to' => $this->request->get('date_to'),
             'id' => $this->request->get('user_id'),
+            'job_statuses' => $this->request->get('job_statuses'),
+            'payment_statuses' => $this->request->get('payment_statuses'),
         ];
 
         $output = $history->getCompletedCancelledJobs($param);
+        $count = $this->countCompletedJob($param['id']);
 
-        return $this->jobInfoOutput($output);
+        return $this->jobInfoOutput($output, $count);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -104,8 +108,8 @@ class HistoryController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request $request
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -116,7 +120,7 @@ class HistoryController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
@@ -125,72 +129,36 @@ class HistoryController extends Controller
     }
 
     /**
-     * Job Schedule output
-     */
-//    public function jobHistoryOutput($output, $status)
-//    {
-//        $start_date = $date = date_create($output->start_date, timezone_open('UTC'));
-//        $end_date = $date = date_create($output->end_date, timezone_open('UTC'));
-//         $created = $date = date_create($output->created_at, timezone_open('UTC'));
-//        $details = [
-//            'schedule_id' => $output->schedule_id,
-//            'job' => [
-//                'job_title' => $output->job_title,
-//                'id' => $output->id,
-//                'employer' => [
-//                    'image_url' => $output->profile_image_path,
-//                    'name' => $output->company_name,
-//                    'description' => $output->company_description
-//                ],
-//                'industry' => [
-//                    'id' => $output->industry_id,
-//                    'name' => $output->industry
-//                ],
-//                'location' => [
-//                    'id' => $output->location_id,
-//                    'name' => $output->location,
-//                ],
-//                'created_date' => date_format($created, 'Y-m-d H:i:sP'),
-//                'start_date' => date_format($start_date, 'Y-m-d H:i:sP'),
-//                'end_date' => date_format($end_date, 'Y-m-d H:i:sP'),
-//                'contact_no' => $output->contact_no,
-//                'rate' => $output->rate,
-//                'thumbnail_url' => $output->job_image_path,
-//                'nationality' => ucfirst($output->nationality),
-//                'description' => $output->description,
-//                'min_age' => $output->min_age,
-//                'max_age' => $output->max_age,
-//                'role' => $output->role,
-//                'remarks' => $output->notes,
-//                'language' => $output->language,
-//                'gender' => $output->gender,
-//                'job_requirements' => $output->job_requirements,
-//                'status' => $output->job_status,
-//                'payment_status' => $status,
-//                'is_assigned' => $output->is_assigned
-//            ]
-//        ];
-//
-//       return $details;
-//
-//    }
-
-    /**
      * Adding response output for lists
      * @param $output
      * @return \Illuminate\Http\JsonResponse
      */
-    function jobInfoOutput($output)
+    function jobInfoOutput($output, $count)
     {
         foreach ($output as $value) {
 
-            $data[] =  $this->jobDetailsoutput($value, 'Pending');
+            $data[] = $this->jobDetailsoutput($value);
         }
 
         $dataUndefined = !empty($data) ? $data : [];
 
-        return response()->json(['completed_jobs' => $dataUndefined]);
+        return response()->json(['completed_jobs' => $dataUndefined, 'completed_job_count' => $count]);
 
     }
+
+    /**
+     * @param $id
+     * @return mixed
+     */
+    public function countCompletedJob($id)
+    {
+        $history = new History();
+
+        $output = $history->countCompletedJobs($id);
+
+        return $output;
+
+    }
+
 
 }

@@ -22,6 +22,14 @@ class History extends Model
                 , 'job_schedules.is_assigned'
                 , 'job_schedules.job_status as schedule_status'
                 , 'job_schedules.payment_status'
+                , 'job_schedules.checkin_datetime'
+                , 'job_schedules.checkin_location'
+                , 'job_schedules.checkout_datetime'
+                , 'job_schedules.checkout_location'
+                , 'job_schedules.working_hours'
+                , 'job_schedules.job_salary'
+                , 'job_schedules.process_date'
+                , 'job_schedules.payment_methods'
                 , 'employer.company_description'
                 , 'employer.company_name'
                 , 'employer.profile_image_path'
@@ -47,7 +55,7 @@ class History extends Model
                 , 'jobs.notes'
                 , 'jobs.language'
                 , 'jobs.choices'
-                ,'jobs.job_requirements'
+                , 'jobs.job_requirements'
             )
             ->when(!empty($param['industries']), function ($query) use ($param) {
 
@@ -57,6 +65,20 @@ class History extends Model
 
                 return $query->whereIn('jobs.location_id', $param['locations']);
             })
+            ->when(!empty($param['date_from']) && !empty($param['date_to']), function ($query) use ($param) {
+
+                return $query->whereBetween('jobs.job_date', [$param['date_from'], $param['date_to']]);
+            })
+
+            ->when(!empty($param['job_statuses']), function ($query) use ($param) {
+
+                return $query->whereIn('job_schedules.job_status', $param['job_statuses']);
+            })
+            ->when(!empty($param['payment_statuses']), function ($query) use ($param) {
+
+                return $query->whereIn('job_schedules.payment_status', $param['payment_statuses']);
+            })
+
             ->when(!empty($param['start']) && !empty($param['created']), function ($query) use ($param) {
 
                 return $query->whereRaw("CASE WHEN jobs.job_date = '" . $param['start'] .
@@ -68,10 +90,9 @@ class History extends Model
 
                 $query->where('users.id', '=', $param['id']);
             })
+            ->whereIn('job_schedules.job_status', ['cancelled', 'completed', 'auto_complete', 'auto_cancel', 'rejected'])
+            ->whereNull('job_schedules.payment_status')
             ->limit($param['limit'])
-            ->where('job_schedules.job_status', '=', 'cancelled')
-            //->orWhere('job_schedules.job_status', '=','completed')
-            ->where('job_schedules.payment_status', 'Pending')
             ->orderBy('jobs.job_date', 'asc')
             ->orderBy('jobs.created_at', 'asc')
             ->get();
@@ -93,6 +114,14 @@ class History extends Model
                 , 'job_schedules.is_assigned'
                 , 'job_schedules.job_status as schedule_status'
                 , 'job_schedules.payment_status'
+                , 'job_schedules.checkin_datetime'
+                , 'job_schedules.checkin_location'
+                , 'job_schedules.checkout_datetime'
+                , 'job_schedules.checkout_location'
+                , 'job_schedules.working_hours'
+                , 'job_schedules.job_salary'
+                , 'job_schedules.process_date'
+                , 'job_schedules.payment_methods'
                 , 'employer.company_description'
                 , 'employer.company_name'
                 , 'employer.profile_image_path'
@@ -118,7 +147,7 @@ class History extends Model
                 , 'jobs.notes'
                 , 'jobs.language'
                 , 'jobs.choices'
-                ,'jobs.job_requirements'
+                , 'jobs.job_requirements'
             )
             ->when(!empty($param['industries']), function ($query) use ($param) {
 
@@ -127,6 +156,18 @@ class History extends Model
             ->when(!empty($param['locations']), function ($query) use ($param) {
 
                 return $query->whereIn('jobs.location_id', $param['locations']);
+            })
+            ->when(!empty($param['date_from']) && !empty($param['date_to']), function ($query) use ($param) {
+
+                return $query->whereBetween('jobs.job_date', [$param['date_from'], $param['date_to']]);
+            })
+            ->when(!empty($param['job_statuses']), function ($query) use ($param) {
+
+                return $query->whereIn('job_schedules.job_status', $param['job_statuses']);
+            })
+            ->when(!empty($param['payment_statuses']), function ($query) use ($param) {
+
+                return $query->whereIn('job_schedules.payment_status', $param['payment_statuses']);
             })
             ->when(!empty($param['start']) && !empty($param['created']), function ($query) use ($param) {
 
@@ -139,10 +180,10 @@ class History extends Model
 
                 $query->where('users.id', '=', $param['id']);
             })
-            ->limit($param['limit'])
-            ->where('job_schedules.job_status', '=','completed')
+            ->where('job_schedules.job_status', '=', 'completed')
             ->where('job_schedules.payment_status', 'Pending')
             ->orWhere('job_schedules.payment_status', 'Processing')
+            ->limit($param['limit'])
             ->orderBy('jobs.job_date', 'asc')
             ->orderBy('jobs.created_at', 'asc')
             ->get();
@@ -167,6 +208,14 @@ class History extends Model
                 , 'job_schedules.is_assigned'
                 , 'job_schedules.job_status as schedule_status'
                 , 'job_schedules.payment_status'
+                , 'job_schedules.checkin_datetime'
+                , 'job_schedules.checkin_location'
+                , 'job_schedules.checkout_datetime'
+                , 'job_schedules.checkout_location'
+                , 'job_schedules.working_hours'
+                , 'job_schedules.job_salary'
+                , 'job_schedules.process_date'
+                , 'job_schedules.payment_methods'
                 , 'employer.company_description'
                 , 'employer.company_name'
                 , 'employer.profile_image_path'
@@ -192,13 +241,38 @@ class History extends Model
                 , 'jobs.notes'
                 , 'jobs.language'
                 , 'jobs.choices'
-                ,'jobs.job_requirements'
+                , 'jobs.job_requirements'
             )
-            ->where($columName , '=', $id)
+            ->where($columName, '=', $id)
             ->first();
 
         return $jobs;
     }
 
+    public function countCompletedJobs($userid)
+    {
+        $count = DB::table('users')
+            ->leftJoin('job_schedules', 'job_schedules.user_id', '=', 'users.id')
+            ->where('users.id', '=', $userid)
+            ->whereIn('job_schedules.job_status', ['cancelled', 'completed', 'auto_complete', 'auto_cancel', 'rejected'])
+            ->whereNull('job_schedules.payment_status')
+            ->count();
+
+        return $count;
+    }
+
+
+    public function countEarnedJobs($userid)
+    {
+        $count = DB::table('users')
+            ->join('job_schedules', 'job_schedules.user_id', '=', 'users.id')
+            ->join('jobs', 'jobs.id', '=', 'job_schedules.job_id')
+            ->where('job_schedules.job_status', '=', 'completed')
+            ->where('job_schedules.payment_status', '=', 'Completed')
+            ->where('users.id', '=', $userid)
+            ->sum('jobs.rate');
+
+        return $count;
+    }
 
 }
