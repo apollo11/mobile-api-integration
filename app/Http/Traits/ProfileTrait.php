@@ -44,6 +44,7 @@ trait ProfileTrait
                     'condition' => $output->medication
                 ],
                 'availabilities' => $availability,
+                'signature_image_url' => $output->signature_file_path
             ],
             'created_at' => $output->created_at,
             'updated_at' => $output->updated_at,
