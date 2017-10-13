@@ -83,6 +83,7 @@ Route::group(['middleware' => ['auth:api']], function () {
         Route::get('lists', 'Job\JobController@jobApiLists');
         Route::get('details', 'Job\JobController@show');
         Route::post('apply', 'JobSchedule\JobScheduleController@store');
+        Route::post('reject','Notification\NotificationController@rejectJob');
 
     });
 
@@ -127,7 +128,15 @@ Route::group(['middleware' => ['auth:api']], function () {
         Route::post('reject','Notification\NotificationController@rejectJob');
         Route::post('multiple/read','Notification\NotificationController@markAsAllRead');
         Route::post('read','Notification\NotificationController@markAsRead');
-        Route::post('delete/token','Notification\NotificationController@deleteToken');
+        Route::post('delete','Notification\NotificationController@deleteNotfif');
+        Route::post('delete/all','Notification\NotificationController@deleteMultipleNotfif');
+
+    });
+
+    Route::prefix('v1/token')->group(function() {
+
+        Route::post('save','Notification\NotificationController@saveDeviceToken');
+        Route::post('delete','Notification\NotificationController@deleteToken');
 
     });
 
@@ -180,10 +189,17 @@ Route::group(['middleware' => ['auth_client']], function () {
 
         Route::post('save', 'Notification\NotificationController@addNotification');
         Route::get('list', 'Notification\NotificationController@notifList');
-        Route::post('reject','Notification\NotificationController@rejectJob');
-        Route::post('multiple/read','Notification\NotificationController@markAsAllRead');
+        Route::post('read/all','Notification\NotificationController@markAsAllRead');
         Route::post('read','Notification\NotificationController@markAsRead');
-        Route::post('delete/token','Notification\NotificationController@deleteToken');
+        Route::post('delete','Notification\NotificationController@deleteNotfif');
+        Route::post('delete/all','Notification\NotificationController@deleteMultipleNotfif');
+
+    });
+
+    Route::prefix('v1/token')->group(function() {
+
+        Route::post('save','Notification\NotificationController@saveDeviceToken');
+        Route::post('delete','Notification\NotificationController@deleteToken');
 
     });
 
