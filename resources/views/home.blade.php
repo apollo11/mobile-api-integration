@@ -126,7 +126,7 @@
                         </div>
                         <div class="details">
                             <div class="number">
-                                <span data-counter="counterup" data-value="1349">{{ $jobRequest }}</span>
+                                <span data-counter="counterup" data-value="{{ $jobRequest }}">{{ $jobRequest }}</span>
                             </div>
                             <div class="desc">No. of New Job Requests</div>
                         </div>
@@ -152,7 +152,7 @@
                         </div>
                         <div class="details">
                             <div class="number">
-                                <span data-counter="counterup" data-value="549">{{ $unassigned }}</span>
+                                <span data-counter="counterup" data-value="{{ $unassigned }}">{{ $unassigned }}</span>
                             </div>
                             <div class="desc">No. of Jobs Unassigned</div>
                         </div>
@@ -205,7 +205,7 @@
                         </div>
                         <div class="details">
                             <div class="number">
-                                <span data-counter="counterup" data-value="549">{{ $cancelled }}</span>
+                                <span data-counter="counterup" data-value="{{ $cancelled }}">{{ $cancelled }}</span>
                             </div>
                             <div class="desc">No. of Cancellation by jobseeker</div>
                         </div>
@@ -218,7 +218,7 @@
                         </div>
                         <div class="details">
                             <div class="number">
-                                <span data-counter="counterup" data-value="1349">{{ $registeredEmployer }}</span>
+                                <span data-counter="counterup" data-value="{{ $registeredEmployer }}">{{ $registeredEmployer }}</span>
                             </div>
                             <div class="desc">No. of Registered Employers on mobile</div>
                         </div>

@@ -44,7 +44,7 @@
         <!-- END THEME STYLES -->
 </head>
     <!-- END HEAD -->
-<body class="page-header-fixed page-sidebar-closed-hide-logo page-container-bg-solid page-content-white">
+<body class="page-header-fixed page-sidebar-closed-hide-logo page-content-white">
     <div class="page-wrapper">
         {{--<nav class="navbar navbar-default navbar-static-top">--}}
             {{--<div class="container">--}}
@@ -111,9 +111,7 @@
 
     <div class="page-container">
             @if(!Auth::guest())
-            <div class="page-sidebar-wrapper">
               @include('layouts.sidebar')
-            </div>
             @endif
 
            @yield('content')

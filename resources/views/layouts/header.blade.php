@@ -5,7 +5,7 @@
         <!-- BEGIN LOGO -->
         <div class="page-logo">
             <a href="/home">
-                <img src="{{ asset('/assets/pages/img/logo.png') }}" width="30px" alt="logo" class="logo-default"/> </a>
+                <img src="{{ asset('/assets/pages/img/logo.png') }}" class="logo-default"/> </a>
             </a>
             <div class="menu-toggler sidebar-toggler hide">
                 <!-- DOC: Remove the above "hide" to enable the sidebar toggler button on header -->
@@ -14,10 +14,9 @@
         <!-- END LOGO -->
 
         <!-- BEGIN RESPONSIVE MENU TOGGLER -->
-        <a href="javascript:;" class="btn-navbar collapsed" data-toggle="collapse" data-target=".nav-collapse">
-            <img src="{{ asset('assets/layouts/layout/img/menu-toggler.png') }}" alt="" />
+        <a href="javascript:;" class="menu-toggler responsive-toggler" data-toggle="collapse" data-target=".navbar-collapse">
+            <span></span>
         </a>
-        <!-- END RESPONSIVE MENU TOGGLER -->
 
         <!-- BEGIN TOP NAVIGATION MENU -->
         <div class="top-menu">
