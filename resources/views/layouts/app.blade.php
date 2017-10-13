@@ -39,8 +39,10 @@
         <link href="{{ asset('assets/global/css/components.css') }}" rel="stylesheet" type="text/css"/>
         <link href="{{ asset('assets/global/css/plugins.css') }}" rel="stylesheet" type="text/css"/>
         <link href="{{ asset('assets/layouts/layout/css/layout.css') }}" rel="stylesheet" type="text/css"/>
+        <link href="{{ asset('assets/pages/css/login.min.css') }}" rel="stylesheet" type="text/css"/>
         <link href="{{ asset('assets/layouts/layout/css/themes/default.css') }}" rel="stylesheet" type="text/css" id="style_color"/>
         <link href="{{ asset('assets/layouts/layout/css/custom.css') }}" rel="stylesheet" type="text/css"/>
+
         <!-- END THEME STYLES -->
 </head>
     <!-- END HEAD -->
