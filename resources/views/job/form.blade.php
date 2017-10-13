@@ -466,18 +466,11 @@
                                     </div>
 
                                     <div class="form-group">
-                                        <label class="control-label col-md-3">Disable Past Dates</label>
-                                        <div class="col-md-3">
-                                            <div class="input-group input-medium date date-picker" data-date-format="dd-mm-yyyy" data-date-start-date="+0d">
-                                                <input type="text" class="form-control" readonly>
-                                                <span class="input-group-btn">
-                                                                <button class="btn default" type="button">
-                                                                    <i class="fa fa-calendar"></i>
-                                                                </button>
-                                                            </span>
-                                            </div>
-                                            <!-- /input-group -->
-                                            <span class="help-block"> Select date </span>
+                                        <div class='input-group date' id='start-date'>
+                                            <input type='text' class="form-control" />
+                                            <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
                                         </div>
                                     </div>
 
