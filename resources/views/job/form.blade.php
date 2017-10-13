@@ -465,19 +465,10 @@
                                         </div>
                                     </div>
 
-                                    <div class="form-group">
-                                        <div class='input-group date' id='start-date'>
-                                            <input type='text' class="form-control" />
-                                            <span class="input-group-addon">
-                        <span class="glyphicon glyphicon-calendar"></span>
-                    </span>
-                                        </div>
-                                    </div>
-
                                     <div class="form-group{{ $errors->has('date') ? ' has-error' : '' }}">
                                         <label class="control-label col-md-3">Start Job Date and Time</label>
                                         <div class="col-md-7">
-                                            <div class="input-group date form_datetime form_datetime bs-datetime">
+                                            <div class="input-group date form_datetime form_datetime bs-datetime" id="start-date">
                                                 <input type="text" name="date" size="16" class="form-control">
                                                 <span class="input-group-addon">
                                                     <button class="btn default date-set" type="button">
@@ -496,7 +487,7 @@
                                     <div class="form-group{{ $errors->has('end_date') ? ' has-error' : '' }}">
                                         <label class="control-label col-md-3">Job End Date and Time</label>
                                         <div class="col-md-7">
-                                            <div class="input-group date form_datetime form_datetime bs-datetime">
+                                            <div class="input-group date form_datetime form_datetime bs-datetime" id="end-date">
                                                 <input type="text" name="end_date" size="16" class="form-control">
                                                 <span class="input-group-addon">
                                                     <button class="btn default date-set" type="button">

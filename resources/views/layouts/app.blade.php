@@ -231,6 +231,7 @@
 
             $(function () {
                 $('#start-date').datetimepicker();
+                $('#end-date').datetimepicker();
             });
         })
     </script>
