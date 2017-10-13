@@ -107,7 +107,7 @@
                 <a href="{{ route('logout') }}"
                    onclick="event.preventDefault();
                                 document.getElementById('logout-form').submit();">
-                    <i class="icon-envelope-open"></i>
+                    <i class="icon-key"></i>
                     <span class="title">Logout</span>
                     <span class="arrow "></span>
                 </a>

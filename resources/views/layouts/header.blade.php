@@ -5,7 +5,7 @@
         <!-- BEGIN LOGO -->
         <div class="page-logo">
             <a href="/home">
-                <img src="{{ asset('/assets/pages/img/logo.png') }}" class="logo-default"/> </a>
+                <img src="{{ asset('/assets/pages/img/logo.png') }}" width="30px" height="20px" class="logo-default"/> </a>
             </a>
             <div class="menu-toggler sidebar-toggler hide">
                 <!-- DOC: Remove the above "hide" to enable the sidebar toggler button on header -->
@@ -141,30 +141,16 @@
                                 <i class="icon-user"></i> My Profile </a>
                         </li>
                         <li>
-                            <a href="page_calendar.html">
-                                <i class="icon-calendar"></i> My Calendar </a>
-                        </li>
-                        <li>
-                            <a href="inbox.html">
-                                <i class="icon-envelope-open"></i> My Inbox <span class="badge badge-danger">
-                            3 </span>
+                            <a href="{{ route('logout') }}"
+                               onclick="event.preventDefault();
+                                document.getElementById('logout-form').submit();">
+                                <i class="icon-key"></i> Logout
                             </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <i class="icon-rocket"></i> My Tasks <span class="badge badge-success">
-                            7 </span>
-                            </a>
-                        </li>
-                        <li class="divider">
-                        </li>
-                        <li>
-                            <a href="extra_lock.html">
-                                <i class="icon-lock"></i> Lock Screen </a>
-                        </li>
-                        <li>
-                            <a href="login.html">
-                                <i class="icon-key"></i> Log Out </a>
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                {{ csrf_field() }}
+                            </form>
+
+
                         </li>
                     </ul>
                 </li>
