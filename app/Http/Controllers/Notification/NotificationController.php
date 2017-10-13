@@ -234,10 +234,9 @@ class NotificationController extends Controller
         if (!empty($request->input('device_token'))) {
 
             $save = \App\User::find($request->input('user_id'));
-            $save->deviceToken()->create([
+            $save->deviceToken()->firstOrCreate([
                 'device_token' => $request->input('device_token')
             ]);
-
 
             $result = $this->ValidUseSuccessResp(200, true);
 
