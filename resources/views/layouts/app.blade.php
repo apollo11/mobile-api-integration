@@ -130,10 +130,12 @@
     <!--[if lt IE 9]>
     <script src="{{ asset('assets/global/plugins/respond.min.js') }}"></script>
     <script src="{{ asset('assets/global/plugins/excanvas.min.js') }}"></script>
+    <script src="{{ asset('assets/global/plugins/ie8.fix.min.js') }}"></script>
     <![endif]-->
 
     <script src="{{ asset('assets/global/plugins/jquery.min.js') }}" type="text/javascript"></script>
     <script src="{{ asset('assets/global/plugins/jquery-migrate.min.js') }}" type="text/javascript"></script>
+
     <!-- IMPORTANT! Load jquery-ui-1.10.3.custom.min.js before bootstrap.min.js to fix bootstrap tooltip conflict with jquery ui tooltip -->
     <script src="{{ asset('assets/global/plugins/jquery-ui/jquery-ui.min.js') }}" type="text/javascript"></script>
     <script src="{{ asset('assets/global/plugins/bootstrap/js/bootstrap.min.js') }}" type="text/javascript"></script>
@@ -187,13 +189,36 @@
     <!-- END PAGE LEVEL PLUGINS -->
 
     <!-- BEGIN PAGE LEVEL SCRIPTS -->
-    <script src="{{ asset('assets/global/scripts/app.js') }}" type="text/javascript"></script>
-    <script src="{{ asset('assets/layouts/layout/scripts/layout.js') }}" type="text/javascript"></script>
-    <script src="{{ asset('assets/layouts/global/scripts/quick-sidebar.js') }}" type="text/javascript"></script>
-    <script src="{{ asset('assets/layouts/global/scripts/quick-nav.js') }}" type="text/javascript"></script>
+    {{--<script src="{{ asset('assets/global/scripts/app.js') }}" type="text/javascript"></script>--}}
+    {{--<script src="{{ asset('assets/layouts/layout/scripts/layout.js') }}" type="text/javascript"></script>--}}
+    {{--<script src="{{ asset('assets/layouts/global/scripts/quick-sidebar.js') }}" type="text/javascript"></script>--}}
+    {{--<script src="{{ asset('assets/layouts/global/scripts/quick-nav.js') }}" type="text/javascript"></script>--}}
     {{--<script src="{{ asset('assets/layouts/layout5/scripts/index.js') }}" type="text/javascript"></script>--}}
-    <script src="{{ asset('assets/pages/scripts/tasks.js') }}" type="text/javascript"></script>
+    {{--<script src="{{ asset('assets/pages/scripts/tasks.js') }}" type="text/javascript"></script>--}}
     <!-- END PAGE LEVEL SCRIPTS -->
+
+    <!-- BEGIN THEME GLOBAL SCRIPTS -->
+    <script src="{{ asset('assets/global/scripts/app.min.js') }}" type="text/javascript"></script>
+    <!-- END THEME GLOBAL SCRIPTS -->
+    <!-- BEGIN PAGE LEVEL SCRIPTS -->
+    <script src="{{ asset('assets/pages/scripts/dashboard.min.js') }}" type="text/javascript"></script>
+    <!-- END PAGE LEVEL SCRIPTS -->
+    <!-- BEGIN THEME LAYOUT SCRIPTS -->
+    <script src="{{ asset('assets/layouts/layout/scripts/layout.min.js') }}" type="text/javascript"></script>
+    {{--<script src="{{ asset('assets/layouts/layout/scripts/demo.min.js')  }}" type="text/javascript"></script>--}}
+    <script src="{{ asset('assets/layouts/global/scripts/quick-sidebar.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('assets/layouts/global/scripts/quick-nav.min.js') }}" type="text/javascript"></script>
+    <!-- END THEME LAYOUT SCRIPTS -->
+    <script>
+        $(document).ready(function()
+        {
+            $('#clickmewow').click(function()
+            {
+                $('#radio1003').attr('checked', 'checked');
+            });
+        })
+    </script>
+
 
     <script>
         jQuery(document).ready(function() {
