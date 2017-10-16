@@ -34,6 +34,8 @@ class Employee extends Model
                 , 'users.employee_status'
                 , 'users.business_manager'
                 , 'users.employee_status as status'
+                , 'created_at as joined'
+                , 'updated_at as updated'
             )
             ->where('users.role_id', '=', 2)
             ->orderBy('users.id', 'asc')

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Employee;
 
 use App\Employee;
+use Input;
 use App\User;
 use Validator;
 use App\Http\Traits\OauthTrait;
@@ -165,9 +166,22 @@ class EmployeeController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        //
+        $user = new User();
+        $submit = $request->input('multiple');
+        $multi = $request->input('multicheck');
+
+        switch ($submit) {
+            case 'Approve':
+                $user->multiUpdate($multi);
+                break;
+            case 'Reject':
+                $user->multiDelete($multi);
+                break;
+        }
+
+        return back();
     }
 
     /**
@@ -202,7 +216,6 @@ class EmployeeController extends Controller
 
         return $validate;
     }
-
 
     /**
      * @param $data

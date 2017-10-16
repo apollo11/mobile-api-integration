@@ -121,5 +121,28 @@ class User extends Authenticatable
 
     }
 
+    /**
+     * Multiple Update
+     */
+
+    public function multiUpdate($multiId)
+    {
+        $user = DB::table('users')->wherein('id', $multiId)
+        ->update(['employee_status' => 'approved']);
+
+        return $user;
+    }
+
+    /**
+     * Multiple delete
+     */
+    public function multiDelete($multiId)
+    {
+        $user = db::table('users')->whereIn('id', $multiId)
+            ->delete();
+
+        return $user;
+    }
+
 
 }

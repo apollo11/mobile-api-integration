@@ -26,6 +26,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/approve/{id}', 'Employee\EmployeeController@approveStatus')->name('employee.approve');
         Route::post('/reject/{id}', 'Employee\EmployeeController@rejectUser')->name('employee.reject');
         Route::post('/upload/{id}', 'Employee\EmployeeController@uploadInfoUser')->name('employee.upload');
+        Route::post('delete','Employee\EmployeeController@destroy')->name('employee.destroy');
 
     });
 

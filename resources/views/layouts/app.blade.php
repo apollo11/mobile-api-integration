@@ -48,6 +48,7 @@
         <link href="{{ asset('assets/pages/css/login.min.css') }}" rel="stylesheet" type="text/css"/>
         <link href="{{ asset('assets/layouts/layout/css/themes/darkblue.css') }}" rel="stylesheet" type="text/css" id="style_color"/>
         <link href="{{ asset('assets/layouts/layout/css/custom.css') }}" rel="stylesheet" type="text/css"/>
+        <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.16/css/jquery.dataTables.css">
 
         <!-- END THEME STYLES -->
 </head>
@@ -198,6 +199,8 @@
     <script src="{{ asset('assets/global/plugins/jquery-easypiechart/jquery.easypiechart.min.js') }}" type="text/javascript"></script>
     <script src="{{ asset('assets/global/plugins/jquery.sparkline.min.js') }}" type="text/javascript"></script>
     <script src="{{ asset('assets/global/plugins/gritter/js/jquery.gritter.js') }}" type="text/javascript"></script>
+
+    <script src="{{ asset('assets/global/plugins/bootbox/bootbox.min.js') }}" type="text/javascript"></script>
     <!-- END PAGE LEVEL PLUGINS -->
 
     <!-- BEGIN PAGE LEVEL SCRIPTS -->
@@ -211,8 +214,10 @@
 
     <!-- BEGIN THEME GLOBAL SCRIPTS -->
     <script src="{{ asset('assets/global/scripts/app.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('assets/pages/scripts/ui-bootbox.min.js') }}" type="text/javascript"></script>
     <!-- END THEME GLOBAL SCRIPTS -->
     <!-- BEGIN PAGE LEVEL SCRIPTS -->
+    <script src="{{ asset('assets/pages/scripts/ui-modals.min.js') }}" type="text/javascript"></script>
     <script src="{{ asset('assets/pages/scripts/dashboard.min.js') }}" type="text/javascript"></script>
     <!-- END PAGE LEVEL SCRIPTS -->
     <!-- BEGIN THEME LAYOUT SCRIPTS -->
@@ -220,6 +225,7 @@
     {{--<script src="{{ asset('assets/layouts/layout/scripts/demo.min.js')  }}" type="text/javascript"></script>--}}
     <script src="{{ asset('assets/layouts/global/scripts/quick-sidebar.min.js') }}" type="text/javascript"></script>
     <script src="{{ asset('assets/layouts/global/scripts/quick-nav.min.js') }}" type="text/javascript"></script>
+    <script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.16/js/jquery.dataTables.js"></script>
     <!-- END THEME LAYOUT SCRIPTS -->
     <script>
         $(document).ready(function()
@@ -233,7 +239,37 @@
                 $('#start-date').datetimepicker();
                 $('#end-date').datetimepicker();
             });
-        })
+
+            $('#employee-table').DataTable({
+                buttons: [
+                    'excel'
+                ],
+                autoFill: true,
+                responsive: true
+            });
+
+            $("#myModal").on("show", function() {    // wire up the OK button to dismiss the modal when shown
+                $("#myModal a.btn").on("click", function(e) {
+                    console.log("button pressed");   // just as an example...
+                    $("#myModal").modal('hide');     // dismiss the dialog
+                });
+            });
+            $("#myModal").on("hide", function() {    // remove the event listeners when the dialog is dismissed
+                $("#myModal a.btn").off("click");
+            });
+
+            $("#myModal").on("hidden", function() {  // remove the actual elements from the DOM when fully hidden
+                $("#myModal").remove();
+            });
+
+            $("#myModal").modal({                    // wire up the actual modal functionality and show the dialog
+                "backdrop"  : "static",
+                "keyboard"  : true,
+                "show"      : true                     // ensure the modal is shown immediately
+            });
+
+        });
+
     </script>
 
 
