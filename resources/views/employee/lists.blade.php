@@ -16,10 +16,22 @@
             {{--</div>--}}
         {{--</div>--}}
     {{--</div>--}}
-
+    @foreach($employees as $user)
+        <form id="approve-{{ $user->id }}" action="{{ route('employee.approve',['id' => $user->id]) }}" method="POST" style="display: none;">
+            {{ csrf_field() }}
+        </form>
+        <form id="reject-{{ $user->id }}" action="{{ route('employee.reject',['id' => $user->id]) }}" method="POST">
+            {{ csrf_field() }}
+            <input type="submit" value="Reject">
+        </form>
+        <form id="destroy-{{ $user->id }}" action="{{ route('employee.destroy-one',['id' => $user->id]) }}" method="POST">
+            {{ csrf_field() }}
+            <input type="submit" value="Delete">
+        </form>
+    @endforeach
     <div class="page-content-wrapper">
         <div class="page-content">
-            <form action="{{ route('employee.destroy')  }}" method="POST">
+            <form action="{{ route('employee.destroy-all')  }}" method="POST">
                 <div class="row">
                     <div class="col-md-12">
                         <!-- BEGIN EXAMPLE TABLE PORTLET-->
@@ -103,11 +115,14 @@
                                             @if($user->employee_status == 'pending')
                                                 <td><span class="label label-sm label-warning"> Pending </span></td>
 
+                                            @elseif($user->employee_status == 'reject')
+                                                <td>
+                                                    <span class="label label-sm label-danger">{{ ucfirst($user->employee_status) }} </span>
+                                                </td>
                                             @else
                                                 <td>
-                                                    <span class="label label-sm label-success">{{ $user->employee_status }} </span>
+                                                    <span class="label label-sm label-success">{{ ucfirst($user->employee_status) }} </span>
                                                 </td>
-
                                             @endif
                                             <td class="center"> {{ $user->joined }}</td>
                                             <td>
@@ -118,33 +133,29 @@
                                                     </button>
                                                     <ul class="dropdown-menu" role="menu">
                                                         <li>
-                                                            <a href="{{ route('logout') }}"
+                                                            <a href="{{ route('employee.destroy-one',['id' => $user->id]) }}"
                                                                onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                                                                Logout
-                                                            </a>
-
-                                                            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                                                                {{ csrf_field() }}
-                                                            </form>
-
-                                                            <a href="javascript:;">
+                                                                       document.getElementById('{{'destroy-'.$user->id }}').submit();">
                                                                 <i class="fa fa-trash"></i> Delete</a>
                                                         </li>
                                                         <li>
-                                                            <a href="javascript:;">
+                                                            <a href="">
                                                                 <i class="fa fa-edit"></i> Edit </a>
                                                         </li>
                                                         <li>
-                                                            <a href="javascript:;">
+                                                            <a href="{{ route('employee.details',['id' => $user->id])  }}">
                                                                 <i class="fa fa-eye"></i> View </a>
                                                         </li>
                                                         <li>
-                                                            <a href="javascript:;">
+                                                            <a href="{{ route('employee.approve',['id' => $user->id])  }}"
+                                                               onclick="event.preventDefault();
+                                                                       document.getElementById('{{'approve-'.$user->id }}').submit();">
                                                                 <i class="fa fa-check-square-o"></i> Approve</a>
                                                         </li>
                                                         <li>
-                                                            <a href="javascript:;">
+                                                            <a href="{{ route('employee.reject',['id' => $user->id]) }}"
+                                                               onclick="event.preventDefault();
+                                                                       document.getElementById('{{'reject-'.$user->id }}').submit();">
                                                                 <i class="fa fa-close"></i> Reject
                                                             </a>
                                                         </li>
@@ -163,4 +174,25 @@
             </form>
         </div>
     </div>
+    {{--<form id="reject" action="{{ route('employee.pending',['id' => $user->id]) }}" method="POST">--}}
+        {{--{{ csrf_field() }}--}}
+        {{--<button type="button">--}}
+            {{--<span class="glyphicon glyphicon-search"></span> Reject--}}
+        {{--</button>--}}
+        {{--<input type="submit" value="Pending">--}}
+    {{--</form>--}}
+
+    {{--<a href="{{ route('employee.pending',['id' => $user->id])  }}"--}}
+       {{--onclick="event.preventDefault();--}}
+               {{--document.getElementById('{{'reject-'.$user->id }}').submit();">--}}
+        {{--<i class="fa fa-close"></i>--}}
+    {{--</a>--}}
+
+
+    {{--<a href="{{ route('employee.approve',['id' => $user->id]) }}"--}}
+       {{--onclick="event.preventDefault();--}}
+               {{--document.getElementById('{{'approve-'.$user->id }}').submit();">--}}
+        {{--<i class="fa fa-check"></i>--}}
+    {{--</a>--}}
+
 @endsection

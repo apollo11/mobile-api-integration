@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Employee;
 use App\Employee;
 use Input;
 use App\User;
+use App\AdditionalInfo;
+use App\JobSchedule;
 use Validator;
 use App\Http\Traits\OauthTrait;
 use App\Http\Traits\HttpResponse;
@@ -276,6 +278,7 @@ class EmployeeController extends Controller
         return back();
 
     }
+
     /**
      * 1 Approve Employee user
      */
@@ -315,6 +318,36 @@ class EmployeeController extends Controller
         return back();
     }
 
+    /**
+     * Delete one user
+     */
+    public function destroyOne($id)
+    {
+        $flight = \App\User::find($id);
 
+        $flight->delete();
+
+        return back();
+    }
+
+    public function details($id)
+    {
+        $userDetails = new AdditionalInfo();
+
+        $details = $userDetails->userInfo($id);
+        $jobInfo = $this->availableJobs($id);
+
+        return view('employee.details', ['userDetails' => $details, 'jobDetails' => $jobInfo]);
+
+    }
+
+    public function availableJobs($id)
+    {
+        $job = new JobSchedule();
+        $jobInfo = $job->getAvailJobsByUser($id);
+
+        return $jobInfo;
+
+    }
 
 }
