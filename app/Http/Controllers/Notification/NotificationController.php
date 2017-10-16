@@ -242,7 +242,7 @@ class NotificationController extends Controller
 
         } else {
 
-            $result = $result = $this->mapValidator(['Something went wrong']);
+             $result = $this->mapValidator(['Something went wrong'], 110001);
 
         }
         return $result;
@@ -260,7 +260,7 @@ class NotificationController extends Controller
 
         if (is_null($find)) {
 
-            $result = $this->mapValidator(['Token unavailable or invalid']);
+            $result = $this->mapValidator(['Token unavailable or invalid'], 110011);
 
         } else {
 
@@ -285,7 +285,7 @@ class NotificationController extends Controller
 
         if(is_null($find)) {
 
-            $result = $this->mapValidator(['Something went wrong']);
+            $result = $this->mapValidator(['Something went wrong'], 10001);
 
         } else {
 
@@ -310,7 +310,7 @@ class NotificationController extends Controller
 
         if(is_null($find)) {
 
-            $result = $this->mapValidator(['Something went wrong']);
+            $result = $this->mapValidator(['Something went wrong'], 10001);
 
         } else {
 
@@ -373,9 +373,9 @@ class NotificationController extends Controller
      * @param $data
      * @return mixed
      */
-    public function mapValidator($data)
+    public function mapValidator($data, $errorCode)
     {
-        return $this->errorResponse($data, 'Validation Error', 110001, 400);
+        return $this->errorResponse($data, 'Validation Error', $errorCode, 400);
     }
 
     /**
