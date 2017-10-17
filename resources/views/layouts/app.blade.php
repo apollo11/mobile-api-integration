@@ -238,6 +238,10 @@
             $(function () {
                 $('#start-date').datetimepicker();
                 $('#end-date').datetimepicker();
+                $('#school-expiry-date').datetimepicker();
+                $('#birthdate').datetimepicker();
+
+
             });
 
             $('#employee-table').DataTable({
