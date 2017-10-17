@@ -3,7 +3,6 @@
 @section('content')
     <div class="page-content-wrapper">
         <div class="page-content">
-
             <div class="page-bar">
                 <ul class="page-breadcrumb">
                     <li>
@@ -11,7 +10,7 @@
                         <i class="fa fa-circle"></i>
                     </li>
                     <li>
-                        <span>Add New Employee</span>
+                        <span>Update Employee</span>
                     </li>
                 </ul>
             </div>
@@ -37,7 +36,7 @@
                                         <label class="col-md-3 control-label">Name</label>
                                         <div class="col-md-7">
                                             <input type="text" class="form-control" placeholder="Enter Name"
-                                                   value="{{ old('name') }}" name="name">
+                                                   value="{{ $details->userName }}" name="name">
                                             @if ($errors->has('name'))
                                                 <span class="help-block">
                                                 {{ $errors->first('name') }}
@@ -50,7 +49,7 @@
                                         <label class="col-md-3 control-label">Email Address</label>
                                         <div class="col-md-7">
                                             <input type="email" class="form-control" placeholder="Enter Email Address"
-                                                   value="{{ old('email') }}" name="email">
+                                                   value="{{ $details->userEmail }}" name="email">
                                             @if ($errors->has('email'))
                                                 <span class="help-block">
                                                 {{ $errors->first('email') }}
@@ -63,7 +62,7 @@
                                         <label class="col-md-3 control-label">Mobile No</label>
                                         <div class="col-md-7">
                                             <input type="text" class="form-control" placeholder="Enter Mobile No"
-                                                   value="{{ old('mobile_no') }}" name="mobile_no">
+                                                   value="{{ $details->userMobile }}" name="mobile_no">
                                             @if ($errors->has('mobile_no'))
                                                 <span class="help-block">
                                                 {{ $errors->first('mobile_no') }}
@@ -72,24 +71,11 @@
                                         </div>
                                     </div>
 
-                                    <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
-                                        <label class="col-md-3 control-label">Password</label>
-                                        <div class="col-md-7">
-                                            <input type="password" class="form-control" placeholder="Enter Password"
-                                                   name="password">
-                                            @if ($errors->has('password'))
-                                                <span class="help-block">
-                                                <strong>{{ $errors->first('password') }}</strong>
-                                               </span>
-                                            @endif
-                                        </div>
-                                    </div>
-
                                     <div class="form-group{{ $errors->has('nric_no') ? ' has-error' : '' }}">
                                         <label class="col-md-3 control-label">NRIC</label>
                                         <div class="col-md-7">
-                                            <input type="text" class="form-control" placeholder="Enter NRIC"
-                                                   name="nric_no"/>
+                                            <input disabled type="text" class="form-control" placeholder="Enter NRIC"
+                                                   name="nric_no" value="{{ $details->nric_no }}"/>
                                             @if ($errors->has('password'))
                                                 <span class="help-block">
                                                 <strong>{{ $errors->first('nric_no') }}</strong>

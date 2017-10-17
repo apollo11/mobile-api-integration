@@ -60,6 +60,7 @@ class AdditionalInfo extends Model
                 , 'users.employee_status'
                 , 'users.social_google_id'
                 , 'users.social_fb_id'
+                , 'users.rate'
                 , 'users.profile_image_path as profile_photo'
                 , 'info.id as profile_id'
                 , 'info.gender'

@@ -168,7 +168,11 @@ class EmployeeController extends Controller
      */
     public function edit($id)
     {
-        //
+        $userDetails = new AdditionalInfo();
+
+        $details = $userDetails->userInfo($id);
+
+        return view('employee.edit-form', ['details' => $details ]);
     }
 
     /**

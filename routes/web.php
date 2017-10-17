@@ -29,6 +29,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('delete','Employee\EmployeeController@destroy')->name('employee.destroy-all');
         Route::post('delete/{id}','Employee\EmployeeController@destroyOne')->name('employee.destroy-one');
         Route::get('details/{id}','Employee\EmployeeController@details')->name('employee.details');
+        Route::get('edit/{id}','Employee\EmployeeController@edit')->name('employee.edit');
 
     });
 

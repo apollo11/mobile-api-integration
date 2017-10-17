@@ -27,15 +27,10 @@
                                     <i class="icon-settings font-dark"></i>
                                     <span class="caption-subject bold uppercase">Employees</span>
                                 </div>
-
                                 {{ csrf_field() }}
-                                {{--<input type="checkbox" name="test[]" class="checkboxes" value="1"/>--}}
-                                {{--<input type="checkbox" name="test[]" class="checkboxes" value="1"/>--}}
-
-                                {{--<button type="submit" name="submitButton" form="ApproveReject" value="Submit">Submit</button>--}}
                                 <div class="actions">
                                     <input class="btn sbold green" name="multiple" value="Approve" type="submit"/>
-                                    <input class="btn sbold green" name="multiple" value="Reject" type="submit"/>
+                                    <input class="btn sbold green" name="multiple" value="Delete" type="submit"/>
                                     <a href="{{ route('employee.create') }}" id="sample_editable_1_new"
                                        class="btn sbold green"> Add New
                                         <i class="fa fa-plus"></i>
@@ -89,7 +84,7 @@
                                                     <span></span>
                                                 </label>
                                             </td>
-                                            <td><a href="#"> {{ $employee[$i]['name'] }} </a></td>
+                                            <td><a href="{{ route('employee.details',['id' => $employee[$i]['id']])  }}"> {{ $employee[$i]['name'] }} </a></td>
                                             <td>
                                                 {{ $employee[$i]['nric_no'] }}
                                             </td>
@@ -163,25 +158,4 @@
             </form>
         </div>
     </div>
-    {{--<form id="reject" action="{{ route('employee.pending',['id' => $user->id]) }}" method="POST">--}}
-        {{--{{ csrf_field() }}--}}
-        {{--<button type="button">--}}
-            {{--<span class="glyphicon glyphicon-search"></span> Reject--}}
-        {{--</button>--}}
-        {{--<input type="submit" value="Pending">--}}
-    {{--</form>--}}
-
-    {{--<a href="{{ route('employee.pending',['id' => $user->id])  }}"--}}
-       {{--onclick="event.preventDefault();--}}
-               {{--document.getElementById('{{'reject-'.$user->id }}').submit();">--}}
-        {{--<i class="fa fa-close"></i>--}}
-    {{--</a>--}}
-
-
-    {{--<a href="{{ route('employee.approve',['id' => $user->id]) }}"--}}
-       {{--onclick="event.preventDefault();--}}
-               {{--document.getElementById('{{'approve-'.$user->id }}').submit();">--}}
-        {{--<i class="fa fa-check"></i>--}}
-    {{--</a>--}}
-
 @endsection
