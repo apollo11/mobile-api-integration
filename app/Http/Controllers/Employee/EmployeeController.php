@@ -26,8 +26,29 @@ class EmployeeController extends Controller
     public function index()
     {
         $employee = new Employee();
+        $result = $employee->employeeLists();
 
-        return view('employee.lists', ['employees' => $employee->employeeLists()]);
+        foreach ($result as $value) {
+            $completed = $this->completedJobs($value->id);
+            $applied = $this->appliedJobs($value->id);
+
+            $data[] = [
+                'id' => $value->id,
+                'name' => $value->name,
+                'birthdate' => $value->birthdate,
+                'nric_no' => $value->nric_no,
+                'mobile_no' => $value->mobile_no,
+                'employee_status' => $value->employee_status,
+                'joined' => $value->joined,
+                'gender' => $value->gender,
+                'completed' => $completed,
+                'applied' => $applied,
+                'business_manager' => $value->business_manager
+            ];
+
+        }
+
+        return view('employee.lists', ['employee' => $data, 'count' => count($data)]);
     }
 
     /**
@@ -336,8 +357,14 @@ class EmployeeController extends Controller
 
         $details = $userDetails->userInfo($id);
         $jobInfo = $this->availableJobs($id);
+        $applied = $this->completedJobs($id);
+        $completed = $this->appliedJobs($id);
 
-        return view('employee.details', ['userDetails' => $details, 'jobDetails' => $jobInfo]);
+        return view('employee.details', ['userDetails' => $details
+            , 'jobDetails' => $jobInfo
+            , 'applied' => $applied
+            , 'completed' => $completed
+        ]);
 
     }
 
@@ -348,6 +375,22 @@ class EmployeeController extends Controller
 
         return $jobInfo;
 
+    }
+
+    public function completedJobs($id)
+    {
+        $count = new JobSchedule();
+        $result = $count->countCompletedJobs($id);
+
+        return $result;
+    }
+
+    public function appliedJobs($id)
+    {
+        $count = new JobSchedule();
+        $result = $count->countAppliedJobs($id);
+
+        return $result;
     }
 
 }

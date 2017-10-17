@@ -1,34 +1,20 @@
 @extends('layouts.app')
 
 @section('content')
-
-    <!-- set up the modal to start hidden and fade in and out -->
-    {{--<div id="myModal" class="modal fade">--}}
-        {{--<div class="modal-dialog">--}}
-            {{--<div class="modal-content">--}}
-                {{--<!-- dialog body -->--}}
-                {{--<div class="modal-body">--}}
-                    {{--<button type="button" class="close" data-dismiss="modal">&times;</button>--}}
-                    {{--Hello world!--}}
-                {{--</div>--}}
-                {{--<!-- dialog buttons -->--}}
-                {{--<div class="modal-footer"><button type="button" data-dismiss="modal" class="btn btn-primary">OK</button></div>--}}
-            {{--</div>--}}
-        {{--</div>--}}
-    {{--</div>--}}
-    @foreach($employees as $user)
-        <form id="approve-{{ $user->id }}" action="{{ route('employee.approve',['id' => $user->id]) }}" method="POST" style="display: none;">
+    @for( $i = 0; $i < $count; $i++ )
+        <form id="approve-{{ $employee[$i]['id'] }}" action="{{ route('employee.approve',['id' => $employee[$i]['id']]) }}" method="POST" style="display: none;">
             {{ csrf_field() }}
         </form>
-        <form id="reject-{{ $user->id }}" action="{{ route('employee.reject',['id' => $user->id]) }}" method="POST">
+        <form id="reject-{{ $employee[$i]['id'] }}" action="{{ route('employee.reject',['id' => $employee[$i]['id']]) }}" method="POST" style="display: none;">
             {{ csrf_field() }}
             <input type="submit" value="Reject">
         </form>
-        <form id="destroy-{{ $user->id }}" action="{{ route('employee.destroy-one',['id' => $user->id]) }}" method="POST">
+        <form id="destroy-{{ $employee[$i]['id'] }}" action="{{ route('employee.destroy-one',['id' => $employee[$i]['id']]) }}" method="POST" style="display: none;">
             {{ csrf_field() }}
             <input type="submit" value="Delete">
         </form>
-    @endforeach
+    @endfor
+
     <div class="page-content-wrapper">
         <div class="page-content">
             <form action="{{ route('employee.destroy-all')  }}" method="POST">
@@ -92,39 +78,42 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    @foreach($employees as $user)
+
+                                    @for( $i = 0; $i < $count; $i++ )
+
                                         <tr class="odd gradeX">
                                             <td>
                                                 <label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">
                                                     <input type="checkbox" name="multicheck[]" class="checkboxes"
-                                                           value="{{ $user->id }}"/>
+                                                           value="{{ $employee[$i]['id'] }}"/>
                                                     <span></span>
                                                 </label>
                                             </td>
-                                            <td><a href="#"> {{ $user->name }} </a></td>
+                                            <td><a href="#"> {{ $employee[$i]['name'] }} </a></td>
                                             <td>
-                                                {{ $user->nric_no }}
+                                                {{ $employee[$i]['nric_no'] }}
                                             </td>
-                                            <td>{{ $user->mobile_no }}</td>
-                                            <td> Not Available</td>
-                                            <td> Not Available</td>
-                                            <td> Not Yet Available</td>
-                                            <td>{{ $user->business_manager }}</td>
-                                            <td>{{ 'None' }}</td>
-                                            <td>{{ 'None' }}</td>
-                                            @if($user->employee_status == 'pending')
+                                            <td>{{ $employee[$i]['mobile_no'] }}</td>
+                                            <td> {{ $employee[$i]['gender'] }}</td>
+                                            <td> {{ $employee[$i]['birthdate']  }}</td>
+                                            <td>{{ 'Not yet available' }}</td>
+                                            <td>{{ $employee[$i]['business_manager'] }}</td>
+                                            <td>  {{ $employee[$i]['applied']  }}</td>
+                                            <td>{{ $employee[$i]['completed'] }} </td>
+
+                                            @if($employee[$i]['employee_status'] == 'pending')
                                                 <td><span class="label label-sm label-warning"> Pending </span></td>
 
-                                            @elseif($user->employee_status == 'reject')
+                                            @elseif($employee[$i]['employee_status'] == 'reject')
                                                 <td>
-                                                    <span class="label label-sm label-danger">{{ ucfirst($user->employee_status) }} </span>
+                                                    <span class="label label-sm label-danger">{{ ucfirst($employee[$i]['employee_status']) }} </span>
                                                 </td>
                                             @else
                                                 <td>
-                                                    <span class="label label-sm label-success">{{ ucfirst($user->employee_status) }} </span>
+                                                    <span class="label label-sm label-success">{{ ucfirst($employee[$i]['employee_status']) }} </span>
                                                 </td>
                                             @endif
-                                            <td class="center"> {{ $user->joined }}</td>
+                                            <td class="center"> {{ $employee[$i]['joined'] }}</td>
                                             <td>
                                                 <div class="btn-group">
                                                     <button class="btn btn-xs green dropdown-toggle" type="button"
@@ -133,9 +122,9 @@
                                                     </button>
                                                     <ul class="dropdown-menu" role="menu">
                                                         <li>
-                                                            <a href="{{ route('employee.destroy-one',['id' => $user->id]) }}"
+                                                            <a href="{{ route('employee.destroy-one',['id' => $employee[$i]['id']]) }}"
                                                                onclick="event.preventDefault();
-                                                                       document.getElementById('{{'destroy-'.$user->id }}').submit();">
+                                                                       document.getElementById('{{'destroy-'.$employee[$i]['id'] }}').submit();">
                                                                 <i class="fa fa-trash"></i> Delete</a>
                                                         </li>
                                                         <li>
@@ -143,19 +132,19 @@
                                                                 <i class="fa fa-edit"></i> Edit </a>
                                                         </li>
                                                         <li>
-                                                            <a href="{{ route('employee.details',['id' => $user->id])  }}">
+                                                            <a href="{{ route('employee.details',['id' => $employee[$i]['id']])  }}">
                                                                 <i class="fa fa-eye"></i> View </a>
                                                         </li>
                                                         <li>
-                                                            <a href="{{ route('employee.approve',['id' => $user->id])  }}"
+                                                            <a href="{{ route('employee.approve',['id' => $employee[$i]['id']])  }}"
                                                                onclick="event.preventDefault();
-                                                                       document.getElementById('{{'approve-'.$user->id }}').submit();">
+                                                                       document.getElementById('{{'approve-'.$employee[$i]['id'] }}').submit();">
                                                                 <i class="fa fa-check-square-o"></i> Approve</a>
                                                         </li>
                                                         <li>
-                                                            <a href="{{ route('employee.reject',['id' => $user->id]) }}"
+                                                            <a href="{{ route('employee.reject',['id' => $employee[$i]['id']]) }}"
                                                                onclick="event.preventDefault();
-                                                                       document.getElementById('{{'reject-'.$user->id }}').submit();">
+                                                                       document.getElementById('{{'reject-'.$employee[$i]['id'] }}').submit();">
                                                                 <i class="fa fa-close"></i> Reject
                                                             </a>
                                                         </li>
@@ -163,7 +152,7 @@
                                                 </div>
                                             </td>
                                         </tr>
-                                    @endforeach
+                                    @endfor
                                     </tbody>
                                 </table>
                             </div>

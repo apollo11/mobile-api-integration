@@ -254,4 +254,34 @@ class JobSchedule extends Model
         return $jobs;
     }
 
+    public function countAppliedJobs($id)
+    {
+        $count = DB::table('users')
+            ->join('job_schedules', 'job_schedules.user_id', '=', 'users.id')
+            ->join('jobs', 'jobs.id', '=', 'job_schedules.job_id')
+            ->where('users.id' , '=', $id)
+            ->whereIn('job_schedules.job_status',[
+                'accepted'
+            ])
+            ->count();
+
+        return $count;
+    }
+
+    public function countCompletedJobs($id)
+    {
+        $count = DB::table('users')
+            ->join('job_schedules', 'job_schedules.user_id', '=', 'users.id')
+            ->join('jobs', 'jobs.id', '=', 'job_schedules.job_id')
+            ->where('users.id' , '=', $id)
+            ->whereIn('job_schedules.job_status',[
+                'completed'
+            ])
+            ->count();
+
+        return $count;
+
+    }
+
+
 }
