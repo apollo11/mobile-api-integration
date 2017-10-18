@@ -1,25 +1,26 @@
 @extends('layouts.app')
 @section('content')
-    {{--<form id="approve-{{ $details->id }}" action="{{ route('job.approve',['id' => $details->id]) }}"--}}
-          {{--method="POST" style="display: none;">--}}
-        {{--{{ csrf_field() }}--}}
-    {{--</form>--}}
-    {{--<form id="reject-{{ $details->id }}" action="{{ route('employee.reject',['id' => $details->id]) }}"--}}
-          {{--method="POST" style="display: none;">--}}
-        {{--{{ csrf_field() }}--}}
-        {{--<input type="submit" value="Reject">--}}
-    {{--</form>--}}
-
+    <form id="approve-{{ $details->id }}"
+          action="{{ route('job.multiple',['id' => $details->id, 'param' => 'Approve']) }}"
+          method="POST" style="display: none;">
+        {{ csrf_field() }}
+    </form>
+    <form id="reject-{{ $details->id }}"
+          action="{{ route('job.multiple',['id' => $details->id, 'param' => 'Reject']) }}"
+          method="POST" style="display: none;">
+        {{ csrf_field() }}
+        <input type="submit" value="Reject">
+    </form>
     <div class="page-content-wrapper employee-details">
         <div class="page-content">
             <div class="page-bar">
                 <ul class="page-breadcrumb">
                     <li>
-                        <a href="{{ route('employee.lists')  }}">Employees</a>
+                        <a href="{{ route('job.lists')  }}">Jobs</a>
                         <i class="fa fa-circle"></i>
                     </li>
                     <li>
-                        <span>View</span>
+                        <span>Details</span>
                     </li>
                 </ul>
             </div>
@@ -31,20 +32,20 @@
                         <div class="portlet-title">
                             <div class="caption font-dark">
                                 <i class="icon-settings font-dark"></i>
-                                <span class="caption-subject bold uppercase">Employees</span>
+                                <span class="caption-subject bold uppercase">Job Details</span>
                             </div>
                             <div class="actions">
                                 <a class="btn sbold green"
-                                   href="{{ route('employee.edit',['id' => $details->id])  }}">
+                                   href="{{ route('job.multiple',['id' => $details->id, 'param' => 'Approve'])  }}">
                                     Update</a>
 
                                 <a class="btn sbold green"
-                                   href="{{ route('employee.approve',['id' => $details->id])  }}"
+                                   href="{{ route('job.multiple',['id' => $details->id, 'param' => 'Approve'])  }}"
                                    onclick="event.preventDefault();
                                            document.getElementById('{{'approve-'.$details->id }}').submit();">
                                     Approve</a>
                                 <a class="btn sbold green"
-                                   href="{{ route('employee.reject',['id' => $details->id]) }}"
+                                   href="{{ route('job.multiple',['id' => $details->id, 'param' => 'Approve']) }}"
                                    onclick="event.preventDefault();
                                            document.getElementById('{{'reject-'.$details->id }}').submit();">
                                     Reject
@@ -58,8 +59,85 @@
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div class="btn-group">
-                                            <div class="col-md-4">Name</div>
-                                            <div class="col-md-8">Testing</div>
+                                            <div class="row">
+                                                <div class="col-md-12">Job Image</div>
+                                                <div class="col-md-12"><img src="/{{ $details->job_image_path }}" width="400px" height="100px"/></div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-md-4">Company Name:</div>
+                                                <div class="col-md-8">{{ $details->company_name }}</div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-4">Job Tile:</div>
+                                                <div class="col-md-8">{{ $details->job_title }}</div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-4">Business Manager</div>
+                                                <div class="col-md-8">{{ $details->business_manager }}</div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-4">Role</div>
+                                                <div class="col-md-8">{{ $details->role }}</div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-4">Job Description:</div>
+                                                <div class="col-md-8">{{ $details->job_description }}</div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-4">Job Location:</div>
+                                                <div class="col-md-8">{{ $details->location }}</div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-4">Job Industry:</div>
+                                                <div class="col-md-8">{{ $details->industry }}</div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-4">Contact No.:</div>
+                                                <div class="col-md-8">{{ $details->contact_no }}</div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-4">Gender Needed:</div>
+                                                <div class="col-md-8">{{ $details->choices }}</div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-4">Rate:</div>
+                                                <div class="col-md-8">${{ $details->rate }}/hr</div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-4">Nationality:</div>
+                                                <div class="col-md-8">{{ ucfirst($details->nationality) }}</div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-4">Job Requirements</div>
+                                                <div class="col-md-8">{{ $details->job_requirements }}/hr</div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-4">Notes</div>
+                                                <div class="col-md-8">{{ $details->notes }}</div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-md-4">Language</div>
+                                                <div class="col-md-8">${{ $details->language }}/hr</div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-md-4">Status</div>
+                                                @if($details->status == 'inactive')
+                                                    <div class="col-md-8"><span class="label label-sm label-danger">Need to Approve</span>
+                                                    </div>
+
+                                                @elseif($details->status == 'active')
+                                                    <div class="col-md-8"><span
+                                                                class="label label-sm label-success">{{ ucfirst($details->status) }} </span>
+                                                    </div>
+                                                @else
+                                                    <div class="col-md-8"><span
+                                                                class="label label-sm label-waring">{{ ucfirst($details->status) }} </span>
+                                                    </div>
+                                                @endif
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -103,52 +181,52 @@
                                 </thead>
                                 <tbody>
 
-                                    <tr class="odd gradeX">
-                                        <th>
-                                            <label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">
-                                                <input type="checkbox" class="group-checkable"
-                                                       data-set="#employee-table .checkboxes"/>
-                                                <span></span>
-                                            </label>
-                                        </th>
-                                        <td>Test</td>
-                                        <td>Test</td>
-                                        <td>Test</td>
-                                        <td>Test</td>
-                                        <td>Test</td>
+                                <tr class="odd gradeX">
+                                    <th>
+                                        <label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">
+                                            <input type="checkbox" class="group-checkable"
+                                                   data-set="#employee-table .checkboxes"/>
+                                            <span></span>
+                                        </label>
+                                    </th>
+                                    <td>Test</td>
+                                    <td>Test</td>
+                                    <td>Test</td>
+                                    <td>Test</td>
+                                    <td>Test</td>
 
-                                        <td>
-                                            <div class="btn-group">
-                                                <button class="btn btn-xs green dropdown-toggle" type="button"
-                                                        data-toggle="dropdown" aria-expanded="false"> Actions
-                                                    <i class="fa fa-angle-down"></i>
-                                                </button>
-                                                <ul class="dropdown-menu" role="menu">
-                                                    <li>
-                                                        <a href="">
-                                                            <i class="fa fa-trash"></i> Delete</a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="">
-                                                            <i class="fa fa-edit"></i> Edit </a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="">
-                                                            <i class="fa fa-eye"></i> View </a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="">
-                                                            <i class="fa fa-check-square-o"></i> Approve</a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="">
-                                                            <i class="fa fa-close"></i> Reject
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </td>
-                                    </tr>
+                                    <td>
+                                        <div class="btn-group">
+                                            <button class="btn btn-xs green dropdown-toggle" type="button"
+                                                    data-toggle="dropdown" aria-expanded="false"> Actions
+                                                <i class="fa fa-angle-down"></i>
+                                            </button>
+                                            <ul class="dropdown-menu" role="menu">
+                                                <li>
+                                                    <a href="">
+                                                        <i class="fa fa-trash"></i> Delete</a>
+                                                </li>
+                                                <li>
+                                                    <a href="">
+                                                        <i class="fa fa-edit"></i> Edit </a>
+                                                </li>
+                                                <li>
+                                                    <a href="">
+                                                        <i class="fa fa-eye"></i> View </a>
+                                                </li>
+                                                <li>
+                                                    <a href="">
+                                                        <i class="fa fa-check-square-o"></i> Approve</a>
+                                                </li>
+                                                <li>
+                                                    <a href="">
+                                                        <i class="fa fa-close"></i> Reject
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </td>
+                                </tr>
                                 </tbody>
                             </table>
                         </div>

@@ -313,8 +313,6 @@ class JobController extends Controller
 
         $details = $job->jobAdminDetails($id);
 
-        return dd($details);
-
         return view('job.details', ['details' => $details]);
     }
 }
