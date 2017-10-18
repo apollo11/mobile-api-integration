@@ -383,10 +383,28 @@ class NotificationController extends Controller
      */
     public function notifResponse($notif)
     {
-        $data = [
-            'notifications' => $notif
-        ];
-        return $data;
+        foreach ($notif as $value)
+        {
+            $data[] = [
+                'id' => $value->id,
+                'title' => $value->title,
+                'message' => $value->message,
+                'type' => $value->type,
+                'job_id' => $value->job_id,
+                'created_at' => $this->dateFormat($value->created_at),
+                'updated_at' => $this->dateFormat($value->updated_at)
+            ];
+        }
+
+        return response()->json(['notifications' =>$data]);
+    }
+
+    public function dateFormat($date)
+    {
+        $format = date_create($date, timezone_open('UTC'));
+        $return = date_format($format, 'Y-m-d H:i:sO');
+
+        return $return;
     }
 
 }
