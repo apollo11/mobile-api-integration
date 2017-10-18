@@ -304,54 +304,14 @@ class JobController extends Controller
 
     }
 
-//    public function jobDetailsoutput($output)
-//    {
-//        $start_date = $date = date_create($output->start_date, timezone_open('UTC'));
-//        $end_date = $date = date_create($output->end_date, timezone_open('UTC'));
-//        $created = $date = date_create($output->created_at, timezone_open('UTC'));
-//        $assigned = is_null($output->schedule_status) ? 'available' : $output->schedule_status;
-//
-//        $details = [
-//            'schedule_id' => $output->schedule_id,
-//            'job' => [
-//                'id' => $output->id,
-//                'job_title' => $output->job_title,
-//                'employer' => [
-//                    'image_url' => $output->profile_image_path,
-//                    'name' => $output->company_name,
-//                    'description' => $output->company_description
-//                ],
-//                'industry' => [
-//                    'id' => $output->industry_id,
-//                    'name' => $output->industry
-//                ],
-//                'location' => [
-//                    'id' => $output->location_id,
-//                    'name' => $output->location,
-//                ],
-//                'created_date' => date_format($created, 'Y-m-d H:i:sP'),
-//                'start_date' => date_format($start_date, 'Y-m-d H:i:sP'),
-//                'end_date' => date_format($end_date, 'Y-m-d H:i:sP'),
-//                'contact_no' => $output->contact_no,
-//                'rate' => $output->rate,
-//                'thumbnail_url' => $output->job_image_path,
-//                'nationality' => ucfirst($output->nationality),
-//                'description' => $output->description,
-//                'min_age' => $output->min_age,
-//                'max_age' => $output->max_age,
-//                'role' => $output->role,
-//                'remarks' => $output->notes,
-//                'language' => $output->language,
-//                'gender' => $output->gender,
-//                'job_requirements' => $output->job_requirements,
-//                'status' => $assigned,
-//                'is_assigned' => 0
-//            ]
-//        ];
-//
-//        return $details;
-//    }
+    /**
+     * Job Details
+     */
+    public function details($id)
+    {
+        $job = new Job();
 
+        $details = $job->jobAdminDetails($id);
 
-
+    }
 }
