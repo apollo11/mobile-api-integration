@@ -395,8 +395,9 @@ class NotificationController extends Controller
                 'updated_at' => $this->dateFormat($value->updated_at)
             ];
         }
+        $dataUndefined = !empty($data) ? $data : [];
 
-        return response()->json(['notifications' =>$data]);
+        return response()->json(['notifications' => $dataUndefined]);
     }
 
     public function dateFormat($date)
