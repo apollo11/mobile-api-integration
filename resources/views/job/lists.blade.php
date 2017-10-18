@@ -112,7 +112,7 @@
                                                             <i class="fa fa-edit"></i> Edit </a>
                                                     </li>
                                                     <li>
-                                                        <a href="{{ route('job.multiple',['id' =>  $value->id])  }}">
+                                                        <a href="{{ route('job.details',['id' =>  $value->id])  }}">
                                                             <i class="fa fa-eye"></i> View </a>
                                                     </li>
                                                     <li>

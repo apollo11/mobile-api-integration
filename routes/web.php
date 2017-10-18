@@ -56,6 +56,7 @@ Route::group(['middleware' => ['auth']], function () {
        Route::get('/lists','Job\JobController@index')->name('job.lists');
        Route::post('/add','Job\JobController@store')->name('job.add');
        Route::post('multiple/{id?}/{param?}','Job\JobController@destroy')->name('job.multiple');
+       Route::get('details/{id}','Job\JobController@details')->name('job.details');
     });
 
 });

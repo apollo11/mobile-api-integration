@@ -266,21 +266,9 @@ class Job extends Model
     public function jobAdminDetails($id)
     {
         $jobDetails = DB::table('users as employer')
-            ->lefJoin('jobs', 'jobs.user_id', '=', 'employer.id')
+            ->leftJoin('jobs', 'jobs.user_id', '=', 'employer.id')
             ->select(
                 'jobs.id'
-                , 'job_schedules.id as schedule_id'
-                , 'job_schedules.user_id as user_id'
-                , 'job_schedules.job_status as schedule_status'
-                , 'job_schedules.payment_status'
-                , 'job_schedules.checkin_datetime'
-                , 'job_schedules.checkin_location'
-                , 'job_schedules.checkout_datetime'
-                , 'job_schedules.checkout_location'
-                , 'job_schedules.working_hours'
-                , 'job_schedules.job_salary'
-                , 'job_schedules.process_date'
-                , 'job_schedules.payment_methods'
                 , 'employer.company_description'
                 , 'employer.company_name'
                 , 'employer.profile_image_path'
