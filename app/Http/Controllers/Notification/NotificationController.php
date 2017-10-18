@@ -157,7 +157,7 @@ class NotificationController extends Controller
 
         if (is_null($find)) {
 
-            $result = $this->mapValidator(['Notification is not available']);
+            $result = $this->mapValidator(['Notification is not available'], 110001);
 
         } else {
 
@@ -188,7 +188,7 @@ class NotificationController extends Controller
 
         if (is_null($find)) {
 
-            $result = $this->mapValidator(['Notification is not available']);
+            $result = $this->mapValidator(['Notification is not available'], 110001);
 
         } else {
 
