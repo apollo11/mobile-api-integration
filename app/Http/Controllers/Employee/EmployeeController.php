@@ -184,7 +184,7 @@ class EmployeeController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+
     }
 
     /**
@@ -242,6 +242,31 @@ class EmployeeController extends Controller
         ];
 
         return $validate;
+    }
+
+    public function updateValidationRules(array $data)
+    {
+        return Validator::make($data, [
+            'gender' => 'required|string',
+            'birthdate' => 'date|string',
+            'religion' => 'required|string',
+            'address' => 'required|string',
+            'email' => 'required|email',
+            'school' => 'nullable',
+            'school_pass_expiry_date' => 'nullable',
+            'front_ic_path' => 'required|file',
+            'back_ic_path' => 'required|file',
+            'emergency_name' => 'required|string',
+            'emergency_contact_no' => 'required|string',
+            'emergency_relationship' => 'required|string',
+            'emergency_address' => 'required|string',
+            'contact_method' => 'required|string',
+            'criminal_record' => 'nullable',
+            'medication' => 'nullable',
+            'bank_statement' => 'required|file',
+            'language' => 'required|string',
+            'signature_file_path' => 'required'
+        ]);
     }
 
     /**
@@ -365,7 +390,7 @@ class EmployeeController extends Controller
         $completed = $this->appliedJobs($id);
 
         return view('employee.details', ['userDetails' => $details
-            , 'jobDetails' => $jobInfo
+            , 'jobInfo' => $jobInfo
             , 'applied' => $applied
             , 'completed' => $completed
         ]);

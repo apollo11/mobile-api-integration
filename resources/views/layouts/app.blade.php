@@ -34,6 +34,7 @@
 
         <link href="{{ asset('assets/global/plugins/fullcalendar/fullcalendar.css') }}" rel="stylesheet" type="text/css"/>
         <link href="{{ asset('assets/global/plugins/jqvmap/jqvmap/jqvmap.css') }}" rel="stylesheet" type="text/css"/>
+        <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.16/css/jquery.dataTables.css">
         <!-- END PAGE LEVEL PLUGIN STYLES -->
 
         <!-- BEGIN PAGE STYLES -->
@@ -48,7 +49,7 @@
         <link href="{{ asset('assets/pages/css/login.min.css') }}" rel="stylesheet" type="text/css"/>
         <link href="{{ asset('assets/layouts/layout/css/themes/darkblue.css') }}" rel="stylesheet" type="text/css" id="style_color"/>
         <link href="{{ asset('assets/layouts/layout/css/custom.css') }}" rel="stylesheet" type="text/css"/>
-        <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.16/css/jquery.dataTables.css">
+
 
         <!-- END THEME STYLES -->
 </head>
@@ -201,6 +202,9 @@
     <script src="{{ asset('assets/global/plugins/gritter/js/jquery.gritter.js') }}" type="text/javascript"></script>
 
     <script src="{{ asset('assets/global/plugins/bootbox/bootbox.min.js') }}" type="text/javascript"></script>
+
+    <script src="{{ asset('assets/global/scripts/datatable.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('assets/global/plugins/datatables/datatables.min.js') }}" type="text/javascript"></script>
     <!-- END PAGE LEVEL PLUGINS -->
 
     <!-- BEGIN PAGE LEVEL SCRIPTS -->
@@ -216,7 +220,9 @@
     <script src="{{ asset('assets/global/scripts/app.min.js') }}" type="text/javascript"></script>
     <script src="{{ asset('assets/pages/scripts/ui-bootbox.min.js') }}" type="text/javascript"></script>
     <!-- END THEME GLOBAL SCRIPTS -->
+
     <!-- BEGIN PAGE LEVEL SCRIPTS -->
+    <script src="{{ asset('assets/pages/scripts/table-datatables-buttons.min.js') }}" type="text/javascript"></script>
     <script src="{{ asset('assets/pages/scripts/ui-modals.min.js') }}" type="text/javascript"></script>
     <script src="{{ asset('assets/pages/scripts/dashboard.min.js') }}" type="text/javascript"></script>
     <!-- END PAGE LEVEL SCRIPTS -->
@@ -225,7 +231,6 @@
     {{--<script src="{{ asset('assets/layouts/layout/scripts/demo.min.js')  }}" type="text/javascript"></script>--}}
     <script src="{{ asset('assets/layouts/global/scripts/quick-sidebar.min.js') }}" type="text/javascript"></script>
     <script src="{{ asset('assets/layouts/global/scripts/quick-nav.min.js') }}" type="text/javascript"></script>
-    <script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.16/js/jquery.dataTables.js"></script>
     <!-- END THEME LAYOUT SCRIPTS -->
     <script>
         $(document).ready(function()
@@ -245,8 +250,9 @@
             });
 
             $('#employee-table').DataTable({
+                dom: 'Bfrtip',
                 buttons: [
-                    'excel'
+                    { "extend": 'excel', "text":'Export',"className": 'btn sbold red' }
                 ],
                 autoFill: true,
                 responsive: true

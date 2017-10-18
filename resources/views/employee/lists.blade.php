@@ -15,7 +15,7 @@
         </form>
     @endfor
 
-    <div class="page-content-wrapper">
+    <div class="page-content-wrapper employee-list">
         <div class="page-content">
             <form action="{{ route('employee.destroy-all')  }}" method="POST">
                 <div class="row">
@@ -39,14 +39,6 @@
                                 </div>
                             </div>
                             <div class="portlet-body">
-                                <div class="table-toolbar">
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="btn-group">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
                                 <table class="table table-striped table-bordered table-hover table-checkable order-column"
                                        id="employee-table">
                                     <thead>

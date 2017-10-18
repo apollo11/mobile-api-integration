@@ -42,6 +42,16 @@ class Employee extends Model
 
     }
 
+    public function updateInfo($data)
+    {
+        $employee = DB::table('users')
+            ->leftJoin('additional_infos', 'additional_infos.user_id', '=', 'users.id')
+            ->where('users.id', '=', $data['id']);
+
+        return $employee;
+
+    }
+
 
 
 
