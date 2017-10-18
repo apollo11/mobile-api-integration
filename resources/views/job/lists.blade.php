@@ -1,9 +1,23 @@
 @extends('layouts.app')
 
 @section('content')
+    @foreach($job as $value)
+        <form id="approve-{{ $value->id }}" action="{{ route('job.multiple',['id' => $value->id, 'param' => 'Approve' ]) }}" method="POST" style="display: none;">
+            {{ csrf_field() }}
+            <input type="multiple" value="Approve">
+        </form>
+        <form id="reject-{{ $value->id }}" action="{{ route('job.multiple',['id' => $value->id, 'param' => 'Reject' ]) }}" method="POST" style="display: none;">
+            {{ csrf_field() }}
+            <input type="multiple" value="Reject">
+        </form>
+        <form id="destroy-{{ $value->id }}" action="{{ route('job.multiple',['id' => $value->id,'param' => 'Delete']) }}" method="POST" style="display: none;">
+            {{ csrf_field() }}
+            <input type="multiple" value="Delete">
+        </form>
+        @endforeach
     <div class="page-content-wrapper employee-list">
         <div class="page-content">
-            <form action="{{ route('employee.destroy-all')  }}" method="POST">
+            <form action="{{ route('job.multiple')  }}" method="POST">
                 <div class="row">
                     <div class="col-md-12">
                         <div class="portlet light bordered">
@@ -15,6 +29,7 @@
                                 {{ csrf_field() }}
                                 <div class="actions">
                                     <input class="btn sbold green" name="multiple" value="Approve" type="submit"/>
+                                    <input class="btn sbold green" name="multiple" value="Reject" type="submit"/>
                                     <input class="btn sbold green" name="multiple" value="Delete" type="submit"/>
                                     <a href="" id="sample_editable_1_new"
                                        class="btn sbold green"> Add New
@@ -52,21 +67,33 @@
                                     <tr class="odd gradeX">
                                         <td>
                                             <label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">
-                                                <input type="checkbox" name="multicheck[]" class="checkboxes"
-                                                       value=""/>
+                                                <input type="checkbox" value="{{ $value->id }}" name="multicheck[]" class="checkboxes"/>
                                                 <span></span>
                                             </label>
                                         </td>
                                         <td>{{ $value->id }}</td>
-                                        <td>{{ $value->company_name }}</td>
+                                        <td><a href="{{ $value->id  }}">{{ $value->company_name }} </a></td>
                                         <td>{{ $value->job_title }}</td>
                                         <td>{{ $value->no_of_person }}</td>
-                                        <td>0</td>
+                                        <td><a href="#">0 </a></td>
                                         <td> {{ '$'.$value->rate.'/hr' }}</td>
                                         <td> {{ Carbon\Carbon::parse($value->start_date)->format('H:i:s d-m-Y') }}</td>
-                                        <td>Jorden Ng</td>
-                                        <td>Amora Road</td>
-                                        <td><span class="label label-sm label-warning"> {{ $value->status }} </span></td>
+                                        <td> {{ $value->business_manager }}</td>
+                                        <td>{{ $value->location }}</td>
+
+                                        @if($value->status == 'inactive')
+
+                                            <td><span class="label label-sm label-danger"> Need to Approve </span></td>
+
+                                        @elseif($value->status == 'active')
+                                            <td>
+                                                <span class="label label-sm label-success">{{ ucfirst($value->status) }} </span>
+                                            </td>
+                                        @else
+                                            <td>
+                                                <span class="label label-sm label-waring">{{ ucfirst($value->status) }} </span>
+                                            </td>
+                                        @endif
                                         <td>
                                             <div class="btn-group">
                                                 <button class="btn btn-xs green dropdown-toggle" type="button"
@@ -75,8 +102,9 @@
                                                 </button>
                                                 <ul class="dropdown-menu" role="menu">
                                                     <li>
-                                                        <a href=""
-                                                           onclick="">
+                                                        <a href="{{ route('job.multiple',['id' =>  $value->id, 'param' =>'Delete' ]) }}"
+                                                           onclick="event.preventDefault();
+                                                                   document.getElementById('{{'destroy-'.$value->id }}').submit();">
                                                             <i class="fa fa-trash"></i> Delete</a>
                                                     </li>
                                                     <li>
@@ -84,15 +112,19 @@
                                                             <i class="fa fa-edit"></i> Edit </a>
                                                     </li>
                                                     <li>
-                                                        <a href="">
+                                                        <a href="{{ route('job.multiple',['id' =>  $value->id])  }}">
                                                             <i class="fa fa-eye"></i> View </a>
                                                     </li>
                                                     <li>
-                                                        <a href="" onclick="">
+                                                        <a href="{{ route('job.multiple',['id' =>  $value->id, 'param' => 'Approve'])  }}"
+                                                           onclick="event.preventDefault();
+                                                                   document.getElementById('{{'approve-'.$value->id }}').submit();">
                                                             <i class="fa fa-check-square-o"></i> Approve</a>
                                                     </li>
                                                     <li>
-                                                        <a href="" onclick="">
+                                                        <a href="{{ route('job.multiple',['id' =>  $value->id, 'param' => 'Reject']) }}"
+                                                           onclick="event.preventDefault();
+                                                                   document.getElementById('{{'reject-'.$value->id }}').submit();">
                                                             <i class="fa fa-close"></i> Reject
                                                         </a>
                                                     </li>

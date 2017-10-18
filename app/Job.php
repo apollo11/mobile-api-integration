@@ -231,6 +231,7 @@ class Job extends Model
                 , 'users.company_name'
                 , 'users.profile_image_path'
                 , 'users.employee_status as status'
+                , 'users.business_manager'
                 , 'jobs.description as job_description'
                 , 'jobs.status'
                 , 'jobs.location'
@@ -332,4 +333,40 @@ class Job extends Model
 
         return $job;
     }
+
+    /**
+     * Multiple Update
+     */
+
+    public function multiUpdateActive($multiId)
+    {
+        $user = DB::table('jobs')->wherein('id', $multiId)
+            ->update(['status' => 'active']);
+
+        return $user;
+    }
+
+    /**
+     * Multiple Update
+     */
+
+    public function multiUpdateInactive($multiId)
+    {
+        $user = DB::table('jobs')->wherein('id', $multiId)
+            ->update(['status' => 'inactive']);
+
+        return $user;
+    }
+
+    /**
+     * Multiple delete
+     */
+    public function multiDelete($multiId)
+    {
+        $user = db::table('jobs')->whereIn('id', $multiId)
+            ->delete();
+
+        return $user;
+    }
+
 }
