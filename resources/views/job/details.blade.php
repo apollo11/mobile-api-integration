@@ -1,5 +1,6 @@
 @extends('layouts.app')
 @section('content')
+
     <form id="approve-{{ $details->id }}"
           action="{{ route('job.multiple',['id' => $details->id, 'param' => 'Approve']) }}"
           method="POST" style="display: none;">
@@ -153,7 +154,7 @@
                         <div class="portlet-title">
                             <div class="caption font-dark">
                                 <i class="icon-settings font-dark"></i>
-                                <span class="caption-subject bold uppercase">Related Jobs</span>
+                                <span class="caption-subject bold uppercase">Related Candidates Applied</span>
                             </div>
                             {{ csrf_field() }}
 
@@ -171,16 +172,15 @@
                                             <span></span>
                                         </label>
                                     </th>
-                                    <th> Job Type</th>
-                                    <th> Job Date</th>
-                                    <th>Status</th>
-                                    <th>Clients Name</th>
+                                    <th>Name</th>
+                                    <th>NRIC</th>
+                                    <th>Contact No</th>
                                     <th>Hourly Rate</th>
                                     <th>Action</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-
+                                @foreach($related as $value)
                                 <tr class="odd gradeX">
                                     <th>
                                         <label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">
@@ -189,11 +189,10 @@
                                             <span></span>
                                         </label>
                                     </th>
-                                    <td>Test</td>
-                                    <td>Test</td>
-                                    <td>Test</td>
-                                    <td>Test</td>
-                                    <td>Test</td>
+                                    <td>{{ $value->name }}</td>
+                                    <td>{{ $value->nric_no }}</td>
+                                    <td>{{ $value->contact_no }}</td>
+                                    <td>{{ $value->rate }}</td>
 
                                     <td>
                                         <div class="btn-group">
@@ -227,6 +226,7 @@
                                         </div>
                                     </td>
                                 </tr>
+                                    @endforeach
                                 </tbody>
                             </table>
                         </div>

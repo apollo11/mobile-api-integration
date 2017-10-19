@@ -196,17 +196,19 @@ class JobSchedule extends Model
         $jobs = DB::table('users')
             ->join('job_schedules', 'job_schedules.user_id', '=', 'users.id')
             ->join('jobs', 'jobs.id', '=', 'job_schedules.job_id')
-            ->join('users as employer', 'employer.id', '=', 'jobs.user_id')
+            ->join('users as employee', 'employee.id', '=', 'jobs.user_id')
             ->select(
-                'jobs.id'
-                , 'job_schedules.id as schedule_id'
+                  'job_schedules.id as schedule_id'
                 , 'job_schedules.user_id'
                 , 'job_schedules.job_id'
                 , 'job_schedules.job_status as schedule_status'
-                , 'employer.company_name'
-                , 'jobs.job_date as start_date'
                 , 'jobs.created_at'
                 , 'jobs.job_title'
+                , 'jobs.rate'
+                , 'employee.company_name'
+                , 'employee.nric_no'
+                , 'employee.name'
+                , 'employee.contact_no'
                 , 'jobs.rate'
             )
             ->where('job_schedules.user_id' , '=', $id)

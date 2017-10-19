@@ -1,9 +1,24 @@
 @extends('layouts.app')
 
 @section('content')
+    @foreach($employers as $value)
+        <form id="approve-{{ $value->id }}" action="{{ route('employer.multiple',['id' => $value->id, 'param' => 'Approve' ]) }}" method="POST" style="display: none;">
+            {{ csrf_field() }}
+            <input type="multiple" value="Approve">
+        </form>
+        <form id="reject-{{ $value->id }}" action="{{ route('employer.multiple',['id' => $value->id, 'param' => 'Reject' ]) }}" method="POST" style="display: none;">
+            {{ csrf_field() }}
+            <input type="multiple" value="Reject">
+        </form>
+        <form id="destroy-{{ $value->id }}" action="{{ route('employer.multiple',['id' => $value->id,'param' => 'Delete']) }}" method="POST" style="display: none;">
+            {{ csrf_field() }}
+            <input type="multiple" value="Delete">
+        </form>
+    @endforeach
+
     <div class="page-content-wrapper employee-list">
         <div class="page-content">
-            <form action="{{ route('employee.destroy-all')  }}" method="POST">
+            <form action="{{ route('employer.multiple')  }}" method="POST">
                 <div class="row">
                     <div class="col-md-12">
                         <!-- BEGIN EXAMPLE TABLE PORTLET-->
@@ -16,8 +31,9 @@
                                 {{ csrf_field() }}
                                 <div class="actions">
                                     <input class="btn sbold green" name="multiple" value="Approve" type="submit"/>
+                                    <input class="btn sbold green" name="multiple" value="Reject" type="submit"/>
                                     <input class="btn sbold green" name="multiple" value="Delete" type="submit"/>
-                                    <a href="{{ route('employee.create') }}" id="sample_editable_1_new"
+                                    <a href="{{ route('employer.create') }}" id="sample_editable_1_new"
                                        class="btn sbold green"> Add New
                                         <i class="fa fa-plus"></i>
                                     </a>
@@ -36,7 +52,6 @@
                                                 <span></span>
                                             </label>
                                         </th>
-                                        <th>Checkbox</th>
                                         <th>#</th>
                                         <th>Company Name</th>
                                         <td>Industry</td>
@@ -46,11 +61,11 @@
                                         <th> Number of Job Posting</th>
                                         <th> Number of Candidates</th>
                                         <th> Business Manager</th>
+                                        <th> Status</th>
                                         <th> Action </th>
                                     </tr>
                                     </thead>
                                     <tbody>
-
                                     @foreach($employers as $user)
 
                                         <tr class="odd gradeX">
@@ -70,7 +85,15 @@
                                             <td>{{ '34' }}</td>
                                             <td>{{ '28' }}</td>
                                             <td> {{ $user->business_manager }}</td>
+                                            @if($user->status == 0 )
                                                 <td><span class="label label-sm label-warning"> Pending </span></td>
+                                            @elseif($user->status == 1)
+                                                <td><span class="label label-sm label-success"> Approve </span></td>
+                                            @elseif($user->status == 2)
+                                                <td><span class="label label-sm label-warning"> Upload </span></td>
+                                            @else
+                                                <td><span class="label label-sm label-danger"> Reject </span></td>
+                                            @endif
                                             <td>
                                                 <div class="btn-group">
                                                     <button class="btn btn-xs green dropdown-toggle" type="button"
@@ -79,7 +102,7 @@
                                                     </button>
                                                     <ul class="dropdown-menu" role="menu">
                                                         <li>
-                                                            <a href="{{ route('employee.destroy-one',['id' => $user->id]) }}"
+                                                            <a href="{{ route('job.multiple',['id' => $user->id, 'param' => 'Approve' ]) }}"
                                                                onclick="event.preventDefault();
                                                                        document.getElementById('{{'destroy-'.$user->id }}').submit();">
                                                                 <i class="fa fa-trash"></i> Delete</a>
@@ -89,17 +112,17 @@
                                                                 <i class="fa fa-edit"></i> Edit </a>
                                                         </li>
                                                         <li>
-                                                            <a href="{{ route('employee.details',['id' => $user->id])  }}">
+                                                            <a href="{{ route('job.multiple',['id' => $user->id, 'param' => 'Approve' ])  }}">
                                                                 <i class="fa fa-eye"></i> View </a>
                                                         </li>
                                                         <li>
-                                                            <a href="{{ route('employee.approve',['id' => $user->id])  }}"
+                                                            <a href="{{ route('job.multiple',['id' => $user->id, 'param' => 'Approve' ])  }}"
                                                                onclick="event.preventDefault();
                                                                        document.getElementById('{{'approve-'.$user->id }}').submit();">
                                                                 <i class="fa fa-check-square-o"></i> Approve</a>
                                                         </li>
                                                         <li>
-                                                            <a href="{{ route('employee.reject',['id' => $user->id]) }}"
+                                                            <a href="{{ route('job.multiple',['id' => $user->id, 'param' => 'Approve' ]) }}"
                                                                onclick="event.preventDefault();
                                                                        document.getElementById('{{'reject-'.$user->id }}').submit();">
                                                                 <i class="fa fa-close"></i> Reject

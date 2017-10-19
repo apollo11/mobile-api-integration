@@ -37,6 +37,8 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/lists', 'Employer\EmployerController@index')->name('employer.lists');
         Route::get('/create', 'Employer\EmployerController@create')->name('employer.create');
         Route::post('/add', 'Employer\EmployerController@store')->name('employer.add');
+        Route::post('multiple/{id?}/{param?}','Employer\EmployerController@destroy')->name('employer.multiple');
+
     });
 
     Route::prefix('industry')->group(function () {

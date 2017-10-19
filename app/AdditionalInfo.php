@@ -30,6 +30,8 @@ class AdditionalInfo extends Model
         , 'language'
         , 'signature_file_path'
         , 'bank_statement'
+        , 'nationality'
+        , 'points'
     ];
 
     /**
@@ -83,6 +85,8 @@ class AdditionalInfo extends Model
                 , 'info.bank_statement'
                 , 'info.is_uploaded'
                 , 'info.signature_file_path'
+                , 'info.nationality'
+                , 'info.points'
             )
             ->where('users.id', '=', $id)
             ->first();

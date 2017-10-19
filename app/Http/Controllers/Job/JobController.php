@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Job;
 
+use App\JobSchedule;
 use Validator;
 use App\Http\Traits\JobDetailsOutputTrait;
 use App\Job;
@@ -310,9 +311,11 @@ class JobController extends Controller
     public function details($id)
     {
         $job = new Job();
+        $schedule = new JobSchedule();
 
         $details = $job->jobAdminDetails($id);
+        $relatedCandidates = $schedule->getAvailJobsByUser($id);
 
-        return view('job.details', ['details' => $details]);
+        return view('job.details', ['details' => $details, 'related' => $relatedCandidates]);
     }
 }
