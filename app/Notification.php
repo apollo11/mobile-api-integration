@@ -34,7 +34,8 @@ class Notification extends Model
     {
         $notif = DB::table('user_notifications')
             ->select(
-                 'title'
+                  'id'
+                , 'title'
                 , 'message'
                 , 'type'
                 , 'job_id'

@@ -109,7 +109,6 @@ class NotificationController extends Controller
         } else {
 
             $this->pushNotif($data);
-            $this->saveDeviceToken($data);
             $this->saveNotif($data);
 
             $result = $this->ValidUseSuccessResp(200, true);
@@ -158,7 +157,7 @@ class NotificationController extends Controller
 
         if (is_null($find)) {
 
-            $result = $this->mapValidator(['Notification is not available']);
+            $result = $this->mapValidator(['Notification is not available'], 110001);
 
         } else {
 
@@ -189,7 +188,7 @@ class NotificationController extends Controller
 
         if (is_null($find)) {
 
-            $result = $this->mapValidator(['Notification is not available']);
+            $result = $this->mapValidator(['Notification is not available'], 110001);
 
         } else {
 
@@ -223,21 +222,30 @@ class NotificationController extends Controller
         return $save;
     }
 
+
+
     /**
      * @param array $data
      * @return mixed|static
      */
-    public function saveDeviceToken(array $data)
+    public function saveDeviceToken(Request $request)
     {
-        if (!empty($data['registration_ids'])) {
 
-            $save = \App\User::find($data['user_id']);
-            $save->deviceToken()->create([
-                'device_token' => $data['registration_ids']
+        if (!empty($request->input('device_token'))) {
+
+            $save = \App\User::find($request->input('user_id'));
+            $save->deviceToken()->firstOrCreate([
+                'device_token' => $request->input('device_token')
             ]);
 
-            return $save;
+            $result = $this->ValidUseSuccessResp(200, true);
+
+        } else {
+
+             $result = $this->mapValidator(['Something went wrong'], 110001);
+
         }
+        return $result;
     }
 
     /**
@@ -252,7 +260,7 @@ class NotificationController extends Controller
 
         if (is_null($find)) {
 
-            $result = $this->mapValidator(['Token unavailable or invalid']);
+            $result = $this->mapValidator(['Token unavailable or invalid'], 110011);
 
         } else {
 
@@ -267,6 +275,55 @@ class NotificationController extends Controller
         return $result;
 
     }
+
+    /**
+     * Delete Notification
+     */
+    public function deleteNotfif(Request $request)
+    {
+        $find = \App\Notification::find($request->input('id'));
+
+        if(is_null($find)) {
+
+            $result = $this->mapValidator(['Something went wrong'], 10001);
+
+        } else {
+
+            \App\Notification::find($request->input('id'))
+                ->delete();
+
+            $result = $this->ValidUseSuccessResp(200, true);
+        }
+
+        return $result;
+
+    }
+
+    /**
+     * Multiple Delete Notification
+     */
+    public function deleteMultipleNotfif(Request $request)
+    {
+        $userid = $request->input('user_id');
+
+        $find = \App\Notification::where('user_id', $userid);
+
+        if(is_null($find)) {
+
+            $result = $this->mapValidator(['Something went wrong'], 10001);
+
+        } else {
+
+            \App\Notification::where('user_id', $userid)
+                ->delete();
+
+            $result = $this->ValidUseSuccessResp(200, true);
+        }
+
+        return $result;
+
+    }
+
 
     /**
      * Notification list by user
@@ -316,9 +373,9 @@ class NotificationController extends Controller
      * @param $data
      * @return mixed
      */
-    public function mapValidator($data)
+    public function mapValidator($data, $errorCode)
     {
-        return $this->errorResponse($data, 'Validation Error', 110001, 400);
+        return $this->errorResponse($data, 'Validation Error', $errorCode, 400);
     }
 
     /**
@@ -326,10 +383,29 @@ class NotificationController extends Controller
      */
     public function notifResponse($notif)
     {
-        $data = [
-            'notifications' => $notif
-        ];
-        return $data;
+        foreach ($notif as $value)
+        {
+            $data[] = [
+                'id' => $value->id,
+                'title' => $value->title,
+                'message' => $value->message,
+                'type' => $value->type,
+                'job_id' => $value->job_id,
+                'created_at' => $this->dateFormat($value->created_at),
+                'updated_at' => $this->dateFormat($value->updated_at)
+            ];
+        }
+        $dataUndefined = !empty($data) ? $data : [];
+
+        return response()->json(['notifications' => $dataUndefined]);
+    }
+
+    public function dateFormat($date)
+    {
+        $format = date_create($date, timezone_open('UTC'));
+        $return = date_format($format, 'Y-m-d H:i:sO');
+
+        return $return;
     }
 
 }

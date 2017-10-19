@@ -26,11 +26,12 @@
                             </div>
                         </div>
                         <div class="portlet-body form">
-                            <form class="form-horizontal" method="POST" role="form" action="{{ route('employee.signup') }}"
+                            <form class="form-horizontal" method="POST" role="form"
+                                  action="{{ route('employee.signup') }}"
                                   enctype="multipart/form-data">
                                 {{ csrf_field() }}
                                 <div class="form-body">
-                                    <input type="hidden" name="platform" value="web" />
+                                    <input type="hidden" name="platform" value="web"/>
 
                                     <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
                                         <label class="col-md-3 control-label">Name</label>
@@ -88,7 +89,7 @@
                                         <label class="col-md-3 control-label">NRIC</label>
                                         <div class="col-md-7">
                                             <input type="text" class="form-control" placeholder="Enter NRIC"
-                                                   name="nric_no" />
+                                                   name="nric_no"/>
                                             @if ($errors->has('password'))
                                                 <span class="help-block">
                                                 <strong>{{ $errors->first('nric_no') }}</strong>
@@ -101,7 +102,7 @@
                                         <label class="col-md-3 control-label">School</label>
                                         <div class="col-md-7">
                                             <input type="text" class="form-control" placeholder="Enter School"
-                                                   name="school" />
+                                                   name="school"/>
                                             @if ($errors->has('school'))
                                                 <span class="help-block">
                                                 <strong>{{ $errors->first('school') }}</strong>
@@ -122,7 +123,6 @@
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>

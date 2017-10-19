@@ -3,7 +3,10 @@
 namespace App\Http\Controllers\Employee;
 
 use App\Employee;
+use Input;
 use App\User;
+use App\AdditionalInfo;
+use App\JobSchedule;
 use Validator;
 use App\Http\Traits\OauthTrait;
 use App\Http\Traits\HttpResponse;
@@ -23,8 +26,29 @@ class EmployeeController extends Controller
     public function index()
     {
         $employee = new Employee();
+        $result = $employee->employeeLists();
 
-        return view('employee.lists', ['employees' => $employee->employeeLists()]);
+        foreach ($result as $value) {
+            $completed = $this->completedJobs($value->id);
+            $applied = $this->appliedJobs($value->id);
+
+            $data[] = [
+                'id' => $value->id,
+                'name' => $value->name,
+                'birthdate' => $value->birthdate,
+                'nric_no' => $value->nric_no,
+                'mobile_no' => $value->mobile_no,
+                'employee_status' => $value->employee_status,
+                'joined' => $value->joined,
+                'gender' => $value->gender,
+                'completed' => $completed,
+                'applied' => $applied,
+                'business_manager' => $value->business_manager
+            ];
+
+        }
+
+        return view('employee.lists', ['employee' => $data, 'count' => count($data)]);
     }
 
     /**
@@ -144,7 +168,11 @@ class EmployeeController extends Controller
      */
     public function edit($id)
     {
-        //
+        $userDetails = new AdditionalInfo();
+
+        $details = $userDetails->userInfo($id);
+
+        return view('employee.edit-form', ['details' => $details ]);
     }
 
     /**
@@ -156,7 +184,7 @@ class EmployeeController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+
     }
 
     /**
@@ -165,9 +193,22 @@ class EmployeeController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        //
+        $user = new User();
+        $submit = $request->input('multiple');
+        $multi = $request->input('multicheck');
+
+        switch ($submit) {
+            case 'Approve':
+                $user->multiUpdate($multi);
+                break;
+            case 'Reject':
+                $user->multiDelete($multi);
+                break;
+        }
+
+        return back();
     }
 
     /**
@@ -203,6 +244,30 @@ class EmployeeController extends Controller
         return $validate;
     }
 
+    public function updateValidationRules(array $data)
+    {
+        return Validator::make($data, [
+            'gender' => 'required|string',
+            'birthdate' => 'date|string',
+            'religion' => 'required|string',
+            'address' => 'required|string',
+            'email' => 'required|email',
+            'school' => 'nullable',
+            'school_pass_expiry_date' => 'nullable',
+            'front_ic_path' => 'required|file',
+            'back_ic_path' => 'required|file',
+            'emergency_name' => 'required|string',
+            'emergency_contact_no' => 'required|string',
+            'emergency_relationship' => 'required|string',
+            'emergency_address' => 'required|string',
+            'contact_method' => 'required|string',
+            'criminal_record' => 'nullable',
+            'medication' => 'nullable',
+            'bank_statement' => 'required|file',
+            'language' => 'required|string',
+            'signature_file_path' => 'required'
+        ]);
+    }
 
     /**
      * @param $data
@@ -263,6 +328,7 @@ class EmployeeController extends Controller
         return back();
 
     }
+
     /**
      * 1 Approve Employee user
      */
@@ -302,6 +368,58 @@ class EmployeeController extends Controller
         return back();
     }
 
+    /**
+     * Delete one user
+     */
+    public function destroyOne($id)
+    {
+        $flight = \App\User::find($id);
 
+        $flight->delete();
+
+        return back();
+    }
+
+    public function details($id)
+    {
+        $userDetails = new AdditionalInfo();
+
+        $details = $userDetails->userInfo($id);
+        $jobInfo = $this->availableJobs($id);
+        $applied = $this->completedJobs($id);
+        $completed = $this->appliedJobs($id);
+
+        return view('employee.details', ['userDetails' => $details
+            , 'jobInfo' => $jobInfo
+            , 'applied' => $applied
+            , 'completed' => $completed
+        ]);
+
+    }
+
+    public function availableJobs($id)
+    {
+        $job = new JobSchedule();
+        $jobInfo = $job->getAvailJobsByUser($id);
+
+        return $jobInfo;
+
+    }
+
+    public function completedJobs($id)
+    {
+        $count = new JobSchedule();
+        $result = $count->countCompletedJobs($id);
+
+        return $result;
+    }
+
+    public function appliedJobs($id)
+    {
+        $count = new JobSchedule();
+        $result = $count->countAppliedJobs($id);
+
+        return $result;
+    }
 
 }

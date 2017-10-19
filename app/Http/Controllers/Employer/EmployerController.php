@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Employer;
 
 use Validator;
+use App\Employer;
 use App\User;
 use App\Industry;
 use Illuminate\Http\Request;
@@ -128,13 +129,32 @@ class EmployerController extends Controller
 
     /**
      * Remove the specified resource from storage.
-     *
+     * 0 Pending
+     * 1 Approved
+     * 2 Upload
+     * 3 Reject
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id=null , $param=null)
     {
-        //
+        $employer = new Employer();
+        $submit = empty($request->input('multiple')) ? $param : $request->input('multiple');
+        $multi = is_null($id) ? $request->input('multicheck') : (array) $id;
+        switch ($submit) {
+            case 'Approve':
+                $employer->multiUpdateApprove($multi);
+                break;
+            case 'Delete':
+                $employer->multiDelete($multi);
+                break;
+            case 'Reject':
+                $employer->multiUpdateReject($multi);
+                break;
+        }
+
+        return back();
+
     }
 
     /**
@@ -172,7 +192,6 @@ class EmployerController extends Controller
     /**
      * List of available industries
      */
-
     public function industryList()
     {
         $industry = new Industry();

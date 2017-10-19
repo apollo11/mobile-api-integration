@@ -44,12 +44,14 @@ trait ProfileTrait
                     'condition' => $output->medication
                 ],
                 'availabilities' => $availability,
+                'signature_image_url' => $output->signature_file_path
             ],
             'created_at' => $output->created_at,
             'updated_at' => $output->updated_at,
             'employee_status' => $output->employee_status,
             'schedule_count' => $count,
             'is_uploaded' => is_null($output->is_uploaded) ? 0 : $output->is_uploaded,
+            'points' => $output->points
         ];
 
         return $data;
