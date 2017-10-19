@@ -157,7 +157,7 @@ class NotificationController extends Controller
 
         if (is_null($find)) {
 
-            $result = $this->mapValidator(['Notification is not available']);
+            $result = $this->mapValidator(['Notification is not available'], 110001);
 
         } else {
 
@@ -188,7 +188,7 @@ class NotificationController extends Controller
 
         if (is_null($find)) {
 
-            $result = $this->mapValidator(['Notification is not available']);
+            $result = $this->mapValidator(['Notification is not available'], 110001);
 
         } else {
 
@@ -242,7 +242,7 @@ class NotificationController extends Controller
 
         } else {
 
-            $result = $result = $this->mapValidator(['Something went wrong']);
+             $result = $this->mapValidator(['Something went wrong'], 110001);
 
         }
         return $result;
@@ -260,7 +260,7 @@ class NotificationController extends Controller
 
         if (is_null($find)) {
 
-            $result = $this->mapValidator(['Token unavailable or invalid']);
+            $result = $this->mapValidator(['Token unavailable or invalid'], 110011);
 
         } else {
 
@@ -285,7 +285,7 @@ class NotificationController extends Controller
 
         if(is_null($find)) {
 
-            $result = $this->mapValidator(['Something went wrong']);
+            $result = $this->mapValidator(['Something went wrong'], 10001);
 
         } else {
 
@@ -310,7 +310,7 @@ class NotificationController extends Controller
 
         if(is_null($find)) {
 
-            $result = $this->mapValidator(['Something went wrong']);
+            $result = $this->mapValidator(['Something went wrong'], 10001);
 
         } else {
 
@@ -373,9 +373,9 @@ class NotificationController extends Controller
      * @param $data
      * @return mixed
      */
-    public function mapValidator($data)
+    public function mapValidator($data, $errorCode)
     {
-        return $this->errorResponse($data, 'Validation Error', 110001, 400);
+        return $this->errorResponse($data, 'Validation Error', $errorCode, 400);
     }
 
     /**
@@ -383,10 +383,29 @@ class NotificationController extends Controller
      */
     public function notifResponse($notif)
     {
-        $data = [
-            'notifications' => $notif
-        ];
-        return $data;
+        foreach ($notif as $value)
+        {
+            $data[] = [
+                'id' => $value->id,
+                'title' => $value->title,
+                'message' => $value->message,
+                'type' => $value->type,
+                'job_id' => $value->job_id,
+                'created_at' => $this->dateFormat($value->created_at),
+                'updated_at' => $this->dateFormat($value->updated_at)
+            ];
+        }
+        $dataUndefined = !empty($data) ? $data : [];
+
+        return response()->json(['notifications' => $dataUndefined]);
+    }
+
+    public function dateFormat($date)
+    {
+        $format = date_create($date, timezone_open('UTC'));
+        $return = date_format($format, 'Y-m-d H:i:sO');
+
+        return $return;
     }
 
 }
