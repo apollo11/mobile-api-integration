@@ -19,26 +19,34 @@ class Employee extends Model
     public function employeeLists()
     {
         $employee = DB::table('users')
-//            ->leftJoin('job_schedules', 'job_schedules.user_id', '=', 'users.id')
-//            ->leftJoin('job_schedules', function ($join) use ($userId) {
-//                $join->on('job_schedules.job_id', '=', 'jobs.id')
-//                    ->where('job_schedules.user_id', '=', $userId);
-//            })
-
+            ->leftJoin('additional_infos', 'additional_infos.user_id', '=', 'users.id')
             ->select(
                   'users.id'
                 , 'users.name'
                 , 'users.nric_no'
                 , 'users.mobile_no'
-                , 'users.date_of_birth'
                 , 'users.employee_status'
                 , 'users.business_manager'
                 , 'users.employee_status as status'
+                , 'additional_infos.gender'
+                , 'additional_infos.birthdate'
+                , 'users.created_at as joined'
+                , 'users.updated_at as updated'
             )
             ->where('users.role_id', '=', 2)
             ->orderBy('users.id', 'asc')
             ->distinct()
             ->get();
+
+        return $employee;
+
+    }
+
+    public function updateInfo($data)
+    {
+        $employee = DB::table('users')
+            ->leftJoin('additional_infos', 'additional_infos.user_id', '=', 'users.id')
+            ->where('users.id', '=', $data['id']);
 
         return $employee;
 

@@ -231,6 +231,7 @@ class Job extends Model
                 , 'users.company_name'
                 , 'users.profile_image_path'
                 , 'users.employee_status as status'
+                , 'users.business_manager'
                 , 'jobs.description as job_description'
                 , 'jobs.status'
                 , 'jobs.location'
@@ -260,6 +261,47 @@ class Job extends Model
             ->get();
 
         return $jobs;
+    }
+
+    public function jobAdminDetails($id)
+    {
+        $jobDetails = DB::table('users as employer')
+            ->leftJoin('jobs', 'jobs.user_id', '=', 'employer.id')
+            ->select(
+                'jobs.id'
+                , 'employer.company_description'
+                , 'employer.company_name'
+                , 'employer.profile_image_path'
+                , 'employer.employee_status as status'
+                , 'employer.business_manager'
+                , 'jobs.description as job_description'
+                , 'jobs.job_title'
+                , 'jobs.status'
+                , 'jobs.location'
+                , 'jobs.location_id'
+                , 'jobs.industry'
+                , 'jobs.industry_id'
+                , 'jobs.job_date as start_date'
+                , 'jobs.created_at'
+                , 'jobs.end_date'
+                , 'jobs.contact_no'
+                , 'jobs.rate'
+                , 'jobs.job_image_path'
+                , 'jobs.nationality'
+                , 'jobs.choices as gender'
+                , 'jobs.description'
+                , 'jobs.min_age'
+                , 'jobs.max_age'
+                , 'jobs.role'
+                , 'jobs.notes'
+                , 'jobs.language'
+                , 'jobs.choices'
+                , 'jobs.job_requirements'
+            )
+            ->where('jobs.id', '=', $id)
+            ->first();
+
+        return $jobDetails;
     }
 
     /**
@@ -332,4 +374,40 @@ class Job extends Model
 
         return $job;
     }
+
+    /**
+     * Multiple Update
+     */
+
+    public function multiUpdateActive($multiId)
+    {
+        $user = DB::table('jobs')->wherein('id', $multiId)
+            ->update(['status' => 'active']);
+
+        return $user;
+    }
+
+    /**
+     * Multiple Update
+     */
+
+    public function multiUpdateInactive($multiId)
+    {
+        $user = DB::table('jobs')->wherein('id', $multiId)
+            ->update(['status' => 'inactive']);
+
+        return $user;
+    }
+
+    /**
+     * Multiple delete
+     */
+    public function multiDelete($multiId)
+    {
+        $user = db::table('jobs')->whereIn('id', $multiId)
+            ->delete();
+
+        return $user;
+    }
+
 }

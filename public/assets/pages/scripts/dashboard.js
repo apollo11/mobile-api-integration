@@ -1391,7 +1391,8 @@ var Dashboard = function() {
 
 }();
 
-
-jQuery(document).ready(function() {
-    Dashboard.init(); // init metronic core componets
-});
+if (App.isAngularJsApp() === false) {
+    jQuery(document).ready(function() {
+        Dashboard.init(); // init metronic core componets
+    });
+}

@@ -26,6 +26,10 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/approve/{id}', 'Employee\EmployeeController@approveStatus')->name('employee.approve');
         Route::post('/reject/{id}', 'Employee\EmployeeController@rejectUser')->name('employee.reject');
         Route::post('/upload/{id}', 'Employee\EmployeeController@uploadInfoUser')->name('employee.upload');
+        Route::post('delete','Employee\EmployeeController@destroy')->name('employee.destroy-all');
+        Route::post('delete/{id}','Employee\EmployeeController@destroyOne')->name('employee.destroy-one');
+        Route::get('details/{id}','Employee\EmployeeController@details')->name('employee.details');
+        Route::get('edit/{id}','Employee\EmployeeController@edit')->name('employee.edit');
 
     });
 
@@ -33,6 +37,8 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/lists', 'Employer\EmployerController@index')->name('employer.lists');
         Route::get('/create', 'Employer\EmployerController@create')->name('employer.create');
         Route::post('/add', 'Employer\EmployerController@store')->name('employer.add');
+        Route::post('multiple/{id?}/{param?}','Employer\EmployerController@destroy')->name('employer.multiple');
+
     });
 
     Route::prefix('industry')->group(function () {
@@ -51,6 +57,8 @@ Route::group(['middleware' => ['auth']], function () {
        Route::get('/create','Job\JobController@create')->name('job.create');
        Route::get('/lists','Job\JobController@index')->name('job.lists');
        Route::post('/add','Job\JobController@store')->name('job.add');
+       Route::post('multiple/{id?}/{param?}','Job\JobController@destroy')->name('job.multiple');
+       Route::get('details/{id}','Job\JobController@details')->name('job.details');
     });
 
 });
