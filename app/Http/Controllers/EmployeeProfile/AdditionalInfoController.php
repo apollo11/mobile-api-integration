@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\EmployeeProfile;
 
 use App\AdditionalInfo;
-use App\Availability;
+use App\History;
 use Validator;
 use App\Http\Traits\ProfileTrait;
 use Illuminate\Http\Request;
@@ -191,10 +191,14 @@ class AdditionalInfoController extends Controller
     public function show($id)
     {
         $info = new AdditionalInfo();
+        $history = new History();
+
+        $complete = $history->countCompletedJobs($id);
+        $money = $history->countEarnedJobs($id);
         $count = $info->countPendingJobs($id);
         $add = $info->userInfo($id);
 
-        return $this->profileIteration($add, $count);
+        return $this->profileIteration($add, $count, $complete, $money);
     }
 
     /**
@@ -271,9 +275,11 @@ class AdditionalInfoController extends Controller
     /**
      * Iteration of profile output
      */
-    public function profileIteration($output, $count)
+    public function profileIteration($output, $count, $complete, $money)
     {
         $data = $this->userDetailsOutput($output, $count);
+        $data['completed_job_count'] = $complete;
+        $data['money_earned'] = $money;
 
         return response()->json(['user_detail' => $data]);
     }

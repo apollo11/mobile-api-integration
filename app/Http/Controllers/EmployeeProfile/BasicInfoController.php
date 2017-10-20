@@ -3,11 +3,12 @@
 namespace App\Http\Controllers\EmployeeProfile;
 
 use Validator;
+use App\User;
+use App\History;
 use App\Http\Traits\ProfileTrait;
 use App\AdditionalInfo;
 use App\Http\Traits\HttpResponse;
 use Illuminate\Support\Facades\Hash;
-use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -55,10 +56,16 @@ class BasicInfoController extends Controller
     public function show($id)
     {
         $info = new AdditionalInfo();
+        $history = new History();
+
+        $count = $info->countPendingJobs($id);
+        $complete = $history->countCompletedJobs($id);
+        $money = $history->countEarnedJobs($id);
+
         $count = $info->countPendingJobs($id);
         $add = $info->userInfo($id);
 
-        return $this->profileIteration($add, $count);
+        return $this->profileIteration($add, $count, $complete, $money);
     }
 
     /**
@@ -305,9 +312,12 @@ class BasicInfoController extends Controller
     /**
      * Iteration of profile output
      */
-    public function profileIteration($output, $count)
+    public function profileIteration($output, $count, $complete, $money)
     {
         $data = $this->userDetailsOutput($output, $count);
+        $data['completed_job_count'] = $complete;
+        $data['money_earned'] = $money;
+
 
         return response()->json(['user_detail' => $data]);
     }
