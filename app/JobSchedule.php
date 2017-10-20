@@ -195,8 +195,8 @@ class JobSchedule extends Model
     {
         $jobs = DB::table('users')
             ->join('job_schedules', 'job_schedules.user_id', '=', 'users.id')
-            ->join('jobs', 'jobs.id', '=', 'job_schedules.job_id')
-            ->join('users as employee', 'employee.id', '=', 'jobs.user_id')
+            ->leftJoin('jobs', 'jobs.id', '=', 'job_schedules.job_id')
+            ->leftJoin('users as employee', 'employee.id', '=', 'jobs.user_id')
             ->select(
                   'job_schedules.id as schedule_id'
                 , 'job_schedules.user_id'
@@ -205,6 +205,7 @@ class JobSchedule extends Model
                 , 'jobs.created_at'
                 , 'jobs.job_title'
                 , 'jobs.rate'
+                , 'jobs.job_date as start_date'
                 , 'employee.company_name'
                 , 'employee.nric_no'
                 , 'employee.name'
