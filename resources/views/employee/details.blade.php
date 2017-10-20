@@ -3,6 +3,7 @@
     <form id="approve-{{ $userDetails->id }}" action="{{ route('employee.approve',['id' => $userDetails->id]) }}"
           method="POST" style="display: none;">
         {{ csrf_field() }}
+        <input type="submit" value="Approve">
     </form>
     <form id="reject-{{ $userDetails->id }}" action="{{ route('employee.reject',['id' => $userDetails->id]) }}"
           method="POST" style="display: none;">

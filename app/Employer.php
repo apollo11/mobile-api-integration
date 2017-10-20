@@ -19,7 +19,7 @@ class Employer extends Model
 
     public function employerList()
     {
-        $jobDetails = DB::table('users as employer')
+        $employer = DB::table('users as employer')
             ->leftJoin('jobs', 'jobs.user_id', '=', 'employer.id')
             ->select(
                 'jobs.id'
@@ -37,8 +37,28 @@ class Employer extends Model
             ->where('employer.role_id', '=', 1)
             ->get();
 
-        return $jobDetails;
+        return $employer;
     }
+
+    public function employerDetails($id)
+    {
+        $details = DB::table('users as employer')
+            ->leftJoin('jobs', 'jobs.user_id', '=', 'employer.id')
+            ->select(
+                'jobs.id'
+                , 'employer.company_description'
+                , 'employer.company_name'
+                , 'employer.profile_image_path'
+                , 'employer.employee_status as status'
+                , 'employer.business_manager'
+            )
+            ->where('employer.id', '=', $id)
+            ->where('employer.role_id', '=', 1)
+            ->first();
+
+        return $details;
+    }
+
 
     /**
      * Multiple Update
