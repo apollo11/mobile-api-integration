@@ -1,17 +1,14 @@
 @extends('layouts.app')
 
 @section('content')
-    <form id="approve-{{ $employer->id }}"
-          action="{{ route('employer.multiple',['id' => $employer->id, 'param' => 'Approve']) }}"
-          method="POST" style="display: none;">
-        <input type="submit" value="Approve">
+
+    <form id="approve-{{ $employer->id }}" action="{{ route('employer.multiple',['id' => $employer->id, 'param' => 'Approve' ]) }}" method="POST" style="display: none;">
         {{ csrf_field() }}
+        <input type="multiple" value="Approve">
     </form>
-    <form id="reject-{{ $employer->id }}"
-          action="{{ route('employer.multiple',['id' => $employer->id, 'param' => 'Reject']) }}"
-          method="POST" style="display: none;">
+    <form id="reject-{{ $employer->id }}" action="{{ route('employer.multiple',['id' => $employer->id, 'param' => 'Reject' ]) }}" method="POST" style="display: none;">
         {{ csrf_field() }}
-        <input type="submit" value="Reject">
+        <input type="multiple" value="Reject">
     </form>
     <div class="page-content-wrapper employee-details">
         <div class="page-content">
@@ -41,17 +38,17 @@
                                    href="{{ route('employee.edit',['id' => $employer->id])  }}">
                                     Update</a>
 
-                                <a class="btn sbold green"
-                                   href="{{ route('employer.multiple',['id' => $employer->id, 'param' => 'Approve'])  }}"
+                                <a class="btn sbold green" href="{{ route('employer.multiple',['id' => $employer->id, 'param' => 'Approve' ])  }}"
                                    onclick="event.preventDefault();
                                            document.getElementById('{{'approve-'.$employer->id }}').submit();">
-                                    Approve</a>
-                                <a class="btn sbold green"
-                                   href="{{ route('employer.multiple',['id' => $employer->id, 'param' => 'Reject']) }}"
+                                   Approve</a>
+
+                                <a class="btn sbold green" href="{{ route('employer.multiple',['id' => $employer->id, 'param' => 'Reject' ]) }}"
                                    onclick="event.preventDefault();
                                            document.getElementById('{{'reject-'.$employer->id }}').submit();">
-                                    Reject
+                                     Reject
                                 </a>
+
                                 <input class="btn sbold green" name="multiple" onclick="window.print()" value="Print"
                                        type="submit"/>
                             </div>

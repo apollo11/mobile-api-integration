@@ -43,13 +43,12 @@ class Employer extends Model
     public function employerDetails($id)
     {
         $details = DB::table('users as employer')
-            ->leftJoin('jobs', 'jobs.user_id', '=', 'employer.id')
             ->select(
-                'jobs.id'
+                'employer.id'
                 , 'employer.company_description'
                 , 'employer.company_name'
                 , 'employer.profile_image_path'
-                , 'employer.employee_status as status'
+                , 'employer.status'
                 , 'employer.business_manager'
             )
             ->where('employer.id', '=', $id)
@@ -59,11 +58,9 @@ class Employer extends Model
         return $details;
     }
 
-
     /**
      * Multiple Update
      */
-
     public function multiUpdateApprove($multiId)
     {
         $user = DB::table('users')->wherein('id', $multiId)
@@ -75,7 +72,6 @@ class Employer extends Model
     /**
      * Multiple Update
      */
-
     public function multiUpdateReject($multiId)
     {
         $user = DB::table('users')->wherein('id', $multiId)
