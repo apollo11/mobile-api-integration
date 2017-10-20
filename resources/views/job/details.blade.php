@@ -1,9 +1,9 @@
 @extends('layouts.app')
 @section('content')
-
     <form id="approve-{{ $details->id }}"
           action="{{ route('job.multiple',['id' => $details->id, 'param' => 'Approve']) }}"
           method="POST" style="display: none;">
+        <input type="submit" value="Approve">
         {{ csrf_field() }}
     </form>
     <form id="reject-{{ $details->id }}"

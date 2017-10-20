@@ -44,7 +44,7 @@ class EmployerController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -53,7 +53,7 @@ class EmployerController extends Controller
 
         $validator = $this->rules($data);
 
-        if($validator->fails()) {
+        if ($validator->fails()) {
 
             return redirect('employer/create')
                 ->withErrors($validator)
@@ -96,18 +96,21 @@ class EmployerController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
-        //
+        $user = new Employer();
+        $employer = $user->employerDetails($id);
+
+        return view('employer.details',['employer' => $employer]);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -118,8 +121,8 @@ class EmployerController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request $request
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -133,14 +136,14 @@ class EmployerController extends Controller
      * 1 Approved
      * 2 Upload
      * 3 Reject
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request, $id=null , $param=null)
+    public function destroy(Request $request, $id = null, $param = null)
     {
         $employer = new Employer();
         $submit = empty($request->input('multiple')) ? $param : $request->input('multiple');
-        $multi = is_null($id) ? $request->input('multicheck') : (array) $id;
+        $multi = is_null($id) ? $request->input('multicheck') : (array)$id;
         switch ($submit) {
             case 'Approve':
                 $employer->multiUpdateApprove($multi);
