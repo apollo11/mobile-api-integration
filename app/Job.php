@@ -227,6 +227,7 @@ class Job extends Model
             ->join('jobs', 'users.id', '=', 'jobs.user_id')
             ->select(
                 'jobs.id'
+                , 'jobs.user_id'
                 , 'users.company_description'
                 , 'users.company_name'
                 , 'users.profile_image_path'

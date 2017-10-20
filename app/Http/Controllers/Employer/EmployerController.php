@@ -24,9 +24,30 @@ class EmployerController extends Controller
      */
     public function index()
     {
-        $employers = $this->userList();
+        $employer = new Employer();
 
-        return view('employer.lists', ['employers' => $employers]);
+        $list = $employer->employerList();
+
+        foreach ($list as $value)
+        {
+            $countPosted = $employer->postedJobCounts($value->id);
+            $applied = $employer->candidates($value->id);
+
+            $data[] = [
+                'id' => $value->id,
+                'business_manager' => $value->business_manager,
+                'company_name' => $value->company_name,
+                'status' => $value->status,
+                'applied' => $applied,
+                'posting' => $countPosted
+            ];
+
+        }
+
+        $dataUndefined = !empty($data) ? $data : [];
+
+
+        return view('employer.lists', ['employers' => $dataUndefined]);
     }
 
     /**
@@ -103,8 +124,18 @@ class EmployerController extends Controller
     {
         $user = new Employer();
         $employer = $user->employerDetails($id);
+        $countPosted = $user->postedJobCounts($employer->id);
+        $applied = $user->candidates($employer->id);
+        $related = $user->relatedJobs($employer->id);
 
-        return view('employer.details',['employer' => $employer]);
+
+        return view('employer.details',
+            [
+                'employer' => $employer
+                , 'applied' => $applied
+                , 'posting' => $countPosted
+                , 'job' => $related
+            ]);
     }
 
     /**
@@ -163,14 +194,12 @@ class EmployerController extends Controller
     /**
      * Employer information
      */
-    public function userList()
+    public function newlyRegisteredEmployer()
     {
-        $user = new User();
-        $employers = $user::where('role_id', 1)
-            ->orderBy('created_at', 'desc')
-            ->get();
+        $user = new Employer();
+        $employers = $user->userByMobile();
 
-        return $employers;
+        return view('employer.newly-lists', ['employers' => $employers ]);
 
     }
 

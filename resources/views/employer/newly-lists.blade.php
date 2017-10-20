@@ -1,23 +1,16 @@
 @extends('layouts.app')
 
 @section('content')
-
     @foreach($employers as $key )
-
-        <form id="approve-{{ $key['id'] }}" action="{{ route('employer.multiple',['id' => $key['id'], 'param' => 'Approve' ]) }}" method="POST" style="display: none;">
-            {{ csrf_field() }}
-            <input type="multiple" value="Approve">
-        </form>
-        <form id="reject-{{ $key['id'] }}" action="{{ route('employer.multiple',['id' =>$key['id'], 'param' => 'Reject' ]) }}" method="POST" style="display: none;">
-            {{ csrf_field() }}
-            <input type="multiple" value="Reject">
-        </form>
-        <form id="destroy-{{ $key['id'] }}" action="{{ route('employer.multiple',['id' => $key['id'],'param' => 'Delete']) }}" method="POST" style="display: none;">
+        <form id="destroy-{{ $key->id }}"
+              action="{{ route('employer.multiple',['id' => $key->id,'param' => 'Delete']) }}" method="POST"
+              style="display: none;">
             {{ csrf_field() }}
             <input type="multiple" value="Delete">
         </form>
 
     @endforeach
+
 
     <div class="page-content-wrapper employee-list">
         <div class="page-content">
@@ -33,14 +26,11 @@
                                 </div>
                                 {{ csrf_field() }}
                                 <div class="actions">
-                                    <input class="btn sbold green" name="multiple" value="Approve" type="submit"/>
-                                    <input class="btn sbold green" name="multiple" value="Reject" type="submit"/>
                                     <input class="btn sbold green" name="multiple" value="Delete" type="submit"/>
                                     <a href="{{ route('employer.create') }}" id="sample_editable_1_new"
                                        class="btn sbold green"> Add New
                                         <i class="fa fa-plus"></i>
                                     </a>
-
                                 </div>
                             </div>
                             <div class="portlet-body">
@@ -56,12 +46,11 @@
                                             </label>
                                         </th>
                                         <th>#</th>
-                                        <th>Company Name</th>
-                                        <th> Business Manager</th>
-                                        <th> Number of Job Posting</th>
-                                        <th> Number of Candidates</th>
-                                        <th> Status</th>
-                                        <th> Action </th>
+                                        <th>Name</th>
+                                        <th> Business Name</th>
+                                        <th>Email</th>
+                                        <th>Mobile No.</th>
+                                        <th> Action</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -71,24 +60,15 @@
                                             <td>
                                                 <label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">
                                                     <input type="checkbox" name="multicheck[]" class="checkboxes"
-                                                           value="{{ $user['id'] }}"/>
+                                                           value="{{ $user->id }}"/>
                                                     <span></span>
                                                 </label>
                                             </td>
-                                            <td>{{ $user['id'] }}</td>
-                                            <td>{{ $user['company_name'] }}</td>
-                                            <td> {{ $user['business_manager'] }}</td>
-                                            <td>{{ $user['posting'] }}</td>
-                                            <td>{{ $user['applied'] }}</td>
-                                            @if($user['status'] == 0 )
-                                                <td><span class="label label-sm label-warning"> Pending </span></td>
-                                            @elseif($user['status'] == 1)
-                                                <td><span class="label label-sm label-success"> Approve </span></td>
-                                            @elseif($user['status'] == 2)
-                                                <td><span class="label label-sm label-warning"> Upload </span></td>
-                                            @else
-                                                <td><span class="label label-sm label-danger"> Reject </span></td>
-                                            @endif
+                                            <td>{{ $user->id }}</td>
+                                            <td>{{ $user->name }}</td>
+                                            <td> {{ $user->business_name }}</td>
+                                            <td>{{ $user->email }}</td>
+                                            <td>{{ $user->mobile_no}}</td>
                                             <td>
                                                 <div class="btn-group">
                                                     <button class="btn btn-xs green dropdown-toggle" type="button"
@@ -97,9 +77,9 @@
                                                     </button>
                                                     <ul class="dropdown-menu" role="menu">
                                                         <li>
-                                                            <a href="{{ route('employer.multiple',['id' => $user['id'], 'param' => 'Delete' ]) }}"
+                                                            <a href="{{ route('employer.multiple',['id' => $user->id, 'param' => 'Delete' ]) }}"
                                                                onclick="event.preventDefault();
-                                                                       document.getElementById('{{'destroy-'.$user['id'] }}').submit();">
+                                                                       document.getElementById('{{'destroy-'.$user->id }}').submit();">
                                                                 <i class="fa fa-trash"></i> Delete</a>
                                                         </li>
                                                         <li>
@@ -107,21 +87,8 @@
                                                                 <i class="fa fa-edit"></i> Edit </a>
                                                         </li>
                                                         <li>
-                                                            <a href="{{ route('employer.details',['id' => $user['id'] ])  }}">
+                                                            <a href="{{ route('employer.details',['id' => $user->id ])  }}">
                                                                 <i class="fa fa-eye"></i> View </a>
-                                                        </li>
-                                                        <li>
-                                                            <a href="{{ route('employer.multiple',['id' => $user['id'], 'param' => 'Approve' ])  }}"
-                                                               onclick="event.preventDefault();
-                                                                       document.getElementById('{{'approve-'.$user['id'] }}').submit();">
-                                                                <i class="fa fa-check-square-o"></i> Approve</a>
-                                                        </li>
-                                                        <li>
-                                                            <a href="{{ route('employer.multiple',['id' => $user['id'], 'param' => 'Reject' ]) }}"
-                                                               onclick="event.preventDefault();
-                                                                       document.getElementById('{{'reject-'.$user['id'] }}').submit();">
-                                                                <i class="fa fa-close"></i> Reject
-                                                            </a>
                                                         </li>
                                                     </ul>
                                                 </div>

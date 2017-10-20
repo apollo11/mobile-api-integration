@@ -45,7 +45,7 @@
                 </a>
             </li>
             <li>
-                <a href="{{ route('employer.lists') }}">
+                <a href="{{ route('employer.new.list') }}">
                     <i class="icon-home"></i>
                     Newly Employers</a>
             </li>

@@ -72,7 +72,7 @@
                                             </label>
                                         </td>
                                         <td>{{ $value->id }}</td>
-                                        <td><a href="{{ $value->id  }}">{{ $value->company_name }} </a></td>
+                                        <td><a href="{{ route('employer.details',['id' => $value->user_id ]) }}">{{ $value->company_name }} </a></td>
                                         <td>{{ $value->job_title }}</td>
                                         <td>{{ $value->no_of_person }}</td>
                                         <td><a href="#">0 </a></td>
