@@ -38,7 +38,11 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/create', 'Employer\EmployerController@create')->name('employer.create');
         Route::post('/add', 'Employer\EmployerController@store')->name('employer.add');
         Route::post('multiple/{id?}/{param?}','Employer\EmployerController@destroy')->name('employer.multiple');
+<<<<<<< Updated upstream
 
+=======
+        Route::get('details/{id}','Employer\EmployerController@show')->name('employer.details');
+>>>>>>> Stashed changes
     });
 
     Route::prefix('industry')->group(function () {

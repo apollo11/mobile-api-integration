@@ -112,7 +112,7 @@
                                                                 <i class="fa fa-edit"></i> Edit </a>
                                                         </li>
                                                         <li>
-                                                            <a href="{{ route('job.multiple',['id' => $user->id, 'param' => 'Approve' ])  }}">
+                                                            <a href="{{ route('employer.details',['id' => $user->id])  }}">
                                                                 <i class="fa fa-eye"></i> View </a>
                                                         </li>
                                                         <li>
