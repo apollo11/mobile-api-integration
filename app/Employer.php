@@ -39,6 +39,7 @@ class Employer extends Model
                 , 'employer.business_manager'
             )
             ->where('employer.role_id', '=', 1)
+            ->whereNull('employer.platform')
             ->get();
 
         return $employer;
@@ -189,8 +190,10 @@ class Employer extends Model
                 ,'users.name'
                 , 'users.mobile_no'
                 , 'users.business_name'
+                , 'users.platform'
+                , 'users.email'
             )
-            ->whereIn('users.platform', '=', ['ios', 'android'])
+            ->whereIn('users.platform',['ios', 'android'])
             ->where('users.role_id', '=', 1)
             ->get();
 
@@ -206,7 +209,7 @@ class Employer extends Model
                 , 'users.mobile_no'
                 , 'users.business_name'
             )
-            ->whereIn('users.platform', '=', ['ios', 'android'])
+            ->whereIn('users.platform',['ios', 'android'])
             ->where('users.role_id', '=', 1)
             ->count();
 

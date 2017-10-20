@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Employer;
 use App\Job;
 use Illuminate\Http\Request;
 
@@ -91,6 +92,16 @@ class HomeController extends Controller
 
         return $count;
 
+    }
 
+    /**
+     * Count Newly registered employee
+     */
+
+    public function countNewlyRegEmployee()
+    {
+        $employer = new Employer();
+
+        return view('layouts.sidebar',['newlyReg' => $employer->countRegMobile()]);
     }
 }

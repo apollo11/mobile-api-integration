@@ -198,8 +198,8 @@ class EmployerController extends Controller
     {
         $user = new Employer();
         $employers = $user->userByMobile();
-        dd($user->countRegMobile());
-        return $employers;
+
+        return view('employer.newly-lists', ['employers' => $employers ]);
 
     }
 
