@@ -265,9 +265,6 @@ class EmployeeController extends Controller
                 'medication' => $medical,
                 'language' => $data['language'],
                 'nationality' => $data['nationality'],
-                'front_ic_path' => 'none',
-                'back_ic_path' => 'none',
-                'signature_file_path' => 'none'
             ]);
 
         }
@@ -544,64 +541,172 @@ class EmployeeController extends Controller
 
     public function updateFrontIc(Request $request, $id)
     {
-        $data = $request->all();
+        $additonalInfo = \App\AdditionalInfo::where('user_id', $id)->first();
+        $user = \App\User::find($id);
+
+        $data['profile_front_ic'] = $request->file('profile_front_ic');
+
         $validator = Validator::make($data, [
-            'front_ic_path' => 'required|file',
+            'profile_front_ic' => 'required|file',
         ]);
 
-        if($validator->fails()) {
+        if ($validator->fails()) {
 
-            return back()
+            return redirect(route('employee.details', ['id' => $id]))
                 ->withErrors($validator)
                 ->withInput();
 
         } else {
 
+            $profileImg = $this->uploadingFile($request);
 
-            return redirect('employee/lists');
+            if (is_null($additonalInfo)) {
+
+                $user->additionalInfo()->firstOrCreate([
+                    'front_ic_path' => $profileImg['profile_front_ic'],
+                ]);
+
+            } else {
+                $user->additionalInfo()->update([
+                    'front_ic_path' => $profileImg['profile_front_ic'],
+                ]);
+            }
+
+            return redirect(route('employee.details', ['id' => $id]));
+
         }
 
     }
 
     public function updateBacktIc(Request $request, $id)
     {
-        $data = $request->all();
+        $additonalInfo = \App\AdditionalInfo::where('user_id', $id)->first();
+        $user = \App\User::find($id);
+
+        $data['profile_back_ic'] = $request->file('profile_back_ic');
+
         $validator = Validator::make($data, [
-            'back_ic_path' => 'required|file',
+            'profile_back_ic' => 'required|file',
         ]);
 
-        if($validator->fails()) {
+        if ($validator->fails()) {
 
-            return back()
+            return redirect(route('employee.details', ['id' => $id]))
                 ->withErrors($validator)
                 ->withInput();
 
         } else {
 
+            $profileImg = $this->uploadingFile($request);
 
-            return redirect('employee/lists');
+            if (is_null($additonalInfo)) {
+
+                $user->additionalInfo()->firstOrCreate([
+                    'back_ic_path' => $profileImg['profile_back_ic'],
+                ]);
+
+            } else {
+                $user->additionalInfo()->update([
+                    'back_ic_path' => $profileImg['profile_back_ic'],
+                ]);
+            }
+
+            return redirect(route('employee.details', ['id' => $id]));
+
         }
 
     }
 
-    public function UpdateProfileImg(Request $request, $id)
+    public function updateBankStmnt(Request $request, $id)
     {
-        $data = $request->all();
+        $additonalInfo = \App\AdditionalInfo::where('user_id', $id)->first();
+        $user = \App\User::find($id);
+
+        $data['bank_statement'] = $request->file('bank_statement');
+
         $validator = Validator::make($data, [
-            'profile_image_path' => 'required|file',
+            'bank_statement' => 'required|file',
         ]);
 
-        if($validator->fails()) {
+        if ($validator->fails()) {
 
-            return back()
+            return redirect(route('employee.details', ['id' => $id]))
                 ->withErrors($validator)
                 ->withInput();
 
         } else {
 
-            return redirect('employee/lists');
+            $profileImg = $this->uploadingFile($request);
+
+            if (is_null($additonalInfo)) {
+
+                $user->additionalInfo()->firstOrCreate([
+                    'bank_statement' => $profileImg['bank_statement'],
+                ]);
+
+            } else {
+                $user->additionalInfo()->update([
+                    'bank_statement' => $profileImg['bank_statement'],
+                ]);
+            }
+
+            return redirect(route('employee.details', ['id' => $id]));
+
         }
 
+    }
+
+    public function updateProfileImg(Request $request, $id = null)
+    {
+        $user = \App\User::find($id);
+        $data['profile_image'] = $request->file('profile_image');
+
+        $validator = Validator::make($data, [
+            'profile_image' => 'required|file',
+        ]);
+
+        if($validator->fails()) {
+
+            return redirect(route('employee.details',['id' => $id]))
+                ->withErrors($validator)
+                ->withInput();
+
+        } else {
+
+           $profileImg = $this->uploadingFile($request);
+
+
+           $user->profile_image_path = $profileImg['profile_image'];
+           $user->save();
+
+            return redirect(route('employee.details',['id' => $id]));
+        }
+
+    }
+
+    function uploadingFile(Request $request)
+    {
+        if ($request->hasFile('profile_front_ic')) {
+
+            $file['profile_front_ic'] = $request->file('profile_front_ic')->store('additional_info');
+        }
+        if ($request->hasFile('profile_back_ic')) {
+
+            $file['profile_back_ic'] = $request->file('profile_back_ic')->store('additional_info');
+
+        }
+
+        if ($request->hasFile('bank_statement')) {
+
+            $file['bank_statement'] = $request->file('bank_statement')->store('additional_info');
+        }
+
+        if ($request->hasFile('profile_image')) {
+
+            $file['profile_image'] = $request->file('profile_image')->store('avatars');
+        }
+
+        return $file;
     }
 
 

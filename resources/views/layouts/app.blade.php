@@ -287,7 +287,32 @@
                 "show"      : false                     // ensure the modal is shown immediately
             });
 
+
         });
+
+    </script>
+
+    <script type="text/javascript">
+        @if ($errors->has('profile_image'))
+            $('#profile-img').modal('show');
+
+//        $('#profile-back-ic').modal('show');
+//        $('#profile-bank-statement').modal('show');
+        @endif
+
+        @if ($errors->has('profile_front_ic'))
+            $('#profile-front-ic').modal('show');
+        @endif
+
+        @if ($errors->has('profile_back_ic'))
+            $('#profile-back-ic').modal('show');
+        @endif
+
+        @if ($errors->has('bank_statement'))
+        $('#profile-bank-statement').modal('show');
+        @endif
+
+
 
     </script>
 
