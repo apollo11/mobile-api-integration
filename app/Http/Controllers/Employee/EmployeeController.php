@@ -542,4 +542,68 @@ class EmployeeController extends Controller
         return $result;
     }
 
+    public function updateFrontIc(Request $request, $id)
+    {
+        $data = $request->all();
+        $validator = Validator::make($data, [
+            'front_ic_path' => 'required|file',
+        ]);
+
+        if($validator->fails()) {
+
+            return back()
+                ->withErrors($validator)
+                ->withInput();
+
+        } else {
+
+
+            return redirect('employee/lists');
+        }
+
+    }
+
+    public function updateBacktIc(Request $request, $id)
+    {
+        $data = $request->all();
+        $validator = Validator::make($data, [
+            'back_ic_path' => 'required|file',
+        ]);
+
+        if($validator->fails()) {
+
+            return back()
+                ->withErrors($validator)
+                ->withInput();
+
+        } else {
+
+
+            return redirect('employee/lists');
+        }
+
+    }
+
+    public function UpdateProfileImg(Request $request, $id)
+    {
+        $data = $request->all();
+        $validator = Validator::make($data, [
+            'profile_image_path' => 'required|file',
+        ]);
+
+        if($validator->fails()) {
+
+            return back()
+                ->withErrors($validator)
+                ->withInput();
+
+        } else {
+
+            return redirect('employee/lists');
+        }
+
+    }
+
+
+
 }

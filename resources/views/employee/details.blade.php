@@ -102,6 +102,26 @@
                     </div>
                     <!-- END EXAMPLE TABLE PORTLET-->
                 </div>
+                <div class="col-md-6">
+                    <!-- BEGIN EXAMPLE TABLE PORTLET-->
+                    <div class="portlet light bordered">
+                        <div class="portlet-body">
+                            <div class="table-toolbar">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="btn-group">
+                                            <div class="col-md-12"><a href="#" class="btn" data-toggle="modal" data-target="#profile-img">Update Profile Image</a></div>
+                                            <div class="col-md-12"><a href="#" class="btn" data-toggle="modal" data-target="#profile-front-ic">Update IC (Front)</a></div>
+                                            <div class="col-md-12"><a href="#" class="btn" data-toggle="modal" data-target="#profile-back-ic">Update IC (back)</a></div>
+                                            <div class="col-md-12"><a href="#" class="btn" data-toggle="modal" data-target="#profile-bank-statement">Update Bank Statement (back)</a></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- END EXAMPLE TABLE PORTLET-->
+                </div>
             </div>
             <div class="row">
                 <div class="col-md-12">
@@ -193,5 +213,8 @@
             </div>
         </div>
     </div>
+
+@include('employee.edit-profile')
+
 
 @endsection

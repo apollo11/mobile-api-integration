@@ -272,10 +272,19 @@
                 $("#myModal").remove();
             });
 
-            $("#myModal").modal({                    // wire up the actual modal functionality and show the dialog
+            $("#profile-img").modal({                    // wire up the actual modal functionality and show the dialog
                 "backdrop"  : "static",
                 "keyboard"  : true,
-                "show"      : true                     // ensure the modal is shown immediately
+                "show"      : false                     // ensure the modal is shown immediately
+            });
+
+            $("#profile-img"
+                , "profile-front-ic"
+                , "profile-back-ic"
+                , "profile-bank-statement").modal({                    // wire up the actual modal functionality and show the dialog
+                "backdrop"  : "static",
+                "keyboard"  : true,
+                "show"      : false                     // ensure the modal is shown immediately
             });
 
         });

@@ -31,6 +31,11 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('delete','Employee\EmployeeController@destroy')->name('employee.destroy-all');
         Route::post('delete/{id}','Employee\EmployeeController@destroyOne')->name('employee.destroy-one');
         Route::post('update/{id?}', 'Employee\EmployeeController@update')->name('employee.update');
+
+        Route::post('update/profile/img/{id?}', 'Employee\EmployeeController@UpdateProfileImg')->name('employee.edit.img');
+        Route::post('update/profile/frontic/{id?}', 'Employee\EmployeeController@updateFrontIc')->name('employee.edit.frontic');
+        Route::post('update/profile/backic/{id?}', 'Employee\EmployeeController@updateBacktIc')->name('employee.edit.backic');
+
     });
 
     Route::prefix('employer')->group(function () {
