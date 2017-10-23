@@ -83,7 +83,7 @@
                                                                 <i class="fa fa-trash"></i> Delete</a>
                                                         </li>
                                                         <li>
-                                                            <a href="">
+                                                            <a href="{{ route('employer.edit',['id' => $user->id]) }}">
                                                                 <i class="fa fa-edit"></i> Edit </a>
                                                         </li>
                                                         <li>

@@ -43,7 +43,9 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/lists', 'Employer\EmployerController@index')->name('employer.lists');
         Route::get('new/list', 'Employer\EmployerController@newlyRegisteredEmployer')->name('employer.new.list');
         Route::get('/create', 'Employer\EmployerController@create')->name('employer.create');
+        Route::get('/edit/{id}', 'Employer\EmployerController@edit')->name('employer.edit');
         Route::post('/add', 'Employer\EmployerController@store')->name('employer.add');
+        Route::post('/update/{id?}', 'Employer\EmployerController@update')->name('employer.update');
         Route::post('multiple/{id?}/{param?}','Employer\EmployerController@destroy')->name('employer.multiple');
         Route::get('details/{id}','Employer\EmployerController@show')->name('employer.details');
     });

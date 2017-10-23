@@ -11,7 +11,7 @@
                         <i class="fa fa-circle"></i>
                     </li>
                     <li>
-                        <span>Add New Employer</span>
+                        <span>Update User Details</span>
                     </li>
                 </ul>
             </div>
@@ -26,7 +26,7 @@
                             </div>
                         </div>
                         <div class="portlet-body form">
-                            <form class="form-horizontal" method="POST" role="form" action="{{ route('employer.add') }}" enctype="multipart/form-data">
+                            <form class="form-horizontal" method="POST" role="form" action="{{ route('employer.update',['id' => $user->id]) }}" enctype="multipart/form-data">
                                 {{ csrf_field() }}
                                 <div class="form-body">
 
@@ -45,7 +45,7 @@
                                     <div class="form-group{{ $errors->has('company_name') ? ' has-error' : '' }}">
                                         <label class="col-md-3 control-label">Company Name</label>
                                         <div class="col-md-7">
-                                            <input type="text" class="form-control" placeholder="Enter Company Name" value="{{ old('company_name') }}" name="company_name">
+                                            <input type="text" class="form-control" placeholder="Enter Company Name" value="{{ $user->company_name }}" name="company_name">
                                             @if ($errors->has('company_name'))
                                                 <span class="help-block">
                                                 {{ $errors->first('company_name') }}
@@ -57,7 +57,7 @@
                                     <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
                                         <label class="col-md-3 control-label">Email Address</label>
                                         <div class="col-md-7">
-                                            <input type="email" class="form-control" placeholder="Enter Email Address" value="{{ old('email') }}" name="email">
+                                            <input type="email" class="form-control" placeholder="Enter Email Address" value="{{ $user->email }}" name="email">
                                             @if ($errors->has('email'))
                                                 <span class="help-block">
                                                 {{ $errors->first('email') }}
@@ -76,7 +76,7 @@
                                     <div class="form-group{{ $errors->has('business_manager') ? ' has-error' : '' }}">
                                         <label class="col-md-3 control-label">Business Manager</label>
                                         <div class="col-md-7">
-                                            <input type="text" class="form-control" placeholder="Enter Business Manager" value="{{ old('business_manager') }}" name="business_manager">
+                                            <input type="text" class="form-control" placeholder="Enter Business Manager" value="{{ $user->business_manager }}" name="business_manager">
                                             @if ($errors->has('business_manager'))
                                                 <span class="help-block">
                                                 {{ $errors->first('business_manager') }}
@@ -99,7 +99,7 @@
                                     <div class="form-group{{ $errors->has('contact_person') ? ' has-error' : '' }}">
                                         <label class="col-md-3 control-label">Contact Person</label>
                                         <div class="col-md-7">
-                                            <input type="text" class="form-control" placeholder="Enter Contact Person" value="{{ old('contact_person') }}" name="contact_person">
+                                            <input type="text" class="form-control" placeholder="Enter Contact Person" value="{{ $user->contact_person }}" name="contact_person">
                                             @if ($errors->has('contact_person'))
                                                 <span class="help-block">
                                                 <strong>{{ $errors->first('contact_person') }}</strong>
@@ -111,7 +111,7 @@
                                     <div class="form-group{{ $errors->has('hourly_rate') ? ' has-error' : '' }}">
                                         <label class="col-md-3 control-label">Hourly Rate</label>
                                         <div class="col-md-7">
-                                            <input type="text" class="form-control" placeholder="Enter Hourly Rate" value="{{ old('hourly_rate') }}" name="hourly_rate">
+                                            <input type="text" class="form-control" placeholder="Enter Hourly Rate" value="{{ $user->rate }}" name="hourly_rate">
                                             @if ($errors->has('hourly_rate'))
                                                 <span class="help-block">
                                                 <strong>{{ $errors->first('hourly_rate') }}</strong>
@@ -126,7 +126,7 @@
                                             <select class="form-control" name="industry">
                                                 @foreach( $industry as $value)
                                                     @if($loop->count == 0)
-                                                         <option value="none">None</option>
+                                                        <option value="none">None</option>
                                                     @else
                                                         <option value="{{ $value->id }}">{{ $value->name }}</option>
                                                     @endif

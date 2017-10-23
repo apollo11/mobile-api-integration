@@ -146,7 +146,12 @@ class EmployerController extends Controller
      */
     public function edit($id)
     {
-        //
+        $industry = $this->industryList();
+        $user = new Employer();
+        $employer = $user->employerDetails($id);
+
+
+        return view('employer.edit-form', ['industry' => $industry, 'user' => $employer]);
     }
 
     /**
@@ -156,9 +161,41 @@ class EmployerController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $id=null)
     {
-        //
+        $data = $request->all();
+
+        $validator = $this->rules($data);
+
+        if ($validator->fails()) {
+
+            return redirect(route('employer.edit',['id' => $id]))
+                ->withErrors($validator)
+                ->withInput();
+
+        } else {
+
+            $companyLogo['company_logo'] = $request->file('company_logo')->store('avatars');
+            $merge = array_merge($data, $companyLogo);
+
+            $employer = \App\User::find($id);
+            $employer->role_id = 1;
+            $employer->role = 'employer';
+            $employer->company_name = $merge['company_name'];
+            $employer->email = $merge['email'];
+            $employer->company_description = $merge['company_description'];
+            $employer->business_manager = $merge['business_manager'];
+            $employer->password = bcrypt($merge['password']);
+            $employer->contact_person = $merge['contact_person'];
+            $employer->rate = $merge['hourly_rate'];
+            $employer->profile_image_path = $merge['company_logo'];
+            $employer->industry = $merge['industry'];
+
+            $employer->save();
+
+            return redirect('employer/lists');
+        }
+
     }
 
     /**
