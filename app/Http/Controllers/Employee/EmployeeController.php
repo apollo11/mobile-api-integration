@@ -170,10 +170,16 @@ class EmployeeController extends Controller
     public function edit($id)
     {
         $userDetails = new AdditionalInfo();
+        $contactMethod = [
+            'sms'
+            , 'phone'
+            , 'email'
+            , 'other'
+        ];
 
         $details = $userDetails->userInfo($id);
 
-        return view('employee.edit-form', ['details' => $details ]);
+        return view('employee.edit-form', ['details' => $details, 'contact_method' => $contactMethod]);
     }
 
     /**
@@ -183,10 +189,123 @@ class EmployeeController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $id = null)
     {
+        $data = $request->all();
+        $validator = $this->updateRules($data);
+
+        if($validator->fails()) {
+
+            return back()
+                ->withErrors($validator)
+                ->withInput();
+
+        } else {
+
+           $this->updateBasicAdditionalInfo($data, $id);
+
+            return redirect('employee/lists');
+        }
+    }
+
+    /**
+     * Update additional information
+     */
+    public function updateBasicAdditionalInfo(array $data, $id)
+    {
+        $criminal = !empty($data['criminal_record']) ? $data['criminal_record'] : '';
+        $medical = !empty($data['medication']) ? $data['medication'] : '';
+        $school = !empty($data['school']) ? $data['school'] : '';
+        $schoolExpiry = !empty($data['school_pass_expiry_date']) ? $data['school_pass_expiry_date'] : '1970-01-01';
+
+        $additonalInfo = \App\AdditionalInfo::where('user_id', $id)->first();
+
+        $user = \App\User::find($id);
+
+        if(is_null($additonalInfo)) {
+
+            $user->additionalInfo()->updateOrCreate([
+                'gender' => $data['gender'],
+                'birthdate' => $data['birthdate'],
+                'religion' => $data['religion'],
+                'address' => $data['address'],
+                'email' => $data['email'],
+                'school' => $school,
+                'school_pass_expiry_date' => $schoolExpiry,
+                'emergency_name' => $data['emergency_contact_person'],
+                'emergency_contact_no' => $data['emergency_contact_person_no'],
+                'emergency_relationship' => $data['emergency_person_relationship'],
+                'emergency_address' => $data['emergency_person_address'],
+                'contact_method' => $data['contact_method'],
+                'criminal_record' => $criminal,
+                'medication' => $medical,
+                'language' => $data['language'],
+                'nationality' => $data['nationality'],
+                'front_ic_path' => 'none',
+                'back_ic_path' => 'none',
+                'signature_file_path' => 'none'
+            ]);
+
+        } else {
+
+            $user->additionalInfo()->update([
+                'gender' => $data['gender'],
+                'birthdate' => $data['birthdate'],
+                'religion' => $data['religion'],
+                'address' => $data['address'],
+                'email' => $data['email'],
+                'school' => $school,
+                'school_pass_expiry_date' => $schoolExpiry,
+                'emergency_name' => $data['emergency_contact_person'],
+                'emergency_contact_no' => $data['emergency_contact_person_no'],
+                'emergency_relationship' => $data['emergency_person_relationship'],
+                'emergency_address' => $data['emergency_person_address'],
+                'contact_method' => $data['contact_method'],
+                'criminal_record' => $criminal,
+                'medication' => $medical,
+                'language' => $data['language'],
+                'nationality' => $data['nationality'],
+                'front_ic_path' => 'none',
+                'back_ic_path' => 'none',
+                'signature_file_path' => 'none'
+            ]);
+
+        }
+
+        \App\User::where('id', $id)
+            ->update([
+                'name' => $data['name'],
+                'mobile_no' => $data['mobile_no']
+            ]);
 
     }
+
+    /**
+     * Update Profile Information Rules
+     */
+    public function updateRules(array $data)
+    {
+
+        return Validator::make($data, [
+                'name' => 'required|string|max:255',
+                'email' => 'required|string|email|max:255|unique:users',
+                'mobile_no' => 'required',
+                'birthdate' => 'date|required',
+                'nationality' => 'required|string',
+                'language' => 'required|string',
+                'gender' => 'string|required',
+                'emergency_contact_person' => 'required|string',
+                'emergency_contact_person_no' => 'required|string',
+                'emergency_person_relationship' => 'required|string',
+                'contact_method' => 'required',
+                'religion' => 'required|string',
+                'emergency_person_address' => 'required|string',
+                'address' => 'required'
+            ]
+        );
+
+    }
+
 
     /**
      * Remove the specified resource from storage.

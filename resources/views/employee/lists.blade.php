@@ -115,7 +115,8 @@
                                                                 <i class="fa fa-trash"></i> Delete</a>
                                                         </li>
                                                         <li>
-                                                            <a href="">
+
+                                                            <a href="{{ route('employee.edit',['id' => $employee[$i]['id']])  }}">
                                                                 <i class="fa fa-edit"></i> Edit </a>
                                                         </li>
                                                         <li>

@@ -21,6 +21,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::prefix('employee')->group(function () {
         Route::get('/lists', 'Employee\EmployeeController@index')->name('employee.lists');
         Route::get('/create', 'Employee\EmployeeController@create')->name('employee.create');
+        Route::get('details/{id}','Employee\EmployeeController@details')->name('employee.details');
+        Route::get('edit/{id}','Employee\EmployeeController@edit')->name('employee.edit');
         Route::post('/signup', 'Employee\EmployeeController@signup')->name('employee.signup');
         Route::post('/pending/{id}', 'Employee\EmployeeController@pendingStatus')->name('employee.pending');
         Route::post('/approve/{id}', 'Employee\EmployeeController@approveStatus')->name('employee.approve');
@@ -28,9 +30,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/upload/{id}', 'Employee\EmployeeController@uploadInfoUser')->name('employee.upload');
         Route::post('delete','Employee\EmployeeController@destroy')->name('employee.destroy-all');
         Route::post('delete/{id}','Employee\EmployeeController@destroyOne')->name('employee.destroy-one');
-        Route::get('details/{id}','Employee\EmployeeController@details')->name('employee.details');
-        Route::get('edit/{id}','Employee\EmployeeController@edit')->name('employee.edit');
-
+        Route::post('update/{id?}', 'Employee\EmployeeController@update')->name('employee.update');
     });
 
     Route::prefix('employer')->group(function () {
