@@ -203,5 +203,7 @@ Route::group(['middleware' => ['auth_client']], function () {
 
     });
 
-
 });
+
+Route::post('/test/assign', 'AssignJob\AssignJobsController@store');
+

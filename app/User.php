@@ -144,5 +144,10 @@ class User extends Authenticatable
         return $user;
     }
 
+    public function assignJobs()
+    {
+        return $this->belongsToMany('\App\AssignJob');
+    }
+
 
 }
