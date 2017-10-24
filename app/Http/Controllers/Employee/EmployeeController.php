@@ -2,15 +2,18 @@
 
 namespace App\Http\Controllers\Employee;
 
-use App\Employee;
+
+use Validator;
 use Input;
+use App\Employee;
 use App\User;
+use App\Mail\EmployeeRegistration;
 use App\AdditionalInfo;
 use App\JobSchedule;
-use Validator;
 use App\Http\Traits\OauthTrait;
 use App\Http\Traits\HttpResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use App\Http\Controllers\Controller;
 
 class EmployeeController extends Controller
@@ -105,10 +108,20 @@ class EmployeeController extends Controller
         } else {
 
             $this->save($data);
+            $this->sendEmailtoEmployee($data);
 
             return redirect('employee/lists');
 
         }
+    }
+
+    /**
+     * Send Email
+     */
+    public function sendEmailToEmployee(array $data)
+    {
+        Mail::to($data['email'])->send( new EmployeeRegistration($data));
+
     }
 
     /**
