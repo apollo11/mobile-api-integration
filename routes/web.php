@@ -35,6 +35,7 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::prefix('employer')->group(function () {
         Route::get('/lists', 'Employer\EmployerController@index')->name('employer.lists');
+        Route::get('new/list', 'Employer\EmployerController@newlyRegisteredEmployer')->name('employer.new.list');
         Route::get('/create', 'Employer\EmployerController@create')->name('employer.create');
         Route::post('/add', 'Employer\EmployerController@store')->name('employer.add');
         Route::post('multiple/{id?}/{param?}','Employer\EmployerController@destroy')->name('employer.multiple');
