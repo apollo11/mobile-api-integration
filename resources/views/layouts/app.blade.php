@@ -257,7 +257,7 @@
                 autoFill: true,
                 "scrollCollapse": true
             });
-            
+
 
             $("#myModal").on("show", function() {    // wire up the OK button to dismiss the modal when shown
                 $("#myModal a.btn").on("click", function(e) {
