@@ -2,16 +2,17 @@
 
 namespace App\Http\Controllers\Job;
 
+use Storage;
+use Validator;
+use App\Employee;
 use App\JobSchedule;
 use App\Nationality;
-use Validator;
-use App\Http\Traits\JobDetailsOutputTrait;
 use App\Job;
 use App\Location;
 use App\Industry;
-use Storage;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use App\Http\Traits\JobDetailsOutputTrait;
 use App\Http\Controllers\Controller;
 
 class JobController extends Controller
@@ -317,6 +318,7 @@ class JobController extends Controller
     public function jobLists()
     {
         $jobs = new Job();
+
         $jobLists = $jobs->jobList();
 
         return $jobLists;
@@ -408,10 +410,12 @@ class JobController extends Controller
     {
         $job = new Job();
         $schedule = new JobSchedule();
+        $employee = new Employee();
 
         $details = $job->jobAdminDetails($id);
         $relatedCandidates = $schedule->getAvailJobsByUser($id);
+        $employeeList = $employee->employeeLists();
 
-        return view('job.details', ['details' => $details, 'related' => $relatedCandidates]);
+        return view('job.details', ['details' => $details, 'related' => $relatedCandidates, 'list' => $employeeList]);
     }
 }

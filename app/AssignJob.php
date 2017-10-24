@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
 
 class AssignJob extends Model
@@ -14,6 +15,19 @@ class AssignJob extends Model
      * @var array
      */
     protected $fillable = [];
+
+    public function userForAssignJob()
+    {
+        $assign =  DB::table('users')
+            ->select(
+                 'id'
+                , 'name'
+            )
+            ->get();
+
+        return $assign;
+
+    }
 
 
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\AssignJob;
 
 use App\User as User;
 use App\Job as Job;
+use App\AssignJob;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -38,12 +39,13 @@ class AssignJobsController extends Controller
     public function store(Request $request)
     {
         $data = $request->all();
+
         $user = User::find($data['user_id']);
         $jobs = Job::find($data['job_id']);
 
         $user->assignJobs()->save($jobs);
 
-        return 'Wthat the fuck';
+        return 'apak';
 
     }
 

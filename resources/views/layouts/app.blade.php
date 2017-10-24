@@ -280,9 +280,11 @@
             });
 
             $("#profile-img"
-                , "profile-front-ic"
-                , "profile-back-ic"
-                , "profile-bank-statement").modal({                    // wire up the actual modal functionality and show the dialog
+                , "#profile-front-ic"
+                , "#profile-back-ic"
+                , "#profile-bank-statement"
+                , "#job-assigned"
+            ).modal({                    // wire up the actual modal functionality and show the dialog
                 "backdrop"  : "static",
                 "keyboard"  : true,
                 "show"      : false                     // ensure the modal is shown immediately

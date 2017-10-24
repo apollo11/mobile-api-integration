@@ -51,6 +51,8 @@
                                            document.getElementById('{{'reject-'.$details->id }}').submit();">
                                     Reject
                                 </a>
+                                <a class="btn sbold green" href="#" class="btn" data-toggle="modal" data-target="#job-assigned">Assign Job</a>
+
                                 <input class="btn sbold green" name="multiple" onclick="window.print()" value="Print"
                                        type="submit"/>
                             </div>
@@ -235,4 +237,5 @@
             </div>
         </div>
     </div>
+    @include('job.assign-job')
 @endsection
