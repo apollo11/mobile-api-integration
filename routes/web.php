@@ -24,6 +24,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('details/{id}','Employee\EmployeeController@details')->name('employee.details');
         Route::get('edit/{id}','Employee\EmployeeController@edit')->name('employee.edit');
         Route::post('/signup', 'Employee\EmployeeController@signup')->name('employee.signup');
+
         Route::post('/pending/{id}', 'Employee\EmployeeController@pendingStatus')->name('employee.pending');
         Route::post('/approve/{id}', 'Employee\EmployeeController@approveStatus')->name('employee.approve');
         Route::post('/reject/{id}', 'Employee\EmployeeController@rejectUser')->name('employee.reject');
@@ -64,6 +65,8 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::prefix('job')->group(function() {
        Route::get('/create','Job\JobController@create')->name('job.create');
+       Route::get('/edit/{id?}','Job\JobController@edit')->name('job.edit');
+       Route::post('/update/{id}','Job\JobController@update')->name('job.update');
        Route::get('/lists','Job\JobController@index')->name('job.lists');
        Route::post('/add','Job\JobController@store')->name('job.add');
        Route::post('multiple/{id?}/{param?}','Job\JobController@destroy')->name('job.multiple');

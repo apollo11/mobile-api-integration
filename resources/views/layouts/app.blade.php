@@ -255,9 +255,9 @@
                     { "extend": 'excel', "text":'Export',"className": 'btn sbold red' }
                 ],
                 autoFill: true,
-                "scrollY":"500px",
                 "scrollCollapse": true
             });
+
 
             $("#myModal").on("show", function() {    // wire up the OK button to dismiss the modal when shown
                 $("#myModal a.btn").on("click", function(e) {
@@ -297,8 +297,6 @@
         @if ($errors->has('profile_image'))
             $('#profile-img').modal('show');
 
-//        $('#profile-back-ic').modal('show');
-//        $('#profile-bank-statement').modal('show');
         @endif
 
         @if ($errors->has('profile_front_ic'))

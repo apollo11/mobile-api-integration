@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Job;
 
 use App\JobSchedule;
+use App\Nationality;
 use Validator;
 use App\Http\Traits\JobDetailsOutputTrait;
 use App\Job;
@@ -47,8 +48,13 @@ class JobController extends Controller
         $user = Auth::user();
         $location = $this->location();
         $industry = $this->industry();
+        $nationality = $this->nationalityList();
 
-        return view('job.form', ['user' => $user, 'industry' => $industry, 'location' => $location]);
+
+        return view('job.form', ['user' => $user
+            , 'industry' => $industry
+            , 'location' => $location
+            , 'nationality' => $nationality]);
     }
 
     /**
@@ -127,6 +133,40 @@ class JobController extends Controller
         ]);
     }
 
+    public function updateData(array $data)
+    {
+
+        $user = \App\User::find($data['user_id']);
+
+        $user->job()->update([
+            'job_title' => $data['job_title'],
+            'job_id' => Auth::user()->id,
+            'location_id' => $data['location_id'],
+            'location' => $data['job_location'],
+            'description' => $data['job_description'],
+            'job_requirements' => $data['job_requirements'],
+            'role' => $data['job_role'],
+            'choices' => $data['gender'],
+            'nationality' => $data['nationality'],
+            'job_image_path' => $data['job_image'],
+            'no_of_person' => $data['no_of_person'],
+            'contact_person' => $data['contact_person'],
+            'contact_no' => $data['contact_no'],
+            'business_manager' => $data['business_manager'],
+            'employer' => $data['job_employer'],
+            'rate' => $data['hourly_rate'],
+            'language' => $data['preferred_language'],
+            'job_date' => $data['date'],
+            'end_date' => $data['end_date'],
+            'industry_id' => $data['industry_id'],
+            'industry' => $data['industry'],
+            'notes' => $data['notes'],
+            'status' => $data['status'],
+            'min_age' => $data['min_age'],
+            'max_age' => $data['max_age']
+        ]);
+    }
+
     /**
      * Display the specified resource.
      *
@@ -152,7 +192,22 @@ class JobController extends Controller
      */
     public function edit($id)
     {
-        //
+        $user = Auth::user();
+        $job = new Job();
+
+        $details = $job->jobAdminDetails($id);
+
+        $location = $this->location();
+        $industry = $this->industry();
+        $nationality = $this->nationalityList();
+
+        return view('job.edit-form', ['user' => $user
+            ,'industry' => $industry
+            , 'location' => $location
+            , 'details' => $details
+            , 'nationality' => $nationality
+        ]);
+
     }
 
     /**
@@ -164,7 +219,38 @@ class JobController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $data = $request->all();
+
+        $location = explode('.', $request->input('job_location'));
+        $industry = explode('.', $request->input('industry'));
+        $age = explode('-', $request->input('age'));
+
+        $split = [
+            'location_id' => $location[0],
+            'job_location' => $location[1],
+            'industry_id' => $industry[0],
+            'industry' => $industry[1],
+            'min_age' => $age[0],
+            'max_age' => $age[1]
+        ];
+
+        $validator = $this->rules($data);
+
+        if ($validator->fails()) {
+
+            return redirect(route('job.edit', ['id' => $id]))
+                ->withErrors($validator)
+                ->withInput();
+        } else {
+
+            $profile['job_image'] = $request->file('job_image')->store('jobs');
+            $mergeData = array_merge($data, $profile, $split);
+
+            $this->updateData($mergeData, $data['user_id']);
+
+            return redirect(route('job.details', ['id' => $id]));
+
+        }
     }
 
     /**
@@ -210,7 +296,7 @@ class JobController extends Controller
             'contact_person' => 'required|string',
             'business_manager' => 'required|string',
             'job_employer' => 'required|string',
-            'hourly_rate' => 'required|digits_between:1,5',
+            'hourly_rate' => 'required|numeric',
             'preferred_language' => 'required|string',
             'date' => 'required|date',
             'end_date' => 'required|date',
@@ -261,6 +347,16 @@ class JobController extends Controller
 
         return $output;
 
+    }
+
+    /**
+     * Nationality
+     */
+    public function nationalityList()
+    {
+        $nationality = new Nationality();
+
+        return $nationality->nationalityDropdown();
     }
 
     /**

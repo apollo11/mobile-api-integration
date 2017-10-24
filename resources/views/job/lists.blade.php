@@ -108,7 +108,7 @@
                                                             <i class="fa fa-trash"></i> Delete</a>
                                                     </li>
                                                     <li>
-                                                        <a href="">
+                                                        <a href="{{ route('job.edit',['id' => $value->id]) }}">
                                                             <i class="fa fa-edit"></i> Edit </a>
                                                     </li>
                                                     <li>
