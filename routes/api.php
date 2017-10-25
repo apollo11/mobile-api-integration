@@ -204,5 +204,5 @@ Route::group(['middleware' => ['auth_client']], function () {
     });
 
 });
-Route::post('/test/assign', 'AssignJob\AssignJobsController@store')->name('assign.job');
+Route::post('/test/notif', 'Job\JobController@returnToken')->name('assign.job');
 

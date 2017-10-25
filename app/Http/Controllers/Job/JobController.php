@@ -4,27 +4,35 @@ namespace App\Http\Controllers\Job;
 
 use Storage;
 use Validator;
+use App\DeviceToken;
 use App\Employee;
 use App\JobSchedule;
 use App\Nationality;
 use App\Job;
 use App\Location;
 use App\Industry;
+use App\Notification;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use App\Http\Traits\PushNotiftrait;
 use App\Http\Traits\JobDetailsOutputTrait;
 use App\Http\Controllers\Controller;
 
 class JobController extends Controller
 {
     use JobDetailsOutputTrait;
+    use PushNotiftrait;
 
     private $request;
     protected $data;
+    public $lastInsertedId;
+    public $newJob;
 
     public function __construct(Request $request)
     {
         $this->request = $request;
+        $this->newJob = constant('NEW_JOB');
     }
 
     /**
@@ -94,18 +102,22 @@ class JobController extends Controller
             $mergeData = array_merge($data, $profile, $split);
 
             $this->saveData($mergeData);
+            $this->saveNotif();
+            $this->saveJobsNotif($mergeData);
 
             return redirect('job/lists');
         }
 
     }
 
+    /**
+     * @param array $data
+     */
     public function saveData(array $data)
     {
-
         $user = \App\User::find(Auth::user()->id);
 
-        $user->job()->create([
+        $insertedId = $user->job()->create([
             'job_title' => $data['job_title'],
             'job_id' => Auth::user()->id,
             'location_id' => $data['location_id'],
@@ -132,8 +144,13 @@ class JobController extends Controller
             'min_age' => $data['min_age'],
             'max_age' => $data['max_age']
         ]);
+
+        $this->lastInsertedId = $insertedId->id;
     }
 
+    /**
+     * @param array $data
+     */
     public function updateData(array $data)
     {
 
@@ -418,4 +435,67 @@ class JobController extends Controller
 
         return view('job.details', ['details' => $details, 'related' => $relatedCandidates, 'list' => $employeeList]);
     }
+
+    public function saveJobsNotif($data)
+    {
+        $date = Carbon::parse($data['date'], 'Asia/Singapore')->format('M d, Y, h:i A');
+        $push['job_id'] = $this->lastInsertedId;
+        $push['title'] = 'New Job Available';
+        $push['body'] = $data['job_employer'].' is hiring for '. $data['job_title']. ' at '. $data['job_location'].' on '.$date.'.';
+        $push['registration_ids'] = $this->returnToken();
+
+        return $this->pushNotif($push);
+    }
+
+    /**
+     * @return array
+     */
+    public function returnToken()
+    {
+        $token = new DeviceToken();
+        $tokenValue = $token->listDeviceToken();
+        foreach ($tokenValue as $value)
+        {
+            $device[] = $value->device_token;
+        }
+
+        return $device;
+    }
+
+    /**
+     * @param array $data
+     * @return mixed|static
+     */
+    public function saveNotif()
+    {
+        $employeeId = $this->listOfEmployeeId();
+
+        foreach ($employeeId as $value ) {
+
+            $save = \App\User::find($value->id);
+
+            $save->userNotification()->create([
+                'job_id' => $this->lastInsertedId,
+                'type' => $this->newJob
+            ]);
+
+        }
+        return $save;
+    }
+
+    /**
+     * @return array
+     */
+    public function listOfEmployeeId()
+    {
+        $employee = new Employee();
+
+        $output = $employee->employeeLists();
+
+
+        return $output;
+    }
+
+
+
 }

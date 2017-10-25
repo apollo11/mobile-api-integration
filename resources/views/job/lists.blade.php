@@ -31,11 +31,10 @@
                                     <input class="btn sbold green" name="multiple" value="Approve" type="submit"/>
                                     <input class="btn sbold green" name="multiple" value="Reject" type="submit"/>
                                     <input class="btn sbold green" name="multiple" value="Delete" type="submit"/>
-                                    <a href="" id="sample_editable_1_new"
+                                    <a href="{{ route('job.create') }}" id="sample_editable_1_new"
                                        class="btn sbold green"> Add New
                                         <i class="fa fa-plus"></i>
                                     </a>
-
                                 </div>
                             </div>
                             <div class="portlet-body">
@@ -91,7 +90,7 @@
                                             </td>
                                         @else
                                             <td>
-                                                <span class="label label-sm label-waring">{{ ucfirst($value->status) }} </span>
+                                                <span class="label label-sm label-warning">{{ ucfirst($value->status) }} </span>
                                             </td>
                                         @endif
                                         <td>

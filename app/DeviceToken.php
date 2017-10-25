@@ -18,9 +18,25 @@ class DeviceToken extends Model
      */
     protected $table = 'user_push_notification_tokens';
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function user()
     {
         return $this->belongsTo('\App\User');
+    }
+
+    /**
+     * List of device token from users
+     */
+    public function listDeviceToken()
+    {
+        $deviceToken = DB::table('user_push_notification_tokens')
+            ->select('id','device_token')
+            ->get();
+
+        return $deviceToken;
+
     }
 
 

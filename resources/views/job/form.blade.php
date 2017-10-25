@@ -156,7 +156,6 @@
                                         <div class="col-md-7">
                                             <select class="form-control" name="nationality">
                                                 <option value="">-- select one --</option>
-                                                <option value="">-- select one --</option>
                                                 @for ($i = 0; $i < count($nationality); $i++)
                                                     <option value="{{ strtolower($nationality[$i]) }}">{{ $nationality[$i]  }}</option>
                                                 @endfor

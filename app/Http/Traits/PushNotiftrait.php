@@ -7,7 +7,7 @@ use GuzzleHttp\Exception\RequestException;
 
 trait PushNotiftrait
 {
-    protected $ENDPOINT;
+    private $ENDPOINT;
     protected $FCM_KEY;
 
     public function __construct()
@@ -18,7 +18,6 @@ trait PushNotiftrait
 
     public function pushNotif($data)
     {
-
         $client = new Client();
 
         try {
@@ -26,16 +25,22 @@ trait PushNotiftrait
                 $map = [
                     'notification' => [
                         'title' => $data['title'],
-                        'message' => $data['message']
+                        'body' => $data['body'],
+                        'content-available' => 1,
+                        'sound' => 'default'
                     ],
-                    'registration_ids' => [$data['registration_ids']]
+                    'data'=>[
+                        'job_id' => $data['job_id'],
+                        'type' => 'new_job_available'
+                    ],
+                    'registration_ids' => $data['registration_ids']
                 ];
 
-                $response = $client->request('POST', $this->ENDPOINT, [
+                $response = $client->request('POST',constant('FCM_ENDPOINT'), [
                     'headers' => [
                         'Authorization' => 'key=AAAARF0JD0Q:APA91bE4FYvPVP6Yio1o4XJf0mt92OcZu6LJ6Ped7Zq-JEIf2_vruKiPduekmjTZAhFvzEh1KfW-boaIfZFeMGJvFj7mtNcL7WHFvGWuYastxGZqu_6yzFFcz_RLOpevKGnrS9P2tL-S'
                     ],
-                    'form_params' => $map,
+                    'json' => $map,
                 ]);
 
                 return $response->getStatusCode();
