@@ -43,9 +43,20 @@ class AssignJobsController extends Controller
         $user = User::find($data['user_id']);
         $jobs = Job::find($data['job_id']);
 
-        $user->assignJobs()->save($jobs);
 
-        return 'apak';
+        foreach ($user as $key => $value) {
+            $assigned[] = [
+                $value->id => [
+                    'is_assigned' => true,
+                    'assign_job_id' => $jobs->id,
+                    'user_id' => $value->id
+                ],
+            ];
+        }
+
+        for ($i = 0; $i < count($assigned); $i++) {
+            $jobs->assignJobs()->attach($assigned[$i]);
+        }
 
     }
 

@@ -146,7 +146,7 @@ class User extends Authenticatable
 
     public function assignJobs()
     {
-        return $this->belongsToMany('\App\AssignJob');
+        return $this->belongsToMany('\App\AssignJob')->withPivot('is_assigned', 'user_id');
     }
 
 

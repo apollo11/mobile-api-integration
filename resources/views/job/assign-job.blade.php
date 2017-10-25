@@ -1,5 +1,6 @@
 <form class="form-horizontal" method="POST" role="form" action="{{ route('assign.job') }}"
       enctype="multipart/form-data">
+    <input type="hidden" name="job_id" value="{{ $details->id }}">
     {{ csrf_field() }}
     <div class="modal fade bs-modal-lg" id="job-assigned" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-lg">
@@ -67,11 +68,11 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <input type="hidden" name="job_id" value="{{ $details->id }}">
                                     @foreach( $list as $value )
                                         <tr class="odd gradeX">
                                             <td>
                                                 <label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">
+
                                                     <input type="checkbox" name="user_id[]" class="checkboxes"
                                                            value="{{ $value->id }}"/>
                                                     <span></span>

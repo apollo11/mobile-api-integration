@@ -68,6 +68,14 @@ class Job extends Model
     }
 
     /**
+     * Assign jobs
+     */
+    public function assignJobs()
+    {
+        return $this->belongsToMany('\App\AssignJob')->withPivot('is_assigned', 'assign_job_id', 'user_id');
+    }
+
+    /**
      * Filter by limit, start date, end date
      */
     public function filterByLimitStartEnd($limit = 20, array $param)

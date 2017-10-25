@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class AssignJob extends Model
 {
-    protected $table = 'assign_job_user';
+    protected $table = 'assign_job_job';
 
     /**
      * The attributes that are mass assignable.
