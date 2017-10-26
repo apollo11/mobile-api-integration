@@ -156,52 +156,53 @@
                                 </tr>
                                 </thead>
                                 <tbody>
+                                @if(count($jobinfo) > 0)
+                                    @foreach($jobInfo as $jobs)
+                                        <form id="destroy-{{ $jobs->id }}" action="{{ route('job.multiple',['id' => $jobs->id,'param' => 'Delete']) }}" method="POST" style="display: none;">
+                                            {{ csrf_field() }}
+                                            <input type="multiple" value="Delete">
+                                        </form>
 
-                                @foreach($jobInfo as $jobs)
-                                    <form id="destroy-{{ $jobs->id }}" action="{{ route('job.multiple',['id' => $jobs->id,'param' => 'Delete']) }}" method="POST" style="display: none;">
-                                        {{ csrf_field() }}
-                                        <input type="multiple" value="Delete">
-                                    </form>
+                                        <tr class="odd gradeX">
+                                            <th>
+                                                <label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">
+                                                    <input type="checkbox" class="group-checkable"
+                                                           data-set="#employee-table .checkboxes"/>
+                                                    <span></span>
+                                                </label>
+                                            </th>
+                                            <td>{{ $jobs->job_title }}</td>
+                                            <td>{{ $jobs->start_date }}</td>
+                                            <td> {{ $jobs->schedule_status }}</td>
+                                            <td> {{ $jobs->company_name }}</td>
+                                            <td> {{ $jobs->rate }}</td>
 
-                                    <tr class="odd gradeX">
-                                        <th>
-                                            <label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">
-                                                <input type="checkbox" class="group-checkable"
-                                                       data-set="#employee-table .checkboxes"/>
-                                                <span></span>
-                                            </label>
-                                        </th>
-                                        <td>{{ $jobs->job_title }}</td>
-                                        <td>{{ $jobs->start_date }}</td>
-                                        <td> {{ $jobs->schedule_status }}</td>
-                                        <td> {{ $jobs->company_name }}</td>
-                                        <td> {{ $jobs->rate }}</td>
-
-                                        <td>
-                                            <div class="btn-group">
-                                                <button class="btn btn-xs green dropdown-toggle" type="button"
-                                                        data-toggle="dropdown" aria-expanded="false"> Actions
-                                                    <i class="fa fa-angle-down"></i>
-                                                </button>
-                                                <ul class="dropdown-menu" role="menu">
-                                                    <li>
-                                                        <a href="{{ route('job.multiple',['id' =>  $jobs->id, 'param' =>'Delete' ]) }}"
-                                                           onclick="event.preventDefault();
-                                                                   document.getElementById('{{'destroy-'.$jobs->id }}').submit();">
-                                                            <i class="fa fa-trash"></i> Delete</a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="{{ route('job.edit',['id' => $jobs->id]) }}">
-                                                            <i class="fa fa-edit"></i> Edit </a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="{{ route('job.details',['id' =>  $jobs->id])  }}">
-                                                            <i class="fa fa-eye"></i> View </a>
-                                                    </li>                                                </ul>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                @endforeach
+                                            <td>
+                                                <div class="btn-group">
+                                                    <button class="btn btn-xs green dropdown-toggle" type="button"
+                                                            data-toggle="dropdown" aria-expanded="false"> Actions
+                                                        <i class="fa fa-angle-down"></i>
+                                                    </button>
+                                                    <ul class="dropdown-menu" role="menu">
+                                                        <li>
+                                                            <a href="{{ route('job.multiple',['id' =>  $jobs->id, 'param' =>'Delete' ]) }}"
+                                                               onclick="event.preventDefault();
+                                                                       document.getElementById('{{'destroy-'.$jobs->id }}').submit();">
+                                                                <i class="fa fa-trash"></i> Delete</a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="{{ route('job.edit',['id' => $jobs->id]) }}">
+                                                                <i class="fa fa-edit"></i> Edit </a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="{{ route('job.details',['id' =>  $jobs->id])  }}">
+                                                                <i class="fa fa-eye"></i> View </a>
+                                                        </li>                                                </ul>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                @endif
                                 </tbody>
                             </table>
                         </div>

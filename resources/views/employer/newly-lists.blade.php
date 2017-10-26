@@ -14,12 +14,12 @@
 
     <div class="page-content-wrapper employee-list">
         <div class="page-content">
-            @if($errors->has('multicheck'))
-                <div class="alert alert-danger alert-dismissable">
-                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
-                    <strong>Error!</strong> Something went wrong. Please check.
-                </div>
-            @endif
+            {{--@if($errors->has('multicheck'))--}}
+                {{--<div class="alert alert-danger alert-dismissable">--}}
+                    {{--<button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>--}}
+                    {{--<strong>Error!</strong> Something went wrong. Please check.--}}
+                {{--</div>--}}
+            {{--@endif--}}
             <form action="{{ route('employer.multiple')  }}" method="POST">
                 <div class="row">
                     <div class="col-md-12">
@@ -32,7 +32,7 @@
                                 </div>
                                 {{ csrf_field() }}
                                 <div class="actions">
-                                    <input class="btn sbold green" name="multiple" value="Delete" type="submit"/>
+                                    {{--<input class="btn sbold green" name="multiple" value="Delete" type="submit"/>--}}
                                     <a href="{{ route('employer.create') }}" id="sample_editable_1_new"
                                        class="btn sbold green"> Add New
                                         <i class="fa fa-plus"></i>
