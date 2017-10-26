@@ -318,9 +318,6 @@
         @if ($errors->has('bank_statement'))
         $('#profile-bank-statement').modal('show');
         @endif
-
-
-
     </script>
 
 

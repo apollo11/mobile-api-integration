@@ -44,6 +44,7 @@ class Notification extends Model
                 , 'notif.job_id'
                 , 'notif.created_at'
                 , 'notif.updated_at'
+                , 'jobs.id as jobid'
                 , 'jobs.description as job_description'
                 , 'jobs.job_status'
                 , 'jobs.location'

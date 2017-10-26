@@ -55,7 +55,7 @@
                     Employers</a>
             </li>
             <li>
-                <a href="ecommerce_orders_view.html">
+                <a href="javascript:;#">
                     <i class="icon-tag"></i>
                     Payouts</a>
             </li>
@@ -76,7 +76,7 @@
             </li>
 
             <li>
-                <a href="ecommerce_products_edit.html">
+                <a href="javascript:;">
                     <i class="icon-pencil"></i>
                     Report</a>
             </li>

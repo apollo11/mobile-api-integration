@@ -422,7 +422,7 @@ class NotificationController extends Controller
                 'updated_at' => $this->dateFormat($output->updated_at),
                'schedule_id' => $output->schedule_id,
                 'job' => [
-                    'id' => $output->id,
+                    'id' => $output->jobid,
                     'job_title' => $output->job_title,
                     'employer' => [
                         'image_url' => $output->profile_image_path,

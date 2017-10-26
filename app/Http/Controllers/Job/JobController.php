@@ -6,12 +6,12 @@ use Storage;
 use Validator;
 use App\DeviceToken;
 use App\Employee;
+use App\Employer;
 use App\JobSchedule;
 use App\Nationality;
 use App\Job;
 use App\Location;
 use App\Industry;
-use App\Notification;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
@@ -54,16 +54,19 @@ class JobController extends Controller
      */
     public function create()
     {
-        $user = Auth::user();
+        $user = new Employer();
         $location = $this->location();
         $industry = $this->industry();
         $nationality = $this->nationalityList();
+        $employee = $user->employerList();
 
 
         return view('job.form', ['user' => $user
             , 'industry' => $industry
             , 'location' => $location
-            , 'nationality' => $nationality]);
+            , 'nationality' => $nationality
+            , 'employee' => $employee
+        ]);
     }
 
     /**
@@ -79,6 +82,7 @@ class JobController extends Controller
         $location = explode('.', $request->input('job_location'));
         $industry = explode('.', $request->input('industry'));
         $age = explode('-', $request->input('age'));
+        $employer = explode('.', $request->input('job_employer'));
 
         $split = [
             'location_id' => $location[0],
@@ -86,7 +90,9 @@ class JobController extends Controller
             'industry_id' => $industry[0],
             'industry' => $industry[1],
             'min_age' => $age[0],
-            'max_age' => $age[1]
+            'max_age' => $age[1],
+            'employer_id' => $employer[0],
+            'employer' => $employer[1]
         ];
 
         $validator = $this->rules($data);
@@ -115,11 +121,11 @@ class JobController extends Controller
      */
     public function saveData(array $data)
     {
-        $user = \App\User::find(Auth::user()->id);
+        $user = \App\User::find($data['employer_id']);
 
         $insertedId = $user->job()->create([
             'job_title' => $data['job_title'],
-            'job_id' => Auth::user()->id,
+            'job_id' => $data['employer_id'],
             'location_id' => $data['location_id'],
             'location' => $data['job_location'],
             'description' => $data['job_description'],
@@ -132,7 +138,7 @@ class JobController extends Controller
             'contact_person' => $data['contact_person'],
             'contact_no' => $data['contact_no'],
             'business_manager' => $data['business_manager'],
-            'employer' => $data['job_employer'],
+            'employer' => $data['employer'],
             'rate' => $data['hourly_rate'],
             'language' => $data['preferred_language'],
             'job_date' => $data['date'],

@@ -132,7 +132,9 @@
                 <li class="dropdown dropdown-user">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
                         <img alt="" class="img-circle" src="../assets/layouts/layout/img/avatar3_small.jpg"/>
-                        <span class="username username-hide-on-mobile"> {{ !Auth::guest() ? Auth::user()->name: '' }}</span>
+                        @if(!Auth::guest())
+                        <span class="username username-hide-on-mobile"> {{  Auth::user()->role_id == 0 ? Auth::user()->name : Auth::user()->company_name }}</span>
+                        @endif
                         <i class="fa fa-angle-down"></i>
                     </a>
                     <ul class="dropdown-menu">

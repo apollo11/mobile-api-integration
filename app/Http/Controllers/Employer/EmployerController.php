@@ -263,7 +263,7 @@ class EmployerController extends Controller
             'business_manager' => 'required|string',
             'contact_person' => 'required|string',
             'password' => 'required|alpha_dash',
-            'hourly_rate' => 'required|digits:1',
+            'hourly_rate' => 'required|numeric',
             'industry' => 'required|string'
         ]);
 
