@@ -182,53 +182,55 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                @foreach($related as $value)
-                                <tr class="odd gradeX">
-                                    <th>
-                                        <label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">
-                                            <input type="checkbox" class="group-checkable"
-                                                   data-set="#employee-table .checkboxes"/>
-                                            <span></span>
-                                        </label>
-                                    </th>
-                                    <td>{{ $value->name }}</td>
-                                    <td>{{ $value->nric_no }}</td>
-                                    <td>{{ $value->contact_no }}</td>
-                                    <td>{{ $value->rate }}</td>
+                                @if(count($related) > 0)
+                                    @foreach($related as $value)
+                                    <tr class="odd gradeX">
+                                        <th>
+                                            <label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">
+                                                <input type="checkbox" class="group-checkable"
+                                                       data-set="#employee-table .checkboxes"/>
+                                                <span></span>
+                                            </label>
+                                        </th>
+                                        <td>{{ $value->name }}</td>
+                                        <td>{{ $value->nric_no }}</td>
+                                        <td>{{ $value->contact_no }}</td>
+                                        <td>{{ $value->rate }}</td>
 
-                                    <td>
-                                        <div class="btn-group">
-                                            <button class="btn btn-xs green dropdown-toggle" type="button"
-                                                    data-toggle="dropdown" aria-expanded="false"> Actions
-                                                <i class="fa fa-angle-down"></i>
-                                            </button>
-                                            <ul class="dropdown-menu" role="menu">
-                                                <li>
-                                                    <a href="">
-                                                        <i class="fa fa-trash"></i> Delete</a>
-                                                </li>
-                                                <li>
-                                                    <a href="">
-                                                        <i class="fa fa-edit"></i> Edit </a>
-                                                </li>
-                                                <li>
-                                                    <a href="">
-                                                        <i class="fa fa-eye"></i> View </a>
-                                                </li>
-                                                <li>
-                                                    <a href="">
-                                                        <i class="fa fa-check-square-o"></i> Approve</a>
-                                                </li>
-                                                <li>
-                                                    <a href="">
-                                                        <i class="fa fa-close"></i> Reject
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </td>
-                                </tr>
+                                        <td>
+                                            <div class="btn-group">
+                                                <button class="btn btn-xs green dropdown-toggle" type="button"
+                                                        data-toggle="dropdown" aria-expanded="false"> Actions
+                                                    <i class="fa fa-angle-down"></i>
+                                                </button>
+                                                <ul class="dropdown-menu" role="menu">
+                                                    <li>
+                                                        <a href="">
+                                                            <i class="fa fa-trash"></i> Delete</a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="">
+                                                            <i class="fa fa-edit"></i> Edit </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="">
+                                                            <i class="fa fa-eye"></i> View </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="">
+                                                            <i class="fa fa-check-square-o"></i> Approve</a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="">
+                                                            <i class="fa fa-close"></i> Reject
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </td>
+                                    </tr>
                                     @endforeach
+                                @endif
                                 </tbody>
                             </table>
                         </div>

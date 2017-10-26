@@ -156,7 +156,7 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                @if(count($jobinfo) > 0)
+                                @if(count($jobInfo) > 0)
                                     @foreach($jobInfo as $jobs)
                                         <form id="destroy-{{ $jobs->id }}" action="{{ route('job.multiple',['id' => $jobs->id,'param' => 'Delete']) }}" method="POST" style="display: none;">
                                             {{ csrf_field() }}
