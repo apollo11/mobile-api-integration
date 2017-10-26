@@ -477,8 +477,9 @@ class NotificationController extends Controller
             ];
 
         }
+        $dataUndefined = !empty($details) ? $details : [];
 
-        return response()->json(['notifications' => $details]);
+        return response()->json(['notifications' => $dataUndefined]);
 
     }
 
