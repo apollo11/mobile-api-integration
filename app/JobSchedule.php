@@ -206,13 +206,14 @@ class JobSchedule extends Model
                 , 'jobs.job_title'
                 , 'jobs.rate'
                 , 'jobs.job_date as start_date'
+                , 'jobs.id as jobid'
                 , 'employee.company_name'
                 , 'employee.nric_no'
                 , 'employee.name'
                 , 'employee.contact_no'
                 , 'jobs.rate'
             )
-            ->where('job_schedules.user_id' , '=', $id)
+            ->where('users.id' , '=', $id)
             ->whereIn('job_schedules.job_status',[
                 'accepted'
                 , 'cancelled'
