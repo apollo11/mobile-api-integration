@@ -3,13 +3,6 @@
 @section('content')
     <div class="page-content-wrapper">
         <div class="page-content">
-        <pre>
-            {{ Auth::user()->name }} <br/>
-            {{ Auth::user()->role_id }} <br />
-            {{ Auth::user()->business_manager }} <br/>
-            {{ Auth::user()->id }}
-            {{ Auth::user()->company_name }}
-        </pre>
             <div class="page-bar">
                 <ul class="page-breadcrumb">
                     <li>
