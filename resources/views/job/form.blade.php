@@ -3,7 +3,6 @@
 @section('content')
     <div class="page-content-wrapper">
         <div class="page-content">
-
             <div class="page-bar">
                 <ul class="page-breadcrumb">
                     <li>
@@ -223,8 +222,15 @@
                                     <div class="form-group{{ $errors->has('business_manager') ? ' has-error' : '' }}">
                                         <label class="col-md-3 control-label">Business Manager</label>
                                         <div class="col-md-7">
+                                            @if(Auth::user()->role_id == 1)
                                             <input type="text" class="form-control" placeholder="Enter Business Manager"
-                                                   value="{{ $user->business_manager }}" name="business_manager">
+                                                   value="{{ Auth::user()->business_manager }}" name="business_manager">
+                                            @endif
+                                             @if(Auth::user()->role_id == 0)
+                                                <input type="text" class="form-control" placeholder="Enter Business Manager"
+                                                       value="{{ Auth::user()->business_manager }}" name="business_manager">
+                                                @endif
+
                                             @if ($errors->has('business_manager'))
                                                 <span class="help-block">
                                                 {{ $errors->first('business_manager') }}
@@ -236,8 +242,24 @@
                                     <div class="form-group{{ $errors->has('job_employer') ? ' has-error' : '' }}">
                                         <label class="col-md-3 control-label">Employer</label>
                                         <div class="col-md-7">
-                                            <input type="text" class="form-control" value="{{ $user->company_name }}"
-                                                   name="job_employer">
+                                            @if(Auth::user()->role_id == 1)
+                                                <select class="form-control" name="job_employer">
+                                                    <option value="">---Select One ---</option>
+                                                    <option value="{{ Auth::user()->id.'.'.Auth::user()->company_name }}" >{{ Auth::user()->company_name }}</option>
+                                                </select>
+                                            @endif
+
+                                            @if(Auth::user()->role_id == 0)
+                                                <select class="form-control" name="job_employer">
+                                                    @foreach( $employee as $value)
+                                                        @if($loop->count == 0)
+                                                            <option value="">None</option>
+                                                        @else
+                                                            <option value="{{ $value->id.'.'.$value->company_name}}">{{ $value->company_name }}</option>
+                                                        @endif
+                                                    @endforeach
+                                                </select>
+                                            @endif
                                             @if ($errors->has('job_employer'))
                                                 <span class="help-block">
                                                 {{ $errors->first('job_employer') }}
