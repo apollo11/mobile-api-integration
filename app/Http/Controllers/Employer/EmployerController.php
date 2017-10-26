@@ -6,6 +6,7 @@ use Validator;
 use App\Employer;
 use App\User;
 use App\Industry;
+use Illuminate\Routing\UrlGenerator;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -210,22 +211,32 @@ class EmployerController extends Controller
     public function destroy(Request $request, $id = null, $param = null)
     {
         $employer = new Employer();
-        $submit = empty($request->input('multiple')) ? $param : $request->input('multiple');
-        $multi = is_null($id) ? $request->input('multicheck') : (array)$id;
-        switch ($submit) {
-            case 'Approve':
-                $employer->multiUpdateApprove($multi);
-                break;
-            case 'Delete':
-                $employer->multiDelete($multi);
-                break;
-            case 'Reject':
-                $employer->multiUpdateReject($multi);
-                break;
+        $multi['multicheck'] = is_null($request->input('multicheck')) ? [] : $request->input('multicheck');
+        $validator = Validator::make($multi, ['multicheck' => 'required']);
+
+        if ($validator->fails()) {
+
+            $result = redirect(route('employer.lists'))
+                ->withErrors($validator)
+                ->withInput();
+        } else {
+            $submit = $request->input('multiple');
+            switch ($submit) {
+                case 'Approve':
+                    $employer->multiUpdateApprove($multi);
+                    break;
+                case 'Delete':
+                    $employer->multiDelete($multi);
+                    break;
+                case 'Reject':
+                    $employer->multiUpdateReject($multi);
+                    break;
+            }
+
+            $result = redirect(route('employer.lists'));
         }
 
-        return back();
-
+        return $result;
     }
 
     /**

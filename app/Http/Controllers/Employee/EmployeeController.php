@@ -326,19 +326,29 @@ class EmployeeController extends Controller
     public function destroy(Request $request)
     {
         $user = new User();
-        $submit = $request->input('multiple');
-        $multi = $request->input('multicheck');
+        $multi['multicheck'] = is_null($request->input('multicheck')) ? [] : $request->input('multicheck');
+        $validator = Validator::make($multi, ['multicheck' => 'required']);
+        if ($validator->fails()) {
 
-        switch ($submit) {
-            case 'Approve':
-                $user->multiUpdate($multi);
-                break;
-            case 'Reject':
-                $user->multiDelete($multi);
-                break;
+            $result = redirect(route('employee.lists'))
+                ->withErrors($validator)
+                ->withInput();
+        } else {
+            $submit = $request->input('multiple');
+            switch ($submit) {
+                case 'Approve':
+                    $user->multiUpdate($multi);
+                    break;
+                case 'Delete':
+                    $user->multiDelete($multi);
+                    break;
+            }
+
+            $result = redirect(route('employee.lists'));
         }
 
-        return back();
+        return $result;
+
     }
 
     /**

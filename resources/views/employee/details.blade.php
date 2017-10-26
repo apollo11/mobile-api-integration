@@ -158,6 +158,11 @@
                                 <tbody>
 
                                 @foreach($jobInfo as $jobs)
+                                    <form id="destroy-{{ $jobs->id }}" action="{{ route('job.multiple',['id' => $jobs->id,'param' => 'Delete']) }}" method="POST" style="display: none;">
+                                        {{ csrf_field() }}
+                                        <input type="multiple" value="Delete">
+                                    </form>
+
                                     <tr class="odd gradeX">
                                         <th>
                                             <label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">
@@ -180,27 +185,19 @@
                                                 </button>
                                                 <ul class="dropdown-menu" role="menu">
                                                     <li>
-                                                        <a href="">
+                                                        <a href="{{ route('job.multiple',['id' =>  $jobs->id, 'param' =>'Delete' ]) }}"
+                                                           onclick="event.preventDefault();
+                                                                   document.getElementById('{{'destroy-'.$jobs->id }}').submit();">
                                                             <i class="fa fa-trash"></i> Delete</a>
                                                     </li>
                                                     <li>
-                                                        <a href="">
+                                                        <a href="{{ route('job.edit',['id' => $jobs->id]) }}">
                                                             <i class="fa fa-edit"></i> Edit </a>
                                                     </li>
                                                     <li>
-                                                        <a href="">
+                                                        <a href="{{ route('job.details',['id' =>  $jobs->id])  }}">
                                                             <i class="fa fa-eye"></i> View </a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="">
-                                                            <i class="fa fa-check-square-o"></i> Approve</a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="">
-                                                            <i class="fa fa-close"></i> Reject
-                                                        </a>
-                                                    </li>
-                                                </ul>
+                                                    </li>                                                </ul>
                                             </div>
                                         </td>
                                     </tr>

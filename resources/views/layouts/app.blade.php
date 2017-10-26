@@ -219,6 +219,7 @@
     <!-- BEGIN THEME GLOBAL SCRIPTS -->
     <script src="{{ asset('assets/global/scripts/app.min.js') }}" type="text/javascript"></script>
     <script src="{{ asset('assets/pages/scripts/ui-bootbox.min.js') }}" type="text/javascript"></script>
+    {{--<script src="{{ asset('assets/pages/scripts/ui-general.min.js') }}" type="text/javascript"></script>--}}
     <!-- END THEME GLOBAL SCRIPTS -->
 
     <!-- BEGIN PAGE LEVEL SCRIPTS -->
@@ -291,6 +292,11 @@
             });
 
 
+        });
+
+        //select all checkboxes
+        $(".group-checkable").change(function(){  //"select all" change
+            $(".checkboxes").prop('checked', $(this).prop("checked")); //change all ".checkbox" checked status
         });
 
     </script>

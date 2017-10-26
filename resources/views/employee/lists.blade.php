@@ -17,6 +17,13 @@
 
     <div class="page-content-wrapper employee-list">
         <div class="page-content">
+            @if($errors->has('multicheck'))
+            <div class="alert alert-danger alert-dismissable">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+                <strong>Error!</strong> Something went wrong. Please check.
+            </div>
+            @endif
+
             <form action="{{ route('employee.destroy-all')  }}" method="POST">
                 <div class="row">
                     <div class="col-md-12">
@@ -45,7 +52,7 @@
                                     <tr>
                                         <th>
                                             <label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">
-                                                <input type="checkbox" class="group-checkable"
+                                                <input id ="group-checkable" type="checkbox" class="group-checkable"
                                                        data-set="#employee-table .checkboxes"/>
                                                 <span></span>
                                             </label>
@@ -71,7 +78,7 @@
                                         <tr class="odd gradeX">
                                             <td>
                                                 <label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">
-                                                    <input type="checkbox" name="multicheck[]" class="checkboxes"
+                                                    <input type="checkbox" id="multicheck" name="multicheck[]" class="checkboxes"
                                                            value="{{ $employee[$i]['id'] }}"/>
                                                     <span></span>
                                                 </label>

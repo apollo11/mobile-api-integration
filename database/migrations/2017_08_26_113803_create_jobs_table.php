@@ -33,7 +33,7 @@ class CreateJobsTable extends Migration
             $table->longText('notes');
             $table->enum('status', ['active', 'inactive', 'draft mode']);
             $table->timestamps();
-            $table->foreign('job_id')->references('id')->on('users');
+            $table->foreign('job_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

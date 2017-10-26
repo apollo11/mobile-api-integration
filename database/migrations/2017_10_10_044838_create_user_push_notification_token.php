@@ -17,8 +17,7 @@ class CreateUserPushNotificationToken extends Migration
             $table->increments('id');
             $table->string('device_token')->nullable();
             $table->integer('user_id')->unsigned()->nullable();
-            $table->foreign('user_id')->references('id')->on('users')
-            ->cascade()->delete();
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
         });
     }
