@@ -456,11 +456,13 @@ class JobController extends Controller
 
     public function saveJobsNotif($data)
     {
+        $employer = explode('.', $data['job_employer']);
+
         $date = Carbon::parse($data['date'], 'Asia/Singapore')->format('M d, Y, h:i A');
         $push['job_id'] = $this->lastInsertedId;
         $push['title'] = 'New Job Available';
         $push['type'] = constant('NEW_JOB');
-        $push['body'] = $data['job_employer'].' is hiring for '. $data['job_title']. ' at '. $data['job_location'].' on '.$date.'.';
+        $push['body'] = $employer[1].' is hiring for '. $data['job_title']. ' at '. $data['job_location'].' on '.$date.'.';
         $push['registration_ids'] = $this->returnToken();
 
         return $this->pushNotif($push);
