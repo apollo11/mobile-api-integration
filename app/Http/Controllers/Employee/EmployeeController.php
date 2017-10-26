@@ -52,7 +52,7 @@ class EmployeeController extends Controller
         }
         $dataUndefined = !empty($data) ? $data : [];
 
-        return view('employee.lists', ['employee' => $dataUndefined, 'count' => count($data)]);
+        return view('employee.lists', ['employee' => $dataUndefined, 'count' => count($dataUndefined)]);
     }
 
     /**
