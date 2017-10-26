@@ -1,5 +1,12 @@
 @extends('layouts.app')
 @section('content')
+    @foreach($related as $value)
+        <form id="destroy-{{ $value->userid }}" action="{{ route('employee.destroy-one',['id' =>$value->userid ]) }}" method="POST" style="display: none;">
+            {{ csrf_field() }}
+            <input type="submit" value="Delete">
+        </form>
+    @endforeach
+
     <form id="approve-{{ $details->id }}"
           action="{{ route('job.multiple',['id' => $details->id, 'param' => 'Approve']) }}"
           method="POST" style="display: none;">
@@ -205,25 +212,18 @@
                                                 </button>
                                                 <ul class="dropdown-menu" role="menu">
                                                     <li>
-                                                        <a href="">
+                                                        <a href="{{ route('employee.destroy-one',['id' => $value->userid]) }}"
+                                                           onclick="event.preventDefault();
+                                                                   document.getElementById('{{'destroy-'.$value->userid }}').submit();">
                                                             <i class="fa fa-trash"></i> Delete</a>
                                                     </li>
                                                     <li>
-                                                        <a href="">
+                                                        <a href="{{ route('employee.edit',['id' => $value->userid ])  }}">
                                                             <i class="fa fa-edit"></i> Edit </a>
                                                     </li>
                                                     <li>
-                                                        <a href="">
+                                                        <a href="{{ route('employee.details',['id' => $value->userid ])  }}">
                                                             <i class="fa fa-eye"></i> View </a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="">
-                                                            <i class="fa fa-check-square-o"></i> Approve</a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="">
-                                                            <i class="fa fa-close"></i> Reject
-                                                        </a>
                                                     </li>
                                                 </ul>
                                             </div>

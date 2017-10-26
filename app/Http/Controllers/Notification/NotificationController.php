@@ -328,12 +328,16 @@ class NotificationController extends Controller
      */
     public function notifList(Request $request)
     {
-        $userId = $request->get('user_id');
         $notif = new Notification();
+        $userId = $request->get('user_id');
+        $param = [
+            'last_notification_id' => $request->get('last_notification_id'),
+            'limit' => empty($request->get('limit')) ? 20 : $request->get('limit')
+        ];
 
-        $notifList = $notif->notificationByUser($userId);
+        $notifList = $notif->notificationByUser($userId, $param);
 
-        return $this->notifResponse($notifList);
+        return $this->notifRespponse($notifList);
     }
 
     /**
@@ -379,24 +383,24 @@ class NotificationController extends Controller
     /**
      * Notification response
      */
-    public function notifResponse($notif)
-    {
-        foreach ($notif as $value)
-        {
-            $data[] = [
-                'id' => $value->id,
-                'title' => $value->title,
-                'message' => $value->message,
-                'type' => $value->type,
-                'job_id' => $value->job_id,
-                'created_at' => $this->dateFormat($value->created_at),
-                'updated_at' => $this->dateFormat($value->updated_at)
-            ];
-        }
-        $dataUndefined = !empty($data) ? $data : [];
-
-        return response()->json(['notifications' => $dataUndefined]);
-    }
+//    public function notifResponse($notif)
+//    {
+//        foreach ($notif as $value)
+//        {
+//            $data[] = [
+//                'id' => $value->id,
+//                'title' => $value->title,
+//                'message' => $value->message,
+//                'type' => $value->type,
+//                'job_id' => $value->job_id,
+//                'created_at' => $this->dateFormat($value->created_at),
+//                'updated_at' => $this->dateFormat($value->updated_at)
+//            ];
+//        }
+//        $dataUndefined = !empty($data) ? $data : [];
+//
+//        return response()->json(['notifications' => $dataUndefined]);
+//    }
 
     public function dateFormat($date)
     {
@@ -404,6 +408,78 @@ class NotificationController extends Controller
         $return = date_format($format, 'Y-m-d H:i:sO');
 
         return $return;
+    }
+
+    public function notifRespponse($data)
+    {
+        foreach ($data as $output)
+        {
+            $assigned = is_null($output->schedule_status) ? 'available' : $output->schedule_status;
+            $details[] = [
+                'id' => $output->id,
+                'type' => $output->type,
+                'created_at' => $this->dateFormat($output->created_at),
+                'updated_at' => $this->dateFormat($output->updated_at),
+               'schedule_id' => $output->schedule_id,
+                'job' => [
+                    'id' => $output->id,
+                    'job_title' => $output->job_title,
+                    'employer' => [
+                        'image_url' => $output->profile_image_path,
+                        'name' => $output->company_name,
+                        'description' => $output->company_description
+                    ],
+                    'industry' => [
+                        'id' => $output->industry_id,
+                        'name' => $output->industry
+                    ],
+                    'location' => [
+                        'id' => $output->location_id,
+                        'name' => $output->location,
+                        'latitude' => 1.2836402,
+                        'longitude' => 103.8603731,
+                    ],
+                    'working_details' => [
+                        'check_in' =>[
+                            'datetime' => $this->dateFormat($output->checkin_datetime),
+                            'location' => $output->checkin_location
+                        ],
+                        'check_out' => [
+                            'datetime' => $this->dateFormat($output->checkout_datetime),
+                            'location' => $output->checkout_location
+                        ],
+                        'working_time_in_minutes' => $output->working_hours,
+                        'job_salary' => round($output->job_salary,'2'),
+                        'processed_date' => $output->process_date,
+                        'payment_method' => $output->payment_methods
+                    ],
+                    'created_date' => $this->dateFormat($output->created_at),
+                    'start_date' => $this->dateFormat($output->start_date),
+                    'end_date' => $this->dateFormat($output->end_date),
+                    'contact_no' => $output->contact_no,
+                    'rate' => $output->rate,
+                    'thumbnail_url' => $output->job_image_path,
+                    'nationality' => ucfirst($output->nationality),
+                    'description' => $output->description,
+                    'min_age' => $output->min_age,
+                    'max_age' => $output->max_age,
+                    'role' => $output->role,
+                    'remarks' => $output->notes,
+                    'language' => $output->language,
+                    'gender' => $output->gender,
+                    'job_requirements' => $output->job_requirements,
+                    'status' => $assigned,
+                    'payment_status' => $output->payment_status,
+                    'is_assigned' => 0,
+                    'cancellation_fee' => 25,
+                    'cancellation_charge' => 0
+                ]
+            ];
+
+        }
+
+        return response()->json(['notifications' => $details]);
+
     }
 
 }

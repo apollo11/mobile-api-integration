@@ -326,8 +326,10 @@ class EmployeeController extends Controller
     public function destroy(Request $request)
     {
         $user = new User();
+
         $multi['multicheck'] = is_null($request->input('multicheck')) ? [] : $request->input('multicheck');
         $validator = Validator::make($multi, ['multicheck' => 'required']);
+
         if ($validator->fails()) {
 
             $result = redirect(route('employee.lists'))
