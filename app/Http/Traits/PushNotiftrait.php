@@ -33,7 +33,8 @@ trait PushNotiftrait
                         'job_id' => $data['job_id'],
                         'type' => $data['type']
                     ],
-                    'registration_ids' => $data['registration_ids']
+                    'registration_ids' => $data['registration_ids'],
+                    'priority' => 'high'
                 ];
 
                 $response = $client->request('POST',constant('FCM_ENDPOINT'), [
