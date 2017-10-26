@@ -1,5 +1,13 @@
 @extends('layouts.app')
 @section('content')
+    @foreach($jobInfo as $jobs)
+        <form id="destroy-{{ $jobs->jobid }}" action="{{ route('job.multiple',['id' => $jobs->jobid,'param' => 'Delete']) }}"
+              method="POST" style="display: none;">
+            {{ csrf_field() }}
+            <input type="submit" name="multiple" value="Delete">
+        </form>
+    @endforeach
+
     <form id="approve-{{ $userDetails->id }}" action="{{ route('employee.approve',['id' => $userDetails->id]) }}"
           method="POST" style="display: none;">
         {{ csrf_field() }}
@@ -158,11 +166,6 @@
                                 <tbody>
                                 @if(count($jobInfo) > 0)
                                     @foreach($jobInfo as $jobs)
-                                        <form id="destroy-{{ $jobs->jobid }}" action="{{ route('job.multiple',['id' => $jobs->jobid,'param' => 'Delete']) }}" method="POST" style="display: none;">
-                                            {{ csrf_field() }}
-                                            <input type="multiple" value="Delete">
-                                        </form>
-
                                         <tr class="odd gradeX">
                                             <th>
                                                 <label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">
@@ -191,11 +194,11 @@
                                                                 <i class="fa fa-trash"></i> Delete</a>
                                                         </li>
                                                         <li>
-                                                            <a href="{{ route('job.edit',['id' => $jobs->jobid]) }}">
+                                                            <a href="{{ route('job.edit',['id' => $jobs->jobid ]) }}">
                                                                 <i class="fa fa-edit"></i> Edit </a>
                                                         </li>
                                                         <li>
-                                                            <a href="{{ route('job.details',['id' =>  $jobs->jobid])  }}">
+                                                            <a href="{{ route('job.details',['id' =>  $jobs->jobid ])  }}">
                                                                 <i class="fa fa-eye"></i> View </a>
                                                         </li>                                                </ul>
                                                 </div>
