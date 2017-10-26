@@ -18,7 +18,7 @@ class CreateJobSchedulesTable extends Migration
             $table->string('name')->nullable();
             $table->integer('job_id');
             $table->integer('user_id')->unsigned()->nullable();
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');;
         });
 
     }

@@ -222,8 +222,6 @@ class NotificationController extends Controller
         return $save;
     }
 
-
-
     /**
      * @param array $data
      * @return mixed|static

@@ -21,6 +21,12 @@
 
     <div class="page-content-wrapper employee-list">
         <div class="page-content">
+            @if($errors->has('multicheck'))
+                <div class="alert alert-danger alert-dismissable">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+                    <strong>Error!</strong> Something went wrong. Please check.
+                </div>
+            @endif
             <form action="{{ route('employer.multiple')  }}" method="POST">
                 <div class="row">
                     <div class="col-md-12">
@@ -103,7 +109,7 @@
                                                                 <i class="fa fa-trash"></i> Delete</a>
                                                         </li>
                                                         <li>
-                                                            <a href="">
+                                                            <a href="{{ route('employer.edit',['id' => $user['id']]) }}">
                                                                 <i class="fa fa-edit"></i> Edit </a>
                                                         </li>
                                                         <li>

@@ -21,8 +21,7 @@ class CreateUserNotification extends Migration
             $table->string('title')->nullable();
             $table->longText('message')->nullable();
             $table->integer('user_id')->unsigned()->nullable();
-            $table->foreign('user_id')->references('id')->on('users')
-            ->cascade()->delete();
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
         });
     }

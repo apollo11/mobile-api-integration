@@ -61,9 +61,9 @@ class Employer extends Model
                 , 'employer.status'
                 , 'employer.business_manager'
                 , 'employer.contact_person'
+                , 'employer.rate'
             )
             ->where('employer.id', '=', $id)
-            ->where('employer.role_id', '=', 1)
             ->first();
 
         return $details;

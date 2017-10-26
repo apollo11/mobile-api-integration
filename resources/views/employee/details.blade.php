@@ -102,6 +102,26 @@
                     </div>
                     <!-- END EXAMPLE TABLE PORTLET-->
                 </div>
+                <div class="col-md-6">
+                    <!-- BEGIN EXAMPLE TABLE PORTLET-->
+                    <div class="portlet light bordered">
+                        <div class="portlet-body">
+                            <div class="table-toolbar">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="btn-group">
+                                            <div class="col-md-12"><a href="#" class="btn" data-toggle="modal" data-target="#profile-img">Update Profile Image</a></div>
+                                            <div class="col-md-12"><a href="#" class="btn" data-toggle="modal" data-target="#profile-front-ic">Update IC (Front)</a></div>
+                                            <div class="col-md-12"><a href="#" class="btn" data-toggle="modal" data-target="#profile-back-ic">Update IC (back)</a></div>
+                                            <div class="col-md-12"><a href="#" class="btn" data-toggle="modal" data-target="#profile-bank-statement">Update Bank Statement (back)</a></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- END EXAMPLE TABLE PORTLET-->
+                </div>
             </div>
             <div class="row">
                 <div class="col-md-12">
@@ -138,6 +158,11 @@
                                 <tbody>
 
                                 @foreach($jobInfo as $jobs)
+                                    <form id="destroy-{{ $jobs->id }}" action="{{ route('job.multiple',['id' => $jobs->id,'param' => 'Delete']) }}" method="POST" style="display: none;">
+                                        {{ csrf_field() }}
+                                        <input type="multiple" value="Delete">
+                                    </form>
+
                                     <tr class="odd gradeX">
                                         <th>
                                             <label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">
@@ -160,27 +185,19 @@
                                                 </button>
                                                 <ul class="dropdown-menu" role="menu">
                                                     <li>
-                                                        <a href="">
+                                                        <a href="{{ route('job.multiple',['id' =>  $jobs->id, 'param' =>'Delete' ]) }}"
+                                                           onclick="event.preventDefault();
+                                                                   document.getElementById('{{'destroy-'.$jobs->id }}').submit();">
                                                             <i class="fa fa-trash"></i> Delete</a>
                                                     </li>
                                                     <li>
-                                                        <a href="">
+                                                        <a href="{{ route('job.edit',['id' => $jobs->id]) }}">
                                                             <i class="fa fa-edit"></i> Edit </a>
                                                     </li>
                                                     <li>
-                                                        <a href="">
+                                                        <a href="{{ route('job.details',['id' =>  $jobs->id])  }}">
                                                             <i class="fa fa-eye"></i> View </a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="">
-                                                            <i class="fa fa-check-square-o"></i> Approve</a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="">
-                                                            <i class="fa fa-close"></i> Reject
-                                                        </a>
-                                                    </li>
-                                                </ul>
+                                                    </li>                                                </ul>
                                             </div>
                                         </td>
                                     </tr>
@@ -193,5 +210,8 @@
             </div>
         </div>
     </div>
+
+@include('employee.edit-profile')
+
 
 @endsection

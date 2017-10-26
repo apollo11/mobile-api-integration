@@ -1,9 +1,12 @@
 @extends('layouts.app')
 
 @section('content')
+
     <div class="page-content-wrapper">
         <div class="page-content">
-
+            <pre>
+                {{ print_r($details) }}
+            </pre>
             <div class="page-bar">
                 <ul class="page-breadcrumb">
                     <li>
@@ -11,7 +14,7 @@
                         <i class="fa fa-circle"></i>
                     </li>
                     <li>
-                        <span>Add New Job</span>
+                        <span>Edit Job</span>
                     </li>
                 </ul>
             </div>
@@ -22,20 +25,20 @@
                         <div class="portlet-title">
                             <div class="caption">
                                 <i class="icon-settings font-dark"></i>
-                                <span class="caption-subject font-dark sbold uppercase">Add Job</span>
+                                <span class="caption-subject font-dark sbold uppercase">Edit Job</span>
                             </div>
                         </div>
                         <div class="portlet-body form">
-                            <form class="form-horizontal" method="POST" role="form" action="{{ route('job.add') }}"
+                            <form class="form-horizontal" method="POST" role="form" action="{{ route('job.update',['id' => $details->id]) }}"
                                   enctype="multipart/form-data">
                                 {{ csrf_field() }}
                                 <div class="form-body">
-
+                                    <input type="hidden" name="user_id" value="{{ $details->user_id }}" />
                                     <div class="form-group{{ $errors->has('job_title') ? ' has-error' : '' }}">
                                         <label class="col-md-3 control-label">Job Title</label>
                                         <div class="col-md-7">
                                             <input type="text" class="form-control" placeholder="Enter Job Title"
-                                                   value="{{ old('job_title') }}" name="job_title">
+                                                   value="{{ $details->job_title }}" name="job_title">
                                             @if ($errors->has('job_title'))
                                                 <span class="help-block">
                                                 {{ $errors->first('job_title') }}
@@ -48,7 +51,7 @@
                                         <label class="col-md-3 control-label">Job Description</label>
                                         <div class="col-md-7">
                                             <textarea class="form-control" name="job_description"
-                                                      rows="3">{{ old('job_description') }}</textarea>
+                                                      rows="3">{{ $details->job_description }}</textarea>
                                             @if ($errors->has('job_description'))
                                                 <span class="help-block">
                                                 {{ $errors->first('job_description') }}
@@ -61,7 +64,7 @@
                                         <label class="col-md-3 control-label">Job Requirements</label>
                                         <div class="col-md-7">
                                             <textarea class="form-control" name="job_requirements"
-                                                      rows="3">{{ old('job_requirements') }}</textarea>
+                                                      rows="3">{{ $details->job_requirements }}</textarea>
                                             @if ($errors->has('job_requirements'))
                                                 <span class="help-block">
                                                 {{ $errors->first('job_requirements') }}
@@ -74,7 +77,7 @@
                                         <label class="col-md-3 control-label">Job Function / Role</label>
                                         <div class="col-md-7">
                                             <input type="text" class="form-control" placeholder="Enter Job Role"
-                                                   value="{{ old('job_role') }}" name="job_role">
+                                                   value="{{ $details->role }}" name="job_role">
                                             @if ($errors->has('job_role'))
                                                 <span class="help-block">
                                                 {{ $errors->first('job_role') }}
@@ -137,8 +140,8 @@
                                                 @foreach( $location as $value)
                                                     @if($loop->count == 0)
                                                         <option value="none">None</option>
-                                                    @else
-                                                        <option value="{{ $value->id.'.'.$value->name }}">{{ $value->name }}</option>
+                                                     @else
+                                                        <option {{$details->location_id == $value->id ? 'selected' : ''}} value="{{ $value->id.'.'.$value->name }}">{{ $value->name }}</option>
                                                     @endif
                                                 @endforeach
                                             </select>
@@ -157,9 +160,10 @@
                                             <select class="form-control" name="nationality">
                                                 <option value="">-- select one --</option>
                                                 @for ($i = 0; $i < count($nationality); $i++)
-                                                    <option value="{{ strtolower($nationality[$i]) }}">{{ $nationality[$i]  }}</option>
+                                                    <option {{ $details->nationality == strtolower($nationality[$i]) ? 'selected' : '' }} value="{{ strtolower($nationality[$i]) }}">{{ $nationality[$i]  }}</option>
                                                 @endfor
                                             </select>
+
                                             @if ($errors->has('nationality'))
                                                 <span class="help-block">
                                                 {{ $errors->first('nationality') }}
@@ -185,7 +189,7 @@
                                         <div class="col-md-7">
                                             <input type="text" class="form-control"
                                                    placeholder="Enter no. of person requested"
-                                                   value="{{ old('no_of_person') }}" name="no_of_person">
+                                                   value="{{ $details->no_of_person }}" name="no_of_person">
                                             @if ($errors->has('no_of_person'))
                                                 <span class="help-block">
                                                 {{ $errors->first('no_of_person') }}
@@ -198,7 +202,7 @@
                                         <label class="col-md-3 control-label">Contact Person</label>
                                         <div class="col-md-7">
                                             <input type="text" class="form-control" placeholder="Enter Contact Person"
-                                                   value="{{ old('contact_person') }}" name="contact_person">
+                                                   value="{{ $details->contact_person }}" name="contact_person">
                                             @if ($errors->has('contact_person'))
                                                 <span class="help-block">
                                                {{ $errors->first('contact_person') }}
@@ -211,7 +215,7 @@
                                         <label class="col-md-3 control-label">Contact No.</label>
                                         <div class="col-md-7">
                                             <input type="text" class="form-control" placeholder="Enter Contact No."
-                                                   value="{{ old('contact_no') }}" name="contact_no">
+                                                   value="{{ $details->contact_no }}" name="contact_no">
                                             @if ($errors->has('contact_no'))
                                                 <span class="help-block">
                                                 {{ $errors->first('contact_no') }}
@@ -224,7 +228,7 @@
                                         <label class="col-md-3 control-label">Business Manager</label>
                                         <div class="col-md-7">
                                             <input type="text" class="form-control" placeholder="Enter Business Manager"
-                                                   value="{{ $user->business_manager }}" name="business_manager">
+                                                   value="{{ $details->business_manager }}" name="business_manager">
                                             @if ($errors->has('business_manager'))
                                                 <span class="help-block">
                                                 {{ $errors->first('business_manager') }}
@@ -236,7 +240,7 @@
                                     <div class="form-group{{ $errors->has('job_employer') ? ' has-error' : '' }}">
                                         <label class="col-md-3 control-label">Employer</label>
                                         <div class="col-md-7">
-                                            <input type="text" class="form-control" value="{{ $user->company_name }}"
+                                            <input type="text" class="form-control" value="{{ $details->company_name }}"
                                                    name="job_employer">
                                             @if ($errors->has('job_employer'))
                                                 <span class="help-block">
@@ -251,7 +255,7 @@
                                         <label class="col-md-3 control-label">Hourly Rate</label>
                                         <div class="col-md-7">
                                             <input type="text" class="form-control" placeholder="Enter Hourly Rate"
-                                                   value="{{ old('hourly_rate') }}" name="hourly_rate">
+                                                   value="{{ $details->rate }}" name="hourly_rate">
                                             @if ($errors->has('hourly_rate'))
                                                 <span class="help-block">
                                                 {{ $errors->first('hourly_rate') }}
@@ -278,7 +282,7 @@
                                         <label class="control-label col-md-3">Start Job Date and Time</label>
                                         <div class="col-md-7">
                                             <div class="input-group date form_datetime form_datetime bs-datetime" id="start-date">
-                                                <input type="text" name="date" size="16" class="form-control">
+                                                <input type="text" name="date" value="{{ $details->start_date }}" size="16" class="form-control">
                                                 <span class="input-group-addon">
                                                     <button class="btn default date-set" type="button">
                                                         <i class="fa fa-calendar"></i>
@@ -297,7 +301,7 @@
                                         <label class="control-label col-md-3">Job End Date and Time</label>
                                         <div class="col-md-7">
                                             <div class="input-group date form_datetime form_datetime bs-datetime" id="end-date">
-                                                <input type="text" name="end_date" size="16" class="form-control">
+                                                <input type="text" name="end_date" value="{{ $details->end_date }}" size="16" class="form-control">
                                                 <span class="input-group-addon">
                                                     <button class="btn default date-set" type="button">
                                                         <i class="fa fa-calendar"></i>
@@ -315,7 +319,7 @@
                                     <div class="form-group{{ $errors->has('notes') ? ' has-error' : '' }}">
                                         <label class="col-md-3 control-label">Important Notes</label>
                                         <div class="col-md-7">
-                                            <textarea class="form-control" name="notes" rows="3"></textarea>
+                                            <textarea class="form-control" name="notes" rows="3">{{ $details->notes }}</textarea>
                                             @if ($errors->has('notes'))
                                                 <span class="help-block">
                                                 {{ $errors->first('notes') }}
@@ -332,7 +336,7 @@
                                                     @if($loop->count == 0)
                                                         <option value="none">None</option>
                                                     @else
-                                                        <option value="{{ $value->id.'.'.$value->name}}">{{ $value->name }}</option>
+                                                        <option {{ $details->industry_id == $value->id ? 'selected' : '' }} value="{{ $value->id.'.'.$value->name}}">{{ $value->name }}</option>
                                                     @endif
                                                 @endforeach
                                             </select>

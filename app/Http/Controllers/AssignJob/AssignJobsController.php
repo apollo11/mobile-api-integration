@@ -1,12 +1,14 @@
- <?php
+<?php
 
-namespace App\Http\Controllers\School;
+namespace App\Http\Controllers\AssignJob;
 
-use App\School;
+use App\User as User;
+use App\Job as Job;
+use App\AssignJob;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
-class SchoolController extends Controller
+class AssignJobsController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,10 +17,7 @@ class SchoolController extends Controller
      */
     public function index()
     {
-        $school = new School();
-
-        return response()->json($school->university());
-
+        //
     }
 
     /**
@@ -39,6 +38,26 @@ class SchoolController extends Controller
      */
     public function store(Request $request)
     {
+        $data = $request->all();
+
+        $user = User::find($data['user_id']);
+        $jobs = Job::find($data['job_id']);
+
+
+        foreach ($user as $key => $value) {
+            $assigned[] = [
+                $value->id => [
+                    'is_assigned' => true,
+                    'assign_job_id' => $jobs->id,
+                    'user_id' => $value->id
+                ],
+            ];
+        }
+
+        for ($i = 0; $i < count($assigned); $i++) {
+            $jobs->assignJobs()->attach($assigned[$i]);
+        }
+
     }
 
     /**

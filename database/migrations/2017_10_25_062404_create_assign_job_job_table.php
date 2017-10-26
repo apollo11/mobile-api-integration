@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateUserPushNotificationToken extends Migration
+class CreateAssignJobJobTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,13 @@ class CreateUserPushNotificationToken extends Migration
      */
     public function up()
     {
-        Schema::create('user_push_notification_tokens', function (Blueprint $table) {
+        Schema::create('assign_job_job', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('device_token')->nullable();
+            $table->boolean('is_assigned')->default(false);
+            $table->integer('job_id')->unsigned()->nullable();
+            $table->foreign('job_id')->references('id')->on('jobs')->onDelete('cascade');
+            $table->integer('assign_job_id')->unsigned()->nullable();
+            $table->foreign('assign_job_id')->references('id')->on('jobs')->onDelete('cascade');
             $table->integer('user_id')->unsigned()->nullable();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
@@ -29,6 +33,6 @@ class CreateUserPushNotificationToken extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('user_push_notification_tokens');
+        Schema::dropIfExists('assign_job_job');
     }
 }
