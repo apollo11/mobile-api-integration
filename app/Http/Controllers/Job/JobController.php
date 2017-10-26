@@ -277,25 +277,37 @@ class JobController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request, $id=null , $param=null)
+    public function destroy(Request $request, $id = null, $param = null)
     {
         $job = new Job();
-        $submit = empty($request->input('multiple')) ? $param : $request->input('multiple');
-        $multi = is_null($id) ? $request->input('multicheck') : (array) $id;
 
-        switch ($submit) {
-            case 'Approve':
-                $job->multiUpdateActive($multi);
-                break;
-            case 'Delete':
-                $job->multiDelete($multi);
-                break;
-            case 'Reject':
-                $job->multiUpdateInactive($multi);
-                break;
+        $submit = empty($request->input('multiple')) ? $param : $request->input('multiple');
+        $multi['multicheck'] = is_null($id) ? (array) $request->input('multicheck') : (array)$id;
+
+        $validator = Validator::make($multi, ['multicheck' => 'required']);
+
+        if ($validator->fails()) {
+
+            $result = redirect(route('job.lists'))
+                ->withErrors($validator)
+                ->withInput();
+        } else {
+
+            switch ($submit) {
+                case 'Approve':
+                    $job->multiUpdateActive($multi['multicheck']);
+                    break;
+                case 'Delete':
+                    $job->multiDelete($multi['multicheck']);
+                    break;
+                case 'Reject':
+                    $job->multiUpdateInactive($multi['multicheck']);
+                    break;
+            }
+            $result = redirect(route('job.lists'));
         }
 
-        return back();
+        return $result;
 
     }
 
@@ -430,7 +442,7 @@ class JobController extends Controller
         $employee = new Employee();
 
         $details = $job->jobAdminDetails($id);
-        $relatedCandidates = $schedule->getAvailJobsByUser($id);
+        $relatedCandidates = $schedule->getRelatedCandidates($id);
         $employeeList = $employee->employeeLists();
 
         return view('job.details', ['details' => $details, 'related' => $relatedCandidates, 'list' => $employeeList]);
