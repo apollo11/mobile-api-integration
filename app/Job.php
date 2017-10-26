@@ -153,6 +153,7 @@ class Job extends Model
             })
             ->whereNull('job_schedules.job_status')
             ->where('jobs.job_date', '>=', Carbon::now())
+            ->where('jobs.status', '=', 'active')
             ->distinct('jobs.id')
             ->orderBy('jobs.job_date', 'asc')
             ->orderBy('jobs.created_at', 'asc')
@@ -277,6 +278,7 @@ class Job extends Model
             ->leftJoin('jobs', 'jobs.user_id', '=', 'employer.id')
             ->select(
                 'jobs.id'
+                , 'employer.id as user_id'
                 , 'employer.company_description'
                 , 'employer.company_name'
                 , 'employer.profile_image_path'
@@ -294,6 +296,9 @@ class Job extends Model
                 , 'jobs.end_date'
                 , 'jobs.contact_no'
                 , 'jobs.rate'
+                , 'jobs.no_of_person'
+                , 'jobs.contact_person'
+                , 'jobs.contact_no'
                 , 'jobs.job_image_path'
                 , 'jobs.nationality'
                 , 'jobs.choices as gender'

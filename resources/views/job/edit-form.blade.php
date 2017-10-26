@@ -4,9 +4,6 @@
 
     <div class="page-content-wrapper">
         <div class="page-content">
-            <pre>
-                {{ print_r($details) }}
-            </pre>
             <div class="page-bar">
                 <ul class="page-breadcrumb">
                     <li>
@@ -33,7 +30,7 @@
                                   enctype="multipart/form-data">
                                 {{ csrf_field() }}
                                 <div class="form-body">
-                                    <input type="hidden" name="user_id" value="{{ $details->user_id }}" />
+                                    <input type="hidden" name="job_id" value="{{ $details->id }}" />
                                     <div class="form-group{{ $errors->has('job_title') ? ' has-error' : '' }}">
                                         <label class="col-md-3 control-label">Job Title</label>
                                         <div class="col-md-7">

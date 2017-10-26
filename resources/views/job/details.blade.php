@@ -44,7 +44,7 @@
                             </div>
                             <div class="actions">
                                 <a class="btn sbold green"
-                                   href="{{ route('job.multiple',['id' => $details->id, 'param' => 'Approve'])  }}">
+                                   href="{{ route('job.edit',['id' => $details->id ])  }}">
                                     Update</a>
 
                                 <a class="btn sbold green"

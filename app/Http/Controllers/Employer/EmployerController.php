@@ -211,7 +211,10 @@ class EmployerController extends Controller
     public function destroy(Request $request, $id = null, $param = null)
     {
         $employer = new Employer();
-        $multi['multicheck'] = is_null($request->input('multicheck')) ? [] : $request->input('multicheck');
+
+        $submit = empty($request->input('multiple')) ? $param : $request->input('multiple');
+        $multi['multicheck'] = is_null($request->input('multicheck')) ? (array) $id : $request->input('multicheck');
+
         $validator = Validator::make($multi, ['multicheck' => 'required']);
 
         if ($validator->fails()) {
@@ -220,7 +223,7 @@ class EmployerController extends Controller
                 ->withErrors($validator)
                 ->withInput();
         } else {
-            $submit = $request->input('multiple');
+
             switch ($submit) {
                 case 'Approve':
                     $employer->multiUpdateApprove($multi);
@@ -233,7 +236,7 @@ class EmployerController extends Controller
                     break;
             }
 
-            $result = redirect(route('employer.lists'));
+            $result = back();
         }
 
         return $result;

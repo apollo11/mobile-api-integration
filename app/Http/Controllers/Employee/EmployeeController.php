@@ -346,7 +346,7 @@ class EmployeeController extends Controller
                     break;
             }
 
-            $result = redirect(route('employee.lists'));
+            $result = back();
         }
 
         return $result;
@@ -713,17 +713,17 @@ class EmployeeController extends Controller
     {
         if ($request->hasFile('profile_front_ic')) {
 
-            $file['profile_front_ic'] = $request->file('profile_front_ic')->store('additional_info');
+            $file['profile_front_ic'] = $request->file('profile_front_ic')->store('additional');
         }
         if ($request->hasFile('profile_back_ic')) {
 
-            $file['profile_back_ic'] = $request->file('profile_back_ic')->store('additional_info');
+            $file['profile_back_ic'] = $request->file('profile_back_ic')->store('additional');
 
         }
 
         if ($request->hasFile('bank_statement')) {
 
-            $file['bank_statement'] = $request->file('bank_statement')->store('additional_info');
+            $file['bank_statement'] = $request->file('bank_statement')->store('additional');
         }
 
         if ($request->hasFile('profile_image')) {

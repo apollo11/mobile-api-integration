@@ -160,9 +160,9 @@ class JobController extends Controller
     public function updateData(array $data)
     {
 
-        $user = \App\User::find($data['user_id']);
+        $user = \App\Job::find($data['job_id']);
 
-        $user->job()->update([
+        $user->update([
             'job_title' => $data['job_title'],
             'job_id' => Auth::user()->id,
             'location_id' => $data['location_id'],
@@ -270,7 +270,7 @@ class JobController extends Controller
             $profile['job_image'] = $request->file('job_image')->store('jobs');
             $mergeData = array_merge($data, $profile, $split);
 
-            $this->updateData($mergeData, $data['user_id']);
+            $this->updateData($mergeData);
 
             return redirect(route('job.details', ['id' => $id]));
 
@@ -310,7 +310,7 @@ class JobController extends Controller
                     $job->multiUpdateInactive($multi['multicheck']);
                     break;
             }
-            $result = redirect(route('job.lists'));
+            $result = back();
         }
 
         return $result;
