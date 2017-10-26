@@ -31,7 +31,7 @@ trait PushNotiftrait
                     ],
                     'data'=>[
                         'job_id' => $data['job_id'],
-                        'type' => 'new_job_available'
+                        'type' => $data['type']
                     ],
                     'registration_ids' => $data['registration_ids']
                 ];
