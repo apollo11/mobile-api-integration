@@ -166,6 +166,7 @@
                                 <tbody>
                                 @if(count($jobInfo) > 0)
                                     @foreach($jobInfo as $jobs)
+                                        @if(!empty($jobs->job_title))
                                         <tr class="odd gradeX">
                                             <th>
                                                 <label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">
@@ -204,6 +205,7 @@
                                                 </div>
                                             </td>
                                         </tr>
+                                        @endif
                                     @endforeach
                                 @endif
                                 </tbody>
