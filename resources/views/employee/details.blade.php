@@ -118,13 +118,13 @@
                                 <div class="portlet-body">
                                     <div class="mt-element-overlay">
                                         <div class="row">
-                                            <div class="col-md-offset-2 col-md-6">
+                                            <div class="col-md-offset-2 col-md-4">
                                                 <div class="mt-overlay-1 mt-scroll-right">
 
                                                     @if(!empty($userDetails->profile_photo))
-                                                        <img src="/{{ $userDetails->profile_photo}}" />
+                                                        <img class="img-circle" src="/{{ $userDetails->profile_photo}}" />
                                                     @else
-                                                        <img src="http://via.placeholder.com/300x300" />
+                                                        <img class="img-circle" src="http://via.placeholder.com/300x300" />
                                                     @endif
                                                     <div class="mt-overlay">
                                                         <ul class="mt-info">
@@ -140,7 +140,7 @@
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-md-offset-2 col-md-6">
+                                            <div class="col-md-offset-2 col-md-4">
                                                 <div class="mt-overlay-1 mt-scroll-right">
                                                     @if(!empty($userDetails->front_ic_path))
                                                         <img src="/{{ $userDetails->front_ic_path }}" />
@@ -161,7 +161,7 @@
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-md-offset-2 col-md-6">
+                                            <div class="col-md-offset-2 col-md-4">
                                                 <div class="mt-overlay-1 mt-scroll-right">
                                                     @if(!empty($userDetails->back_ic_path))
                                                         <img src="/{{ $userDetails->back_ic_path }}" />
@@ -179,6 +179,27 @@
                                                     </div>
                                                 </div>
                                                 <h3><a href="#" class="btn sbold green" data-toggle="modal" data-target="#profile-back-ic">Update Back IC</a></h3>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-offset-2 col-md-4">
+                                                <div class="mt-overlay-1 mt-scroll-right">
+                                                    @if(!empty($userDetails->bank_statement))
+                                                        <img src="/{{ $userDetails->bank_statement }}" />
+                                                    @else
+                                                        <img src="http://via.placeholder.com/500x300" />
+                                                    @endif
+                                                    <div class="mt-overlay">
+                                                        <ul class="mt-info">
+                                                            <li>
+                                                                <div class="btn sbold red" data-toggle="modal" data-target="#profile-bank-statement">
+                                                                    Update Bank Statement
+                                                                </div>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                                <h3><a href="#" class="btn sbold green" data-toggle="modal" data-target="#profile-bank-statement">Update Bank Statement</a></h3>
                                             </div>
                                         </div>
                                     </div>
