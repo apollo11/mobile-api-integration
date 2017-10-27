@@ -27,7 +27,8 @@ trait PushNotiftrait
                         'title' => $data['title'],
                         'body' => $data['body'],
                         'content-available' => 1,
-                        'sound' => 'default'
+                        'sound' => 'default',
+                        'badge' => '1'
                     ],
                     'data'=>[
                         'job_id' => $data['job_id'],
