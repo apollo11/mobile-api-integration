@@ -71,12 +71,12 @@ Route::group(['middleware' => ['auth']], function () {
        Route::post('/add','Job\JobController@store')->name('job.add');
        Route::post('multiple/{id?}/{param?}','Job\JobController@destroy')->name('job.multiple');
        Route::get('details/{id}','Job\JobController@details')->name('job.details');
+      Route::post('/assign', 'AssignJob\AssignJobsController@store')->name('assign.job');
+
     });
 
 });
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-Route::get('/test', 'HomeController@countCancelledJobs')->name('test');
-Route::post('/test/assign', 'AssignJob\AssignJobsController@store')->name('assign.job');
 
