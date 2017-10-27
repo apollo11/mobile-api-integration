@@ -76,9 +76,9 @@
                                                 <span></span>
                                             </label>
                                         </td>
-                                        <td>{{ $value->id }}</td>
+                                        <td>{{ $loop->iteration }}</td>
                                         <td><a href="{{ route('employer.details',['id' => $value->user_id ]) }}">{{ $value->company_name }} </a></td>
-                                        <td>{{ $value->job_title }}</td>
+                                        <td> <a href="{{ route('job.details',['id' =>  $value->id])  }}"> {{ $value->job_title }} </a></td>
                                         <td>{{ $value->no_of_person }}</td>
                                         <td><a href="#">0 </a></td>
                                         <td> {{ '$'.$value->rate.'/hr' }}</td>

@@ -81,8 +81,8 @@
                                                     <span></span>
                                                 </label>
                                             </td>
-                                            <td>{{ $user['id'] }}</td>
-                                            <td>{{ $user['company_name'] }}</td>
+                                            <td>{{ $loop->iteration }}</td>
+                                            <td><a href="{{ route('employer.details',['id' => $user['id'] ]) }}">{{ $user['company_name'] }} </a></td>
                                             <td> {{ $user['business_manager'] }}</td>
                                             <td>{{ $user['posting'] }}</td>
                                             <td>{{ $user['applied'] }}</td>

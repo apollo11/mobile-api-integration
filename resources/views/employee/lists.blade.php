@@ -94,8 +94,8 @@
                                             <td> {{ $employee[$i]['birthdate']  }}</td>
                                             <td>{{ 'Not yet available' }}</td>
                                             <td>{{ $employee[$i]['business_manager'] }}</td>
-                                            <td>  {{ $employee[$i]['applied']  }}</td>
-                                            <td>{{ $employee[$i]['completed'] }} </td>
+                                            <td> <a href="{{ route('employee.details',['id' => $employee[$i]['id']])  }}"> {{ $employee[$i]['applied']  }} </a></td>
+                                            <td><a href="{{ route('employee.details',['id' => $employee[$i]['id']])  }}"> {{ $employee[$i]['completed'] }} </a></td>
 
                                             @if($employee[$i]['employee_status'] == 'pending')
                                                 <td><span class="label label-sm label-warning"> Pending </span></td>

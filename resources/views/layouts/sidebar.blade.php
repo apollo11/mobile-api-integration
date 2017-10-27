@@ -48,7 +48,7 @@
             <li>
                 <a href="{{ route('employer.new.list') }}">
                     <i class="icon-home"></i>
-                    Newly Employers</a>
+                    Registered Employers</a>
             </li>
             <li>
                 <a href="{{ route('employer.lists') }}">
@@ -56,7 +56,7 @@
                     Employers</a>
             </li>
             <li>
-                <a href="javascript:;#">
+                <a href="javascript:;">
                     <i class="icon-tag"></i>
                     Payouts</a>
             </li>
