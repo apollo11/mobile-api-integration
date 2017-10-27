@@ -1,5 +1,13 @@
 @extends('layouts.app')
 @section('content')
+    @foreach($jobInfo as $jobs)
+        <form id="destroy-{{ $jobs->jobid }}" action="{{ route('job.multiple',['id' => $jobs->jobid,'param' => 'Delete']) }}"
+              method="POST" style="display: none;">
+            {{ csrf_field() }}
+            <input type="submit" name="multiple" value="Delete">
+        </form>
+    @endforeach
+
     <form id="approve-{{ $userDetails->id }}" action="{{ route('employee.approve',['id' => $userDetails->id]) }}"
           method="POST" style="display: none;">
         {{ csrf_field() }}
@@ -102,6 +110,93 @@
                     </div>
                     <!-- END EXAMPLE TABLE PORTLET-->
                 </div>
+                <div class="col-md-6">
+                    <!-- BEGIN EXAMPLE TABLE PORTLET-->
+                    <div class="portlet light bordered">
+                        <div class="portlet-body">
+                            <div class="table-toolbar">
+                                <div class="portlet-body">
+                                    <div class="mt-element-overlay">
+                                        <div class="row">
+                                            <div class="col-md-offset-2 col-md-6">
+                                                <div class="mt-overlay-1 mt-scroll-right">
+
+                                                    @if(!empty($userDetails->profile_photo))
+                                                        <img src="/{{ $userDetails->profile_photo}}" />
+                                                    @else
+                                                        <img src="http://via.placeholder.com/300x300" />
+                                                    @endif
+                                                    <div class="mt-overlay">
+                                                        <ul class="mt-info">
+                                                            <li>
+                                                                <div class="btn sbold red" data-toggle="modal" data-target="#profile-img">
+                                                                   Update Profile Image
+                                                                </div>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                                    <h3><a href="#" class="btn sbold green" data-toggle="modal" data-target="#profile-img">Update Profile Image</a></h3>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-offset-2 col-md-6">
+                                                <div class="mt-overlay-1 mt-scroll-right">
+                                                    @if(!empty($userDetails->front_ic_path))
+                                                        <img src="/{{ $userDetails->front_ic_path }}" />
+                                                    @else
+                                                        <img src="http://via.placeholder.com/500x300" />
+                                                    @endif
+                                                    <div class="mt-overlay">
+                                                        <ul class="mt-info">
+                                                            <li>
+                                                                <div class="btn sbold red" data-toggle="modal" data-target="#profile-front-ic">
+                                                                    Update Front IC
+                                                                </div>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                                <h3><a href="#" class="btn sbold green" data-toggle="modal" data-target="#profile-front-ic">Update Front IC</a></h3>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-offset-2 col-md-6">
+                                                <div class="mt-overlay-1 mt-scroll-right">
+                                                    @if(!empty($userDetails->back_ic_path))
+                                                        <img src="/{{ $userDetails->back_ic_path }}" />
+                                                    @else
+                                                        <img src="http://via.placeholder.com/500x300" />
+                                                    @endif
+                                                    <div class="mt-overlay">
+                                                        <ul class="mt-info">
+                                                            <li>
+                                                                <div class="btn sbold red" data-toggle="modal" data-target="#profile-back-ic">
+                                                                    Update Back IC
+                                                                </div>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                                <h3><a href="#" class="btn sbold green" data-toggle="modal" data-target="#profile-back-ic">Update Front IC</a></h3>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {{--<div class="row">--}}
+                                    {{--<div class="col-md-12">--}}
+                                        {{--<div class="btn-group">--}}
+                                            {{--<div class="col-md-12"><a href="#" class="btn sbold green" data-toggle="modal" data-target="#profile-front-ic">Update IC (Front)</a></div>--}}
+                                            {{--<div class="col-md-12"><a href="#" class="btn sbold green" data-toggle="modal" data-target="#profile-back-ic">Update IC (back)</a></div>--}}
+                                            {{--<div class="col-md-12"><a href="#" class="btn sbold green" data-toggle="modal" data-target="#profile-bank-statement">Update Bank Statement (back)</a></div>--}}
+                                        {{--</div>--}}
+                                    {{--</div>--}}
+                                {{--</div>--}}
+                            </div>
+                        </div>
+                    </div>
+                    <!-- END EXAMPLE TABLE PORTLET-->
+                </div>
             </div>
             <div class="row">
                 <div class="col-md-12">
@@ -136,55 +231,50 @@
                                 </tr>
                                 </thead>
                                 <tbody>
+                                @if(count($jobInfo) > 0)
+                                    @foreach($jobInfo as $jobs)
+                                        @if(!empty($jobs->job_title))
+                                        <tr class="odd gradeX">
+                                            <th>
+                                                <label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">
+                                                    <input type="checkbox" class="group-checkable"
+                                                           data-set="#employee-table .checkboxes"/>
+                                                    <span></span>
+                                                </label>
+                                            </th>
+                                            <td>{{ $jobs->job_title }}</td>
+                                            <td>{{ $jobs->start_date }}</td>
+                                            <td> {{ $jobs->schedule_status }}</td>
+                                            <td> {{ $jobs->company_name }}</td>
+                                            <td> {{ $jobs->rate }}</td>
 
-                                @foreach($jobInfo as $jobs)
-                                    <tr class="odd gradeX">
-                                        <th>
-                                            <label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">
-                                                <input type="checkbox" class="group-checkable"
-                                                       data-set="#employee-table .checkboxes"/>
-                                                <span></span>
-                                            </label>
-                                        </th>
-                                        <td>{{ $jobs->job_title }}</td>
-                                        <td>{{ $jobs->start_date }}</td>
-                                        <td> {{ $jobs->schedule_status }}</td>
-                                        <td> {{ $jobs->company_name }}</td>
-                                        <td> {{ $jobs->rate }}</td>
-
-                                        <td>
-                                            <div class="btn-group">
-                                                <button class="btn btn-xs green dropdown-toggle" type="button"
-                                                        data-toggle="dropdown" aria-expanded="false"> Actions
-                                                    <i class="fa fa-angle-down"></i>
-                                                </button>
-                                                <ul class="dropdown-menu" role="menu">
-                                                    <li>
-                                                        <a href="">
-                                                            <i class="fa fa-trash"></i> Delete</a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="">
-                                                            <i class="fa fa-edit"></i> Edit </a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="">
-                                                            <i class="fa fa-eye"></i> View </a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="">
-                                                            <i class="fa fa-check-square-o"></i> Approve</a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="">
-                                                            <i class="fa fa-close"></i> Reject
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                @endforeach
+                                            <td>
+                                                <div class="btn-group">
+                                                    <button class="btn btn-xs green dropdown-toggle" type="button"
+                                                            data-toggle="dropdown" aria-expanded="false"> Actions
+                                                        <i class="fa fa-angle-down"></i>
+                                                    </button>
+                                                    <ul class="dropdown-menu" role="menu">
+                                                        <li>
+                                                            <a href="{{ route('job.multiple',['id' =>  $jobs->jobid, 'param' =>'Delete' ]) }}"
+                                                               onclick="event.preventDefault();
+                                                                       document.getElementById('{{'destroy-'.$jobs->jobid }}').submit();">
+                                                                <i class="fa fa-trash"></i> Delete</a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="{{ route('job.edit',['id' => $jobs->jobid ]) }}">
+                                                                <i class="fa fa-edit"></i> Edit </a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="{{ route('job.details',['id' =>  $jobs->jobid ])  }}">
+                                                                <i class="fa fa-eye"></i> View </a>
+                                                        </li>                                                </ul>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        @endif
+                                    @endforeach
+                                @endif
                                 </tbody>
                             </table>
                         </div>
@@ -193,5 +283,8 @@
             </div>
         </div>
     </div>
+
+@include('employee.edit-profile')
+
 
 @endsection

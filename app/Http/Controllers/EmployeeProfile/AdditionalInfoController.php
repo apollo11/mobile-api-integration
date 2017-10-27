@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\EmployeeProfile;
 
 use App\AdditionalInfo;
-use App\Availability;
+use App\History;
 use Validator;
 use App\Http\Traits\ProfileTrait;
 use Illuminate\Http\Request;
@@ -152,22 +152,22 @@ class AdditionalInfoController extends Controller
     {
         if ($request->hasFile('front_ic_path')) {
 
-            $file['front_ic_path'] = $request->file('front_ic_path')->store('additional_info');
+            $file['front_ic_path'] = $request->file('front_ic_path')->store('additional');
 
         }
         if ($request->hasFile('back_ic_path')) {
 
-            $file['back_ic_path'] = $request->file('back_ic_path')->store('additional_info');
+            $file['back_ic_path'] = $request->file('back_ic_path')->store('additional');
 
         }
 
         if ($request->hasFile('bank_statement')) {
 
-            $file['bank_statement'] = $request->file('bank_statement')->store('additional_info');
+            $file['bank_statement'] = $request->file('bank_statement')->store('additional');
         }
         if ($request->hasFile('signature_file_path')) {
 
-            $file['signature_file_path'] = $request->file('signature_file_path')->store('additional_info');
+            $file['signature_file_path'] = $request->file('signature_file_path')->store('additional');
         }
 
         return $file;
@@ -191,10 +191,14 @@ class AdditionalInfoController extends Controller
     public function show($id)
     {
         $info = new AdditionalInfo();
+        $history = new History();
+
+        $complete = $history->countCompletedJobs($id);
+        $money = $history->countEarnedJobs($id);
         $count = $info->countPendingJobs($id);
         $add = $info->userInfo($id);
 
-        return $this->profileIteration($add, $count);
+        return $this->profileIteration($add, $count, $complete, $money);
     }
 
     /**
@@ -271,9 +275,11 @@ class AdditionalInfoController extends Controller
     /**
      * Iteration of profile output
      */
-    public function profileIteration($output, $count)
+    public function profileIteration($output, $count, $complete, $money)
     {
         $data = $this->userDetailsOutput($output, $count);
+        $data['completed_job_count'] = $complete;
+        $data['money_earned'] = $money;
 
         return response()->json(['user_detail' => $data]);
     }

@@ -1,5 +1,12 @@
 @extends('layouts.app')
 @section('content')
+    @foreach($related as $value)
+        <form id="destroy-{{ $value->userid }}" action="{{ route('employee.destroy-one',['id' =>$value->userid ]) }}" method="POST" style="display: none;">
+            {{ csrf_field() }}
+            <input type="submit" value="Delete">
+        </form>
+    @endforeach
+
     <form id="approve-{{ $details->id }}"
           action="{{ route('job.multiple',['id' => $details->id, 'param' => 'Approve']) }}"
           method="POST" style="display: none;">
@@ -37,7 +44,7 @@
                             </div>
                             <div class="actions">
                                 <a class="btn sbold green"
-                                   href="{{ route('job.multiple',['id' => $details->id, 'param' => 'Approve'])  }}">
+                                   href="{{ route('job.edit',['id' => $details->id ])  }}">
                                     Update</a>
 
                                 <a class="btn sbold green"
@@ -51,6 +58,8 @@
                                            document.getElementById('{{'reject-'.$details->id }}').submit();">
                                     Reject
                                 </a>
+                                <a class="btn sbold green" href="#" class="btn" data-toggle="modal" data-target="#job-assigned">Assign Job</a>
+
                                 <input class="btn sbold green" name="multiple" onclick="window.print()" value="Print"
                                        type="submit"/>
                             </div>
@@ -180,53 +189,48 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                @foreach($related as $value)
-                                <tr class="odd gradeX">
-                                    <th>
-                                        <label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">
-                                            <input type="checkbox" class="group-checkable"
-                                                   data-set="#employee-table .checkboxes"/>
-                                            <span></span>
-                                        </label>
-                                    </th>
-                                    <td>{{ $value->name }}</td>
-                                    <td>{{ $value->nric_no }}</td>
-                                    <td>{{ $value->contact_no }}</td>
-                                    <td>{{ $value->rate }}</td>
+                                @if(count($related) > 0)
+                                    @foreach($related as $value)
+                                    <tr class="odd gradeX">
+                                        <th>
+                                            <label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">
+                                                <input type="checkbox" class="group-checkable"
+                                                       data-set="#employee-table .checkboxes"/>
+                                                <span></span>
+                                            </label>
+                                        </th>
+                                        <td>{{ $value->name }}</td>
+                                        <td>{{ $value->nric_no }}</td>
+                                        <td>{{ $value->contact_no }}</td>
+                                        <td>{{ $value->rate }}</td>
 
-                                    <td>
-                                        <div class="btn-group">
-                                            <button class="btn btn-xs green dropdown-toggle" type="button"
-                                                    data-toggle="dropdown" aria-expanded="false"> Actions
-                                                <i class="fa fa-angle-down"></i>
-                                            </button>
-                                            <ul class="dropdown-menu" role="menu">
-                                                <li>
-                                                    <a href="">
-                                                        <i class="fa fa-trash"></i> Delete</a>
-                                                </li>
-                                                <li>
-                                                    <a href="">
-                                                        <i class="fa fa-edit"></i> Edit </a>
-                                                </li>
-                                                <li>
-                                                    <a href="">
-                                                        <i class="fa fa-eye"></i> View </a>
-                                                </li>
-                                                <li>
-                                                    <a href="">
-                                                        <i class="fa fa-check-square-o"></i> Approve</a>
-                                                </li>
-                                                <li>
-                                                    <a href="">
-                                                        <i class="fa fa-close"></i> Reject
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </td>
-                                </tr>
+                                        <td>
+                                            <div class="btn-group">
+                                                <button class="btn btn-xs green dropdown-toggle" type="button"
+                                                        data-toggle="dropdown" aria-expanded="false"> Actions
+                                                    <i class="fa fa-angle-down"></i>
+                                                </button>
+                                                <ul class="dropdown-menu" role="menu">
+                                                    <li>
+                                                        <a href="{{ route('employee.destroy-one',['id' => $value->userid]) }}"
+                                                           onclick="event.preventDefault();
+                                                                   document.getElementById('{{'destroy-'.$value->userid }}').submit();">
+                                                            <i class="fa fa-trash"></i> Delete</a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="{{ route('employee.edit',['id' => $value->userid ])  }}">
+                                                            <i class="fa fa-edit"></i> Edit </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="{{ route('employee.details',['id' => $value->userid ])  }}">
+                                                            <i class="fa fa-eye"></i> View </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </td>
+                                    </tr>
                                     @endforeach
+                                @endif
                                 </tbody>
                             </table>
                         </div>
@@ -235,4 +239,5 @@
             </div>
         </div>
     </div>
+    @include('job.assign-job')
 @endsection

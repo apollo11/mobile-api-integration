@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Employer;
 use App\Job;
 use Illuminate\Http\Request;
 
@@ -29,7 +30,9 @@ class HomeController extends Controller
             'inactiveJob' => $this->countInactiveJob(),
             'unassigned' => $this->countUnassignedJob(),
             'cancelled' => $this->countCancelledJobs(),
-            'registeredEmployer' => $this->countEmployer()
+            'registeredEmployer' => $this->countEmployer(),
+            'checkout' => $this->checkOut(),
+            'checkin' => $this->checkIn()
         ];
 
         return view('home', $param);
@@ -91,6 +94,40 @@ class HomeController extends Controller
 
         return $count;
 
+    }
+
+    /**
+     * Count Newly registered employee
+     */
+
+    public function countNewlyRegEmployee()
+    {
+        $employer = new Employer();
+
+        return view('layouts.sidebar',['newlyReg' => $employer->countRegMobile()]);
+    }
+
+    /**
+     * Count Check in
+     */
+    public function checkIn()
+    {
+        $job = new Job();
+
+        $count = $job->checkInCount();
+
+        return $count;
+    }
+
+    /**
+     * Checkout Count
+     */
+    public function checkOut()
+    {
+        $job = new Job();
+        $count = $job->checkOutCount();
+
+        return $count;
 
     }
 }

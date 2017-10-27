@@ -2,15 +2,18 @@
 
 namespace App\Http\Controllers\Employee;
 
-use App\Employee;
+
+use Validator;
 use Input;
+use App\Employee;
 use App\User;
+use App\Mail\EmployeeRegistration;
 use App\AdditionalInfo;
 use App\JobSchedule;
-use Validator;
 use App\Http\Traits\OauthTrait;
 use App\Http\Traits\HttpResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use App\Http\Controllers\Controller;
 
 class EmployeeController extends Controller
@@ -49,7 +52,7 @@ class EmployeeController extends Controller
         }
         $dataUndefined = !empty($data) ? $data : [];
 
-        return view('employee.lists', ['employee' => $dataUndefined, 'count' => count($data)]);
+        return view('employee.lists', ['employee' => $dataUndefined, 'count' => count($dataUndefined)]);
     }
 
     /**
@@ -105,10 +108,20 @@ class EmployeeController extends Controller
         } else {
 
             $this->save($data);
+            $this->sendEmailtoEmployee($data);
 
             return redirect('employee/lists');
 
         }
+    }
+
+    /**
+     * Send Email
+     */
+    public function sendEmailToEmployee(array $data)
+    {
+        Mail::to($data['email'])->send( new EmployeeRegistration($data));
+
     }
 
     /**
@@ -170,10 +183,16 @@ class EmployeeController extends Controller
     public function edit($id)
     {
         $userDetails = new AdditionalInfo();
+        $contactMethod = [
+            'sms'
+            , 'phone'
+            , 'email'
+            , 'other'
+        ];
 
         $details = $userDetails->userInfo($id);
 
-        return view('employee.edit-form', ['details' => $details ]);
+        return view('employee.edit-form', ['details' => $details, 'contact_method' => $contactMethod]);
     }
 
     /**
@@ -183,10 +202,120 @@ class EmployeeController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $id = null)
     {
+        $data = $request->all();
+        $validator = $this->updateRules($data);
+
+        if($validator->fails()) {
+
+            return back()
+                ->withErrors($validator)
+                ->withInput();
+
+        } else {
+
+           $this->updateBasicAdditionalInfo($data, $id);
+
+            return redirect('employee/lists');
+        }
+    }
+
+    /**
+     * Update additional information
+     */
+    public function updateBasicAdditionalInfo(array $data, $id)
+    {
+        $criminal = !empty($data['criminal_record']) ? $data['criminal_record'] : '';
+        $medical = !empty($data['medication']) ? $data['medication'] : '';
+        $school = !empty($data['school']) ? $data['school'] : '';
+        $schoolExpiry = !empty($data['school_pass_expiry_date']) ? $data['school_pass_expiry_date'] : '1970-01-01';
+
+        $additonalInfo = \App\AdditionalInfo::where('user_id', $id)->first();
+
+        $user = \App\User::find($id);
+
+        if(is_null($additonalInfo)) {
+
+            $user->additionalInfo()->updateOrCreate([
+                'gender' => $data['gender'],
+                'birthdate' => $data['birthdate'],
+                'religion' => $data['religion'],
+                'address' => $data['address'],
+                'email' => $data['email'],
+                'school' => $school,
+                'school_pass_expiry_date' => $schoolExpiry,
+                'emergency_name' => $data['emergency_contact_person'],
+                'emergency_contact_no' => $data['emergency_contact_person_no'],
+                'emergency_relationship' => $data['emergency_person_relationship'],
+                'emergency_address' => $data['emergency_person_address'],
+                'contact_method' => $data['contact_method'],
+                'criminal_record' => $criminal,
+                'medication' => $medical,
+                'language' => $data['language'],
+                'nationality' => $data['nationality'],
+                'front_ic_path' => 'none',
+                'back_ic_path' => 'none',
+                'signature_file_path' => 'none'
+            ]);
+
+        } else {
+
+            $user->additionalInfo()->update([
+                'gender' => $data['gender'],
+                'birthdate' => $data['birthdate'],
+                'religion' => $data['religion'],
+                'address' => $data['address'],
+                'email' => $data['email'],
+                'school' => $school,
+                'school_pass_expiry_date' => $schoolExpiry,
+                'emergency_name' => $data['emergency_contact_person'],
+                'emergency_contact_no' => $data['emergency_contact_person_no'],
+                'emergency_relationship' => $data['emergency_person_relationship'],
+                'emergency_address' => $data['emergency_person_address'],
+                'contact_method' => $data['contact_method'],
+                'criminal_record' => $criminal,
+                'medication' => $medical,
+                'language' => $data['language'],
+                'nationality' => $data['nationality'],
+            ]);
+
+        }
+
+        \App\User::where('id', $id)
+            ->update([
+                'name' => $data['name'],
+                'mobile_no' => $data['mobile_no']
+            ]);
 
     }
+
+    /**
+     * Update Profile Information Rules
+     */
+    public function updateRules(array $data)
+    {
+
+        return Validator::make($data, [
+                'name' => 'required|string|max:255',
+                'email' => 'required|string|email|max:255|unique:users',
+                'mobile_no' => 'required',
+                'birthdate' => 'date|required',
+                'nationality' => 'required|string',
+                'language' => 'required|string',
+                'gender' => 'string|required',
+                'emergency_contact_person' => 'required|string',
+                'emergency_contact_person_no' => 'required|string',
+                'emergency_person_relationship' => 'required|string',
+                'contact_method' => 'required',
+                'religion' => 'required|string',
+                'emergency_person_address' => 'required|string',
+                'address' => 'required'
+            ]
+        );
+
+    }
+
 
     /**
      * Remove the specified resource from storage.
@@ -197,19 +326,31 @@ class EmployeeController extends Controller
     public function destroy(Request $request)
     {
         $user = new User();
-        $submit = $request->input('multiple');
-        $multi = $request->input('multicheck');
 
-        switch ($submit) {
-            case 'Approve':
-                $user->multiUpdate($multi);
-                break;
-            case 'Reject':
-                $user->multiDelete($multi);
-                break;
+        $multi['multicheck'] = is_null($request->input('multicheck')) ? [] : $request->input('multicheck');
+        $validator = Validator::make($multi, ['multicheck' => 'required']);
+
+        if ($validator->fails()) {
+
+            $result = redirect(route('employee.lists'))
+                ->withErrors($validator)
+                ->withInput();
+        } else {
+            $submit = $request->input('multiple');
+            switch ($submit) {
+                case 'Approve':
+                    $user->multiUpdate($multi);
+                    break;
+                case 'Delete':
+                    $user->multiDelete($multi);
+                    break;
+            }
+
+            $result = back();
         }
 
-        return back();
+        return $result;
+
     }
 
     /**
@@ -422,5 +563,177 @@ class EmployeeController extends Controller
 
         return $result;
     }
+
+    public function updateFrontIc(Request $request, $id)
+    {
+        $additonalInfo = \App\AdditionalInfo::where('user_id', $id)->first();
+        $user = \App\User::find($id);
+
+        $data['profile_front_ic'] = $request->file('profile_front_ic');
+
+        $validator = Validator::make($data, [
+            'profile_front_ic' => 'required|file',
+        ]);
+
+        if ($validator->fails()) {
+
+            return redirect(route('employee.details', ['id' => $id]))
+                ->withErrors($validator)
+                ->withInput();
+
+        } else {
+
+            $profileImg = $this->uploadingFile($request);
+
+            if (is_null($additonalInfo)) {
+
+                $user->additionalInfo()->firstOrCreate([
+                    'front_ic_path' => $profileImg['profile_front_ic'],
+                ]);
+
+            } else {
+                $user->additionalInfo()->update([
+                    'front_ic_path' => $profileImg['profile_front_ic'],
+                ]);
+            }
+
+            return redirect(route('employee.details', ['id' => $id]));
+
+        }
+
+    }
+
+    public function updateBacktIc(Request $request, $id)
+    {
+        $additonalInfo = \App\AdditionalInfo::where('user_id', $id)->first();
+        $user = \App\User::find($id);
+
+        $data['profile_back_ic'] = $request->file('profile_back_ic');
+
+        $validator = Validator::make($data, [
+            'profile_back_ic' => 'required|file',
+        ]);
+
+        if ($validator->fails()) {
+
+            return redirect(route('employee.details', ['id' => $id]))
+                ->withErrors($validator)
+                ->withInput();
+
+        } else {
+
+            $profileImg = $this->uploadingFile($request);
+
+            if (is_null($additonalInfo)) {
+
+                $user->additionalInfo()->firstOrCreate([
+                    'back_ic_path' => $profileImg['profile_back_ic'],
+                ]);
+
+            } else {
+                $user->additionalInfo()->update([
+                    'back_ic_path' => $profileImg['profile_back_ic'],
+                ]);
+            }
+
+            return redirect(route('employee.details', ['id' => $id]));
+
+        }
+
+    }
+
+    public function updateBankStmnt(Request $request, $id)
+    {
+        $additonalInfo = \App\AdditionalInfo::where('user_id', $id)->first();
+        $user = \App\User::find($id);
+
+        $data['bank_statement'] = $request->file('bank_statement');
+
+        $validator = Validator::make($data, [
+            'bank_statement' => 'required|file',
+        ]);
+
+        if ($validator->fails()) {
+
+            return redirect(route('employee.details', ['id' => $id]))
+                ->withErrors($validator)
+                ->withInput();
+
+        } else {
+
+            $profileImg = $this->uploadingFile($request);
+
+            if (is_null($additonalInfo)) {
+
+                $user->additionalInfo()->firstOrCreate([
+                    'bank_statement' => $profileImg['bank_statement'],
+                ]);
+
+            } else {
+                $user->additionalInfo()->update([
+                    'bank_statement' => $profileImg['bank_statement'],
+                ]);
+            }
+
+            return redirect(route('employee.details', ['id' => $id]));
+
+        }
+
+    }
+
+    public function updateProfileImg(Request $request, $id = null)
+    {
+        $user = \App\User::find($id);
+        $data['profile_image'] = $request->file('profile_image');
+
+        $validator = Validator::make($data, [
+            'profile_image' => 'required|file',
+        ]);
+
+        if($validator->fails()) {
+
+            return redirect(route('employee.details',['id' => $id]))
+                ->withErrors($validator)
+                ->withInput();
+
+        } else {
+
+           $profileImg = $this->uploadingFile($request);
+
+
+           $user->profile_image_path = $profileImg['profile_image'];
+           $user->save();
+
+            return redirect(route('employee.details',['id' => $id]));
+        }
+
+    }
+
+    function uploadingFile(Request $request)
+    {
+        if ($request->hasFile('profile_front_ic')) {
+
+            $file['profile_front_ic'] = $request->file('profile_front_ic')->store('additional');
+        }
+        if ($request->hasFile('profile_back_ic')) {
+
+            $file['profile_back_ic'] = $request->file('profile_back_ic')->store('additional');
+
+        }
+
+        if ($request->hasFile('bank_statement')) {
+
+            $file['bank_statement'] = $request->file('bank_statement')->store('additional');
+        }
+
+        if ($request->hasFile('profile_image')) {
+
+            $file['profile_image'] = $request->file('profile_image')->store('avatars');
+        }
+
+        return $file;
+    }
+
+
 
 }

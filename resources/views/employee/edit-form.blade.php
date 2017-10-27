@@ -25,8 +25,7 @@
                             </div>
                         </div>
                         <div class="portlet-body form">
-                            <form class="form-horizontal" method="POST" role="form"
-                                  action="{{ route('employee.signup') }}"
+                            <form class="form-horizontal" method="POST" role="form" action="{{ route('employee.update',['id' => $details->id ]) }}"
                                   enctype="multipart/form-data">
                                 {{ csrf_field() }}
                                 <div class="form-body">
@@ -49,7 +48,7 @@
                                         <label class="col-md-3 control-label">Email Address</label>
                                         <div class="col-md-7">
                                             <input type="email" class="form-control" placeholder="Enter Email Address"
-                                                   value="{{ $details->userEmail }}" name="email">
+                                                   value="{{old('email') }}" name="email">
                                             @if ($errors->has('email'))
                                                 <span class="help-block">
                                                 {{ $errors->first('email') }}
@@ -62,7 +61,7 @@
                                         <label class="col-md-3 control-label">Mobile No</label>
                                         <div class="col-md-7">
                                             <input type="text" class="form-control" placeholder="Enter Mobile No"
-                                                   value="{{ $details->userMobile }}" name="mobile_no">
+                                                   value="{{ old('mobile_no') }}" name="mobile_no">
                                             @if ($errors->has('mobile_no'))
                                                 <span class="help-block">
                                                 {{ $errors->first('mobile_no') }}
@@ -88,7 +87,7 @@
                                         <div class="col-md-7">
                                             <div class="input-group date form_datetime form_datetime bs-datetime"
                                                  id="birthdate">
-                                                <input type="text" name="birthdate" size="16" class="form-control">
+                                                <input type="text" name="birthdate" value="{{ old('birthdate') }}" size="16" class="form-control">
                                                 <span class="input-group-addon">
                                                     <button class="btn default date-set" type="button">
                                                         <i class="fa fa-calendar"></i>
@@ -105,7 +104,7 @@
                                     <div class="form-group{{ $errors->has('school') ? ' has-error' : '' }}">
                                         <label class="col-md-3 control-label">School</label>
                                         <div class="col-md-7">
-                                            <input type="text" class="form-control" placeholder="Enter School"
+                                            <input type="text" value="{{ old('school') }}"class="form-control" placeholder="Enter School"
                                                    name="school"/>
                                             @if ($errors->has('school'))
                                                 <span class="help-block">
@@ -120,7 +119,7 @@
                                         <div class="col-md-7">
                                             <div class="input-group date form_datetime form_datetime bs-datetime"
                                                  id="school-expiry-date">
-                                                <input type="text" name="school_expiry_date" size="16"
+                                                <input type="text" value="{{ old('school_expiry_date') }}"name="school_expiry_date" size="16"
                                                        class="form-control">
                                                 <span class="input-group-addon">
                                                     <button class="btn default date-set" type="button">
@@ -343,18 +342,31 @@
                                         </div>
                                     </div>
 
-                                    <div class="form-group{{ $errors->has('nationality') ? ' has-error' : '' }}">
+                                    <div class="form-group{{ $errors->has('language') ? ' has-error' : '' }}">
                                         <label class="col-md-3 control-label">Language</label>
                                         <div class="col-md-7">
-                                            <select class="form-control" name="nationality">
+                                            <select class="form-control" name="language">
                                                 <option value="">-- select one --</option>
                                                 <option value="english">English</option>
                                             </select>
 
-                                            @if ($errors->has('nationality'))
+                                            @if ($errors->has('language'))
                                                 <span class="help-block">
-                                                {{ $errors->first('nationality') }}
+                                                {{ $errors->first('language') }}
                                                </span>
+                                            @endif
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group{{ $errors->has('religion') ? ' has-error' : '' }}">
+                                        <label class="col-md-3 control-label">Religion</label>
+                                        <div class="col-md-7">
+                                            <input type="text" class="form-control" placeholder="Enter religion"
+                                                   name="religion" value="{{ old('religion') }}"/>
+                                            @if ($errors->has('religion'))
+                                                <span class="help-block">
+                                                    {{ $errors->first('religion') }}
+                                              </span>
                                             @endif
                                         </div>
                                     </div>
@@ -374,47 +386,61 @@
                                             </div>
                                             @if ($errors->has('gender'))
                                                 <span class="help-block">
-                                                <strong>{{ $errors->first('gender') }}</strong>
+                                                {{ $errors->first('gender') }}
                                                </span>
                                             @endif
                                         </div>
                                     </div>
 
-                                    <div class="form-group{{ $errors->has('emergency_name') ? ' has-error' : '' }}">
+                                    <div class="form-group{{ $errors->has('emergency_contact_person') ? ' has-error' : '' }}">
                                         <label class="col-md-3 control-label">Emergency contact person</label>
                                         <div class="col-md-7">
                                             <input type="text" class="form-control" placeholder="Enter contact person"
-                                                   name="emergency_name"/>
-                                            @if ($errors->has('emergency_name'))
+                                                   name="emergency_contact_person" value="{{ old('emergency_contact_person') }}"/>
+                                            @if ($errors->has('emergency_contact_person'))
                                                 <span class="help-block">
-                                                    <strong>{{ $errors->first('emergency_name') }}</strong>
+                                                    {{ $errors->first('emergency_contact_person') }}
                                               </span>
                                             @endif
                                         </div>
                                     </div>
-                                    <div class="form-group{{ $errors->has('emergency_contact_no') ? ' has-error' : '' }}">
+                                    <div class="form-group{{ $errors->has('emergency_contact_person_no') ? ' has-error' : '' }}">
                                         <label class="col-md-3 control-label">Emergency person contact no.</label>
                                         <div class="col-md-7">
                                             <input type="text" class="form-control"
                                                    placeholder="Enter emergency contact no."
-                                                   name="emergency_contact_no"/>
-                                            @if ($errors->has('emergency_contact_no'))
+                                                   name="emergency_contact_person_no" value="{{ old('emergency_contact_person_no') }}"/>
+                                            @if ($errors->has('emergency_contact_person_no'))
                                                 <span class="help-block">
-                                                    <strong>{{ $errors->first('emergency_contact_no') }}</strong>
+                                                    {{ $errors->first('emergency_contact_person_no') }}
                                               </span>
                                             @endif
                                         </div>
                                     </div>
 
-                                    <div class="form-group{{ $errors->has('emergency_relationship') ? ' has-error' : '' }}">
+                                    <div class="form-group{{ $errors->has('emergency_person_relationship') ? ' has-error' : '' }}">
                                         <label class="col-md-3 control-label">Emergency person relationship</label>
                                         <div class="col-md-7">
                                             <input type="text" class="form-control"
                                                    placeholder="Enter emergency person relationship"
-                                                   name="emergency_contact_no"/>
-                                            @if ($errors->has('emergency_contact_no'))
+                                                   name="emergency_person_relationship" value="{{ old('emergency_person_relationship') }}"/>
+                                            @if ($errors->has('emergency_person_relationship'))
                                                 <span class="help-block">
-                                                    <strong>{{ $errors->first('emergency_contact_no') }}</strong>
+                                                    {{ $errors->first('emergency_person_relationship') }}
+                                              </span>
+                                            @endif
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group{{ $errors->has('emergency_person_address') ? ' has-error' : '' }}">
+                                        <label class="col-md-3 control-label">Emergency person address</label>
+                                        <div class="col-md-7">
+                                            <input type="text" class="form-control"
+                                                   placeholder="Enter emergency person address"
+                                                   name="emergency_person_address" value="{{ old('emergency_person_address') }}"/>
+                                            @if ($errors->has('emergency_person_address'))
+                                                <span class="help-block">
+                                                    {{ $errors->first('emergency_person_address') }}
                                               </span>
                                             @endif
                                         </div>
@@ -424,29 +450,36 @@
                                         <div class="col-md-7">
                                             <div class="mt-checkbox-inline">
                                                 <label class="mt-checkbox">
-                                                    <input type="checkbox" name="contact_method[]" id="contact_method"
-                                                           value="sms"> Sms
+
+                                                    <input type="radio" name="contact_method" id="contact_method"
+                                                           value="sms"
+                                                    > Sms
                                                     <span></span>
                                                 </label>
                                                 <label class="mt-checkbox">
-                                                    <input type="checkbox" name="contact_method[]" id="contact_method"
-                                                           value="phone"> Phone
+                                                    <input type="radio" name="contact_method" id="contact_method"
+                                                           value="phone"
+
+                                                    > Phone
                                                     <span></span>
                                                 </label>
                                                 <label class="mt-checkbox">
-                                                    <input type="checkbox" name="contact_method[]" id="contact_method"
-                                                           value="email"> Email
+                                                    <input type="radio" name="contact_method" id="contact_method"
+                                                           value="email"
+
+                                                    > Email
                                                     <span></span>
                                                 </label>
                                                 <label class="mt-checkbox">
-                                                    <input type="checkbox" name="contact_method[]" id="contact_method"
-                                                           value="other"> Other
+                                                    <input type="radio" name="contact_method" id="contact_method"
+                                                           value="other"
+                                                    > Other
                                                     <span></span>
                                                 </label>
                                             </div>
                                             @if ($errors->has('contact_method'))
                                                 <span class="help-block">
-                                                <strong>{{ $errors->first('contact_method') }}</strong>
+                                                {{ $errors->first('contact_method') }}
                                                </span>
                                             @endif
                                         </div>
@@ -469,6 +502,18 @@
                                             @if ($errors->has('medication'))
                                                 <span class="help-block">
                                                 {{ $errors->first('medication') }}
+                                               </span>
+                                            @endif
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group{{ $errors->has('address') ? ' has-error' : '' }}">
+                                        <label class="col-md-3 control-label">Address</label>
+                                        <div class="col-md-7">
+                                            <textarea class="form-control" name="address" rows="3"></textarea>
+                                            @if ($errors->has('address'))
+                                                <span class="help-block">
+                                                {{ $errors->first('address') }}
                                                </span>
                                             @endif
                                         </div>

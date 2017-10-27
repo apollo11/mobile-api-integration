@@ -206,13 +206,53 @@ class JobSchedule extends Model
                 , 'jobs.job_title'
                 , 'jobs.rate'
                 , 'jobs.job_date as start_date'
+                , 'jobs.id as jobid'
                 , 'employee.company_name'
                 , 'employee.nric_no'
                 , 'employee.name'
                 , 'employee.contact_no'
                 , 'jobs.rate'
+                , 'jobs.id'
             )
-            ->where('job_schedules.user_id' , '=', $id)
+            ->where('users.id' , '=', $id)
+            ->whereIn('job_schedules.job_status',[
+                'accepted'
+                , 'cancelled'
+                , 'completed'
+                , 'rejected'
+                , 'auto_complete'
+                , 'auto_cancelled'
+            ])
+            ->get();
+
+        return $jobs;
+    }
+
+    public function getRelatedCandidates($id)
+    {
+        $jobs = DB::table('users')
+            ->join('job_schedules', 'job_schedules.user_id', '=', 'users.id')
+            ->leftJoin('jobs', 'jobs.id', '=', 'job_schedules.job_id')
+            ->leftJoin('users as employee', 'employee.id', '=', 'jobs.user_id')
+            ->select(
+                'job_schedules.id as schedule_id'
+                , 'job_schedules.user_id'
+                , 'job_schedules.job_id'
+                , 'job_schedules.job_status as schedule_status'
+                , 'jobs.created_at'
+                , 'jobs.job_title'
+                , 'jobs.rate'
+                , 'jobs.job_date as start_date'
+                , 'jobs.id as jobid'
+                , 'users.company_name'
+                , 'users.nric_no'
+                , 'users.name'
+                , 'users.contact_no'
+                , 'users.id as userid'
+                , 'jobs.rate'
+                , 'jobs.id'
+            )
+            ->where('job_schedules.job_id' , '=', $id)
             ->whereIn('job_schedules.job_status',[
                 'accepted'
                 , 'cancelled'

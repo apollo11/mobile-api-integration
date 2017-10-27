@@ -68,6 +68,14 @@ class Job extends Model
     }
 
     /**
+     * Assign jobs
+     */
+    public function assignJobs()
+    {
+        return $this->belongsToMany('\App\AssignJob')->withPivot('is_assigned', 'assign_job_id', 'user_id');
+    }
+
+    /**
      * Filter by limit, start date, end date
      */
     public function filterByLimitStartEnd($limit = 20, array $param)
@@ -144,8 +152,8 @@ class Job extends Model
 
             })
             ->whereNull('job_schedules.job_status')
-            ->orWhere('job_schedules.job_status', '=', 'available')
             ->where('jobs.job_date', '>=', Carbon::now())
+            ->where('jobs.status', '=', 'active')
             ->distinct('jobs.id')
             ->orderBy('jobs.job_date', 'asc')
             ->orderBy('jobs.created_at', 'asc')
@@ -227,6 +235,7 @@ class Job extends Model
             ->join('jobs', 'users.id', '=', 'jobs.user_id')
             ->select(
                 'jobs.id'
+                , 'jobs.user_id'
                 , 'users.company_description'
                 , 'users.company_name'
                 , 'users.profile_image_path'
@@ -269,6 +278,7 @@ class Job extends Model
             ->leftJoin('jobs', 'jobs.user_id', '=', 'employer.id')
             ->select(
                 'jobs.id'
+                , 'employer.id as user_id'
                 , 'employer.company_description'
                 , 'employer.company_name'
                 , 'employer.profile_image_path'
@@ -286,6 +296,9 @@ class Job extends Model
                 , 'jobs.end_date'
                 , 'jobs.contact_no'
                 , 'jobs.rate'
+                , 'jobs.no_of_person'
+                , 'jobs.contact_person'
+                , 'jobs.contact_no'
                 , 'jobs.job_image_path'
                 , 'jobs.nationality'
                 , 'jobs.choices as gender'
@@ -307,6 +320,18 @@ class Job extends Model
     /**
      *Count active jobs
      */
+    public function countJobs()
+    {
+        $job = DB::table('users')
+            ->join('jobs', 'users.id', '=', 'jobs.user_id')
+            ->count();
+
+        return $job;
+    }
+
+    /**
+     * @return mixed
+     */
     public function countActiveJobs()
     {
         $job = DB::table('users')
@@ -316,6 +341,7 @@ class Job extends Model
 
         return $job;
     }
+
 
     /**
      * count inactive jobs
@@ -331,14 +357,43 @@ class Job extends Model
     }
 
     /**
+     * CheckIn count
+     */
+    public function checkInCount()
+    {
+        $job = DB::table('users')
+            ->join('job_schedules', 'users.id', '=', 'job_schedules.user_id')
+            ->whereNotNull('job_schedules.checkin_datetime')
+            ->where('users.role_id','=', 2)
+            ->count();
+
+        return $job;
+    }
+
+    /**
+     * CheckIn count
+     */
+    public function checkOutCount()
+    {
+        $job = DB::table('users')
+            ->join('job_schedules', 'users.id', '=', 'job_schedules.user_id')
+            ->whereNotNull('job_schedules.checkout_datetime')
+            ->where('users.role_id','=', 2)
+            ->count();
+
+        return $job;
+    }
+
+
+
+    /**
      * @return mixed
      */
     public function unAssignedJobs()
     {
-        $job = DB::table('users')
-            ->join('jobs', 'users.id', '=', 'jobs.user_id')
-            ->leftJoin('job_schedules', 'job_schedules.user_id', '=', 'users.id')
-            ->where('job_schedules.is_assigned', '=', null)
+        $job = DB::table('jobs')
+            ->join('assign_job_job', 'jobs.id', '=', 'assign_job_job.job_id')
+            ->whereNull('assign_job_job.job_id')
             ->count();
 
         return $job;
@@ -365,10 +420,7 @@ class Job extends Model
     public function registeredEmployersviaMobile()
     {
         $job = DB::table('users')
-            ->orWhere(function ($query) {
-                $query->where('platform', '=', 'ios')
-                    ->where('platform', '=', 'android');
-            })
+        ->whereIn('platform',['ios', 'android'])
         ->where('role_id', '=', 1)
         ->count();
 

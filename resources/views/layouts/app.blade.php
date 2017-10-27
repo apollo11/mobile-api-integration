@@ -219,6 +219,7 @@
     <!-- BEGIN THEME GLOBAL SCRIPTS -->
     <script src="{{ asset('assets/global/scripts/app.min.js') }}" type="text/javascript"></script>
     <script src="{{ asset('assets/pages/scripts/ui-bootbox.min.js') }}" type="text/javascript"></script>
+    {{--<script src="{{ asset('assets/pages/scripts/ui-general.min.js') }}" type="text/javascript"></script>--}}
     <!-- END THEME GLOBAL SCRIPTS -->
 
     <!-- BEGIN PAGE LEVEL SCRIPTS -->
@@ -255,8 +256,9 @@
                     { "extend": 'excel', "text":'Export',"className": 'btn sbold red' }
                 ],
                 autoFill: true,
-                responsive: true
+                "scrollCollapse": true
             });
+
 
             $("#myModal").on("show", function() {    // wire up the OK button to dismiss the modal when shown
                 $("#myModal a.btn").on("click", function(e) {
@@ -272,14 +274,54 @@
                 $("#myModal").remove();
             });
 
-            $("#myModal").modal({                    // wire up the actual modal functionality and show the dialog
+            $("#profile-img").modal({                    // wire up the actual modal functionality and show the dialog
                 "backdrop"  : "static",
                 "keyboard"  : true,
-                "show"      : true                     // ensure the modal is shown immediately
+                "show"      : false                     // ensure the modal is shown immediately
             });
+
+            $("#profile-img"
+                , "#profile-front-ic"
+                , "#profile-back-ic"
+                , "#profile-bank-statement"
+                , "#job-assigned"
+            ).modal({                    // wire up the actual modal functionality and show the dialog
+                "backdrop"  : "static",
+                "keyboard"  : true,
+                "show"      : false                     // ensure the modal is shown immediately
+            });
+
 
         });
 
+        //select all checkboxes
+        $(".group-checkable").change(function(){  //"select all" change
+            $(".checkboxes").prop('checked', $(this).prop("checked")); //change all ".checkbox" checked status
+        });
+
+    </script>
+
+    <script type="text/javascript">
+        @if ($errors->has('profile_image'))
+            $('#profile-img').modal('show');
+
+        @endif
+
+        @if ($errors->has('profile_front_ic'))
+            $('#profile-front-ic').modal('show');
+        @endif
+
+        @if ($errors->has('profile_back_ic'))
+            $('#profile-back-ic').modal('show');
+        @endif
+
+        @if ($errors->has('bank_statement'))
+        $('#profile-bank-statement').modal('show');
+        @endif
+
+        @if ($errors->has('user_assign'))
+        $('#job-assigned').modal('show');
+        @endif
     </script>
 
 

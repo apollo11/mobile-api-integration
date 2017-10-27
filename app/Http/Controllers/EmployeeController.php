@@ -216,4 +216,14 @@ class EmployeeController extends Controller
         return $this->ouathResponse($data);
     }
 
+    /**
+     * Update Profile Information
+     */
+    public function updateProfileInfo()
+    {
+
+
+    }
+
+
 }

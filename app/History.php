@@ -255,7 +255,7 @@ class History extends Model
         $count = DB::table('users')
             ->leftJoin('job_schedules', 'job_schedules.user_id', '=', 'users.id')
             ->where('users.id', '=', $userid)
-            ->whereIn('job_schedules.job_status', ['cancelled', 'completed', 'auto_complete', 'auto_cancel', 'rejected'])
+            ->whereIn('job_schedules.job_status', ['cancelled', 'completed', 'auto_completed', 'auto_cancelled', 'rejected'])
             ->whereNull('job_schedules.payment_status')
             ->count();
 

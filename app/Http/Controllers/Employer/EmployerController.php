@@ -6,6 +6,7 @@ use Validator;
 use App\Employer;
 use App\User;
 use App\Industry;
+use Illuminate\Routing\UrlGenerator;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -24,9 +25,30 @@ class EmployerController extends Controller
      */
     public function index()
     {
-        $employers = $this->userList();
+        $employer = new Employer();
 
-        return view('employer.lists', ['employers' => $employers]);
+        $list = $employer->employerList();
+
+        foreach ($list as $value)
+        {
+            $countPosted = $employer->postedJobCounts($value->id);
+            $applied = $employer->candidates($value->id);
+
+            $data[] = [
+                'id' => $value->id,
+                'business_manager' => $value->business_manager,
+                'company_name' => $value->company_name,
+                'status' => $value->status,
+                'applied' => $applied,
+                'posting' => $countPosted
+            ];
+
+        }
+
+        $dataUndefined = !empty($data) ? $data : [];
+
+
+        return view('employer.lists', ['employers' => $dataUndefined]);
     }
 
     /**
@@ -103,8 +125,18 @@ class EmployerController extends Controller
     {
         $user = new Employer();
         $employer = $user->employerDetails($id);
+        $countPosted = $user->postedJobCounts($employer->id);
+        $applied = $user->candidates($employer->id);
+        $related = $user->relatedJobs($employer->id);
 
-        return view('employer.details',['employer' => $employer]);
+
+        return view('employer.details',
+            [
+                'employer' => $employer
+                , 'applied' => $applied
+                , 'posting' => $countPosted
+                , 'job' => $related
+            ]);
     }
 
     /**
@@ -115,7 +147,12 @@ class EmployerController extends Controller
      */
     public function edit($id)
     {
-        //
+        $industry = $this->industryList();
+        $user = new Employer();
+        $employer = $user->employerDetails($id);
+
+
+        return view('employer.edit-form', ['industry' => $industry, 'user' => $employer]);
     }
 
     /**
@@ -125,9 +162,41 @@ class EmployerController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $id=null)
     {
-        //
+        $data = $request->all();
+
+        $validator = $this->rules($data);
+
+        if ($validator->fails()) {
+
+            return redirect(route('employer.edit',['id' => $id]))
+                ->withErrors($validator)
+                ->withInput();
+
+        } else {
+
+            $companyLogo['company_logo'] = $request->file('company_logo')->store('avatars');
+            $merge = array_merge($data, $companyLogo);
+
+            $employer = \App\User::find($id);
+            $employer->role_id = 1;
+            $employer->role = 'employer';
+            $employer->company_name = $merge['company_name'];
+            $employer->email = $merge['email'];
+            $employer->company_description = $merge['company_description'];
+            $employer->business_manager = $merge['business_manager'];
+            $employer->password = bcrypt($merge['password']);
+            $employer->contact_person = $merge['contact_person'];
+            $employer->rate = $merge['hourly_rate'];
+            $employer->profile_image_path = $merge['company_logo'];
+            $employer->industry = $merge['industry'];
+
+            $employer->save();
+
+            return redirect('employer/lists');
+        }
+
     }
 
     /**
@@ -142,35 +211,46 @@ class EmployerController extends Controller
     public function destroy(Request $request, $id = null, $param = null)
     {
         $employer = new Employer();
+
         $submit = empty($request->input('multiple')) ? $param : $request->input('multiple');
-        $multi = is_null($id) ? $request->input('multicheck') : (array)$id;
-        switch ($submit) {
-            case 'Approve':
-                $employer->multiUpdateApprove($multi);
-                break;
-            case 'Delete':
-                $employer->multiDelete($multi);
-                break;
-            case 'Reject':
-                $employer->multiUpdateReject($multi);
-                break;
+        $multi['multicheck'] = is_null($request->input('multicheck')) ? (array) $id : $request->input('multicheck');
+
+        $validator = Validator::make($multi, ['multicheck' => 'required']);
+
+        if ($validator->fails()) {
+
+            $result = redirect(route('employer.lists'))
+                ->withErrors($validator)
+                ->withInput();
+        } else {
+
+            switch ($submit) {
+                case 'Approve':
+                    $employer->multiUpdateApprove($multi);
+                    break;
+                case 'Delete':
+                    $employer->multiDelete($multi);
+                    break;
+                case 'Reject':
+                    $employer->multiUpdateReject($multi);
+                    break;
+            }
+
+            $result = back();
         }
 
-        return back();
-
+        return $result;
     }
 
     /**
      * Employer information
      */
-    public function userList()
+    public function newlyRegisteredEmployer()
     {
-        $user = new User();
-        $employers = $user::where('role_id', 1)
-            ->orderBy('created_at', 'desc')
-            ->get();
+        $user = new Employer();
+        $employers = $user->userByMobile();
 
-        return $employers;
+        return view('employer.newly-lists', ['employers' => $employers ]);
 
     }
 
@@ -186,7 +266,7 @@ class EmployerController extends Controller
             'business_manager' => 'required|string',
             'contact_person' => 'required|string',
             'password' => 'required|alpha_dash',
-            'hourly_rate' => 'required|digits:1',
+            'hourly_rate' => 'required|numeric',
             'industry' => 'required|string'
         ]);
 

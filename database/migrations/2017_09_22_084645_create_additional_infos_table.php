@@ -16,20 +16,20 @@ class CreateAdditionalInfosTable extends Migration
         Schema::create('additional_infos', function (Blueprint $table) {
 
             $table->increments('id');
-            $table->enum('gender', ['male', 'female']);
-            $table->date('birthdate');
-            $table->string('religion');
-            $table->longText('address');
-            $table->string('email');
-            $table->string('school');
-            $table->date('school_pass_expiry_date');
-            $table->string('front_ic_path');
-            $table->string('back_ic_path');
-            $table->string('emergency_name');
-            $table->string('emergency_contact_no');
-            $table->string('emergency_relationship');
-            $table->longText('emergency_address');
-            $table->string('contact_method');
+            $table->enum('gender', ['male', 'female'])->nullable();
+            $table->date('birthdate')->nullable();
+            $table->string('religion')->nullable();
+            $table->longText('address')->nullable();
+            $table->string('email')->nullable();
+            $table->string('school')->nullable();
+            $table->date('school_pass_expiry_date')->nullable();
+            $table->string('front_ic_path')->nullable();
+            $table->string('back_ic_path')->nullable();
+            $table->string('emergency_name')->nullable();
+            $table->string('emergency_contact_no')->nullable();
+            $table->string('emergency_relationship')->nullable();
+            $table->longText('emergency_address')->nullable();
+            $table->string('contact_method')->nullable();
             $table->string('criminal_record')->nullable();
             $table->string('medication')->nullable();
             $table->integer('user_id')->unsigned()->nullable();

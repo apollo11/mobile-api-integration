@@ -101,13 +101,13 @@ class CheckoutController extends Controller
 
         $jobDetails = $this->getJob($jobSched['user_id'], $jobSched['job_id']);
         $geolocation = $this->getAddress($data['latitude'], $data['longitude']);
-        $hours = $this->compareDates($jobSched->checkin_datetime);
-        $salaryRate = $this->salaryRate($hours, $jobDetails->rate);
+        $minutes = $this->compareDates($jobSched->checkin_datetime);
+        $salaryRate = $this->salaryRate($minutes, $jobDetails->rate);
 
         $jobSched->update([
             'checkout_datetime' => Carbon::now(),
             'checkout_location' => $geolocation,
-            'working_hours' => $hours,
+            'working_hours' => $minutes,
             'job_salary' => $salaryRate,
             'job_status' => 'completed'
         ]);
@@ -148,17 +148,15 @@ class CheckoutController extends Controller
         $start = Carbon::parse($start);
         $now = Carbon::now();
 
-        return $now->diffInHours($start);
+        return $now->diffInMinutes($start);
     }
 
-    public function salaryRate($hours, $rate)
+    public function salaryRate($minutes, $rate)
     {
-        $salary = $hours * $rate;
+        $salary = ($minutes / 60) * $rate;
 
         return $salary;
     }
-
-
 
     /**
      * Get the exact address by getting latitude and longtitude

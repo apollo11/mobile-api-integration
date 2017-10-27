@@ -37,8 +37,8 @@ trait JobDetailsOutputTrait
                         'datetime' => $this->dateFormat($output->checkout_datetime),
                         'location' => $output->checkout_location
                     ],
-                    'working_hours' => $output->working_hours,
-                    'job_salary' => $output->job_salary,
+                    'working_time_in_minutes' => $output->working_hours,
+                    'job_salary' => round($output->job_salary,'2'),
                     'processed_date' => $output->process_date,
                     'payment_method' => $output->payment_methods
                 ],
