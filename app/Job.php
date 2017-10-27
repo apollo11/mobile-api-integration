@@ -320,6 +320,18 @@ class Job extends Model
     /**
      *Count active jobs
      */
+    public function countJobs()
+    {
+        $job = DB::table('users')
+            ->join('jobs', 'users.id', '=', 'jobs.user_id')
+            ->count();
+
+        return $job;
+    }
+
+    /**
+     * @return mixed
+     */
     public function countActiveJobs()
     {
         $job = DB::table('users')
@@ -329,6 +341,7 @@ class Job extends Model
 
         return $job;
     }
+
 
     /**
      * count inactive jobs
@@ -344,14 +357,43 @@ class Job extends Model
     }
 
     /**
+     * CheckIn count
+     */
+    public function checkInCount()
+    {
+        $job = DB::table('users')
+            ->join('job_schedules', 'users.id', '=', 'job_schedules.user_id')
+            ->whereNotNull('job_schedules.checkin_datetime')
+            ->where('users.role_id','=', 2)
+            ->count();
+
+        return $job;
+    }
+
+    /**
+     * CheckIn count
+     */
+    public function checkOutCount()
+    {
+        $job = DB::table('users')
+            ->join('job_schedules', 'users.id', '=', 'job_schedules.user_id')
+            ->whereNotNull('job_schedules.checkout_datetime')
+            ->where('users.role_id','=', 2)
+            ->count();
+
+        return $job;
+    }
+
+
+
+    /**
      * @return mixed
      */
     public function unAssignedJobs()
     {
-        $job = DB::table('users')
-            ->join('jobs', 'users.id', '=', 'jobs.user_id')
-            ->leftJoin('job_schedules', 'job_schedules.user_id', '=', 'users.id')
-            ->where('job_schedules.is_assigned', '=', null)
+        $job = DB::table('jobs')
+            ->join('assign_job_job', 'jobs.id', '=', 'assign_job_job.job_id')
+            ->whereNull('assign_job_job.job_id')
             ->count();
 
         return $job;
@@ -378,10 +420,7 @@ class Job extends Model
     public function registeredEmployersviaMobile()
     {
         $job = DB::table('users')
-            ->orWhere(function ($query) {
-                $query->where('platform', '=', 'ios')
-                    ->where('platform', '=', 'android');
-            })
+        ->whereIn('platform',['ios', 'android'])
         ->where('role_id', '=', 1)
         ->count();
 
