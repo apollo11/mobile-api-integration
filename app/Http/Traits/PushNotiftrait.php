@@ -28,10 +28,11 @@ trait PushNotiftrait
                         'body' => $data['body'],
                         'content-available' => 1,
                         'sound' => 'default',
-                        'badge' => '1'
+                        'badge' => (string) $data['badge']
                     ],
                     'data'=>[
                         'job_id' => $data['job_id'],
+                        'badge' => $data['badge'],
                         'type' => $data['type']
                     ],
                     'registration_ids' => $data['registration_ids'],
