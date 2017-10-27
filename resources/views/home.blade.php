@@ -139,7 +139,7 @@
                         </div>
                         <div class="details">
                             <div class="number">
-                                <span data-counter="counterup" data-value="1349">0</span>
+                                <span data-counter="counterup" data-value="{{ $jobRequest }}">{{ $jobRequest }}</span>
                             </div>
                             <div class="desc">No of Jobs Approved</div>
                         </div>
@@ -165,7 +165,7 @@
                         </div>
                         <div class="details">
                             <div class="number">
-                                <span data-counter="counterup" data-value="1349">0</span>
+                                <span data-counter="counterup" data-value="0">0</span>
                             </div>
                             <div class="desc">Pending Salary Transfers</div>
                         </div>
@@ -179,7 +179,7 @@
                         </div>
                         <div class="details">
                             <div class="number">
-                                <span data-counter="counterup" data-value="1349">0</span>
+                                <span data-counter="counterup" data-value="{{ $checkin }}">{{ $checkout }}</span>
                             </div>
                             <div class="desc"> Checked In jobseekers today</div>
                         </div>
@@ -192,7 +192,7 @@
                         </div>
                         <div class="details">
                             <div class="number">
-                                <span data-counter="counterup" data-value="1349">0</span>
+                                <span data-counter="counterup" data-value="{{ $checkout }}">{{ $checkout }}</span>
                             </div>
                             <div class="desc"> Checked out jobseekers today</div>
                         </div>
