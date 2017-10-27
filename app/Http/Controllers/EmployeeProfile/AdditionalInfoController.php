@@ -152,22 +152,22 @@ class AdditionalInfoController extends Controller
     {
         if ($request->hasFile('front_ic_path')) {
 
-            $file['front_ic_path'] = $request->file('front_ic_path')->store('additional_info');
+            $file['front_ic_path'] = $request->file('front_ic_path')->store('additional');
 
         }
         if ($request->hasFile('back_ic_path')) {
 
-            $file['back_ic_path'] = $request->file('back_ic_path')->store('additional_info');
+            $file['back_ic_path'] = $request->file('back_ic_path')->store('additional');
 
         }
 
         if ($request->hasFile('bank_statement')) {
 
-            $file['bank_statement'] = $request->file('bank_statement')->store('additional_info');
+            $file['bank_statement'] = $request->file('bank_statement')->store('additional');
         }
         if ($request->hasFile('signature_file_path')) {
 
-            $file['signature_file_path'] = $request->file('signature_file_path')->store('additional_info');
+            $file['signature_file_path'] = $request->file('signature_file_path')->store('additional');
         }
 
         return $file;

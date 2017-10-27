@@ -1,17 +1,31 @@
 @extends('layouts.app')
 
 @section('content')
+    @foreach($job as $value)
+        <form id="approve-{{ $value->id }}" action="{{ route('job.multiple',['id' => $value->id, 'param' => 'Approve' ]) }}" method="POST" style="display: none;">
+            {{ csrf_field() }}
+            <input type="multiple" value="Approve">
+        </form>
+        <form id="reject-{{ $value->id }}" action="{{ route('job.multiple',['id' => $value->id, 'param' => 'Reject' ]) }}" method="POST" style="display: none;">
+            {{ csrf_field() }}
+            <input type="multiple" value="Reject">
+        </form>
+        <form id="destroy-{{ $value->id }}" action="{{ route('job.multiple',['id' => $value->id,'param' => 'Delete']) }}" method="POST" style="display: none;">
+            {{ csrf_field() }}
+            <input type="multiple" value="Delete">
+        </form>
+    @endforeach
     <form id="approve-{{ $employer->id }}"
           action="{{ route('employer.multiple',['id' => $employer->id, 'param' => 'Approve' ]) }}" method="POST"
           style="display: none;">
         {{ csrf_field() }}
-        <input type="multiple" value="Approve">
+        <input type="submit" name="multiple" value="Approve">
     </form>
     <form id="reject-{{ $employer->id }}"
           action="{{ route('employer.multiple',['id' => $employer->id, 'param' => 'Reject' ]) }}" method="POST"
           style="display: none;">
         {{ csrf_field() }}
-        <input type="multiple" value="Reject">
+        <input type="submit" name="multiple" value="Reject">
     </form>
     <div class="page-content-wrapper employee-details">
         <div class="page-content">
@@ -38,7 +52,7 @@
                             </div>
                             <div class="actions">
                                 <a class="btn sbold green"
-                                   href="{{ route('employee.edit',['id' => $employer->id])  }}">
+                                   href="{{ route('employer.edit',['id' => $employer->id])  }}">
                                     Update</a>
 
                                 <a class="btn sbold green"

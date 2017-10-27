@@ -318,6 +318,10 @@
         @if ($errors->has('bank_statement'))
         $('#profile-bank-statement').modal('show');
         @endif
+
+        @if ($errors->has('user_assign'))
+        $('#job-assigned').modal('show');
+        @endif
     </script>
 
 

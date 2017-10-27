@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\AssignJob;
 
+use Validator;
 use App\User as User;
 use App\Job as Job;
 use App\AssignJob;
@@ -38,25 +39,44 @@ class AssignJobsController extends Controller
      */
     public function store(Request $request)
     {
-        $data = $request->all();
-
-        $user = User::find($data['user_id']);
-        $jobs = Job::find($data['job_id']);
+        $data = $request->input('user_id');
+        $jobId =  $request->input('job_id');
 
 
-        foreach ($user as $key => $value) {
-            $assigned[] = [
-                $value->id => [
-                    'is_assigned' => true,
-                    'assign_job_id' => $jobs->id,
-                    'user_id' => $value->id
-                ],
-            ];
+        $multi['user_assign'] = is_null($data) ? [] : $data;
+
+        $validator = Validator::make($multi, ['user_assign' => 'required']);
+
+
+        if ($validator->fails()) {
+
+            $result = redirect(route('job.details',['id' => $jobId ]))
+                ->withErrors($validator)
+                ->withInput();
+        } else {
+            $user = User::find($data);
+            $jobs = Job::find($jobId);
+
+
+            foreach ($user as $key => $value) {
+                $assigned[] = [
+                    $value->id => [
+                        'is_assigned' => true,
+                        'assign_job_id' => $jobs->id,
+                        'user_id' => $value->id
+                    ],
+                ];
+            }
+
+            for ($i = 0; $i < count($assigned); $i++) {
+                $jobs->assignJobs()->attach($assigned[$i]);
+            }
+
+            $result = redirect(route('job.details',['id' => $jobId]));
+
         }
 
-        for ($i = 0; $i < count($assigned); $i++) {
-            $jobs->assignJobs()->attach($assigned[$i]);
-        }
+        return $result;
 
     }
 

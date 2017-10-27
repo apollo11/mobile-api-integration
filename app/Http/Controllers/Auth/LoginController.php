@@ -7,6 +7,7 @@ use App\Http\Traits\OauthTrait;
 use App\Http\Traits\HttpRequest;
 use App\Http\Traits\HttpResponse;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 
@@ -32,7 +33,7 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/home';
+    protected $redirectTo;
 
     /**
      * LoginController constructor.
@@ -40,6 +41,8 @@ class LoginController extends Controller
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
+
+
     }
 
     /**
@@ -172,6 +175,23 @@ class LoginController extends Controller
     public function validateGoogleUser($token)
     {
         return $this->getSocialGoogleResponse($token);
+    }
+
+    /**
+     * Check user's role and redirect user based on their role
+     * @return
+     */
+    public function authenticated()
+    {
+        if(Auth::user()->role_id == 0)
+        {
+            return redirect('/home');
+        }else {
+
+            return redirect(route('employee.lists'));
+
+        }
+
     }
 
 

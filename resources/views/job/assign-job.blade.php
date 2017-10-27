@@ -10,6 +10,13 @@
                     <h4 class="modal-title">Job Seeker Assignment</h4>
                 </div>
                 <div class="modal-body">
+                    @if($errors->has('user_assign'))
+                        <div class="alert alert-danger alert-dismissable">
+                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+                            <strong>Error!</strong> Something went wrong. Please check.
+                        </div>
+                    @endif
+
                     <div class="scroller" style="height:300px" data-always-visible="1" data-rail-visible1="1">
 
                         <div class="row">

@@ -34,7 +34,11 @@ class Notification extends Model
     {
         $notif = DB::table('user_notifications as notif')
             ->leftJoin('jobs', 'jobs.id', '=', 'notif.job_id')
-            ->leftJoin('job_schedules', 'job_schedules.job_id', '=', 'jobs.id')
+            ->leftJoin('job_schedules', function ($join) use ($userId) {
+                            $join->on('job_schedules.job_id', '=', 'jobs.id')
+                           ->where('job_schedules.user_id', '=', $userId);
+                    })
+
             ->join('users as employer', 'employer.id', '=', 'jobs.user_id')
             ->select(
                   'notif.id'
