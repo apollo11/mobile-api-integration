@@ -178,7 +178,7 @@
                                                         </ul>
                                                     </div>
                                                 </div>
-                                                <h3><a href="#" class="btn sbold green" data-toggle="modal" data-target="#profile-back-ic">Update Front IC</a></h3>
+                                                <h3><a href="#" class="btn sbold green" data-toggle="modal" data-target="#profile-back-ic">Update Back IC</a></h3>
                                             </div>
                                         </div>
                                     </div>
