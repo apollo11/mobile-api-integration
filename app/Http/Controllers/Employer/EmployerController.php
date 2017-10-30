@@ -40,7 +40,10 @@ class EmployerController extends Controller
                 'company_name' => $value->company_name,
                 'status' => $value->status,
                 'applied' => $applied,
-                'posting' => $countPosted
+                'posting' => $countPosted,
+                'contact_person' => $value->contact_person,
+                'contact_no' => $value->contact_no,
+                'email' => $value->email
             ];
 
         }
@@ -103,6 +106,7 @@ class EmployerController extends Controller
         $employer->role = 'employer';
         $employer->name = 'None';
         $employer->company_name = $data['company_name'];
+        $employer->contact_no = $data['contact_no'];
         $employer->email = $data['email'];
         $employer->company_description = $data['company_description'];
         $employer->business_manager = $data['business_manager'];
@@ -166,7 +170,7 @@ class EmployerController extends Controller
     {
         $data = $request->all();
 
-        $validator = $this->rules($data);
+        $validator = $this->updateRules($data);
 
         if ($validator->fails()) {
 
@@ -186,8 +190,8 @@ class EmployerController extends Controller
             $employer->email = $merge['email'];
             $employer->company_description = $merge['company_description'];
             $employer->business_manager = $merge['business_manager'];
-            $employer->password = bcrypt($merge['password']);
             $employer->contact_person = $merge['contact_person'];
+            $employer->contact_no = $data['contact_no'];
             $employer->rate = $merge['hourly_rate'];
             $employer->profile_image_path = $merge['company_logo'];
             $employer->industry = $merge['industry'];
@@ -265,12 +269,32 @@ class EmployerController extends Controller
             'email' => 'email|required|string|email|max:255|unique:users',
             'business_manager' => 'required|string',
             'contact_person' => 'required|string',
+            'contact_no' => 'required|string',
             'password' => 'required|alpha_dash',
             'hourly_rate' => 'required|numeric',
             'industry' => 'required|string'
         ]);
 
     }
+
+    /**
+     * Update validation Rules
+     */
+    public function updateRules(array $data)
+    {
+        return Validator::make($data, [
+            'company_logo' => 'required',
+            'company_name' => 'required|string',
+            'email' => 'email|required|string|email|max:255|unique:users',
+            'business_manager' => 'required|string',
+            'contact_person' => 'required|string',
+            'contact_no' => 'required|string',
+            'hourly_rate' => 'required|numeric',
+            'industry' => 'required|string'
+        ]);
+
+    }
+
 
     /**
      * List of available industries

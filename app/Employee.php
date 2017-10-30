@@ -16,10 +16,11 @@ class Employee extends Model
         return $this->hasMany('YYJobs\Schedule');
     }
 
-    public function employeeLists()
+    public function employeeLists(array $param)
     {
         $employee = DB::table('users')
             ->leftJoin('additional_infos', 'additional_infos.user_id', '=', 'users.id')
+            ->leftJoin('job_schedules', 'job_schedules.user_id', '=', 'users.id')
             ->select(
                   'users.id'
                 , 'users.name'
@@ -33,6 +34,18 @@ class Employee extends Model
                 , 'users.created_at as joined'
                 , 'users.updated_at as updated'
             )
+            ->when(!empty($param['checkin']), function ($query) use ($param) {
+
+                return $query->whereNotNull('job_schedules.checkin_datetime');
+            })
+            ->when(!empty($param['checkout']), function ($query) use ($param) {
+
+                return $query->whereNotNull('job_schedules.checkout_datetime');
+            })
+            ->when(!empty($param['job_status']), function ($query) use ($param) {
+
+                return $query->where('job_schedules.job_status', $param['job_status']);
+            })
             ->where('users.role_id', '=', 2)
             ->orderBy('users.id', 'asc')
             ->distinct()

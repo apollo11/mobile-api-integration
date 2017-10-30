@@ -35,6 +35,8 @@ class Employer extends Model
                 , 'employer.company_name'
                 , 'employer.profile_image_path as company_logo'
                 , 'employer.contact_person'
+                , 'employer.contact_no'
+                , 'employer.email'
                 , 'employer.status as status'
                 , 'employer.business_manager'
             )

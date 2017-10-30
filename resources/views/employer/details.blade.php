@@ -42,7 +42,7 @@
             </div>
 
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-8">
                     <!-- BEGIN EXAMPLE TABLE PORTLET-->
                     <div class="portlet light bordered">
                         <div class="portlet-title">
@@ -75,17 +75,19 @@
                         <div class="portlet-body">
                             <div class="table-toolbar">
                                 <div class="row">
-                                    <div class="col-md-12">
+                                    <div class="col-md-6">
                                         <div class="btn-group">
-                                            <div class="row">
-                                                <div class="col-md-12">
-                                                    <img src="/{{ $employer->profile_image_path }}" height="80px"/>
-                                                </div>
-                                            </div>
-
                                             <div class="row">
                                                 <div class="col-md-4">Company Name</div>
                                                 <div class="col-md-8"> {{ $employer->company_name }}</div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-4">Company Description</div>
+                                                <div class="col-md-8"> {{ $employer->company_description }}</div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-4">Email</div>
+                                                <div class="col-md-8">{{ $employer->email }}</div>
                                             </div>
                                             <div class="row">
                                                 <div class="col-md-4">Business Manager</div>
@@ -116,6 +118,15 @@
                                                 @else
                                                     <td><span class="label label-sm label-danger"> Reject </span></td>
                                                 @endif
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="btn-group">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <img class="img-circle" src="/{{ $employer->profile_image_path }}" height="80px"/>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>

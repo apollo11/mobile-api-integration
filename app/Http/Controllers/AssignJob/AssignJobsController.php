@@ -18,7 +18,11 @@ class AssignJobsController extends Controller
      */
     public function index()
     {
-        //
+        $job = new AssignJob();
+        $jobsLists = $job->assignedJobs();
+
+        return view('job.lists', ['job' => $jobsLists]);
+
     }
 
     /**
