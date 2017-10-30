@@ -447,13 +447,14 @@ class JobController extends Controller
      */
     public function details($id)
     {
+        $param[] = null;
         $job = new Job();
         $schedule = new JobSchedule();
         $employee = new Employee();
 
         $details = $job->jobAdminDetails($id);
         $relatedCandidates = $schedule->getRelatedCandidates($id);
-        $employeeList = $employee->employeeLists();
+        $employeeList = $employee->employeeLists($param);
 
         return view('job.details', ['details' => $details, 'related' => $relatedCandidates, 'list' => $employeeList]);
     }
