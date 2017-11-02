@@ -84,17 +84,6 @@
                                             @endif
                                         </div>
                                     </div>
-                                    <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
-                                        <label class="col-md-3 control-label">Password</label>
-                                        <div class="col-md-7">
-                                            <input type="password" class="form-control" placeholder="Enter Password" name="password">
-                                            @if ($errors->has('password'))
-                                                <span class="help-block">
-                                                <strong>{{ $errors->first('password') }}</strong>
-                                               </span>
-                                            @endif
-                                        </div>
-                                    </div>
 
                                     <div class="form-group{{ $errors->has('contact_person') ? ' has-error' : '' }}">
                                         <label class="col-md-3 control-label">Contact Person</label>
@@ -103,6 +92,17 @@
                                             @if ($errors->has('contact_person'))
                                                 <span class="help-block">
                                                 <strong>{{ $errors->first('contact_person') }}</strong>
+                                               </span>
+                                            @endif
+                                        </div>
+                                    </div>
+                                    <div class="form-group{{ $errors->has('contact_no') ? ' has-error' : '' }}">
+                                        <label class="col-md-3 control-label">Contact Number</label>
+                                        <div class="col-md-7">
+                                            <input type="text" class="form-control" placeholder="Enter Contact Person" value="{{ old('contact_person') }}" name="contact_no">
+                                            @if ($errors->has('contact_no'))
+                                                <span class="help-block">
+                                                <strong>{{ $errors->first('contact_no') }}</strong>
                                                </span>
                                             @endif
                                         </div>

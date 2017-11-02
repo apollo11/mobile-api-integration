@@ -26,10 +26,16 @@ class EmployeeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+        $param = [
+          'checkin' => $request->get('checkin'),
+          'checkout' => $request->get('checkout'),
+          'job_status' => $request->get('status'),
+        ];
+
         $employee = new Employee();
-        $result = $employee->employeeLists();
+        $result = $employee->employeeLists($param);
 
         foreach ($result as $value) {
             $completed = $this->completedJobs($value->id);

@@ -32,7 +32,8 @@ class HomeController extends Controller
             'cancelled' => $this->countCancelledJobs(),
             'registeredEmployer' => $this->countEmployer(),
             'checkout' => $this->checkOut(),
-            'checkin' => $this->checkIn()
+            'checkin' => $this->checkIn(),
+            'approved' => $this->approved(),
         ];
 
         return view('home', $param);
@@ -45,7 +46,7 @@ class HomeController extends Controller
     public function countJobRequest()
     {
         $job = new Job();
-        $count = $job->countActiveJobs();
+        $count = $job->countJobRequest();
 
         return $count;
     }
@@ -126,6 +127,18 @@ class HomeController extends Controller
     {
         $job = new Job();
         $count = $job->checkOutCount();
+
+        return $count;
+
+    }
+
+    /**
+     * Count approved Job
+     */
+    public function approved()
+    {
+        $job = new Job();
+        $count = $job->approvedJob();
 
         return $count;
 

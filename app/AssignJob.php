@@ -29,6 +29,52 @@ class AssignJob extends Model
 
     }
 
+    /**
+     * @return mixed
+     */
+    public function assignedJobs()
+    {
+        $job = DB::table('jobs')
+            ->join('users', 'users.id', '=', 'jobs.user_id')
+            ->leftJoin('assign_job_job', 'jobs.id', '=', 'assign_job_job.job_id')
+            ->select(
+                'jobs.id'
+                , 'jobs.user_id'
+                , 'users.company_description'
+                , 'users.company_name'
+                , 'users.profile_image_path'
+                , 'users.employee_status as status'
+                , 'users.business_manager'
+                , 'jobs.description as job_description'
+                , 'jobs.status'
+                , 'jobs.location'
+                , 'jobs.no_of_person'
+                , 'jobs.job_title'
+                , 'jobs.location_id'
+                , 'jobs.industry'
+                , 'jobs.industry_id'
+                , 'jobs.job_date as start_date'
+                , 'jobs.created_at'
+                , 'jobs.end_date'
+                , 'jobs.contact_no'
+                , 'jobs.rate'
+                , 'jobs.job_image_path'
+                , 'jobs.nationality'
+                , 'jobs.choices as gender'
+                , 'jobs.description'
+                , 'jobs.min_age'
+                , 'jobs.max_age'
+                , 'jobs.role'
+                , 'jobs.notes'
+                , 'jobs.language'
+                , 'jobs.choices'
+                , 'jobs.job_requirements')
+            ->whereNull('assign_job_job.id')
+            ->get();
+
+        return $job;
+    }
+
 
 
 }
