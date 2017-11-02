@@ -45,6 +45,7 @@ class AssignJob extends Model
                 , 'users.profile_image_path'
                 , 'users.employee_status as status'
                 , 'users.business_manager'
+                , 'users.employee_points'
                 , 'jobs.description as job_description'
                 , 'jobs.status'
                 , 'jobs.location'

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\CancelJob;
 
 use Validator;
+use Carbon\Carbon;
+use App\CancelJob;
 use App\JobSchedule;
 use App\Http\Traits\HttpResponse;
 use Illuminate\Http\Request;
@@ -20,6 +22,8 @@ class CancelJobController extends Controller
     public function index(Request $request)
     {
         $data = $request->all();
+
+        return $this->outputStartDate($data['id']);
 
         $validate = $this->rules($data);
         $errorMsg = $validate->errors()->all();
@@ -70,6 +74,35 @@ class CancelJobController extends Controller
         return $jobSched;
 
     }
+
+    /**
+     * Validate Job start Date
+     */
+    public function outputStartDate($id)
+    {
+        $cancel = new CancelJob();
+        $output = $cancel->jobValidateDate($id);
+
+        return $this->validateDeduction($output->start_date);
+    }
+
+    public function validateDeduction($date)
+    {
+        $start = Carbon::parse($date);
+        $now = Carbon::now();
+
+        if ($now->diffInHours($start) > 72) {
+
+            $deduct = 10;
+        }else{
+
+            $deduct = 15;
+        }
+
+        return $deduct;
+
+    }
+
 
 
     /**
