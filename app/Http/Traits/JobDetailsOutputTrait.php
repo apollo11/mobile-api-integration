@@ -14,6 +14,7 @@ trait JobDetailsOutputTrait
                 'id' => $output->id,
                 'job_title' => $output->job_title,
                 'employer' => [
+                    'id' => $output->employer_id,
                     'image_url' => $output->profile_image_path,
                     'name' => $output->company_name,
                     'description' => $output->company_description
