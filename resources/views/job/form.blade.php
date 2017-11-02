@@ -31,7 +31,7 @@
                                 <div class="form-body">
 
                                     <div class="form-group{{ $errors->has('job_title') ? ' has-error' : '' }}">
-                                        <label class="col-md-3 control-label">Job Title</label>
+                                        <label class="col-md-3 control-label">Job Title <span class="is-required">*</span></label>
                                         <div class="col-md-7">
                                             <input type="text" class="form-control" placeholder="Enter Job Title"
                                                    value="{{ old('job_title') }}" name="job_title">
@@ -44,7 +44,7 @@
                                     </div>
 
                                     <div class="form-group{{ $errors->has('job_description') ? ' has-error' : '' }}">
-                                        <label class="col-md-3 control-label">Job Description</label>
+                                        <label class="col-md-3 control-label">Job Description<span class="is-required">*</span></label>
                                         <div class="col-md-7">
                                             <textarea class="form-control" name="job_description"
                                                       rows="3">{{ old('job_description') }}</textarea>
@@ -57,7 +57,7 @@
                                     </div>
 
                                     <div class="form-group{{ $errors->has('job_requirements') ? ' has-error' : '' }}">
-                                        <label class="col-md-3 control-label">Job Requirements</label>
+                                        <label class="col-md-3 control-label">Job Requirements<span class="is-required">*</span></label>
                                         <div class="col-md-7">
                                             <textarea class="form-control" name="job_requirements"
                                                       rows="3">{{ old('job_requirements') }}</textarea>
@@ -70,7 +70,7 @@
                                     </div>
 
                                     <div class="form-group{{ $errors->has('job_role') ? ' has-error' : '' }}">
-                                        <label class="col-md-3 control-label">Job Function / Role</label>
+                                        <label class="col-md-3 control-label">Job Function / Role<span class="is-required">*</span></label>
                                         <div class="col-md-7">
                                             <input type="text" class="form-control" placeholder="Enter Job Role"
                                                    value="{{ old('job_role') }}" name="job_role">
@@ -83,7 +83,7 @@
                                     </div>
 
                                     <div class="form-group{{ $errors->has('age') ? ' has-error' : '' }}">
-                                        <label class="col-md-3 control-label">Age</label>
+                                        <label class="col-md-3 control-label">Age<span class="is-required">*</span></label>
                                         <div class="col-md-7">
                                             <select class="form-control" name="age">
                                                 <option value="16-20">16-20</option>
@@ -101,7 +101,7 @@
                                     </div>
 
                                     <div class="form-group {{ $errors->has('gender') ? ' has-error' : '' }}">
-                                        <label class="col-md-3 control-label">Gender</label>
+                                        <label class="col-md-3 control-label">Gender<span class="is-required">*</span></label>
                                         <div class="col-md-7">
                                             <div class="mt-checkbox-inline">
                                                 <label class="mt-checkbox">
@@ -130,7 +130,7 @@
                                     </div>
 
                                     <div class="form-group{{ $errors->has('job_location') ? ' has-error' : '' }}">
-                                        <label class="col-md-3 control-label">Location</label>
+                                        <label class="col-md-3 control-label">Location<span class="is-required">*</span></label>
                                         <div class="col-md-7">
                                             <select class="form-control" name="job_location">
                                                 @foreach( $location as $value)
@@ -151,7 +151,7 @@
                                     </div>
 
                                     <div class="form-group{{ $errors->has('nationality') ? ' has-error' : '' }}">
-                                        <label class="col-md-3 control-label">Nationality</label>
+                                        <label class="col-md-3 control-label">Nationality<span class="is-required">*</span></label>
                                         <div class="col-md-7">
                                             <select class="form-control" name="nationality">
                                                 <option value="">-- select one --</option>
@@ -168,7 +168,7 @@
                                     </div>
 
                                     <div class="form-group{{ $errors->has('job_image') ? ' has-error' : '' }}">
-                                        <label for="Image Upload" class="col-md-3 control-label">Job Image</label>
+                                        <label for="Image Upload" class="col-md-3 control-label">Job Image<span class="is-required">*</span></label>
                                         <div class="col-md-9">
                                             <input type="file" name="job_image" value="{{ old('job_image') }}">
                                             @if ($errors->has('job_image'))
@@ -180,7 +180,7 @@
                                     </div>
 
                                     <div class="form-group{{ $errors->has('no_of_person') ? ' has-error' : '' }}">
-                                        <label class="col-md-3 control-label">No. of person requested</label>
+                                        <label class="col-md-3 control-label">No. of person requested<span class="is-required">*</span></label>
                                         <div class="col-md-7">
                                             <input type="text" class="form-control"
                                                    placeholder="Enter no. of person requested"
@@ -194,7 +194,7 @@
                                     </div>
 
                                     <div class="form-group{{ $errors->has('contact_person') ? ' has-error' : '' }}">
-                                        <label class="col-md-3 control-label">Contact Person</label>
+                                        <label class="col-md-3 control-label">Contact Person<span class="is-required">*</span></label>
                                         <div class="col-md-7">
                                             <input type="text" class="form-control" placeholder="Enter Contact Person"
                                                    value="{{ old('contact_person') }}" name="contact_person">
@@ -207,7 +207,7 @@
                                     </div>
 
                                     <div class="form-group{{ $errors->has('contact_no') ? ' has-error' : '' }}">
-                                        <label class="col-md-3 control-label">Contact No.</label>
+                                        <label class="col-md-3 control-label">Contact No.<span class="is-required">*</span></label>
                                         <div class="col-md-7">
                                             <input type="text" class="form-control" placeholder="Enter Contact No."
                                                    value="{{ old('contact_no') }}" name="contact_no">
@@ -220,7 +220,7 @@
                                     </div>
 
                                     <div class="form-group{{ $errors->has('business_manager') ? ' has-error' : '' }}">
-                                        <label class="col-md-3 control-label">Business Manager</label>
+                                        <label class="col-md-3 control-label">Business Manager<span class="is-required">*</span></label>
                                         <div class="col-md-7">
                                             @if(Auth::user()->role_id == 1)
                                             <input type="text" class="form-control" placeholder="Enter Business Manager"
@@ -240,7 +240,7 @@
                                     </div>
 
                                     <div class="form-group{{ $errors->has('job_employer') ? ' has-error' : '' }}">
-                                        <label class="col-md-3 control-label">Employer</label>
+                                        <label class="col-md-3 control-label">Employer<span class="is-required">*</span></label>
                                         <div class="col-md-7">
                                             @if(Auth::user()->role_id == 1)
                                                 <select class="form-control" name="job_employer">
@@ -270,7 +270,7 @@
 
 
                                     <div class="form-group{{ $errors->has('hourly_rate') ? ' has-error' : '' }}">
-                                        <label class="col-md-3 control-label">Hourly Rate</label>
+                                        <label class="col-md-3 control-label">Hourly Rate<span class="is-required">*</span></label>
                                         <div class="col-md-7">
                                             <input type="text" class="form-control" placeholder="Enter Hourly Rate"
                                                    value="{{ old('hourly_rate') }}" name="hourly_rate">
@@ -283,10 +283,14 @@
                                     </div>
 
                                     <div class="form-group{{ $errors->has('preferred_language') ? ' has-error' : '' }}">
-                                        <label class="col-md-3 control-label">Preferred Language</label>
+                                        <label class="col-md-3 control-label">Preferred Language<span class="is-required">*</span></label>
                                         <div class="col-md-7">
                                             <select class="form-control" name="preferred_language">
                                                 <option value="english">English</option>
+                                                <option value="english">Chinese</option>
+                                                <option value="english">Malay</option>
+                                                <option value="english">Tamil</option>
+                                                <option value="english">Hindi</option>
                                             </select>
                                             @if ($errors->has('preferred_language'))
                                                 <span class="help-block">
@@ -297,7 +301,7 @@
                                     </div>
 
                                     <div class="form-group{{ $errors->has('date') ? ' has-error' : '' }}">
-                                        <label class="control-label col-md-3">Start Job Date and Time</label>
+                                        <label class="control-label col-md-3">Start Job Date and Time<span class="is-required">*</span></label>
                                         <div class="col-md-7">
                                             <div class="input-group date form_datetime form_datetime bs-datetime" id="start-date">
                                                 <input type="text" name="date" size="16" class="form-control">
@@ -316,7 +320,7 @@
                                     </div>
 
                                     <div class="form-group{{ $errors->has('end_date') ? ' has-error' : '' }}">
-                                        <label class="control-label col-md-3">Job End Date and Time</label>
+                                        <label class="control-label col-md-3">Job End Date and Time<span class="is-required">*</span></label>
                                         <div class="col-md-7">
                                             <div class="input-group date form_datetime form_datetime bs-datetime" id="end-date">
                                                 <input type="text" name="end_date" size="16" class="form-control">
@@ -335,7 +339,7 @@
                                     </div>
 
                                     <div class="form-group{{ $errors->has('notes') ? ' has-error' : '' }}">
-                                        <label class="col-md-3 control-label">Important Notes</label>
+                                        <label class="col-md-3 control-label">Important Notes<span class="is-required">*</span></label>
                                         <div class="col-md-7">
                                             <textarea class="form-control" name="notes" rows="3"></textarea>
                                             @if ($errors->has('notes'))
@@ -347,7 +351,7 @@
                                     </div>
 
                                     <div class="form-group{{ $errors->has('industry') ? ' has-error' : '' }}">
-                                        <label class="col-md-3 control-label">Industry</label>
+                                        <label class="col-md-3 control-label">Industry<span class="is-required">*</span></label>
                                         <div class="col-md-7">
                                             <select class="form-control" name="industry">
                                                 @foreach( $industry as $value)
@@ -368,7 +372,7 @@
 
 
                                     <div class="form-group{{ $errors->has('status') ? ' has-error' : '' }}">
-                                        <label class="col-md-3 control-label">Job Status</label>
+                                        <label class="col-md-3 control-label">Job Status<span class="is-required">*</span></label>
                                         <div class="col-md-7">
                                             <select class="form-control" name="status">
                                                 <option value="draft mode">Draft mode</option>

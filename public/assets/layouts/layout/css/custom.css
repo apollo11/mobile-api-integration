@@ -18,3 +18,9 @@
     right: 74px;
     top: 12px;
 }
+
+/* ERROR REQUIRED */
+.is-required {
+    color: red;
+
+}

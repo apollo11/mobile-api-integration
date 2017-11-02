@@ -40,9 +40,13 @@ class JobController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $jobsLists = $this->jobLists();
+        $param = [
+            'status' => $request->get('status')
+        ];
+
+        $jobsLists = $this->jobLists($param);
 
         return view('job.lists', ['job' => $jobsLists]);
     }
@@ -350,11 +354,11 @@ class JobController extends Controller
     /**
      * Job Lists
      */
-    public function jobLists()
+    public function jobLists($param)
     {
         $jobs = new Job();
 
-        $jobLists = $jobs->jobList();
+        $jobLists = $jobs->jobList($param);
 
         return $jobLists;
 
@@ -443,13 +447,14 @@ class JobController extends Controller
      */
     public function details($id)
     {
+        $param[] = null;
         $job = new Job();
         $schedule = new JobSchedule();
         $employee = new Employee();
 
         $details = $job->jobAdminDetails($id);
         $relatedCandidates = $schedule->getRelatedCandidates($id);
-        $employeeList = $employee->employeeLists();
+        $employeeList = $employee->employeeLists($param);
 
         return view('job.details', ['details' => $details, 'related' => $relatedCandidates, 'list' => $employeeList]);
     }
@@ -510,9 +515,10 @@ class JobController extends Controller
      */
     public function listOfEmployeeId()
     {
+        $param[] = null;
         $employee = new Employee();
 
-        $output = $employee->employeeLists();
+        $output = $employee->employeeLists($param);
 
 
         return $output;

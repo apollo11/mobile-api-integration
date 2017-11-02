@@ -90,7 +90,7 @@
                                             <input type="password" class="form-control" placeholder="Enter Password" name="password">
                                             @if ($errors->has('password'))
                                                 <span class="help-block">
-                                                <strong>{{ $errors->first('password') }}</strong>
+                                                {{ $errors->first('password') }}
                                                </span>
                                             @endif
                                         </div>
@@ -102,7 +102,18 @@
                                             <input type="text" class="form-control" placeholder="Enter Contact Person" value="{{ old('contact_person') }}" name="contact_person">
                                             @if ($errors->has('contact_person'))
                                                 <span class="help-block">
-                                                <strong>{{ $errors->first('contact_person') }}</strong>
+                                                {{ $errors->first('contact_person') }}
+                                               </span>
+                                            @endif
+                                        </div>
+                                    </div>
+                                    <div class="form-group{{ $errors->has('contact_no') ? ' has-error' : '' }}">
+                                        <label class="col-md-3 control-label">Contact Number</label>
+                                        <div class="col-md-7">
+                                            <input type="text" class="form-control" placeholder="Enter Contact Person" value="{{ old('contact_person') }}" name="contact_no">
+                                            @if ($errors->has('contact_no'))
+                                                <span class="help-block">
+                                                {{ $errors->first('contact_no') }}
                                                </span>
                                             @endif
                                         </div>
@@ -114,7 +125,7 @@
                                             <input type="text" class="form-control" placeholder="Enter Hourly Rate" value="{{ old('hourly_rate') }}" name="hourly_rate">
                                             @if ($errors->has('hourly_rate'))
                                                 <span class="help-block">
-                                                <strong>{{ $errors->first('hourly_rate') }}</strong>
+                                                {{ $errors->first('hourly_rate') }}
                                                </span>
                                             @endif
                                         </div>
@@ -134,7 +145,7 @@
                                             </select>
                                             @if ($errors->has('industry'))
                                                 <span class="help-block">
-                                                <strong>{{ $errors->first('industry') }}</strong>
+                                                {{ $errors->first('industry') }}
                                                </span>
                                             @endif
                                         </div>

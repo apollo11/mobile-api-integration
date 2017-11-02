@@ -108,6 +108,7 @@ class Job extends Model
                 , 'users.company_name'
                 , 'users.profile_image_path'
                 , 'users.employee_status as status'
+                , 'users.id as employer_id'
                 , 'jobs.description as job_description'
                 , 'jobs.job_status'
                 , 'jobs.location'
@@ -195,6 +196,7 @@ class Job extends Model
                 , 'employer.company_name'
                 , 'employer.profile_image_path'
                 , 'employer.employee_status as status'
+                , 'employer.id as employer_id'
                 , 'jobs.description as job_description'
                 , 'jobs.job_title'
                 , 'jobs.job_status'
@@ -228,7 +230,7 @@ class Job extends Model
     /**
      * Filter by limit, start date, end date
      */
-    public function jobList()
+    public function jobList(array $param)
     {
 
         $jobs = DB::table('users')
@@ -241,6 +243,7 @@ class Job extends Model
                 , 'users.profile_image_path'
                 , 'users.employee_status as status'
                 , 'users.business_manager'
+                , 'users.id as employer_id'
                 , 'jobs.description as job_description'
                 , 'jobs.status'
                 , 'jobs.location'
@@ -266,6 +269,10 @@ class Job extends Model
                 , 'jobs.choices'
                 , 'jobs.job_requirements'
             )
+            ->when(!empty($param['status']), function ($query) use ($param) {
+
+                return $query->where('jobs.status', $param['status']);
+            })
             ->orderBy('jobs.id', 'asc')
             ->get();
 
@@ -284,6 +291,7 @@ class Job extends Model
                 , 'employer.profile_image_path'
                 , 'employer.employee_status as status'
                 , 'employer.business_manager'
+                , 'employer.id as employer_id'
                 , 'jobs.description as job_description'
                 , 'jobs.job_title'
                 , 'jobs.status'
@@ -332,11 +340,11 @@ class Job extends Model
     /**
      * @return mixed
      */
-    public function countActiveJobs()
+    public function countJobRequest()
     {
         $job = DB::table('users')
             ->join('jobs', 'users.id', '=', 'jobs.user_id')
-            ->where('jobs.status', 'active')
+     //       ->whereIn('jobs.status', ['draft mode', 'inactive'])
             ->count();
 
         return $job;
@@ -384,6 +392,18 @@ class Job extends Model
         return $job;
     }
 
+    /**
+     * Count Approved Job
+     */
+    public function approvedJob()
+    {
+        $job = DB::table('users')
+            ->join('jobs', 'users.id', '=', 'jobs.user_id')
+            ->where('jobs.status', 'active')
+            ->count();
+
+        return $job;
+    }
 
 
     /**
@@ -392,12 +412,13 @@ class Job extends Model
     public function unAssignedJobs()
     {
         $job = DB::table('jobs')
-            ->join('assign_job_job', 'jobs.id', '=', 'assign_job_job.job_id')
-            ->whereNull('assign_job_job.job_id')
+            ->leftJoin('assign_job_job', 'jobs.id', '=', 'assign_job_job.job_id')
+            ->whereNull('assign_job_job.id')
             ->count();
 
         return $job;
     }
+
 
     /**
      * @return mixed

@@ -256,7 +256,8 @@
                     { "extend": 'excel', "text":'Export',"className": 'btn sbold red' }
                 ],
                 autoFill: true,
-                "scrollCollapse": true
+//                "scrollCollapse": true,
+                "scrollY":"500"
             });
 
 

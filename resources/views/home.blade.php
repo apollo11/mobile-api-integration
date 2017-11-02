@@ -120,7 +120,7 @@
             <!-- BEGIN DASHBOARD STATS 1-->
             <div class="row">
                 <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                    <a class="dashboard-stat dashboard-stat-v2 blue" href="#">
+                    <a href="{{ route('job.lists') }}" class="dashboard-stat dashboard-stat-v2 blue" href="#">
                         <div class="visual">
                             <i class="fa fa-comments"></i>
                         </div>
@@ -133,20 +133,20 @@
                     </a>
                 </div>
                 <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                    <a class="dashboard-stat dashboard-stat-v2 red" href="#">
+                    <a href="/job/lists?status=active" class="dashboard-stat dashboard-stat-v2 red" href="#">
                         <div class="visual">
                             <i class="fa fa-comments"></i>
                         </div>
                         <div class="details">
                             <div class="number">
-                                <span data-counter="counterup" data-value="{{ $jobRequest }}">{{ $jobRequest }}</span>
+                                <span data-counter="counterup" data-value="{{ $approved }}">{{ $approved }}</span>
                             </div>
                             <div class="desc">No of Jobs Approved</div>
                         </div>
                     </a>
                 </div>
                 <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                    <a class="dashboard-stat dashboard-stat-v2 green" href="#">
+                    <a href="{{ route('assign.lists') }}" class="dashboard-stat dashboard-stat-v2 green" href="#">
                         <div class="visual">
                             <i class="fa fa-comments"></i>
                         </div>
@@ -173,20 +173,20 @@
                 </div>
 
                 <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                    <a class="dashboard-stat dashboard-stat-v2 blue" href="#">
+                    <a href="/employee/lists?checkin=true" class="dashboard-stat dashboard-stat-v2 blue" href="#">
                         <div class="visual">
                             <i class="fa fa-comments"></i>
                         </div>
                         <div class="details">
                             <div class="number">
-                                <span data-counter="counterup" data-value="{{ $checkin }}">{{ $checkout }}</span>
+                                <span data-counter="counterup" data-value="{{ $checkin }}">{{ $checkin }}</span>
                             </div>
                             <div class="desc"> Checked In jobseekers today</div>
                         </div>
                     </a>
                 </div>
                 <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                    <a class="dashboard-stat dashboard-stat-v2 red" href="#">
+                    <a href="/employee/lists?checkout=true" class="dashboard-stat dashboard-stat-v2 red" >
                         <div class="visual">
                             <i class="fa fa-comments"></i>
                         </div>
@@ -199,7 +199,7 @@
                     </a>
                 </div>
                 <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                    <a class="dashboard-stat dashboard-stat-v2 green" href="#">
+                    <a href="/employee/lists?status=cancelled" class="dashboard-stat dashboard-stat-v2 green" href="#">
                         <div class="visual">
                             <i class="fa fa-comments"></i>
                         </div>
@@ -212,7 +212,7 @@
                     </a>
                 </div>
                 <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                    <a class="dashboard-stat dashboard-stat-v2 purple" href="#">
+                    <a href="{{ route('employer.new.list') }}" class="dashboard-stat dashboard-stat-v2 purple" href="#">
                         <div class="visual">
                             <i class="fa fa-comments"></i>
                         </div>

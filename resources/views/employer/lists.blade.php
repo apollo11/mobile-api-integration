@@ -62,7 +62,10 @@
                                             </label>
                                         </th>
                                         <th>#</th>
-                                        <th>Company Name</th>
+                                        <th>Company</th>
+                                        <th> Contact Person</th>
+                                        <th> Contact Number</th>
+                                        <th> Email </th>
                                         <th> Business Manager</th>
                                         <th> Number of Job Posting</th>
                                         <th> Number of Candidates</th>
@@ -81,8 +84,11 @@
                                                     <span></span>
                                                 </label>
                                             </td>
-                                            <td>{{ $user['id'] }}</td>
-                                            <td>{{ $user['company_name'] }}</td>
+                                            <td>{{ $loop->iteration }}</td>
+                                            <td><a href="{{ route('employer.details',['id' => $user['id'] ]) }}">{{ $user['company_name'] }} </a></td>
+                                            <td> {{ $user['contact_person'] }}</td>
+                                            <td> {{ $user['contact_no'] }}</td>
+                                            <td> {{ $user['email'] }}</td>
                                             <td> {{ $user['business_manager'] }}</td>
                                             <td>{{ $user['posting'] }}</td>
                                             <td>{{ $user['applied'] }}</td>
