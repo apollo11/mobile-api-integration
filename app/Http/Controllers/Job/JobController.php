@@ -515,9 +515,10 @@ class JobController extends Controller
      */
     public function listOfEmployeeId()
     {
+        $param[] = null;
         $employee = new Employee();
 
-        $output = $employee->employeeLists();
+        $output = $employee->employeeLists($param);
 
 
         return $output;
