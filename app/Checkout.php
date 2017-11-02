@@ -35,6 +35,7 @@ class Checkout extends Model
                 , 'employer.company_name'
                 , 'employer.profile_image_path'
                 , 'employer.employee_status as status'
+                , 'employer.id as employer_id'
                 , 'jobs.description as job_description'
                 , 'jobs.location'
                 , 'jobs.job_title'
