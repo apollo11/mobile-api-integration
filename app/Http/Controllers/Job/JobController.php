@@ -87,16 +87,16 @@ class JobController extends Controller
     public function store(Request $request)
     {
         $data = $request->all();
-        return $this->getAddress($request->input('job_location'));
         $location = explode('.', $request->input('job_location'));
-
+        $zipCode = $this->getAddress($request->input('postal_code'));
+        $data['postal_code'] = $zipCode;
         $industry = explode('.', $request->input('industry'));
         $age = explode('-', $request->input('age'));
         $employer = explode('.', $request->input('job_employer'));
 
         $split = [
-            'location_id' => 0,
-            'job_location' => $location,
+            'location_id' => $location[0],
+            'location' => $location[1],
             'industry_id' => $industry[0],
             'industry' => $industry[1],
             'min_age' => $age[0],
@@ -113,9 +113,7 @@ class JobController extends Controller
                 ->withErrors($validator)
                 ->withInput();
         } else {
-
             $profile['job_image'] = $request->file('job_image')->store('jobs');
-
             $mergeData = array_merge($data, $profile, $split);
 
             $this->saveData($mergeData);
@@ -124,7 +122,6 @@ class JobController extends Controller
 
             return redirect('job/lists');
         }
-
     }
 
     /**
@@ -159,7 +156,9 @@ class JobController extends Controller
             'notes' => $data['notes'],
             'status' => $data['status'],
             'min_age' => $data['min_age'],
-            'max_age' => $data['max_age']
+            'max_age' => $data['max_age'],
+            'latitude' => $data['postal_code']['lat'],
+            'longitude' =>  $data['postal_code']['lng']
         ]);
 
         $this->lastInsertedId = $insertedId->id;
@@ -354,7 +353,8 @@ class JobController extends Controller
             'contact_no' => 'required|string',
             'industry' => 'required|string',
             'age' => 'required',
-            'nationality' => 'required|string'
+            'nationality' => 'required|string',
+            'postal_code' => 'required'
         ]);
     }
 
@@ -551,7 +551,7 @@ class JobController extends Controller
 
             }else {
 
-                $param['location'] = [];
+                $param['location'] = '';
             }
 
             return $param['location'];

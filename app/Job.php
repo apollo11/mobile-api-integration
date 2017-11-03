@@ -41,6 +41,8 @@ class Job extends Model
         'job_requirements',
         'employee_status',
         'job_status'
+        ,'latitude'
+        ,'longitude'
     ];
 
     /**

@@ -103,6 +103,9 @@ return [
         'attribute-name' => [
             'rule-name' => 'custom-message',
         ],
+        'postal_code' => [
+            'required' => 'The zip code field is required or Invalid Zip Code'
+        ]
     ],
 
     /*

@@ -129,6 +129,20 @@
                                         </div>
                                     </div>
 
+                                    <div class="form-group{{ $errors->has('postal_code') ? ' has-error' : '' }}">
+                                        <label class="col-md-3 control-label">Zip Code<span class="is-required">*</span></label>
+                                        <div class="col-md-7">
+                                            <input type="text" class="form-control" placeholder="Enter Postal Code"
+                                                   value="{{ old('postal_code') }}" name="postal_code">
+                                            @if ($errors->has('postal_code'))
+                                                <span class="help-block">
+                                                {{ $errors->first('postal_code') }}
+                                               </span>
+                                            @endif
+                                        </div>
+                                    </div>
+
+
                                     <div class="form-group{{ $errors->has('job_location') ? ' has-error' : '' }}">
                                         <label class="col-md-3 control-label">Location<span class="is-required">*</span></label>
                                         <div class="col-md-7">
