@@ -29,6 +29,7 @@ class User extends Authenticatable
         , 'mobile_no'
         , 'status'
         , 'profile_image_path'
+        , 'employee_points'
     ];
 
     /**
@@ -124,7 +125,6 @@ class User extends Authenticatable
     /**
      * Multiple Update
      */
-
     public function multiUpdate($multiId)
     {
         $user = DB::table('users')->wherein('id', $multiId)
@@ -144,6 +144,9 @@ class User extends Authenticatable
         return $user;
     }
 
+    /**
+     * @return $this
+     */
     public function assignJobs()
     {
         return $this->belongsToMany('\App\AssignJob')->withPivot('is_assigned', 'user_id');
