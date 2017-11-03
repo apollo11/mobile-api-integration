@@ -10,16 +10,28 @@ class CancelJob extends Model
     /**
      * Update users point when cancelled
      */
-    public function cancelJob($userId, $deduction)
+    public function validSched($schedId, $userId)
     {
-        DB::table('user')
-            ->where('id', $userId)->decrement('employee_points', 25);
+        $validate = DB::table('job_schedules')
+            ->where('job_schedules.id', $schedId)
+            ->where('job_schedules.user_id', $userId)
+            ->first();
 
+        return $validate;
     }
 
     /**
-     * public function detectJob
+     * Deduction of points
      */
+    public function deductionsPoints($userId, $subtract)
+    {
+        $user = DB::table('users')
+            ->where('users.id', $userId)
+            ->decrement('users.employee_points', $subtract);
+
+        return $user;
+    }
+
     /**
      * Filter by limit, start date, end date
      */

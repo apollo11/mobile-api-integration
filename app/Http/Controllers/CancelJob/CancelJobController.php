@@ -6,7 +6,6 @@ use Validator;
 use Carbon\Carbon;
 use App\CancelJob;
 use App\JobSchedule;
-use App\Http\Traits\HttpResponse;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -78,32 +77,36 @@ class CancelJobController extends Controller
     /**
      * Validate Job start Date
      */
-    public function outputStartDate($id)
+    public function cancelledSuccess($id)
     {
         $cancel = new CancelJob();
         $output = $cancel->jobValidateDate($id);
+        $diffHours = $this->validateDeduction($output->start_date);
 
-        return $this->validateDeduction($output->start_date);
+        if ($diffHours > 72) {
+
+            $result = $cancel->deductionsPoints(4, 7);
+        } else {
+
+            $result = $cancel->deductionsPoints(4, 7);
+
+        }
+
+        return $result;
     }
 
+    /**
+     * @param $date
+     * @return int
+     */
     public function validateDeduction($date)
     {
         $start = Carbon::parse($date);
         $now = Carbon::now();
 
-        if ($now->diffInHours($start) > 72) {
-
-            $deduct = 10;
-        }else{
-
-            $deduct = 15;
-        }
-
-        return $deduct;
+        return $now->diffInHours($start);
 
     }
-
-
 
     /**
      * Show the form for creating a new resource.
