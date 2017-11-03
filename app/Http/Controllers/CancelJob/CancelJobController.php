@@ -89,7 +89,7 @@ class CancelJobController extends Controller
             if ($diffHours > 72) {
                 return $cancel->deductionsPoints($output->user_id, 10);
             } else {
-                return $cancel->deductionsPoints($output->user_id, 25);
+                return $cancel->deductionsPoints($output->user_id, 15);
 
             }
         }
