@@ -150,6 +150,7 @@ class Employer extends Model
                 , 'users.company_name'
                 , 'users.profile_image_path'
                 , 'users.employee_status as status'
+                , 'users.employee_points'
                 , 'users.business_manager'
                 , 'jobs.description as job_description'
                 , 'jobs.status'
