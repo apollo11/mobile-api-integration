@@ -22,9 +22,8 @@ class CancelJobController extends Controller
     {
         $data = $request->all();
 
-        return $this->outputStartDate($data['id']);
-
         $validate = $this->rules($data);
+
         $errorMsg = $validate->errors()->all();
 
         if ($validate->fails()) {
@@ -49,7 +48,7 @@ class CancelJobController extends Controller
 
                     $file['file'] = null;
                 }
-
+                $this->deductCancelledJob($data['id'], $data['user_id']);
                 $merge = array_merge($data, $file);
                 $this->edit($merge);
 
@@ -77,22 +76,24 @@ class CancelJobController extends Controller
     /**
      * Validate Job start Date
      */
-    public function cancelledSuccess($id)
+    public function deductCancelledJob($schedId, $userId)
     {
         $cancel = new CancelJob();
-        $output = $cancel->jobValidateDate($id);
-        $diffHours = $this->validateDeduction($output->start_date);
+        $output = $cancel->jobValidateDate($schedId);
 
-        if ($diffHours > 72) {
+        $ifDateAndSchedIsEmpty = !is_null($output) && $output->start_date;
+        $isValidJob = !is_null($cancel->validSched($schedId, $userId));
 
-            $result = $cancel->deductionsPoints(4, 7);
-        } else {
+        if($isValidJob && $ifDateAndSchedIsEmpty) {
+            $diffHours = $this->validateDeduction($output->start_date);
 
-            $result = $cancel->deductionsPoints(4, 7);
+            if ($diffHours > 72) {
+                return $cancel->deductionsPoints($userId, 10);
+            } else {
+                return $cancel->deductionsPoints($userId, 25);
 
+            }
         }
-
-        return $result;
     }
 
     /**

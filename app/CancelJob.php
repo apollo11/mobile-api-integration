@@ -37,14 +37,13 @@ class CancelJob extends Model
      */
     public function jobValidateDate($jobId)
     {
-        $jobs = DB::table('jobs')
-            ->join('job_schedules', 'job_schedules.job_id', '=', 'jobs.id')
+        $jobs = DB::table('job_schedules')
+            ->leftJoin('jobs','jobs.id', '=', 'job_schedules.job_id')
             ->select(
-                'jobs.id'
-                , 'jobs.user_id'
+                'job_schedules.id'
+                , 'job_schedules.user_id'
                 , 'jobs.job_date as start_date'
-                , 'jobs.created_at'
-                , 'jobs.end_date'
+                , 'job_schedules.job_id'
             )
             ->where('job_schedules.id', $jobId)
             ->first();
