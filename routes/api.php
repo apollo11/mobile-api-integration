@@ -205,3 +205,5 @@ Route::group(['middleware' => ['auth_client']], function () {
 
 });
 
+Route::get('test/map/{postal}', 'Job\JobController@getAddress');
+
