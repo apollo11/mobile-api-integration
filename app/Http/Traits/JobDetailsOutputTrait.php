@@ -1,7 +1,6 @@
 <?php
 namespace App\Http\Traits;
 
-use Carbon\Carbon;
 trait JobDetailsOutputTrait
 {
     public function jobDetailsoutput($output)
