@@ -104,7 +104,7 @@ class AdditionalInfoController extends Controller
             'contact_method' => $data['contact_method'],
             'criminal_record' => $criminal,
             'medication' => $medical,
-            'bank_statement' => $data['bank_statement'],
+            'bank_statement' => $data['bank_account'],
             'language' => $data['language'],
             'is_uploaded' => 1
         ]);
@@ -137,7 +137,7 @@ class AdditionalInfoController extends Controller
                     'contact_method' => $data['contact_method'],
                     'criminal_record' => $criminal,
                     'medication' => $medical,
-                    'bank_statement' => $data['bank_statement'],
+                    'bank_statement' => $data['bank_account'],
                     'language' => $data['language'],
                     'is_uploaded' => 1
             ]);
@@ -159,11 +159,6 @@ class AdditionalInfoController extends Controller
 
             $file['back_ic_path'] = $request->file('back_ic_path')->store('additional');
 
-        }
-
-        if ($request->hasFile('bank_statement')) {
-
-            $file['bank_statement'] = $request->file('bank_statement')->store('additional');
         }
         if ($request->hasFile('signature_file_path')) {
 
@@ -256,7 +251,7 @@ class AdditionalInfoController extends Controller
             'contact_method' => 'required|string',
             'criminal_record' => 'nullable',
             'medication' => 'nullable',
-            'bank_statement' => 'required|file',
+            'bank_account' => 'required|string',
             'language' => 'required|string',
             'signature_file_path' => 'required'
         ]);
