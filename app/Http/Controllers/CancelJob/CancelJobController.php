@@ -3,8 +3,9 @@
 namespace App\Http\Controllers\CancelJob;
 
 use Validator;
+use Carbon\Carbon;
+use App\CancelJob;
 use App\JobSchedule;
-use App\Http\Traits\HttpResponse;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -22,6 +23,7 @@ class CancelJobController extends Controller
         $data = $request->all();
 
         $validate = $this->rules($data);
+
         $errorMsg = $validate->errors()->all();
 
         if ($validate->fails()) {
@@ -46,7 +48,7 @@ class CancelJobController extends Controller
 
                     $file['file'] = null;
                 }
-
+                $this->deductCancelledJob($data['id'], $data['user_id']);
                 $merge = array_merge($data, $file);
                 $this->edit($merge);
 
@@ -71,6 +73,41 @@ class CancelJobController extends Controller
 
     }
 
+    /**
+     * Validate Job start Date
+     */
+    public function deductCancelledJob($schedId, $userId)
+    {
+        $cancel = new CancelJob();
+        $output = $cancel->jobValidateDate($schedId);
+
+        $ifDateAndSchedIsEmpty = !is_null($output) && $output->start_date;
+        $isValidJob = !is_null($cancel->validSched($schedId, $userId));
+
+        if($isValidJob && $ifDateAndSchedIsEmpty) {
+            $diffHours = $this->validateDeduction($output->start_date);
+
+            if ($diffHours > 72) {
+                return $cancel->deductionsPoints($userId, 10);
+            } else {
+                return $cancel->deductionsPoints($userId, 25);
+
+            }
+        }
+    }
+
+    /**
+     * @param $date
+     * @return int
+     */
+    public function validateDeduction($date)
+    {
+        $start = Carbon::parse($date);
+        $now = Carbon::now();
+
+        return $now->diffInHours($start);
+
+    }
 
     /**
      * Show the form for creating a new resource.
