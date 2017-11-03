@@ -213,6 +213,7 @@ class JobSchedule extends Model
                 , 'employee.nric_no'
                 , 'employee.name'
                 , 'employee.contact_no'
+                , 'users.employee_points'
                 , 'jobs.rate'
                 , 'jobs.id'
             )

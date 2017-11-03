@@ -29,6 +29,7 @@ class Employee extends Model
                 , 'users.employee_status'
                 , 'users.business_manager'
                 , 'users.employee_status as status'
+                , 'users.employee_points'
                 , 'additional_infos.gender'
                 , 'additional_infos.birthdate'
                 , 'users.created_at as joined'
