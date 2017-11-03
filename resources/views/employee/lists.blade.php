@@ -5,6 +5,11 @@
         <form id="approve-{{ $employee[$i]['id'] }}" action="{{ route('employee.approve',['id' => $employee[$i]['id']]) }}" method="POST" style="display: none;">
             {{ csrf_field() }}
         </form>
+        <form id="upload-{{ $employee[$i]['id'] }}" action="{{ route('employee.upload',['id' => $employee[$i]['id']]) }}" method="POST" style="display: none;">
+            {{ csrf_field() }}
+            <input type="submit" value="Upload">
+        </form>
+
         <form id="reject-{{ $employee[$i]['id'] }}" action="{{ route('employee.reject',['id' => $employee[$i]['id']]) }}" method="POST" style="display: none;">
             {{ csrf_field() }}
             <input type="submit" value="Reject">
@@ -139,6 +144,14 @@
                                                                            document.getElementById('{{'approve-'.$employee[$i]['id'] }}').submit();">
                                                                     <i class="fa fa-check-square-o"></i> Approve</a>
                                                             </li>
+                                                            <li>
+                                                                <a href="{{ route('employee.upload',['id' => $employee[$i]['id']]) }}"
+                                                                   onclick="event.preventDefault();
+                                                                           document.getElementById('{{'upload-'.$employee[$i]['id'] }}').submit();">
+                                                                    <i class="fa fa-folder-open"></i> Upload
+                                                                </a>
+                                                            </li>
+
                                                             <li>
                                                                 <a href="{{ route('employee.reject',['id' => $employee[$i]['id']]) }}"
                                                                    onclick="event.preventDefault();

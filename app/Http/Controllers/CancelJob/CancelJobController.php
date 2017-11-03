@@ -21,7 +21,6 @@ class CancelJobController extends Controller
     public function index(Request $request)
     {
         $data = $request->all();
-
         $validate = $this->rules($data);
 
         $errorMsg = $validate->errors()->all();
@@ -48,7 +47,7 @@ class CancelJobController extends Controller
 
                     $file['file'] = null;
                 }
-                $this->deductCancelledJob($data['id'], $data['user_id']);
+                $this->deductCancelledJob($data['id']);
                 $merge = array_merge($data, $file);
                 $this->edit($merge);
 
@@ -76,21 +75,21 @@ class CancelJobController extends Controller
     /**
      * Validate Job start Date
      */
-    public function deductCancelledJob($schedId, $userId)
+    public function deductCancelledJob($schedId)
     {
         $cancel = new CancelJob();
         $output = $cancel->jobValidateDate($schedId);
 
         $ifDateAndSchedIsEmpty = !is_null($output) && $output->start_date;
-        $isValidJob = !is_null($cancel->validSched($schedId, $userId));
+        $isValidJob = !is_null($cancel->validSched($schedId,  $output->user_id));
 
         if($isValidJob && $ifDateAndSchedIsEmpty) {
             $diffHours = $this->validateDeduction($output->start_date);
 
             if ($diffHours > 72) {
-                return $cancel->deductionsPoints($userId, 10);
+                return $cancel->deductionsPoints($output->user_id, 10);
             } else {
-                return $cancel->deductionsPoints($userId, 25);
+                return $cancel->deductionsPoints($output->user_id, 15);
 
             }
         }

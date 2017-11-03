@@ -198,7 +198,6 @@ class Job extends Model
                 , 'employer.profile_image_path'
                 , 'employer.employee_status as status'
                 , 'employer.id as employer_id'
-                , 'users.employee_points'
                 , 'jobs.description as job_description'
                 , 'jobs.job_title'
                 , 'jobs.job_status'
