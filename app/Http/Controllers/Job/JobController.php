@@ -421,12 +421,6 @@ class JobController extends Controller
     }
 
     /**
-     * Set of gender
-     */
-
-
-
-    /**
      * API List for jobs
      */
     public function jobApiLists()
