@@ -60,6 +60,8 @@ class CheckIn extends Model
                 , 'jobs.language'
                 , 'jobs.choices'
                 ,'jobs.job_requirements'
+                , 'jobs.latitude'
+                , 'jobs.longitude'
             )
 
             ->where('job_schedules.user_id', '=', $param['id'])

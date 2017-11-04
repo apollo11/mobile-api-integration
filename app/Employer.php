@@ -176,6 +176,9 @@ class Employer extends Model
                 , 'jobs.language'
                 , 'jobs.choices'
                 , 'jobs.job_requirements'
+                , 'jobs.latitude'
+                , 'jobs.longitude'
+
             )
             ->where('users.id', '=', $userId)
             ->where('users.role_id', '=', 1)

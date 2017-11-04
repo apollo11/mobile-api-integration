@@ -13,11 +13,13 @@ use App\Job;
 use App\Location;
 use App\Industry;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Http\Request;
+use GuzzleHttp\Client;
+use GuzzleHttp\Exception\RequestException;
 use App\Http\Traits\PushNotiftrait;
 use App\Http\Traits\JobDetailsOutputTrait;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
 
 class JobController extends Controller
 {
@@ -28,11 +30,14 @@ class JobController extends Controller
     protected $data;
     public $lastInsertedId;
     public $newJob;
+    protected $googleMap;
+
 
     public function __construct(Request $request)
     {
         $this->request = $request;
         $this->newJob = constant('NEW_JOB');
+        $this->googleMap = constant('GOOGLE_MAP_ENDPOINT');
     }
 
     /**
@@ -63,6 +68,8 @@ class JobController extends Controller
         $industry = $this->industry();
         $nationality = $this->nationalityList();
         $employee = $user->employerList();
+        $age = $this->age();
+
 
 
         return view('job.form', ['user' => $user
@@ -70,6 +77,7 @@ class JobController extends Controller
             , 'location' => $location
             , 'nationality' => $nationality
             , 'employee' => $employee
+            , 'age' => $age
         ]);
     }
 
@@ -82,15 +90,16 @@ class JobController extends Controller
     public function store(Request $request)
     {
         $data = $request->all();
-
         $location = explode('.', $request->input('job_location'));
+        $zipCode = $this->getAddress($request->input('postal_code'));
+        $data['postal_code'] = $zipCode;
         $industry = explode('.', $request->input('industry'));
         $age = explode('-', $request->input('age'));
         $employer = explode('.', $request->input('job_employer'));
 
         $split = [
             'location_id' => $location[0],
-            'job_location' => $location[1],
+            'location' => $location[1],
             'industry_id' => $industry[0],
             'industry' => $industry[1],
             'min_age' => $age[0],
@@ -107,7 +116,6 @@ class JobController extends Controller
                 ->withErrors($validator)
                 ->withInput();
         } else {
-
             $profile['job_image'] = $request->file('job_image')->store('jobs');
             $mergeData = array_merge($data, $profile, $split);
 
@@ -117,7 +125,6 @@ class JobController extends Controller
 
             return redirect('job/lists');
         }
-
     }
 
     /**
@@ -152,7 +159,9 @@ class JobController extends Controller
             'notes' => $data['notes'],
             'status' => $data['status'],
             'min_age' => $data['min_age'],
-            'max_age' => $data['max_age']
+            'max_age' => $data['max_age'],
+            'latitude' => $data['postal_code']['lat'],
+            'longitude' =>  $data['postal_code']['lng']
         ]);
 
         $this->lastInsertedId = $insertedId->id;
@@ -347,7 +356,8 @@ class JobController extends Controller
             'contact_no' => 'required|string',
             'industry' => 'required|string',
             'age' => 'required',
-            'nationality' => 'required|string'
+            'nationality' => 'required|string',
+            'postal_code' => 'required'
         ]);
     }
 
@@ -398,6 +408,16 @@ class JobController extends Controller
         $nationality = new Nationality();
 
         return $nationality->nationalityDropdown();
+    }
+
+    /**
+     * Set list
+     */
+    public function age()
+    {
+        $age = new Job();
+
+        return $age->ageList();
     }
 
     /**
@@ -524,6 +544,40 @@ class JobController extends Controller
         return $output;
     }
 
+    /**
+     * Get Address using postal code
+     * @param $postal
+     * @return string
+     */
+    public function getAddress($postal)
+    {
+        $http = new Client();
+        try {
+            $response = $http->get($this->googleMap . '?components=postal_code:' .$postal. '&key=' . env('GOOGLE_API_KEY'));
+            $result = json_decode((string)$response->getBody(), true);
+            if(!empty($result['results'])) {
+
+                $param['location'] = [
+                    'lng' => $result['results'][0]['geometry']['location']['lng'],
+                    'lat' => $result['results'][0]['geometry']['location']['lat']
+                ];
+
+            }else {
+
+                $param['location'] = '';
+            }
+
+            return $param['location'];
+
+        } catch (RequestException $e) {
+
+            if ($e->hasResponse()) {
+
+                return 'Unknown Address';
+            }
+        }
+
+    }
 
 
 }

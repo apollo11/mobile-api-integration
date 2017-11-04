@@ -57,6 +57,9 @@ class History extends Model
                 , 'jobs.language'
                 , 'jobs.choices'
                 , 'jobs.job_requirements'
+                , 'jobs.latitude'
+                , 'jobs.longitude'
+
             )
             ->when(!empty($param['industries']), function ($query) use ($param) {
 
