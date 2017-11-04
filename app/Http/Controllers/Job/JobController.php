@@ -68,6 +68,8 @@ class JobController extends Controller
         $industry = $this->industry();
         $nationality = $this->nationalityList();
         $employee = $user->employerList();
+        $age = $this->age();
+
 
 
         return view('job.form', ['user' => $user
@@ -75,6 +77,7 @@ class JobController extends Controller
             , 'location' => $location
             , 'nationality' => $nationality
             , 'employee' => $employee
+            , 'age' => $age
         ]);
     }
 
@@ -408,6 +411,22 @@ class JobController extends Controller
     }
 
     /**
+     * Set list
+     */
+    public function age()
+    {
+        $age = new Job();
+
+        return $age->ageList();
+    }
+
+    /**
+     * Set of gender
+     */
+
+
+
+    /**
      * API List for jobs
      */
     public function jobApiLists()
@@ -566,19 +585,5 @@ class JobController extends Controller
 
     }
 
-    public function responseMap($test)
-    {
-        if(!is_null($test['results'])) {
-
-
-        } else {
-            $param = [
-                'lng' => 'none',
-                'lat' => 'none'
-            ];
-        }
-
-        return $param;
-    }
 
 }

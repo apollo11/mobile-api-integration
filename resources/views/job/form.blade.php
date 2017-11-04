@@ -86,10 +86,9 @@
                                         <label class="col-md-3 control-label">Age<span class="is-required">*</span></label>
                                         <div class="col-md-7">
                                             <select class="form-control" name="age">
-                                                <option value="16-20">16-20</option>
-                                                <option value="21-30">21-30</option>
-                                                <option value="41-50">41-50</option>
-                                                <option value="50">above 50</option>
+                                                @foreach($age as $key => $value)
+                                                <option value="{{ $value }}" {{ old('age') == $value ? "selected" : "" }}>{{ $value }}</option>
+                                                @endforeach
                                             </select>
 
                                             @if ($errors->has('age'))
@@ -105,17 +104,17 @@
                                         <div class="col-md-7">
                                             <div class="mt-checkbox-inline">
                                                 <label class="mt-checkbox">
-                                                    <input type="radio" name="gender" value="male">
+                                                    <input type="radio" name="gender" value="male" {{ old('gender') == 'male' ? 'checked' : '' }}>
                                                     Male
                                                     <span></span>
                                                 </label>
                                                 <label class="mt-checkbox">
-                                                    <input type="radio" name="gender" value="female">
+                                                    <input type="radio" name="gender" value="female" {{ old('gender') == 'female' ? 'checked' : '' }}>
                                                     Female
                                                     <span></span>
                                                 </label>
                                                 <label class="mt-checkbox">
-                                                    <input type="radio" name="gender" value="both">
+                                                    <input type="radio" name="gender" value="both" {{ old('gender') == 'both' ? 'checked' : '' }}>
                                                     both
                                                     <span></span>
                                                 </label>
@@ -134,6 +133,7 @@
                                         <div class="col-md-7">
                                             <input type="text" class="form-control" placeholder="Enter Postal Code"
                                                    value="{{ old('postal_code') }}" name="postal_code">
+                                            <p class="help-block"> Zip Code must be 5 digits ie.(018956)</p>
                                             @if ($errors->has('postal_code'))
                                                 <span class="help-block">
                                                 {{ $errors->first('postal_code') }}
@@ -144,14 +144,15 @@
 
 
                                     <div class="form-group{{ $errors->has('job_location') ? ' has-error' : '' }}">
-                                        <label class="col-md-3 control-label">Location<span class="is-required">*</span></label>
+                                        <label class="col-md-3 control-label">Filter by location<span class="is-required">*</span></label>
                                         <div class="col-md-7">
                                             <select class="form-control" name="job_location">
                                                 @foreach( $location as $value)
+                                                    {{$input = $value->id.'.'.$value->name}}
                                                     @if($loop->count == 0)
                                                         <option value="none">None</option>
                                                     @else
-                                                        <option value="{{ $value->id.'.'.$value->name }}">{{ $value->name }}</option>
+                                                        <option value="{{ $input  }}" {{ old('job_location') == $input ? "selected" : "" }}>{{ $value->name }}</option>
                                                     @endif
                                                 @endforeach
                                             </select>
@@ -169,9 +170,9 @@
                                         <div class="col-md-7">
                                             <select class="form-control" name="nationality">
                                                 <option value="">-- select one --</option>
-                                                @for ($i = 0; $i < count($nationality); $i++)
-                                                    <option value="{{ strtolower($nationality[$i]) }}">{{ $nationality[$i]  }}</option>
-                                                @endfor
+                                                @foreach($nationality as $key => $value)
+                                                    <option value="{{$value}}" {{ old('nationality') == $value ? "selected" : "" }}> {{ $value  }}</option>
+                                                @endforeach
                                             </select>
                                             @if ($errors->has('nationality'))
                                                 <span class="help-block">
@@ -318,7 +319,7 @@
                                         <label class="control-label col-md-3">Start Job Date and Time<span class="is-required">*</span></label>
                                         <div class="col-md-7">
                                             <div class="input-group date form_datetime form_datetime bs-datetime" id="start-date">
-                                                <input type="text" name="date" size="16" class="form-control">
+                                                <input type="text" name="date"  value="{{ old('date') }}" size="16" class="form-control">
                                                 <span class="input-group-addon">
                                                     <button class="btn default date-set" type="button">
                                                         <i class="fa fa-calendar"></i>
@@ -337,7 +338,7 @@
                                         <label class="control-label col-md-3">Job End Date and Time<span class="is-required">*</span></label>
                                         <div class="col-md-7">
                                             <div class="input-group date form_datetime form_datetime bs-datetime" id="end-date">
-                                                <input type="text" name="end_date" size="16" class="form-control">
+                                                <input type="text" name="end_date" value="{{ old('end_date') }}"size="16" class="form-control">
                                                 <span class="input-group-addon">
                                                     <button class="btn default date-set" type="button">
                                                         <i class="fa fa-calendar"></i>

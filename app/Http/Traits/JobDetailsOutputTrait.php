@@ -25,8 +25,8 @@ trait JobDetailsOutputTrait
                 'location' => [
                     'id' => $output->location_id,
                     'name' => $output->location,
-                    'latitude' => 1.2836402,
-                    'longitude' => 103.8603731,
+                    'latitude' => is_null($output->latitude) ? 1.2836402 : $output->latitude,
+                    'longitude' => is_null($output->longitude) ? 103.8603731 : $output->longitude,
                 ],
                 'working_details' => [
                     'check_in' =>[
