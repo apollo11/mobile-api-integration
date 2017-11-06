@@ -15,6 +15,7 @@ use App\Industry;
 use Carbon\Carbon;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
+use App\Http\Traits\DateFormatDate;
 use App\Http\Traits\PushNotiftrait;
 use App\Http\Traits\JobDetailsOutputTrait;
 use App\Http\Controllers\Controller;
@@ -23,6 +24,7 @@ use Illuminate\Http\Request;
 
 class JobController extends Controller
 {
+    use DateFormatDate;
     use JobDetailsOutputTrait;
     use PushNotiftrait;
 
@@ -90,6 +92,7 @@ class JobController extends Controller
     public function store(Request $request)
     {
         $data = $request->all();
+
         $location = explode('.', $request->input('job_location'));
         $zipCode = $this->getAddress($request->input('postal_code'));
         $data['postal_code'] = $zipCode;
@@ -138,7 +141,7 @@ class JobController extends Controller
             'job_title' => $data['job_title'],
             'job_id' => $data['employer_id'],
             'location_id' => $data['location_id'],
-            'location' => $data['job_location'],
+            'location' => $data['location'],
             'description' => $data['job_description'],
             'job_requirements' => $data['job_requirements'],
             'role' => $data['job_role'],
@@ -179,7 +182,7 @@ class JobController extends Controller
             'job_title' => $data['job_title'],
             'job_id' => Auth::user()->id,
             'location_id' => $data['location_id'],
-            'location' => $data['job_location'],
+            'location' => $data['location'],
             'description' => $data['job_description'],
             'job_requirements' => $data['job_requirements'],
             'role' => $data['job_role'],
@@ -193,8 +196,8 @@ class JobController extends Controller
             'employer' => $data['job_employer'],
             'rate' => $data['hourly_rate'],
             'language' => $data['preferred_language'],
-            'job_date' => $data['date'],
-            'end_date' => $data['end_date'],
+            'job_date' => $this->convertToUtc($data['date']),
+            'end_date' => $this->convertToUtc($data['end_date']),
             'industry_id' => $data['industry_id'],
             'industry' => $data['industry'],
             'notes' => $data['notes'],
@@ -205,10 +208,9 @@ class JobController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Return Job Details from users
      *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function show()
     {
