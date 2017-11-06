@@ -69,84 +69,80 @@
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div class="btn-group">
-                                            <div class="row">
-                                                <div class="col-md-12">Job Image</div>
-                                                <div class="col-md-12"><img src="/{{ $details->job_image_path }}" width="400px" height="100px"/></div>
-                                            </div>
+                                            <div class="portlet-body">
+                                                <div class="table-scrollable">
+                                                    <table class="table table-hover">
+                                                        <tbody>
+                                                        <tr>
+                                                            <td><strong>Job Image</strong></td>
+                                                            <td ><img src="/{{ $details->job_image_path }}" width="200px"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><strong>Company Name: </strong></td>
+                                                            <td>{{ $details->company_name }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td> <strong>Business Manager </strong></td>
+                                                            <td>{{ $details->business_manager }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><strong>Role</strong></td>
+                                                            <td>{{ $details->role }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td> <strong>Job Description: </strong></td>
+                                                            <td>{{ $details->job_description }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><strong>Job Location: </strong></td>
+                                                            <td>{{ $details->location }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><strong>Job Industry: </strong></td>
+                                                            <td>{{ $details->industry }}</td>
 
-                                            <div class="row">
-                                                <div class="col-md-4">Company Name:</div>
-                                                <div class="col-md-8">{{ $details->company_name }}</div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-md-4">Job Tile:</div>
-                                                <div class="col-md-8">{{ $details->job_title }}</div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-md-4">Business Manager</div>
-                                                <div class="col-md-8">{{ $details->business_manager }}</div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-md-4">Role</div>
-                                                <div class="col-md-8">{{ $details->role }}</div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-md-4">Job Description:</div>
-                                                <div class="col-md-8">{{ $details->job_description }}</div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-md-4">Job Location:</div>
-                                                <div class="col-md-8">{{ $details->location }}</div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-md-4">Job Industry:</div>
-                                                <div class="col-md-8">{{ $details->industry }}</div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-md-4">Contact No.:</div>
-                                                <div class="col-md-8">{{ $details->contact_no }}</div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-md-4">Gender Needed:</div>
-                                                <div class="col-md-8">{{ $details->choices }}</div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-md-4">Rate:</div>
-                                                <div class="col-md-8">${{ $details->rate }}/hr</div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-md-4">Nationality:</div>
-                                                <div class="col-md-8">{{ ucfirst($details->nationality) }}</div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-md-4">Job Requirements</div>
-                                                <div class="col-md-8">{{ $details->job_requirements }}/hr</div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-md-4">Notes</div>
-                                                <div class="col-md-8">{{ $details->notes }}</div>
-                                            </div>
-
-                                            <div class="row">
-                                                <div class="col-md-4">Language</div>
-                                                <div class="col-md-8">${{ $details->language }}/hr</div>
-                                            </div>
-
-                                            <div class="row">
-                                                <div class="col-md-4">Status</div>
-                                                @if($details->status == 'inactive')
-                                                    <div class="col-md-8"><span class="label label-sm label-danger">Need to Approve</span>
-                                                    </div>
-
-                                                @elseif($details->status == 'active')
-                                                    <div class="col-md-8"><span
-                                                                class="label label-sm label-success">{{ ucfirst($details->status) }} </span>
-                                                    </div>
-                                                @else
-                                                    <div class="col-md-8"><span
-                                                                class="label label-sm label-waring">{{ ucfirst($details->status) }} </span>
-                                                    </div>
-                                                @endif
+                                                        </tr>
+                                                        <tr>
+                                                            <td><strong>Contact No.: </strong></td>
+                                                            <td>{{ $details->contact_no }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><strong>Gender Needed: </strong></td>
+                                                            <td>{{ $details->choices }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><strong>Rate:</strong></td>
+                                                            <td>${{ $details->rate }}/hr</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><strong>Nationality:</strong></td>
+                                                            <td>{{ ucfirst($details->nationality) }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><strong>Job Requirements </strong></td>
+                                                            <td>{{ $details->job_requirements }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><strong>Notes</strong></td>
+                                                            <td>{{ $details->notes }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><strong>Language</strong></td>
+                                                            <td>${{ $details->language }}/hr</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Status</td>
+                                                            @if($details->status == 'inactive')
+                                                                <td><span class="label label-sm label-danger">Need to Approve</span></td>
+                                                            @elseif($details->status == 'active')
+                                                                <td><span class="label label-sm label-success">{{ ucfirst($details->status) }} </span></td>
+                                                            @else
+                                                                <td><span class="label label-sm label-waring">{{ ucfirst($details->status) }} </span></td>
+                                                            @endif
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -183,8 +179,15 @@
                                     </th>
                                     <th>Name</th>
                                     <th>NRIC</th>
+                                    <th>Gender</th>
+                                    <th>Birthdate</th>
+                                    <th>Nationality</th>
+                                    <th>Religion</th>
                                     <th>Contact No</th>
+                                    <th> Email </th>
                                     <th>Hourly Rate</th>
+                                    <th> Hourly Job Rate</th>
+                                    <th>Schedule Status</th>
                                     <th>Action</th>
                                 </tr>
                                 </thead>
@@ -192,18 +195,24 @@
                                 @if(count($related) > 0)
                                     @foreach($related as $value)
                                     <tr class="odd gradeX">
-                                        <th>
+                                        <td>
                                             <label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">
                                                 <input type="checkbox" class="group-checkable"
                                                        data-set="#employee-table .checkboxes"/>
                                                 <span></span>
                                             </label>
-                                        </th>
+                                        </td>
                                         <td>{{ $value->name }}</td>
                                         <td>{{ $value->nric_no }}</td>
-                                        <td>{{ $value->contact_no }}</td>
+                                        <td> {{ $value->gender }}</td>
+                                        <td> {{ $value->birthdate }}</td>
+                                        <td> {{ $value->nationality }}</td>
+                                        <td> {{ $value->religion }}</td>
+                                        <td>{{ $value->mobile_no }}</td>
+                                        <td>{{ $value->email }}</td>
                                         <td>{{ $value->rate }}</td>
-
+                                        <td>{{ $value->job_rate }}</td>
+                                        <td>{{ ucfirst($value->schedule_status) }}</td>
                                         <td>
                                             <div class="btn-group">
                                                 <button class="btn btn-xs green dropdown-toggle" type="button"
