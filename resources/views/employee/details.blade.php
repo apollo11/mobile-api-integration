@@ -373,8 +373,7 @@
                                             <td>{{ $jobs->start_date }}</td>
                                             <td> {{ $jobs->company_name }}</td>
                                             <td> {{ $jobs->rate }}</td>
-                                            <td> @if($jobs->schedule_status == 'cancelled') <a href="#">{{ ucfirst($jobs->schedule_status) }}</a>  @else {{ ucfirst($jobs->schedule_status) }} @endif</td>
-
+                                            <td> @if($jobs->schedule_status == 'cancelled') <a href="{{ route('cancel.details',['userId' => $jobs->user_id, 'jobId' => $jobs->id]) }}">{{ ucfirst($jobs->schedule_status) }}</a>  @else {{ ucfirst($jobs->schedule_status) }} @endif</td>
                                             <td>
                                                 <div class="btn-group">
                                                     <button class="btn btn-xs green dropdown-toggle" type="button"
