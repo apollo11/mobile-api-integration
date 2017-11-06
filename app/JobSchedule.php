@@ -242,6 +242,7 @@ class JobSchedule extends Model
         $jobs = DB::table('users')
             ->join('job_schedules', 'job_schedules.user_id', '=', 'users.id')
             ->leftJoin('jobs', 'jobs.id', '=', 'job_schedules.job_id')
+            ->leftJoin('additional_infos as info', 'info.user_id', '=', 'users.id')
             ->leftJoin('users as employee', 'employee.id', '=', 'jobs.user_id')
             ->select(
                 'job_schedules.id as schedule_id'
@@ -250,16 +251,23 @@ class JobSchedule extends Model
                 , 'job_schedules.job_status as schedule_status'
                 , 'jobs.created_at'
                 , 'jobs.job_title'
-                , 'jobs.rate'
                 , 'jobs.job_date as start_date'
                 , 'jobs.id as jobid'
                 , 'users.company_name'
                 , 'users.nric_no'
                 , 'users.name'
                 , 'users.contact_no'
+                , 'users.mobile_no'
                 , 'users.id as userid'
-                , 'jobs.rate'
+                , 'users.email'
+                , 'employee.rate'
+                , 'jobs.rate as job_rate'
                 , 'jobs.id'
+                , 'info.gender'
+                , 'info.birthdate'
+                , 'info.religion'
+                , 'info.nationality'
+
             )
             ->where('job_schedules.job_id' , '=', $id)
             ->whereIn('job_schedules.job_status',[

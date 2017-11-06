@@ -49,6 +49,7 @@ class AdditionalInfo extends Model
     {
         $additionalInfo = DB::table('users')
             ->leftJoin('additional_infos as info', 'info.user_id', '=', 'users.id')
+            ->leftJoin('job_schedules as sched', 'sched.user_id', '=', 'info.user_id')
             ->select(
                 'users.id'
                 , 'users.name as userName'
@@ -66,6 +67,7 @@ class AdditionalInfo extends Model
                 , 'users.rate'
                 , 'users.employee_points'
                 , 'users.profile_image_path as profile_photo'
+                , 'users.business_manager as agent_name'
                 , 'info.id as profile_id'
                 , 'info.gender'
                 , 'info.birthdate'
@@ -84,7 +86,6 @@ class AdditionalInfo extends Model
                 , 'info.criminal_record'
                 , 'info.medication'
                 , 'info.language'
-                , 'info.bank_statement'
                 , 'info.is_uploaded'
                 , 'info.signature_file_path'
                 , 'info.nationality'
