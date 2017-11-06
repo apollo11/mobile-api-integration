@@ -349,11 +349,11 @@
                                             <span></span>
                                         </label>
                                     </th>
-                                    <th> Job Type</th>
+                                    <th> Job Title</th>
                                     <th> Job Date</th>
-                                    <th>Status</th>
                                     <th>Clients Name</th>
                                     <th>Hourly Rate</th>
+                                    <th>Status</th>
                                     <th>Action</th>
                                 </tr>
                                 </thead>
@@ -371,9 +371,9 @@
                                             </th>
                                             <td>{{ $jobs->job_title }}</td>
                                             <td>{{ $jobs->start_date }}</td>
-                                            <td> {{ $jobs->schedule_status }}</td>
                                             <td> {{ $jobs->company_name }}</td>
                                             <td> {{ $jobs->rate }}</td>
+                                            <td> @if($jobs->schedule_status == 'cancelled') <a href="#">{{ ucfirst($jobs->schedule_status) }}</a>  @else {{ ucfirst($jobs->schedule_status) }} @endif</td>
 
                                             <td>
                                                 <div class="btn-group">

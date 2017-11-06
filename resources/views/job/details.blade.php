@@ -212,7 +212,7 @@
                                         <td>{{ $value->email }}</td>
                                         <td>{{ $value->rate }}</td>
                                         <td>{{ $value->job_rate }}</td>
-                                        <td>{{ ucfirst($value->schedule_status) }}</td>
+                                        <td>@if($value->schedule_status == 'cancelled') <a href="#">{{ ucfirst($value->schedule_status) }} </a> @else {{ ucfirst($jobs->schedule_status) }} @endif</td>
                                         <td>
                                             <div class="btn-group">
                                                 <button class="btn btn-xs green dropdown-toggle" type="button"
