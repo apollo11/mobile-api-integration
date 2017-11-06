@@ -263,6 +263,7 @@ class CancelJobController extends Controller
 
         $cancel = new CancelJob();
         $details = $cancel->cancelJobDetails($userId, $jobId);
+
         return view('job.cancel-details',['details' => $details]);
 
     }

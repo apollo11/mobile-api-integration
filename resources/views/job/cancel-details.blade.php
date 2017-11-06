@@ -1,6 +1,5 @@
 @extends('layouts.app')
 @section('content')
-    {{ dd($details) }}
     <div class="page-content-wrapper employee-details">
         <div class="page-content">
             <div class="page-bar">
@@ -34,97 +33,82 @@
                                        type="submit"/>
                             </div>
                         </div>
-                        {{--<div class="portlet-body">--}}
-                            {{--<div class="table-toolbar">--}}
-                                {{--<div class="row">--}}
-                                    {{--<div class="col-md-12">--}}
-                                        {{--<div class="btn-group">--}}
-                                            {{--<div class="portlet-body">--}}
-                                                {{--<div class="table-scrollable">--}}
-                                                    {{--<table class="table table-hover">--}}
-                                                        {{--<tbody>--}}
-                                                        {{--<tr>--}}
-                                                            {{--<td><strong>Job Image</strong></td>--}}
-                                                            {{--<td><img src="/{{ $details->job_image_path }}"--}}
-                                                                     {{--width="200px"/></td>--}}
-                                                        {{--</tr>--}}
-                                                        {{--<tr>--}}
-                                                            {{--<td><strong>Company Name: </strong></td>--}}
-                                                            {{--<td>{{ $details->company_name }}</td>--}}
-                                                        {{--</tr>--}}
-                                                        {{--<tr>--}}
-                                                            {{--<td><strong>Business Manager </strong></td>--}}
-                                                            {{--<td>{{ $details->business_manager }}</td>--}}
-                                                        {{--</tr>--}}
-                                                        {{--<tr>--}}
-                                                            {{--<td><strong>Role</strong></td>--}}
-                                                            {{--<td>{{ $details->role }}</td>--}}
-                                                        {{--</tr>--}}
-                                                        {{--<tr>--}}
-                                                            {{--<td><strong>Job Description: </strong></td>--}}
-                                                            {{--<td>{{ $details->job_description }}</td>--}}
-                                                        {{--</tr>--}}
-                                                        {{--<tr>--}}
-                                                            {{--<td><strong>Job Location: </strong></td>--}}
-                                                            {{--<td>{{ $details->location }}</td>--}}
-                                                        {{--</tr>--}}
-                                                        {{--<tr>--}}
-                                                            {{--<td><strong>Job Industry: </strong></td>--}}
-                                                            {{--<td>{{ $details->industry }}</td>--}}
+                        <div class="portlet-body">
+                            <div class="table-toolbar">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="btn-group">
+                                            <div class="portlet-body">
+                                                <div class="table-scrollable">
+                                                    <table class="table table-hover">
+                                                        <tbody>
+                                                        <tr>
+                                                            <td><strong>Job Image</strong></td>
+                                                            <td><img src="/{{ $details->job_image_path }}"
+                                                                     width="200px"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><strong>Role</strong></td>
+                                                            <td>{{ $details->role }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><strong>Job Description: </strong></td>
+                                                            <td>{{ $details->job_description }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><strong>Job Location: </strong></td>
+                                                            <td>{{ $details->location }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><strong>Job Industry: </strong></td>
+                                                            <td>{{ $details->industry }}</td>
 
-                                                        {{--</tr>--}}
-                                                        {{--<tr>--}}
-                                                            {{--<td><strong>Contact No.: </strong></td>--}}
-                                                            {{--<td>{{ $details->contact_no }}</td>--}}
-                                                        {{--</tr>--}}
-                                                        {{--<tr>--}}
-                                                            {{--<td><strong>Gender Needed: </strong></td>--}}
-                                                            {{--<td>{{ $details->choices }}</td>--}}
-                                                        {{--</tr>--}}
-                                                        {{--<tr>--}}
-                                                            {{--<td><strong>Rate:</strong></td>--}}
-                                                            {{--<td>${{ $details->rate }}/hr</td>--}}
-                                                        {{--</tr>--}}
-                                                        {{--<tr>--}}
-                                                            {{--<td><strong>Nationality:</strong></td>--}}
-                                                            {{--<td>{{ ucfirst($details->nationality) }}</td>--}}
-                                                        {{--</tr>--}}
-                                                        {{--<tr>--}}
-                                                            {{--<td><strong>Job Requirements </strong></td>--}}
-                                                            {{--<td>{{ $details->job_requirements }}</td>--}}
-                                                        {{--</tr>--}}
-                                                        {{--<tr>--}}
-                                                            {{--<td><strong>Notes</strong></td>--}}
-                                                            {{--<td>{{ $details->notes }}</td>--}}
-                                                        {{--</tr>--}}
-                                                        {{--<tr>--}}
-                                                            {{--<td><strong>Language</strong></td>--}}
-                                                            {{--<td>${{ $details->language }}/hr</td>--}}
-                                                        {{--</tr>--}}
-                                                        {{--<tr>--}}
-                                                            {{--<td>Status</td>--}}
-                                                            {{--@if($details->status == 'inactive')--}}
-                                                                {{--<td><span class="label label-sm label-danger">Need to Approve</span>--}}
-                                                                {{--</td>--}}
-                                                            {{--@elseif($details->status == 'active')--}}
-                                                                {{--<td>--}}
-                                                                    {{--<span class="label label-sm label-success">{{ ucfirst($details->status) }} </span>--}}
-                                                                {{--</td>--}}
-                                                            {{--@else--}}
-                                                                {{--<td>--}}
-                                                                    {{--<span class="label label-sm label-waring">{{ ucfirst($details->status) }} </span>--}}
-                                                                {{--</td>--}}
-                                                            {{--@endif--}}
-                                                        {{--</tr>--}}
-                                                        {{--</tbody>--}}
-                                                    {{--</table>--}}
-                                                {{--</div>--}}
-                                            {{--</div>--}}
-                                        {{--</div>--}}
-                                    {{--</div>--}}
-                                {{--</div>--}}
-                            {{--</div>--}}
-                        {{--</div>--}}
+                                                        </tr>
+                                                        <tr>
+                                                            <td><strong>Contact No.: </strong></td>
+                                                            <td>{{ $details->contact_no }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><strong>Gender Needed: </strong></td>
+                                                            <td>{{ $details->choices }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><strong>Rate:</strong></td>
+                                                            <td>${{ $details->rate }}/hr</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><strong>Nationality:</strong></td>
+                                                            <td>{{ ucfirst($details->nationality) }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><strong>Job Requirements </strong></td>
+                                                            <td>{{ $details->job_requirements }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><strong>Notes</strong></td>
+                                                            <td>{{ $details->notes }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><strong>Language</strong></td>
+                                                            <td>{{ ucfirst($details->language) }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><strong>Reason for Cancelling Job</strong></td>
+                                                            <td>{{ $details->cancel_reason }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><strong>File Upload when Cancelled</strong></td>
+                                                            <td><img src="/{{ $details->cancel_file_path }}" target="_blank"></td>
+                                                        </tr>
+                                                       </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
