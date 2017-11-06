@@ -171,12 +171,6 @@
                                                             @endif
                                                         </tr>
                                                         <tr>
-                                                            @if($userDetails->employee_status)
-                                                                <td><strong>Status</strong></td>
-                                                                <td> {{ ucfirst($userDetails->employee_status) }}</td>
-                                                            @endif
-                                                        </tr>
-                                                        <tr>
                                                             @if($userDetails->emergency_name)
                                                                 <td><strong>Emergency Contact Person</strong></td>
                                                                 <td> {{ $userDetails->emergency_name }}</td>
@@ -216,6 +210,19 @@
                                                             @if($userDetails->signature_file_path !='none')
                                                                 <td><strong>Signature</strong></td>
                                                                 <td><img src="/{{ $userDetails->signature_file_path }}" with="200px"/></td>
+                                                            @endif
+                                                        </tr>
+                                                        <tr>
+                                                        <td><strong>Status</strong></td>
+                                                        @if($userDetails->employee_status == 'pending')
+                                                                <td> <span class="label label-sm label-warning">{{ ucfirst($userDetails->employee_status) }} </span></td>
+                                                            @endif
+
+                                                            @if($userDetails->employee_status == 'approved')
+                                                                <td> <span class="label label-sm label-success">{{ ucfirst($userDetails->employee_status) }} </span></td>
+                                                            @endif
+                                                            @if($userDetails->employee_status == 'reject')
+                                                                <td> <span class="label label-sm label-danger">{{ ucfirst($userDetails->employee_status) }} </span></td>
                                                             @endif
                                                         </tr>
                                                         </tbody>
