@@ -133,7 +133,7 @@
                                         <div class="col-md-7">
                                             <input type="text" class="form-control" placeholder="Enter Postal Code"
                                                    value="{{ old('postal_code') }}" name="postal_code">
-                                            <p class="help-block"> Zip Code must be 5 digits ie.(018956)</p>
+                                            <p class="help-block"> Zip Code must be 6 digits ie.(018956)</p>
                                             @if ($errors->has('postal_code'))
                                                 <span class="help-block">
                                                 {{ $errors->first('postal_code') }}
