@@ -77,9 +77,11 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::prefix('assign')->group(function() {
         Route::get('/lists','AssignJob\AssignJobsController@index')->name('assign.lists');
-
     });
 
+    Route::prefix('cancel/job')->group(function() {
+        Route::get('details/{userId}/{jobId}', 'CancelJob\CancelJobController@details')->name('cancel.details');
+    });
 
 });
 

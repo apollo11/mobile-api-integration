@@ -49,7 +49,6 @@ class AdditionalInfo extends Model
     {
         $additionalInfo = DB::table('users')
             ->leftJoin('additional_infos as info', 'info.user_id', '=', 'users.id')
-            ->leftJoin('job_schedules as sched', 'sched.user_id', '=', 'info.user_id')
             ->select(
                 'users.id'
                 , 'users.name as userName'
