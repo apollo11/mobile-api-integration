@@ -46,6 +46,38 @@ class Payout extends Model
 
     }
 
+    public function payoutDetails($id)
+    {
+        $jobs = DB::table('users')
+            ->join('job_schedules', 'job_schedules.user_id', '=', 'users.id')
+            ->leftJoin('jobs', 'jobs.id', '=', 'job_schedules.job_id')
+            ->leftJoin('users as employer', 'employer.id', '=', 'jobs.user_id')
+            ->select(
+                'users.name'
+                , 'job_schedules.job_salary'
+                , 'job_schedules.working_hours'
+                , 'job_schedules.id as schedule_id'
+                , 'job_schedules.user_id'
+                , 'job_schedules.job_id'
+                , 'job_schedules.job_status as schedule_status'
+                , 'jobs.job_title'
+                , 'jobs.rate'
+                , 'jobs.job_date as start_date'
+                , 'jobs.job_title'
+                , 'users.nric_no'
+                , 'users.contact_no'
+                , 'users.employee_points'
+                , 'employer.company_name'
+                , 'employer.business_manager'
+                , 'job_schedules.payment_status'
+            )
+            ->where('job_schedules.id', $id)
+            ->first();
+
+        return $jobs;
+
+    }
+
     public function approveJob($id, $userId)
     {
         $approved = DB::table('job_schedules')
@@ -84,6 +116,16 @@ class Payout extends Model
 
         return $processed;
     }
+
+    public function updateWorkingHours($id, $data)
+    {
+        $processed = DB::table('job_schedules')
+            ->where('id', $id)
+            ->update(['working_hours' => $data]);
+
+        return $processed;
+    }
+
 
 
 }

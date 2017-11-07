@@ -102,7 +102,7 @@
                                                     </button>
                                                     <ul class="dropdown-menu" role="menu">
                                                         <li>
-                                                            <a href="#">
+                                                            <a href="{{ route('payout.edit',['id' => $value->schedule_id]) }}">
                                                                 <i class="fa fa-edit"></i> Edit </a>
                                                         </li>
                                                         <li>

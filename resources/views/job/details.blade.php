@@ -90,6 +90,10 @@
                                                             <td>{{ $details->role }}</td>
                                                         </tr>
                                                         <tr>
+                                                            <td><strong>Job Title</strong></td>
+                                                            <td>{{ $details->job_title }}</td>
+                                                        </tr>
+                                                        <tr>
                                                             <td> <strong>Job Description: </strong></td>
                                                             <td>{{ $details->job_description }}</td>
                                                         </tr>
@@ -103,12 +107,16 @@
 
                                                         </tr>
                                                         <tr>
+                                                            <td><strong>Age Required</strong></td>
+                                                            <td>{{ $details->min_age }} - {{ $details->max_age }}</td>
+                                                        </tr>
+                                                        <tr>
                                                             <td><strong>Contact No.: </strong></td>
                                                             <td>{{ $details->contact_no }}</td>
                                                         </tr>
                                                         <tr>
                                                             <td><strong>Gender Needed: </strong></td>
-                                                            <td>{{ $details->choices }}</td>
+                                                            <td>{{ ucfirst($details->choices) }}</td>
                                                         </tr>
                                                         <tr>
                                                             <td><strong>Rate:</strong></td>
@@ -128,10 +136,10 @@
                                                         </tr>
                                                         <tr>
                                                             <td><strong>Language</strong></td>
-                                                            <td>${{ $details->language }}/hr</td>
+                                                            <td>{{ ucfirst($details->language) }}</td>
                                                         </tr>
                                                         <tr>
-                                                            <td>Status</td>
+                                                            <td><strong>Status</strong></td>
                                                             @if($details->status == 'inactive')
                                                                 <td><span class="label label-sm label-danger">Need to Approve</span></td>
                                                             @elseif($details->status == 'active')

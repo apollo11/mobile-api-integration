@@ -66,7 +66,9 @@ class PayoutController extends Controller
      */
     public function edit($id)
     {
-        //
+        $payoutObj = new Payout();
+        $details = $payoutObj->payoutDetails($id);
+        return view('Payout.edit-form',['details' => $details]);
     }
 
     /**
@@ -78,7 +80,25 @@ class PayoutController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $payoutObj = new Payout();
+        $data = $request->all();
+
+        $validator = Validator::make($data, ['working_hours' => 'required|numeric']);
+
+        if($validator->fails()) {
+
+            $result = redirect(route('payout.edit',['id' => $id]))
+                ->withErrors($validator)
+                ->withInput();
+
+        } else {
+
+            $payoutObj->updateWorkingHours($id, $data['working_hours']);
+            $result = redirect(route('payout.lists',['id' => $id]));
+        }
+
+        return $result;
+
     }
 
     /**
