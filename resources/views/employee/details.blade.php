@@ -209,7 +209,7 @@
                                                         <tr>
                                                             @if($userDetails->signature_file_path !='none')
                                                                 <td><strong>Signature</strong></td>
-                                                                <td><img src="/{{ $userDetails->signature_file_path }}" with="200px"/></td>
+                                                                <td><img src="/{{ $userDetails->signature_file_path }}" width="200px"/></td>
                                                             @endif
                                                         </tr>
                                                         <tr>

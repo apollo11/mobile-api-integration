@@ -98,7 +98,7 @@
                                                         </tr>
                                                         <tr>
                                                             <td><strong>File Upload when Cancelled</strong></td>
-                                                            <td><img src="/{{ $details->cancel_file_path }}" target="_blank"></td>
+                                                            <td><img src="/{{ $details->cancel_file_path }}" width="200px" ></td>
                                                         </tr>
                                                        </tbody>
                                                     </table>
