@@ -83,6 +83,13 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('details/{userId}/{jobId}', 'CancelJob\CancelJobController@details')->name('cancel.details');
     });
 
+    Route::prefix('payout')->group(function() {
+       Route::get('lists', 'Payout\PayoutController@index')->name('payout.lists');
+       Route::post('approved/{id}/{userId}', 'Payout\PayoutController@approvedJob')->name('payout.approved');
+       Route::post('processed/{id}/{userId}', 'Payout\PayoutController@processedJob')->name('payout.processed');
+       Route::post('rejected/{id}/{userId}', 'Payout\PayoutController@rejectJob')->name('payout.rejected');
+    });
+
 });
 
 Route::get('/home', 'HomeController@index')->name('home');

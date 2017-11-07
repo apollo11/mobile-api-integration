@@ -56,7 +56,7 @@
                     Employers</a>
             </li>
             <li>
-                <a href="javascript:;">
+                <a href="{{ route('payout.lists') }}">
                     <i class="icon-tag"></i>
                     Payouts</a>
             </li>

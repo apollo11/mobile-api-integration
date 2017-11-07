@@ -13,9 +13,16 @@ class PayoutController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $param = [
+            'payment_status' => $request->get('payment-status')
+        ];
+
+        $payoutObj = new Payout();
+        $output = $payoutObj->payout($param);
+
+        return view('payout.lists', ['list' => $output]);
     }
 
     /**
@@ -82,5 +89,48 @@ class PayoutController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    /**
+     * Approved Job Schedule
+     * @param $id
+     * @return mixed
+     */
+    public function approvedJob($id, $userId)
+    {
+        $payoutObj = new Payout();
+
+        $payoutObj->approveJob($id, $userId);
+
+        return back();
+
+    }
+
+    /**
+     * Job has been processed
+     * @param $id
+     * @param $userId
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function processedJob($id, $userId)
+    {
+        $payoutObj = new Payout();
+        $payoutObj->processedJob($id, $userId);
+
+        return back();
+    }
+
+    /**
+     * Rejecting job
+     * @param $id
+     * @param $userId
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function rejectJob($id, $userId)
+    {
+        $payoutObj = new Payout();
+        $payoutObj->rejectJob($id, $userId);
+
+        return back();
     }
 }
