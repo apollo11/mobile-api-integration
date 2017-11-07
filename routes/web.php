@@ -88,6 +88,8 @@ Route::group(['middleware' => ['auth']], function () {
        Route::post('approved/{id}/{userId}', 'Payout\PayoutController@approvedJob')->name('payout.approved');
        Route::post('processed/{id}/{userId}', 'Payout\PayoutController@processedJob')->name('payout.processed');
        Route::post('rejected/{id}/{userId}', 'Payout\PayoutController@rejectJob')->name('payout.rejected');
+       Route::post('rejected/{id}/{userId}', 'Payout\PayoutController@rejectJob')->name('payout.rejected');
+       Route::post('multiprocessed', 'Payout\PayoutController@multiProcessed')->name('payout.multiple');
     });
 
 });

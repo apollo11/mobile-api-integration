@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Payout;
 
+use Validator;
 use App\Payout;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -132,5 +133,24 @@ class PayoutController extends Controller
         $payoutObj->rejectJob($id, $userId);
 
         return back();
+    }
+
+    public function multiProcessed(Request $request)
+    {
+        $payoutObj = new Payout();
+        $multi['multicheck'] = (array) $request->input('multicheck');
+
+        $validator = Validator::make($multi, ['multicheck' => 'required']);
+        if($validator->fails()) {
+            $result = redirect(route('payout.lists'))
+                ->withErrors($validator)
+                ->withInput();
+
+        } else {
+            $payoutObj->multipleProcessed($multi['multicheck']);
+            $result = back();
+        }
+
+        return $result;
     }
 }

@@ -66,6 +66,15 @@ class Payout extends Model
         return $processed;
     }
 
+    public function multipleProcessed($id)
+    {
+        $processed = DB::table('job_schedules')
+            ->whereIn('id', $id)
+            ->update(['job_status' => 'approved', 'payment_status' => 'processed']);
+
+        return $processed;
+    }
+
     public function rejectJob($id, $userId)
     {
         $processed = DB::table('job_schedules')
