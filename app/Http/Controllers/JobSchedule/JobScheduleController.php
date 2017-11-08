@@ -3,8 +3,6 @@
 namespace App\Http\Controllers\JobSchedule;
 
 use Validator;
-use Carbon\Carbon;
-use App\Job;
 use App\JobSchedule;
 use App\Http\Traits\JobDetailsOutputTrait;
 use App\Http\Traits\HttpResponse;
@@ -50,7 +48,6 @@ class JobScheduleController extends Controller
      */
     public function store(Request $request)
     {
-
         $user = \App\User::find($request->input('user_id'));
 
         if ($user['employee_status'] == 'pending' || $user['employee_status'] == 'reject') {
