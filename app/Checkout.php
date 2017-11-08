@@ -58,6 +58,9 @@ class Checkout extends Model
                 , 'jobs.language'
                 , 'jobs.choices'
                 ,'jobs.job_requirements'
+                , 'jobs.latitude'
+                , 'jobs.longitude'
+
             )
             ->when(!empty($param['id']), function ($query) use ($param) {
 

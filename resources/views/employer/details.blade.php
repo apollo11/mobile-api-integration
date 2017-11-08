@@ -75,61 +75,70 @@
                         <div class="portlet-body">
                             <div class="table-toolbar">
                                 <div class="row">
-                                    <div class="col-md-6">
+                                    <div class="col-md-12">
                                         <div class="btn-group">
-                                            <div class="row">
-                                                <div class="col-md-4">Company Name</div>
-                                                <div class="col-md-8"> {{ $employer->company_name }}</div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-md-4">Company Description</div>
-                                                <div class="col-md-8"> {{ $employer->company_description }}</div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-md-4">Email</div>
-                                                <div class="col-md-8">{{ $employer->email }}</div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-md-4">Business Manager</div>
-                                                <div class="col-md-8"> {{ $employer->business_manager }}</div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-md-4">Contact Person</div>
-                                                <div class="col-md-8"> {{ $employer->contact_person }}</div>
-                                            </div>
+                                            <div class="portlet-body">
+                                                <div class="table-scrollable">
+                                                    <table class="table table-hover">
+                                                        <tbody>
+                                                        <tr>
+                                                            <td colspan="2" align="center"><img class="img-circle" src="/{{ $employer->profile_image_path }}" width="400px" height="200px"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><strong>Company Name</strong></td>
+                                                            <td>{{ $employer->company_name }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><strong>Company Description </strong></td>
+                                                            <td>{{ $employer->company_description }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><strong>Email</strong></td>
+                                                            <td>{{ $employer->email }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><strong>Business Manager </strong></td>
+                                                            <td>{{ $employer->business_manager }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><strong>Contact Person </strong></td>
+                                                            <td>{{ $employer->contact_person }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><strong>Posted Jobs</strong></td>
+                                                            <td> {{ $posting }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="col-md-4"><strong>Applied Jobs </strong></td>
+                                                            <td class="col-md-8"> {{ $applied }}</td>
+                                                        </tr>
+                                                        <td class="col-md-4"><strong>Status</strong></td>
+                                                        @if($employer->status == 0 )
+                                                            <td><span class="label label-sm label-warning"> Pending </span></td>
+                                                        @elseif($employer->status == 1)
+                                                            <td><span class="label label-sm label-success"> Approve </span></td>
+                                                        @elseif($employer->status == 2)
+                                                            <td><span class="label label-sm label-warning"> Upload </span></td>
+                                                        @else
+                                                            <td><span class="label label-sm label-danger"> Reject </span></td>
+                                                        @endif
 
-                                            <div class="row">
-                                                <div class="col-md-4">Posted Jobs</div>
-                                                <div class="col-md-8"> {{ $posting }}</div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-md-4">Applied Jobs</div>
-                                                <div class="col-md-8"> {{ $applied }}</div>
-                                            </div>
-
-                                            <div class="row">
-                                                <div class="col-md-4">Status</div>
-                                                @if($employer->status == 0 )
-                                                    <td><span class="label label-sm label-warning"> Pending </span></td>
-                                                @elseif($employer->status == 1)
-                                                    <td><span class="label label-sm label-success"> Approve </span></td>
-                                                @elseif($employer->status == 2)
-                                                    <td><span class="label label-sm label-warning"> Upload </span></td>
-                                                @else
-                                                    <td><span class="label label-sm label-danger"> Reject </span></td>
-                                                @endif
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="btn-group">
-                                            <div class="row">
-                                                <div class="col-md-12">
-                                                    <img class="img-circle" src="/{{ $employer->profile_image_path }}" height="80px"/>
+                                                        </tbody>
+                                                    </table>
                                                 </div>
                                             </div>
+
                                         </div>
                                     </div>
+                                    {{--<div class="col-md-6">--}}
+                                        {{--<div class="btn-group">--}}
+                                            {{--<div class="row">--}}
+                                                {{--<div class="col-md-12">--}}
+                                                    {{--<img class="img-circle" src="/{{ $employer->profile_image_path }}" height="80px"/>--}}
+                                                {{--</div>--}}
+                                            {{--</div>--}}
+                                        {{--</div>--}}
+                                    {{--</div>--}}
                                 </div>
                             </div>
                         </div>
@@ -183,7 +192,7 @@
                                                     <span></span>
                                                 </label>
                                             </td>
-                                            <td>{{ $value->id }}</td>
+                                            <td>{{ $loop->iteration }}</td>
                                             <td><a href="{{ route('employer.details',['id' => $value->user_id ]) }}">{{ $value->company_name }} </a></td>
                                             <td>{{ $value->job_title }}</td>
                                             <td>{{ $value->no_of_person }}</td>

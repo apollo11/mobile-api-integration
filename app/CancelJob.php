@@ -51,4 +51,50 @@ class CancelJob extends Model
         return $jobs;
     }
 
+    public function cancelJobDetails($userId, $jobId)
+    {
+        $cancelledJob = DB::table('job_schedules')
+            ->leftJoin('jobs', 'jobs.id', '=', 'job_schedules.job_id')
+            ->select(
+                'jobs.id'
+                , 'jobs.description as job_description'
+                , 'jobs.job_title'
+                , 'jobs.status'
+                , 'jobs.location'
+                , 'jobs.location_id'
+                , 'jobs.industry'
+                , 'jobs.industry_id'
+                , 'jobs.job_date as start_date'
+                , 'jobs.created_at'
+                , 'jobs.end_date'
+                , 'jobs.contact_no'
+                , 'jobs.rate'
+                , 'jobs.no_of_person'
+                , 'jobs.contact_person'
+                , 'jobs.contact_no'
+                , 'jobs.job_image_path'
+                , 'jobs.nationality'
+                , 'jobs.choices as gender'
+                , 'jobs.description'
+                , 'jobs.min_age'
+                , 'jobs.max_age'
+                , 'jobs.role'
+                , 'jobs.notes'
+                , 'jobs.language'
+                , 'jobs.choices'
+                , 'jobs.job_requirements'
+                , 'jobs.latitude'
+                , 'job_schedules.job_id'
+                , 'job_schedules.cancel_status'
+                , 'job_schedules.cancel_file_path'
+                , 'job_schedules.cancel_reason'
+
+            )
+            ->where('job_schedules.job_id' ,$jobId)
+            ->where('job_schedules.user_id', $userId)
+            ->first();
+
+        return $cancelledJob;
+    }
+
 }

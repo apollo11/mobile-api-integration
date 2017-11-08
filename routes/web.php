@@ -77,9 +77,21 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::prefix('assign')->group(function() {
         Route::get('/lists','AssignJob\AssignJobsController@index')->name('assign.lists');
-
     });
 
+    Route::prefix('cancel/job')->group(function() {
+        Route::get('details/{userId}/{jobId}', 'CancelJob\CancelJobController@details')->name('cancel.details');
+    });
+
+    Route::prefix('payout')->group(function() {
+       Route::get('lists', 'Payout\PayoutController@index')->name('payout.lists');
+       Route::get('edit/{id}', 'Payout\PayoutController@edit')->name('payout.edit');
+       Route::post('update/{id}', 'Payout\PayoutController@update')->name('payout.update');
+       Route::post('approved/{id}/{userId}', 'Payout\PayoutController@approvedJob')->name('payout.approved');
+       Route::post('processed/{id}/{userId}', 'Payout\PayoutController@processedJob')->name('payout.processed');
+       Route::post('rejected/{id}/{userId}', 'Payout\PayoutController@rejectJob')->name('payout.rejected');
+       Route::post('multiprocessed', 'Payout\PayoutController@multiProcessed')->name('payout.multiple');
+    });
 
 });
 

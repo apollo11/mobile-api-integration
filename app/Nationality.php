@@ -77,4 +77,17 @@ class Nationality extends Model
 
         return $arr;
     }
+
+    public function language()
+    {
+        $lang = [
+            'english'
+            ,'chinese'
+            ,'malay'
+            ,'tamil'
+            ,'hindi'
+        ];
+
+        return $lang;
+    }
 }

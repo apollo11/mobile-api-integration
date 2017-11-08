@@ -6,6 +6,8 @@
 }
 
 .employee-list .dataTables_wrapper .dataTables_filter,
+.payout-list .dataTables_wrapper .dataTables_filter,
+.payout-details .dataTables_wrapper .dataTables_filter,
 .employee-details .dataTables_wrapper .dataTables_filter
  {
     float: left;
@@ -22,5 +24,24 @@
 /* ERROR REQUIRED */
 .is-required {
     color: red;
-
 }
+
+/* Payout */
+
+.payout-list .portlet.light > .portlet-title > .actions {
+    padding: 6px 0 14px 16px;
+}
+
+.payout-list .portlet > .portlet-title > .actions {
+    float: left;
+    display: inline-block;
+    padding: 6px 0;
+}
+
+.payout-list .pay-job {
+    float: right;
+    position: relative;
+    right: 74px;
+    top: 14px;
+}
+

@@ -41,6 +41,8 @@ class Job extends Model
         'job_requirements',
         'employee_status',
         'job_status'
+        ,'latitude'
+        ,'longitude'
     ];
 
     /**
@@ -133,6 +135,8 @@ class Job extends Model
                 , 'jobs.language'
                 , 'jobs.choices'
                 , 'jobs.job_requirements'
+                , 'jobs.latitude'
+                , 'jobs.longitude'
             )
             ->when(!empty($param['industries']), function ($query) use ($param) {
 
@@ -221,6 +225,9 @@ class Job extends Model
                 , 'jobs.language'
                 , 'jobs.choices'
                 , 'jobs.job_requirements'
+                , 'jobs.latitude'
+                , 'jobs.longitude'
+
             )
             ->where('jobs.id', '=', $id)
             ->first();
@@ -269,12 +276,15 @@ class Job extends Model
                 , 'jobs.language'
                 , 'jobs.choices'
                 , 'jobs.job_requirements'
+                , 'jobs.latitude'
+                , 'jobs.longitude'
+
             )
             ->when(!empty($param['status']), function ($query) use ($param) {
 
                 return $query->where('jobs.status', $param['status']);
             })
-            ->orderBy('jobs.id', 'asc')
+            ->orderBy('jobs.id', 'DESC')
             ->get();
 
         return $jobs;
@@ -319,6 +329,9 @@ class Job extends Model
                 , 'jobs.language'
                 , 'jobs.choices'
                 , 'jobs.job_requirements'
+                , 'jobs.latitude'
+                , 'jobs.longitude'
+
             )
             ->where('jobs.id', '=', $id)
             ->first();
@@ -482,6 +495,36 @@ class Job extends Model
             ->delete();
 
         return $user;
+    }
+
+    /**
+     * Age Lists
+     */
+    public function ageList()
+    {
+        $age = [
+            '16-20'
+            , '21-30'
+            , '41-50'
+            , '50'
+        ];
+
+        return $age;
+    }
+
+    /**
+     * list of gender
+     */
+    public function gender()
+    {
+        $gender = [
+            'male'
+            , 'femal'
+            , 'both'
+
+        ];
+
+        return $gender;
     }
 
 }

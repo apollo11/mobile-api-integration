@@ -13,14 +13,18 @@ use App\Job;
 use App\Location;
 use App\Industry;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Http\Request;
+use GuzzleHttp\Client;
+use GuzzleHttp\Exception\RequestException;
+use App\Http\Traits\DateFormatDate;
 use App\Http\Traits\PushNotiftrait;
 use App\Http\Traits\JobDetailsOutputTrait;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
 
 class JobController extends Controller
 {
+    use DateFormatDate;
     use JobDetailsOutputTrait;
     use PushNotiftrait;
 
@@ -28,11 +32,14 @@ class JobController extends Controller
     protected $data;
     public $lastInsertedId;
     public $newJob;
+    protected $googleMap;
+
 
     public function __construct(Request $request)
     {
         $this->request = $request;
         $this->newJob = constant('NEW_JOB');
+        $this->googleMap = constant('GOOGLE_MAP_ENDPOINT');
     }
 
     /**
@@ -63,6 +70,8 @@ class JobController extends Controller
         $industry = $this->industry();
         $nationality = $this->nationalityList();
         $employee = $user->employerList();
+        $age = $this->age();
+
 
 
         return view('job.form', ['user' => $user
@@ -70,6 +79,7 @@ class JobController extends Controller
             , 'location' => $location
             , 'nationality' => $nationality
             , 'employee' => $employee
+            , 'age' => $age
         ]);
     }
 
@@ -84,13 +94,15 @@ class JobController extends Controller
         $data = $request->all();
 
         $location = explode('.', $request->input('job_location'));
+        $zipCode = $this->getAddress($request->input('postal_code'));
+        $data['postal_code'] = $zipCode;
         $industry = explode('.', $request->input('industry'));
         $age = explode('-', $request->input('age'));
         $employer = explode('.', $request->input('job_employer'));
 
         $split = [
             'location_id' => $location[0],
-            'job_location' => $location[1],
+            'location' => $location[1],
             'industry_id' => $industry[0],
             'industry' => $industry[1],
             'min_age' => $age[0],
@@ -107,7 +119,6 @@ class JobController extends Controller
                 ->withErrors($validator)
                 ->withInput();
         } else {
-
             $profile['job_image'] = $request->file('job_image')->store('jobs');
             $mergeData = array_merge($data, $profile, $split);
 
@@ -117,7 +128,6 @@ class JobController extends Controller
 
             return redirect('job/lists');
         }
-
     }
 
     /**
@@ -131,7 +141,7 @@ class JobController extends Controller
             'job_title' => $data['job_title'],
             'job_id' => $data['employer_id'],
             'location_id' => $data['location_id'],
-            'location' => $data['job_location'],
+            'location' => $data['location'],
             'description' => $data['job_description'],
             'job_requirements' => $data['job_requirements'],
             'role' => $data['job_role'],
@@ -145,14 +155,16 @@ class JobController extends Controller
             'employer' => $data['employer'],
             'rate' => $data['hourly_rate'],
             'language' => $data['preferred_language'],
-            'job_date' => $data['date'],
-            'end_date' => $data['end_date'],
+            'job_date' => $this->convertToUtc($data['date']),
+            'end_date' => $this->convertToUtc($data['end_date']),
             'industry_id' => $data['industry_id'],
             'industry' => $data['industry'],
             'notes' => $data['notes'],
             'status' => $data['status'],
             'min_age' => $data['min_age'],
-            'max_age' => $data['max_age']
+            'max_age' => $data['max_age'],
+            'latitude' => $data['postal_code']['lat'],
+            'longitude' =>  $data['postal_code']['lng']
         ]);
 
         $this->lastInsertedId = $insertedId->id;
@@ -170,7 +182,7 @@ class JobController extends Controller
             'job_title' => $data['job_title'],
             'job_id' => Auth::user()->id,
             'location_id' => $data['location_id'],
-            'location' => $data['job_location'],
+            'location' => $data['location'],
             'description' => $data['job_description'],
             'job_requirements' => $data['job_requirements'],
             'role' => $data['job_role'],
@@ -184,8 +196,8 @@ class JobController extends Controller
             'employer' => $data['job_employer'],
             'rate' => $data['hourly_rate'],
             'language' => $data['preferred_language'],
-            'job_date' => $data['date'],
-            'end_date' => $data['end_date'],
+            'job_date' => $this->convertToUtc($data['date']),
+            'end_date' => $this->convertToUtc($data['end_date']),
             'industry_id' => $data['industry_id'],
             'industry' => $data['industry'],
             'notes' => $data['notes'],
@@ -196,10 +208,9 @@ class JobController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Return Job Details from users
      *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function show()
     {
@@ -224,16 +235,18 @@ class JobController extends Controller
         $job = new Job();
 
         $details = $job->jobAdminDetails($id);
-
         $location = $this->location();
         $industry = $this->industry();
         $nationality = $this->nationalityList();
+        $age = $this->age();
 
         return view('job.edit-form', ['user' => $user
             ,'industry' => $industry
             , 'location' => $location
             , 'details' => $details
             , 'nationality' => $nationality
+            , 'age' => $age
+
         ]);
 
     }
@@ -252,14 +265,24 @@ class JobController extends Controller
         $location = explode('.', $request->input('job_location'));
         $industry = explode('.', $request->input('industry'));
         $age = explode('-', $request->input('age'));
+        $zipCode = $this->getAddress($request->input('postal_code'));
+        $data['postal_code'] = $zipCode;
 
+//        $split = [
+//            'location_id' => $location[0],
+//            'job_location' => $location[1],
+//            'industry_id' => $industry[0],
+//            'industry' => $industry[1],
+//            'min_age' => $age[0],
+//            'max_age' => $age[1]
+//        ];
         $split = [
             'location_id' => $location[0],
-            'job_location' => $location[1],
+            'location' => $location[1],
             'industry_id' => $industry[0],
             'industry' => $industry[1],
             'min_age' => $age[0],
-            'max_age' => $age[1]
+            'max_age' => $age[1],
         ];
 
         $validator = $this->rules($data);
@@ -347,7 +370,8 @@ class JobController extends Controller
             'contact_no' => 'required|string',
             'industry' => 'required|string',
             'age' => 'required',
-            'nationality' => 'required|string'
+            'nationality' => 'required|string',
+            'postal_code' => 'required'
         ]);
     }
 
@@ -398,6 +422,16 @@ class JobController extends Controller
         $nationality = new Nationality();
 
         return $nationality->nationalityDropdown();
+    }
+
+    /**
+     * Set list
+     */
+    public function age()
+    {
+        $age = new Job();
+
+        return $age->ageList();
     }
 
     /**
@@ -524,6 +558,40 @@ class JobController extends Controller
         return $output;
     }
 
+    /**
+     * Get Address using postal code
+     * @param $postal
+     * @return string
+     */
+    public function getAddress($postal)
+    {
+        $http = new Client();
+        try {
+            $response = $http->get($this->googleMap . '?components=postal_code:' .$postal. '&key=' . env('GOOGLE_API_KEY'));
+            $result = json_decode((string)$response->getBody(), true);
+            if(!empty($result['results'])) {
+
+                $param['location'] = [
+                    'lng' => $result['results'][0]['geometry']['location']['lng'],
+                    'lat' => $result['results'][0]['geometry']['location']['lat']
+                ];
+
+            }else {
+
+                $param['location'] = '';
+            }
+
+            return $param['location'];
+
+        } catch (RequestException $e) {
+
+            if ($e->hasResponse()) {
+
+                return 'Unknown Address';
+            }
+        }
+
+    }
 
 
 }
