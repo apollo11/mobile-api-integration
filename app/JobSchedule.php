@@ -25,6 +25,7 @@ class JobSchedule extends Model
         , 'job_salary'
         , 'process_date'
         , 'payment_methods'
+        , 'applied_date'
     ];
 
     /**
@@ -199,6 +200,10 @@ class JobSchedule extends Model
         return $jobs;
     }
 
+    /**
+     * @param $id
+     * @return mixed
+     */
     public function getAvailJobsByUser($id)
     {
         $jobs = DB::table('users')
@@ -237,6 +242,10 @@ class JobSchedule extends Model
         return $jobs;
     }
 
+    /**
+     * @param $id
+     * @return mixed
+     */
     public function getRelatedCandidates($id)
     {
         $jobs = DB::table('users')
@@ -283,6 +292,10 @@ class JobSchedule extends Model
         return $jobs;
     }
 
+    /**
+     * @param $id
+     * @return mixed
+     */
     public function countAppliedJobs($id)
     {
         $count = DB::table('users')
@@ -297,6 +310,10 @@ class JobSchedule extends Model
         return $count;
     }
 
+    /**
+     * @param $id
+     * @return mixed
+     */
     public function countCompletedJobs($id)
     {
         $count = DB::table('users')
@@ -310,6 +327,15 @@ class JobSchedule extends Model
 
         return $count;
 
+    }
+
+    public function checkScheduleDate($JobDate)
+    {
+        $schedule = DB::table('job_schedules')
+            ->where('checkin_datetime',$JobDate)
+        ->get();
+
+        return $schedule;
     }
 
 

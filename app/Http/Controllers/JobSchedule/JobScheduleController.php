@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\JobSchedule;
 
 use Validator;
+use Carbon\Carbon;
 use App\Job;
 use App\JobSchedule;
 use App\Http\Traits\JobDetailsOutputTrait;
@@ -49,6 +50,7 @@ class JobScheduleController extends Controller
      */
     public function store(Request $request)
     {
+
         $user = \App\User::find($request->input('user_id'));
 
         if ($user['employee_status'] == 'pending' || $user['employee_status'] == 'reject') {
@@ -56,20 +58,28 @@ class JobScheduleController extends Controller
             $output = $this->errorResponse(['Your account status is pending or blocked'], 'User Verification', 110008, 400);
 
         } else {
-
+            $job = $this->findJob($request->input('job_id'));
             $checkJob = $this->isJobExist($request->input('job_id'), $request->input('user_id'));
 
-            if ($checkJob != null) {
+            if ($job['job_date'] == $checkJob['applied_date']) {
 
-                $output = $this->errorResponse(['This job is already on your scheduled job list.'], 'Apply Failure', 110009, 400);
+                $output = $this->errorResponse(['You have already had a job at the same time slot!.'], 'Apply Failure', 1100014, 400);
 
             } else {
 
-                $user->jobSchedule()->create(['name' => null, 'job_id' => $request->input('job_id'), 'job_status' =>"accepted"]);
+                if ($checkJob != null) {
 
-                $this->updateJobStatus($request->input('job_id'));
+                    $output = $this->errorResponse(['This job is already on your scheduled job list.'], 'Apply Failure', 110009, 400);
 
-                $output = $this->show($request->input('job_id'));
+                } else {
+
+                    $user->jobSchedule()->create(['name' => null, 'job_id' => $request->input('job_id'), 'job_status' => "accepted", 'applied_date' => $job['job_date']]);
+
+                    $this->updateJobStatus($request->input('job_id'));
+
+                    $output = $this->show($request->input('job_id'));
+
+                }
 
             }
 
@@ -91,6 +101,16 @@ class JobScheduleController extends Controller
         return $jobSched;
 
     }
+
+    public function compareJobSchedDate($jobDate)
+    {
+        $findSched = new JobSchedule();
+
+        $result = $findSched->checkScheduleDate($jobDate);
+
+        return $result;
+    }
+
 
     /**
      * Display the specified resource.
@@ -154,6 +174,13 @@ class JobScheduleController extends Controller
             ->first();
 
         return $employee;
+    }
+
+    public function findJob($id) {
+
+        $find = \App\Job::find($id)->first();
+
+        return $find;
     }
 
     /**
