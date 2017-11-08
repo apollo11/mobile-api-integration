@@ -93,7 +93,7 @@
                                                             <td>{{ $employer->company_description }}</td>
                                                         </tr>
                                                         <tr>
-                                                            <td><strong>>Email</strong</td>
+                                                            <td><strong>Email</strong></td>
                                                             <td>{{ $employer->email }}</td>
                                                         </tr>
                                                         <tr>
@@ -192,7 +192,7 @@
                                                     <span></span>
                                                 </label>
                                             </td>
-                                            <td>{{ $value->id }}</td>
+                                            <td>{{ $loop->iteration }}</td>
                                             <td><a href="{{ route('employer.details',['id' => $value->user_id ]) }}">{{ $value->company_name }} </a></td>
                                             <td>{{ $value->job_title }}</td>
                                             <td>{{ $value->no_of_person }}</td>

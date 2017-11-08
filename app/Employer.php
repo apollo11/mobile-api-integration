@@ -63,6 +63,7 @@ class Employer extends Model
                 , 'employer.status'
                 , 'employer.business_manager'
                 , 'employer.contact_person'
+                , 'employer.contact_no'
                 , 'employer.rate'
             )
             ->where('employer.id', '=', $id)

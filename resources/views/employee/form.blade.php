@@ -89,7 +89,7 @@
                                         <label class="col-md-3 control-label">NRIC</label>
                                         <div class="col-md-7">
                                             <input type="text" class="form-control" placeholder="Enter NRIC"
-                                                   name="nric_no"/>
+                                                   name="nric_no" value="{{ old('"nric_no') }}" />
                                             @if ($errors->has('password'))
                                                 <span class="help-block">
                                                 <strong>{{ $errors->first('nric_no') }}</strong>
@@ -102,7 +102,7 @@
                                         <label class="col-md-3 control-label">School</label>
                                         <div class="col-md-7">
                                             <input type="text" class="form-control" placeholder="Enter School"
-                                                   name="school"/>
+                                                   name="school" value="{{ old('school') }}"/>
                                             @if ($errors->has('school'))
                                                 <span class="help-block">
                                                 <strong>{{ $errors->first('school') }}</strong>

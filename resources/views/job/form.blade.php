@@ -148,7 +148,7 @@
                                         <div class="col-md-7">
                                             <select class="form-control" name="job_location">
                                                 @foreach( $location as $value)
-                                                    {{$input = $value->id.'.'.$value->name}}
+                                                    {{ $input = $value->id.'.'.$value->name }}
                                                     @if($loop->count == 0)
                                                         <option value="none">None</option>
                                                     @else
@@ -243,7 +243,7 @@
                                             @endif
                                              @if(Auth::user()->role_id == 0)
                                                 <input type="text" class="form-control" placeholder="Enter Business Manager"
-                                                       value="{{ Auth::user()->business_manager }}" name="business_manager">
+                                                       value="{{ old('business_manager') }}" name="business_manager">
                                                 @endif
 
                                             @if ($errors->has('business_manager'))
@@ -302,10 +302,10 @@
                                         <div class="col-md-7">
                                             <select class="form-control" name="preferred_language">
                                                 <option value="english">English</option>
-                                                <option value="english">Chinese</option>
-                                                <option value="english">Malay</option>
-                                                <option value="english">Tamil</option>
-                                                <option value="english">Hindi</option>
+                                                <option value="chinese">Chinese</option>
+                                                <option value="malay">Malay</option>
+                                                <option value="tamil">Tamil</option>
+                                                <option value="hindi">Hindi</option>
                                             </select>
                                             @if ($errors->has('preferred_language'))
                                                 <span class="help-block">
@@ -356,7 +356,7 @@
                                     <div class="form-group{{ $errors->has('notes') ? ' has-error' : '' }}">
                                         <label class="col-md-3 control-label">Important Notes<span class="is-required">*</span></label>
                                         <div class="col-md-7">
-                                            <textarea class="form-control" name="notes" rows="3"></textarea>
+                                            <textarea class="form-control" name="notes" rows="3"> {{ old('notes') }}</textarea>
                                             @if ($errors->has('notes'))
                                                 <span class="help-block">
                                                 {{ $errors->first('notes') }}

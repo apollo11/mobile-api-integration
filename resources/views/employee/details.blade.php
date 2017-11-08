@@ -6,6 +6,17 @@
             {{ csrf_field() }}
             <input type="submit" name="multiple" value="Delete">
         </form>
+
+        <form id="payout-{{ $jobs->jobid }}" action="{{ route('payout.approved',['id' => $jobs->schedule_id, 'userId' => $jobs->user_id]) }}"
+              method="POST" style="display: none;">
+            {{ csrf_field() }}
+            <input type="submit" name="payout_submit" value="Approve">
+        </form>
+        <form id="reject-{{ $jobs->jobid }}" action="{{ route('payout.rejected',['id' => $jobs->schedule_id, 'userId' => $jobs->user_id]) }}"
+              method="POST" style="display: none;">
+            {{ csrf_field() }}
+            <input type="submit" name="reject_submit" value="Delete">
+        </form>
     @endforeach
 
     <form id="approve-{{ $userDetails->id }}" action="{{ route('employee.approve',['id' => $userDetails->id]) }}"
@@ -209,7 +220,7 @@
                                                         <tr>
                                                             @if($userDetails->signature_file_path !='none')
                                                                 <td><strong>Signature</strong></td>
-                                                                <td><img src="/{{ $userDetails->signature_file_path }}" with="200px"/></td>
+                                                                <td><img src="/{{ $userDetails->signature_file_path }}" width="200px"/></td>
                                                             @endif
                                                         </tr>
                                                         <tr>
@@ -394,7 +405,24 @@
                                                         <li>
                                                             <a href="{{ route('job.details',['id' =>  $jobs->jobid ])  }}">
                                                                 <i class="fa fa-eye"></i> View </a>
-                                                        </li>                                                </ul>
+                                                        </li>
+                                                        @if($jobs->schedule_status == 'completed')
+                                                            <li>
+                                                                <a href="{{ route('payout.approved',['id' => $jobs->schedule_id, 'userId' => $jobs->user_id])  }}"
+                                                                   onclick="event.preventDefault();
+                                                                           document.getElementById('{{'payout-'.$jobs->jobid }}').submit();">
+                                                                    <i class="fa fa-check-square-o"></i> Approve</a>
+                                                            </li>
+                                                            <li>
+                                                                <a href="{{ route('payout.rejected',['id' => $jobs->schedule_id, 'userId' => $jobs->user_id]) }}"
+                                                                   onclick="event.preventDefault();
+                                                                           document.getElementById('{{'reject-'.$jobs->jobid }}').submit();">
+                                                                    <i class="fa fa-close"></i> Reject
+                                                                </a>
+                                                            </li>
+
+                                                        @endif
+                                                    </ul>
                                                 </div>
                                             </td>
                                         </tr>

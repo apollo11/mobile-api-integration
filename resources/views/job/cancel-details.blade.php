@@ -26,9 +26,6 @@
                                 <a class="btn sbold green"
                                    href="{{ url()->previous()  }}">
                                     Back</a>
-                                <a class="btn sbold green" href="#" class="btn" data-toggle="modal"
-                                   data-target="#job-assigned">Assign Job</a>
-
                                 <input class="btn sbold green" name="multiple" onclick="window.print()" value="Print"
                                        type="submit"/>
                             </div>
@@ -98,7 +95,7 @@
                                                         </tr>
                                                         <tr>
                                                             <td><strong>File Upload when Cancelled</strong></td>
-                                                            <td><img src="/{{ $details->cancel_file_path }}" target="_blank"></td>
+                                                            <td><img src="/{{ $details->cancel_file_path }}" width="200px" ></td>
                                                         </tr>
                                                        </tbody>
                                                     </table>
