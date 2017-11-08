@@ -93,6 +93,11 @@ Route::group(['middleware' => ['auth']], function () {
        Route::post('multiprocessed', 'Payout\PayoutController@multiProcessed')->name('payout.multiple');
     });
 
+    Route::prefix('recipient')->group(function() {
+        Route::get('create', 'RecipientGroup\RecipientGroupController@create');
+        Route::post('search', 'RecipientGroup\RecipientGroupController@advanceSearch');
+    });
+
 });
 
 Route::get('/home', 'HomeController@index')->name('home');

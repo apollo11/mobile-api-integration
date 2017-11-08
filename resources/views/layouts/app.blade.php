@@ -260,6 +260,27 @@
                 "scrollY":"500"
             });
 
+            $('#select-group, #select-employer ').DataTable({
+                autoFill: true,
+                "scrollY":"200",
+                "searching": false,
+                "bPaginate": false,
+                "paging":   false,
+                "info":     false
+            });
+
+            $('#recipient-form-list').DataTable({
+                autoFill: true,
+                "scrollY":"300",
+                "searching": false,
+                "bPaginate": true,
+                "paging":   true,
+                "info":     false
+            });
+
+
+
+
 
             $("#myModal").on("show", function() {    // wire up the OK button to dismiss the modal when shown
                 $("#myModal a.btn").on("click", function(e) {
