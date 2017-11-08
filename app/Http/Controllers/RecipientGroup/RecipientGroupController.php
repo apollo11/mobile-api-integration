@@ -126,9 +126,9 @@ class RecipientGroupController extends Controller
      */
     public function saveGroup(array $data)
     {
-        $recipient = new RecipientGroup();
+        $recipient = \App\User::find($data['employee']);
 
-        $recipient->create(['group_name' => $data['group_name'], 'user_id' => $data['employee']]);
+        $recipient->create(['group_name' => $data['group_name'], 'user_id' => $data['employee']])->attach($data['employee']);
 
 //        return $user;
 
