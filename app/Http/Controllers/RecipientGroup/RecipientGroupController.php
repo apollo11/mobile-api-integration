@@ -45,28 +45,21 @@ class RecipientGroupController extends Controller
      */
     public function store(Request $request)
     {
-        $userObj = new User();
         $data = $request->all();
         $validator = Validator::make($data, ['employee' => 'required', 'group_name' => 'required']);
 
         if ($validator->fails()) {
 
-            $test = redirect(route('recipient.create'))
+            $result = redirect(route('recipient.create'))
                 ->withErrors($validator)
                 ->withInput();
         } else {
 
-            $result = User::find($data);
-            $test = $result['id'];
-            //$result = $data;
+            return $this->saveGroup($data);
+            $result = $data;
         }
 
-        return $test;
-//        return $data;
-
-
-
-       // $userObj->recipient()->attach()
+        return $result;
     }
 
     /**
@@ -128,6 +121,32 @@ class RecipientGroupController extends Controller
 
     }
 
+    /**
+     * @param array $data
+     */
+    public function saveGroup(array $data)
+    {
+        $recipient = new RecipientGroup();
+
+        $recipient->create(['group_name' => $data['group_name'], 'user_id' => $data['employee']]);
+
+//        return $user;
+
+//        $insertedId = $user->testRecipient();
+//        return $insertedId;
+        //$this->saveUserRecipientGroup($insertedId, $data);
+    }
+
+    /**
+     * Save User Recipient Group
+     */
+    public function saveUserRecipientGroup($id, $data)
+    {
+        $recipientUser = \App\RecipientGroup::find($id);
+        $recipientUser->userRecipientGroup()->create([
+            'user_id' => $data['employee']
+        ]);
+    }
 
 
 }

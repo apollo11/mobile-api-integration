@@ -50,6 +50,9 @@ class User extends Authenticatable
 
 //    protected $dateFormat = 'U';
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function job()
     {
        return  $this->hasMany('\App\Job');
@@ -85,6 +88,15 @@ class User extends Authenticatable
     public function userNotification()
     {
         return $this->hasMany('\App\Notification');
+    }
+
+    /**
+     * Relationship with Users
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function recipient()
+    {
+        return $this->hasMany('\App\RecipientGroup');
     }
 
     /**
@@ -151,16 +163,6 @@ class User extends Authenticatable
     {
         return $this->belongsToMany('\App\AssignJob')->withPivot('is_assigned', 'user_id');
     }
-
-    /**
-     * Relationship with jobs
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function recipient()
-    {
-        return $this->belongsToMany('\App\RecipientGroup')->withPivot('group_name')->withTimestamps();
-    }
-
 
 
 }

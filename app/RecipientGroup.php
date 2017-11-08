@@ -8,11 +8,36 @@ use Illuminate\Database\Eloquent\Model;
 class RecipientGroup extends Model
 {
     /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = ['group_name'];
+
+    /**
      * The table associated with the model.
      *
      * @var string
      */
     protected $table = 'recipient_groups';
+
+    /**
+     * Has may relationship
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function userRecipientGroup()
+    {
+        return $this->hasMany('\App\UserRecipientGroup');
+    }
+
+    /**
+     * Belongs to user
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function user()
+    {
+        return $this->belongsTo('\App\User');
+    }
 
     /**
      * Agent Name List

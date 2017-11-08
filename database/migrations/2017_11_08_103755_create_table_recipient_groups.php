@@ -17,7 +17,7 @@ class CreateTableRecipientGroups extends Migration
             $table->increments('id');
             $table->string('group_name')->nullable();
             $table->integer('user_id')->unsigned()->nullable();
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');;
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
         });
     }
