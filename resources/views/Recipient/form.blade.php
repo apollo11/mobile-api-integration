@@ -26,28 +26,15 @@
                             </div>
                         </div>
                         <div class="portlet-body form">
-                            <form class="form-horizontal" method="POST" role="form"
-                                  action=""
-                                  enctype="multipart/form-data">
-                                {{ csrf_field() }}
+
                                 <div class="form-body">
                                     <input type="hidden" name="platform" value="web"/>
 
-                                    <div class="form-group{{ $errors->has('group') ? ' has-error' : '' }}">
-                                        <div class="row">
-                                            <label class="col-md-2 control-label">Group Name</label>
-                                            <div class="col-md-4">
-                                                <input type="text" class="form-control" placeholder="Enter Group Name"
-                                                       value="{{ old('group_name') }}" name="group_name">
-                                                @if ($errors->has('group_name'))
-                                                    <span class="help-block">
-                                                {{ $errors->first('group_name') }}
-                                               </span>
-                                                @endif
-                                            </div>
-                                        </div>
-                                    </div>
                                     <div class="form-group">
+                                        <form class="form-horizontal" method="POST" role="form"
+                                              action=""
+                                              enctype="multipart/form-data">
+                                            {{ csrf_field() }}
                                         <div class="row">
                                             <label class="col-md-2 control-label">Select</label>
                                             <div class="col-md-4">
@@ -121,7 +108,20 @@
                                                 <a href="#" type="submit" class="btn green">Advance Search</a>
                                             </div>
                                         </div>
+                                        </form>
+                                        <br />
+
                                         <div class="row">
+                                            <label class="col-md-2 control-label">Group Name</label>
+                                            <div class="col-md-4">
+                                                <input type="text" class="form-control" placeholder="Enter Group Name"
+                                                       value="{{ old('group_name') }}" name="group_name">
+                                                @if ($errors->has('group_name'))
+                                                    <span class="help-block">
+                                            {{ $errors->first('group_name') }}
+                                           </span>
+                                                @endif
+                                            </div>
                                             <div class="col-md-12">
                                                 <table class="table table-striped table-bordered table-hover table-checkable order-column"
                                                        id="recipient-form-list">
@@ -178,7 +178,6 @@
                                         </div>
                                     </div>
                                 </div>
-                            </form>
                         </div>
                         <div class="row">
                             <div class="col-md-offset-3 col-md-9">

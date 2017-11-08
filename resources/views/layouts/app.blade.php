@@ -274,7 +274,7 @@
                 "scrollY":"300",
                 "searching": false,
                 "bPaginate": true,
-                "paging":   true,
+                "paging":   false,
                 "info":     false
             });
 
