@@ -60,7 +60,7 @@ class JobScheduleController extends Controller
 
             if ($job['job_date'] == $checkJob['applied_date']) {
 
-                $output = $this->errorResponse(['You have already had a job at the same time slot!.'], 'Apply Failure', 1100014, 400);
+                $output = $this->errorResponse(['You have already had a job at the same time slot!.'], 'Apply Failure', 110009, 400);
 
             } else {
 
