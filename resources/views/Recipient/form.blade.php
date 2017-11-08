@@ -27,14 +27,14 @@
                         </div>
                         <div class="portlet-body form">
 
-                                <div class="form-body">
-                                    <input type="hidden" name="platform" value="web"/>
+                            <div class="form-body">
+                                <input type="hidden" name="platform" value="web"/>
 
-                                    <div class="form-group">
-                                        <form class="form-horizontal" method="POST" role="form"
-                                              action=""
-                                              enctype="multipart/form-data">
-                                            {{ csrf_field() }}
+                                <div class="form-group">
+                                    <form class="form-horizontal" method="POST" role="form"
+                                          action="{{ route('recipient.search') }}"
+                                          enctype="multipart/form-data">
+                                        {{ csrf_field() }}
                                         <div class="row">
                                             <label class="col-md-2 control-label">Select</label>
                                             <div class="col-md-4">
@@ -105,21 +105,38 @@
                                                 </table>
                                             </div>
                                             <div class="col-md-offset-2 col-md-6">
-                                                <a href="#" type="submit" class="btn green">Advance Search</a>
+                                                <input type="submit" class="btn green" value="Advance Search">
                                             </div>
                                         </div>
-                                        </form>
-                                        <br />
-
+                                    </form>
+                                    <br/>
+                                    <form class="form-horizontal" method="POST" role="form"
+                                          action="{{ route('recipient.store') }}"
+                                          enctype="multipart/form-data">
+                                        {{ csrf_field() }}
                                         <div class="row">
+                                            @if($errors->has('employee') || $errors->has('group_name'))
+                                                <div class="alert alert-danger alert-dismissable">
+                                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+                                                    <ul>
+                                                        <li>{{ $errors->first('employee') }}</li>
+                                                        <li>{{ $errors->first('group_name') }}</li>
+                                                    </ul>
+                                                </div>
+                                            @endif
+                                                {{--@if($errors->has('group_name'))--}}
+                                                    {{--<div class="alert alert-danger alert-dismissable">--}}
+                                                        {{--<button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>--}}
+
+                                                    {{--</div>--}}
+                                                {{--@endif--}}
+
                                             <label class="col-md-2 control-label">Group Name</label>
                                             <div class="col-md-4">
                                                 <input type="text" class="form-control" placeholder="Enter Group Name"
                                                        value="{{ old('group_name') }}" name="group_name">
                                                 @if ($errors->has('group_name'))
-                                                    <span class="help-block">
-                                            {{ $errors->first('group_name') }}
-                                           </span>
+                                                    <span class="help-block"> {{ $errors->first('group_name') }}</span>
                                                 @endif
                                             </div>
                                             <div class="col-md-12">
@@ -170,27 +187,22 @@
                                                     @endforeach
                                                     </tbody>
                                                 </table>
-                                                {{--<pre>--}}
-                                                {{--{{ print_r($employee) }}--}}
-                                            {{--</pre>--}}
                                             </div>
 
                                         </div>
-                                    </div>
+                                        <div class="row">
+                                            <div class="col-md-offset-3 col-md-9">
+                                                <button type="submit" class="btn green">Submit</button>
+                                                <button type="button" class="btn default">Cancel</button>
+                                            </div>
+                                        </div>
+                                    </form>
                                 </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-offset-3 col-md-9">
-                                <button type="submit" class="btn green">Submit</button>
-                                <button type="button" class="btn default">Cancel</button>
                             </div>
                         </div>
                     </div>
-                    </form>
                 </div>
             </div>
         </div>
-    </div>
-    </div>
     </div>
 @endsection

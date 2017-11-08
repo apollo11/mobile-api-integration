@@ -8,6 +8,13 @@ use Illuminate\Database\Eloquent\Model;
 class RecipientGroup extends Model
 {
     /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'recipient_groups';
+
+    /**
      * Agent Name List
      */
     public function agentList()
@@ -48,7 +55,10 @@ class RecipientGroup extends Model
 
                 return $query->whereIn('jobs.business_manager', $param['agent']);
             })
+            ->when(!empty($param['employer']), function ($query) use ($param) {
 
+                return $query->whereIn('jobs.employer', $param['employer']);
+            })
             ->distinct()
             ->where('users.role_id', 2)
             ->get();

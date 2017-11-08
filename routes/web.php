@@ -96,6 +96,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::prefix('recipient')->group(function() {
         Route::get('create', 'RecipientGroup\RecipientGroupController@create')->name('recipient.create');
         Route::post('search', 'RecipientGroup\RecipientGroupController@advanceSearch')->name('recipient.search');
+        Route::post('add', 'RecipientGroup\RecipientGroupController@store')->name('recipient.store');
     });
 
 });

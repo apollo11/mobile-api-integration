@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\RecipientGroup;
 
+use Validator;
+use App\User;
 use App\RecipientGroup;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -43,7 +45,28 @@ class RecipientGroupController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $userObj = new User();
+        $data = $request->all();
+        $validator = Validator::make($data, ['employee' => 'required', 'group_name' => 'required']);
+
+        if ($validator->fails()) {
+
+            $test = redirect(route('recipient.create'))
+                ->withErrors($validator)
+                ->withInput();
+        } else {
+
+            $result = User::find($data);
+            $test = $result['id'];
+            //$result = $data;
+        }
+
+        return $test;
+//        return $data;
+
+
+
+       // $userObj->recipient()->attach()
     }
 
     /**
@@ -93,12 +116,15 @@ class RecipientGroupController extends Controller
 
     public function advanceSearch(Request $request)
     {
-        $param = [
-            'agent' => $request->input('agent'),
-            'employer' => $request->input('employer')
-        ];
+        $data = $request->all();
+        $recipientObj = new RecipientGroup();
 
-        return $param;
+
+        return view('Recipient.form',
+            [
+                'agent' => $recipientObj->agentList(),
+                'employee' => $recipientObj->employeeList($data)
+            ]);
 
     }
 
