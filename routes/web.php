@@ -93,6 +93,13 @@ Route::group(['middleware' => ['auth']], function () {
        Route::post('multiprocessed', 'Payout\PayoutController@multiProcessed')->name('payout.multiple');
     });
 
+    Route::prefix('recipient')->group(function() {
+        Route::get('create', 'RecipientGroup\RecipientGroupController@create')->name('recipient.create');
+        Route::get('lists', 'RecipientGroup\RecipientGroupController@index')->name('recipient.lists');
+        Route::post('search', 'RecipientGroup\RecipientGroupController@advanceSearch')->name('recipient.search');
+        Route::post('add', 'RecipientGroup\RecipientGroupController@store')->name('recipient.store');
+    });
+
 });
 
 Route::get('/home', 'HomeController@index')->name('home');

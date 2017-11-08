@@ -97,6 +97,13 @@
                 </a>
             </li>
             <li>
+                <a href="{{ route('recipient.lists') }}">
+                    <i class="icon-settings"></i>
+                    <span class="title">Recipient Group</span>
+                    <span class="arrow "></span>
+                </a>
+            </li>
+            <li>
                 <a href="javascript:;">
                     <i class="icon-logout"></i>
                     <span class="title">Settings</span>
