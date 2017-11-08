@@ -32,7 +32,7 @@
                                 <div class="form-body">
                                     <input type="hidden" name="job_id" value="{{ $details->id }}" />
                                     <div class="form-group{{ $errors->has('job_title') ? ' has-error' : '' }}">
-                                        <label class="col-md-3 control-label">Job Title</label>
+                                        <label class="col-md-3 control-label">Job Title<span class="is-required">*</span></label>
                                         <div class="col-md-7">
                                             <input type="text" class="form-control" placeholder="Enter Job Title"
                                                    value="{{ $details->job_title }}" name="job_title">
@@ -45,7 +45,7 @@
                                     </div>
 
                                     <div class="form-group{{ $errors->has('job_description') ? ' has-error' : '' }}">
-                                        <label class="col-md-3 control-label">Job Description</label>
+                                        <label class="col-md-3 control-label">Job Description<span class="is-required">*</span></label>
                                         <div class="col-md-7">
                                             <textarea class="form-control" name="job_description"
                                                       rows="3">{{ $details->job_description }}</textarea>
@@ -58,7 +58,7 @@
                                     </div>
 
                                     <div class="form-group{{ $errors->has('job_requirements') ? ' has-error' : '' }}">
-                                        <label class="col-md-3 control-label">Job Requirements</label>
+                                        <label class="col-md-3 control-label">Job Requirements<span class="is-required">*</span></label>
                                         <div class="col-md-7">
                                             <textarea class="form-control" name="job_requirements"
                                                       rows="3">{{ $details->job_requirements }}</textarea>
@@ -71,7 +71,7 @@
                                     </div>
 
                                     <div class="form-group{{ $errors->has('job_role') ? ' has-error' : '' }}">
-                                        <label class="col-md-3 control-label">Job Function / Role</label>
+                                        <label class="col-md-3 control-label">Job Function / Role<span class="is-required">*</span></label>
                                         <div class="col-md-7">
                                             <input type="text" class="form-control" placeholder="Enter Job Role"
                                                    value="{{ $details->role }}" name="job_role">
@@ -84,13 +84,12 @@
                                     </div>
 
                                     <div class="form-group{{ $errors->has('age') ? ' has-error' : '' }}">
-                                        <label class="col-md-3 control-label">Age</label>
+                                        <label class="col-md-3 control-label">Age<span class="is-required">*</span></label>
                                         <div class="col-md-7">
                                             <select class="form-control" name="age">
-                                                <option value="16-20">16-20</option>
-                                                <option value="21-30">21-30</option>
-                                                <option value="41-50">41-50</option>
-                                                <option value="50">above 50</option>
+                                                @foreach($age as $key => $value)
+                                                    <option value="{{ $value }}" {{ old('age') == $value ? "selected" : "" }}>{{ $value }}</option>
+                                                @endforeach
                                             </select>
 
                                             @if ($errors->has('age'))
@@ -102,21 +101,21 @@
                                     </div>
 
                                     <div class="form-group {{ $errors->has('gender') ? ' has-error' : '' }}">
-                                        <label class="col-md-3 control-label">Gender</label>
+                                        <label class="col-md-3 control-label">Gender<span class="is-required">*</span></label>
                                         <div class="col-md-7">
                                             <div class="mt-checkbox-inline">
                                                 <label class="mt-checkbox">
-                                                    <input type="radio" name="gender" value="male">
+                                                    <input type="radio" name="gender" value="male" {{ $details->choices == 'male' ? 'checked' : '' }}>
                                                     Male
                                                     <span></span>
                                                 </label>
                                                 <label class="mt-checkbox">
-                                                    <input type="radio" name="gender" value="female">
+                                                    <input type="radio" name="gender" value="female" {{ $details->choices == 'female' ? 'checked' : '' }}>
                                                     Female
                                                     <span></span>
                                                 </label>
                                                 <label class="mt-checkbox">
-                                                    <input type="radio" name="gender" value="both">
+                                                    <input type="radio" name="gender" value="both" {{ $details->choices == 'both' ? 'checked' : '' }}>
                                                     both
                                                     <span></span>
                                                 </label>
@@ -129,16 +128,30 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="form-group{{ $errors->has('postal_code') ? ' has-error' : '' }}">
+                                        <label class="col-md-3 control-label">Zip Code<span class="is-required">*</span></label>
+                                        <div class="col-md-7">
+                                            <input type="text" class="form-control" placeholder="Enter Postal Code"
+                                                   value="{{ old('postal_code') }}" name="postal_code">
+                                            <p class="help-block"> Zip Code must be 6 digits ie.(018956)</p>
+                                            @if ($errors->has('postal_code'))
+                                                <span class="help-block">
+                                                {{ $errors->first('postal_code') }}
+                                               </span>
+                                            @endif
+                                        </div>
+                                    </div>
 
                                     <div class="form-group{{ $errors->has('job_location') ? ' has-error' : '' }}">
-                                        <label class="col-md-3 control-label">Location</label>
+                                        <label class="col-md-3 control-label">Filter by location<span class="is-required">*</span></label>
                                         <div class="col-md-7">
                                             <select class="form-control" name="job_location">
                                                 @foreach( $location as $value)
+                                                    {{ $input = $value->id.'.'.$value->name }}
                                                     @if($loop->count == 0)
                                                         <option value="none">None</option>
-                                                     @else
-                                                        <option {{$details->location_id == $value->id ? 'selected' : ''}} value="{{ $value->id.'.'.$value->name }}">{{ $value->name }}</option>
+                                                    @else
+                                                        <option value="{{ $input  }}" {{ old('job_location') == $input ? "selected" : "" }}>{{ $value->name }}</option>
                                                     @endif
                                                 @endforeach
                                             </select>
@@ -152,13 +165,13 @@
                                     </div>
 
                                     <div class="form-group{{ $errors->has('nationality') ? ' has-error' : '' }}">
-                                        <label class="col-md-3 control-label">Nationality</label>
+                                        <label class="col-md-3 control-label">Nationality<span class="is-required">*</span></label>
                                         <div class="col-md-7">
                                             <select class="form-control" name="nationality">
                                                 <option value="">-- select one --</option>
-                                                @for ($i = 0; $i < count($nationality); $i++)
-                                                    <option {{ $details->nationality == strtolower($nationality[$i]) ? 'selected' : '' }} value="{{ strtolower($nationality[$i]) }}">{{ $nationality[$i]  }}</option>
-                                                @endfor
+                                                @foreach($nationality as $key => $value)
+                                                    <option value="{{$value}}" {{ $details->nationality == $value ? "selected" : "" }}> {{ $value  }}</option>
+                                                @endforeach
                                             </select>
 
                                             @if ($errors->has('nationality'))

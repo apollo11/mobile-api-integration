@@ -111,6 +111,14 @@
                                                             <td>{{ $details->min_age }} - {{ $details->max_age }}</td>
                                                         </tr>
                                                         <tr>
+                                                            <td><strong>No. of person requested</strong></td>
+                                                            <td>{{ $details->no_of_person }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><strong>Contact Person</strong></td>
+                                                            <td>{{ $details->contact_person }}</td>
+                                                        </tr>
+                                                        <tr>
                                                             <td><strong>Contact No.: </strong></td>
                                                             <td>{{ $details->contact_no }}</td>
                                                         </tr>
@@ -125,6 +133,14 @@
                                                         <tr>
                                                             <td><strong>Nationality:</strong></td>
                                                             <td>{{ ucfirst($details->nationality) }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><strong>Start Job Date and Time</strong></td>
+                                                            <td>{{ $details->start_date  }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><strong>Job End Date and Time</strong></td>
+                                                            <td>{{ $details->end_date }}</td>
                                                         </tr>
                                                         <tr>
                                                             <td><strong>Job Requirements </strong></td>
@@ -145,7 +161,7 @@
                                                             @elseif($details->status == 'active')
                                                                 <td><span class="label label-sm label-success">{{ ucfirst($details->status) }} </span></td>
                                                             @else
-                                                                <td><span class="label label-sm label-waring">{{ ucfirst($details->status) }} </span></td>
+                                                                <td><span class="label label-sm label-warning">{{ ucfirst($details->status) }} </span></td>
                                                             @endif
                                                         </tr>
                                                         </tbody>

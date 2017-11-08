@@ -284,7 +284,7 @@ class Job extends Model
 
                 return $query->where('jobs.status', $param['status']);
             })
-            ->orderBy('jobs.id', 'asc')
+            ->orderBy('jobs.id', 'DESC')
             ->get();
 
         return $jobs;

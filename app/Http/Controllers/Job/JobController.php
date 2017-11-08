@@ -235,16 +235,18 @@ class JobController extends Controller
         $job = new Job();
 
         $details = $job->jobAdminDetails($id);
-
         $location = $this->location();
         $industry = $this->industry();
         $nationality = $this->nationalityList();
+        $age = $this->age();
 
         return view('job.edit-form', ['user' => $user
             ,'industry' => $industry
             , 'location' => $location
             , 'details' => $details
             , 'nationality' => $nationality
+            , 'age' => $age
+
         ]);
 
     }
@@ -263,14 +265,24 @@ class JobController extends Controller
         $location = explode('.', $request->input('job_location'));
         $industry = explode('.', $request->input('industry'));
         $age = explode('-', $request->input('age'));
+        $zipCode = $this->getAddress($request->input('postal_code'));
+        $data['postal_code'] = $zipCode;
 
+//        $split = [
+//            'location_id' => $location[0],
+//            'job_location' => $location[1],
+//            'industry_id' => $industry[0],
+//            'industry' => $industry[1],
+//            'min_age' => $age[0],
+//            'max_age' => $age[1]
+//        ];
         $split = [
             'location_id' => $location[0],
-            'job_location' => $location[1],
+            'location' => $location[1],
             'industry_id' => $industry[0],
             'industry' => $industry[1],
             'min_age' => $age[0],
-            'max_age' => $age[1]
+            'max_age' => $age[1],
         ];
 
         $validator = $this->rules($data);

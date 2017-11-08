@@ -31,7 +31,7 @@
                                 <div class="form-body">
 
                                     <div class="form-group{{ $errors->has('company_logo') ? ' has-error' : '' }}">
-                                        <label for="Image Upload" class="col-md-3 control-label">Company Logo</label>
+                                        <label for="Image Upload" class="col-md-3 control-label">Company Logo<span class="is-required">*</span></label>
                                         <div class="col-md-9">
                                             <input type="file" name="company_logo" value="{{ old('company_logo') }}">
                                             @if ($errors->has('company_logo'))
@@ -43,7 +43,7 @@
                                     </div>
 
                                     <div class="form-group{{ $errors->has('company_name') ? ' has-error' : '' }}">
-                                        <label class="col-md-3 control-label">Company Name</label>
+                                        <label class="col-md-3 control-label">Company Name<span class="is-required">*</span></label>
                                         <div class="col-md-7">
                                             <input type="text" class="form-control" placeholder="Enter Company Name" value="{{ old('company_name') }}" name="company_name">
                                             @if ($errors->has('company_name'))
@@ -55,7 +55,7 @@
                                     </div>
 
                                     <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
-                                        <label class="col-md-3 control-label">Email Address</label>
+                                        <label class="col-md-3 control-label">Email Address<span class="is-required">*</span></label>
                                         <div class="col-md-7">
                                             <input type="email" class="form-control" placeholder="Enter Email Address" value="{{ old('email') }}" name="email">
                                             @if ($errors->has('email'))
@@ -69,12 +69,12 @@
                                     <div class="form-group">
                                         <label class="col-md-3 control-label">Company Description</label>
                                         <div class="col-md-7">
-                                            <textarea class="form-control" name="company_description" rows="3"></textarea>
+                                            <textarea class="form-control" name="company_description" rows="3"> {{ old('company_description') }}</textarea>
                                         </div>
                                     </div>
 
                                     <div class="form-group{{ $errors->has('business_manager') ? ' has-error' : '' }}">
-                                        <label class="col-md-3 control-label">Business Manager</label>
+                                        <label class="col-md-3 control-label">Business Manager<span class="is-required">*</span></label>
                                         <div class="col-md-7">
                                             <input type="text" class="form-control" placeholder="Enter Business Manager" value="{{ old('business_manager') }}" name="business_manager">
                                             @if ($errors->has('business_manager'))
@@ -85,7 +85,7 @@
                                         </div>
                                     </div>
                                     <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
-                                        <label class="col-md-3 control-label">Password</label>
+                                        <label class="col-md-3 control-label">Password<span class="is-required">*</span></label>
                                         <div class="col-md-7">
                                             <input type="password" class="form-control" placeholder="Enter Password" name="password">
                                             @if ($errors->has('password'))
@@ -97,7 +97,7 @@
                                     </div>
 
                                     <div class="form-group{{ $errors->has('contact_person') ? ' has-error' : '' }}">
-                                        <label class="col-md-3 control-label">Contact Person</label>
+                                        <label class="col-md-3 control-label">Contact Person<span class="is-required">*</span></label>
                                         <div class="col-md-7">
                                             <input type="text" class="form-control" placeholder="Enter Contact Person" value="{{ old('contact_person') }}" name="contact_person">
                                             @if ($errors->has('contact_person'))
@@ -108,9 +108,9 @@
                                         </div>
                                     </div>
                                     <div class="form-group{{ $errors->has('contact_no') ? ' has-error' : '' }}">
-                                        <label class="col-md-3 control-label">Contact Number</label>
+                                        <label class="col-md-3 control-label">Contact Number<span class="is-required">*</span></label>
                                         <div class="col-md-7">
-                                            <input type="text" class="form-control" placeholder="Enter Contact Person" value="{{ old('contact_person') }}" name="contact_no">
+                                            <input type="text" class="form-control" placeholder="Enter Contact No" value="{{ old('contact_no') }}" name="contact_no">
                                             @if ($errors->has('contact_no'))
                                                 <span class="help-block">
                                                 {{ $errors->first('contact_no') }}
@@ -120,7 +120,7 @@
                                     </div>
 
                                     <div class="form-group{{ $errors->has('hourly_rate') ? ' has-error' : '' }}">
-                                        <label class="col-md-3 control-label">Hourly Rate</label>
+                                        <label class="col-md-3 control-label">Hourly Rate<span class="is-required">*</span></label>
                                         <div class="col-md-7">
                                             <input type="text" class="form-control" placeholder="Enter Hourly Rate" value="{{ old('hourly_rate') }}" name="hourly_rate">
                                             @if ($errors->has('hourly_rate'))
@@ -139,7 +139,7 @@
                                                     @if($loop->count == 0)
                                                          <option value="none">None</option>
                                                     @else
-                                                        <option value="{{ $value->id }}">{{ $value->name }}</option>
+                                                        <option value="{{ $value->id }}" {{ old('industry') == $value->id ? "selected" : "" }}>{{ $value->name }}</option>
                                                     @endif
                                                 @endforeach
                                             </select>

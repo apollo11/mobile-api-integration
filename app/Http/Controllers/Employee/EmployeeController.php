@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Employee;
 
-
 use Validator;
 use Input;
+
+use App\Nationality;
+use App\Location;
 use App\Employee;
 use App\User;
 use App\Mail\EmployeeRegistration;
@@ -189,6 +191,9 @@ class EmployeeController extends Controller
     public function edit($id)
     {
         $userDetails = new AdditionalInfo();
+        $location = new Location();
+        $nationality = new Nationality();
+
         $contactMethod = [
             'sms'
             , 'phone'
@@ -198,7 +203,14 @@ class EmployeeController extends Controller
 
         $details = $userDetails->userInfo($id);
 
-        return view('employee.edit-form', ['details' => $details, 'contact_method' => $contactMethod]);
+        return view('employee.edit-form', [
+            'details' => $details
+            , 'contact_method' => $contactMethod
+            , 'location' => $location->locationLists()
+            , 'nationality' => $nationality->nationalityDropdown()
+            , 'language' => $nationality->language()
+
+        ]);
     }
 
     /**

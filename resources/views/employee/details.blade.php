@@ -406,19 +406,22 @@
                                                             <a href="{{ route('job.details',['id' =>  $jobs->jobid ])  }}">
                                                                 <i class="fa fa-eye"></i> View </a>
                                                         </li>
-                                                        <li>
-                                                            <a href="{{ route('payout.approved',['id' => $jobs->schedule_id, 'userId' => $jobs->user_id])  }}"
-                                                               onclick="event.preventDefault();
-                                                                       document.getElementById('{{'payout-'.$jobs->jobid }}').submit();">
-                                                                <i class="fa fa-check-square-o"></i> Approve</a>
-                                                        </li>
-                                                        <li>
-                                                            <a href="{{ route('payout.rejected',['id' => $jobs->schedule_id, 'userId' => $jobs->user_id]) }}"
-                                                               onclick="event.preventDefault();
-                                                                       document.getElementById('{{'reject-'.$jobs->jobid }}').submit();">
-                                                                <i class="fa fa-close"></i> Reject
-                                                            </a>
-                                                        </li>
+                                                        @if($jobs->schedule_status == 'completed')
+                                                            <li>
+                                                                <a href="{{ route('payout.approved',['id' => $jobs->schedule_id, 'userId' => $jobs->user_id])  }}"
+                                                                   onclick="event.preventDefault();
+                                                                           document.getElementById('{{'payout-'.$jobs->jobid }}').submit();">
+                                                                    <i class="fa fa-check-square-o"></i> Approve</a>
+                                                            </li>
+                                                            <li>
+                                                                <a href="{{ route('payout.rejected',['id' => $jobs->schedule_id, 'userId' => $jobs->user_id]) }}"
+                                                                   onclick="event.preventDefault();
+                                                                           document.getElementById('{{'reject-'.$jobs->jobid }}').submit();">
+                                                                    <i class="fa fa-close"></i> Reject
+                                                                </a>
+                                                            </li>
+
+                                                        @endif
                                                     </ul>
                                                 </div>
                                             </td>
