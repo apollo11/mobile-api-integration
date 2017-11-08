@@ -7,7 +7,7 @@
             <div class="page-bar">
                 <ul class="page-breadcrumb">
                     <li>
-                        <a href="{{ route('employee.lists')  }}">Recipient Group</a>
+                        <a href="{{ route('recipient.lists')  }}">Recipient Group</a>
                         <i class="fa fa-circle"></i>
                     </li>
                     <li>
@@ -119,8 +119,12 @@
                                                 <div class="alert alert-danger alert-dismissable">
                                                     <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
                                                     <ul>
-                                                        <li>{{ $errors->first('employee') }}</li>
-                                                        <li>{{ $errors->first('group_name') }}</li>
+                                                        @if($errors->has('employee'))
+                                                            <li>{{ $errors->first('employee') }}</li>
+                                                        @endif
+                                                        @if($errors->has('group_name'))
+                                                            <li>{{ $errors->first('group_name') }}</li>
+                                                        @endif
                                                     </ul>
                                                 </div>
                                             @endif
@@ -135,9 +139,6 @@
                                             <div class="col-md-4">
                                                 <input type="text" class="form-control" placeholder="Enter Group Name"
                                                        value="{{ old('group_name') }}" name="group_name">
-                                                @if ($errors->has('group_name'))
-                                                    <span class="help-block"> {{ $errors->first('group_name') }}</span>
-                                                @endif
                                             </div>
                                             <div class="col-md-12">
                                                 <table class="table table-striped table-bordered table-hover table-checkable order-column"
@@ -146,8 +147,8 @@
                                                     <tr>
                                                         <th>
                                                             <label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">
-                                                                <input id="group-checkable" type="checkbox"
-                                                                       class="group-checkable"
+                                                                <input id="" type="checkbox"
+                                                                       class=""
                                                                        data-set="#employee-table .checkboxes"/>
                                                                 <span></span>
                                                             </label>
@@ -168,7 +169,7 @@
                                                         <tr class="odd gradeX">
                                                             <td>
                                                                 <label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">
-                                                                    <input type="checkbox" id="agent" name="employee[]"
+                                                                    <input type="radio" id="employee" name="employee"
                                                                            class="checkboxes"
                                                                            value="{{ $key->id }}"/>
                                                                     <span></span>

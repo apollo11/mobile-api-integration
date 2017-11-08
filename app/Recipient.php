@@ -11,7 +11,7 @@ class Recipient extends Model
      *
      * @var array
      */
-    protected $fillable = ['group_name'];
+    protected $fillable = ['group_name', 'email'];
 
     /**
      * The table associated with the model.

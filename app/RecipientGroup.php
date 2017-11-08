@@ -12,7 +12,7 @@ class RecipientGroup extends Model
      *
      * @var array
      */
-    protected $fillable = ['group_name'];
+    protected $fillable = ['group_name', 'email'];
 
     /**
      * The table associated with the model.
@@ -92,5 +92,21 @@ class RecipientGroup extends Model
 
     }
 
+    public function recipientList()
+    {
+        $employee = DB::table('recipient_groups')
+            ->select(
+                'id'
+                ,'group_name'
+                , 'created_at'
+                , 'email'
+            )
+            ->orderBy('id', 'DESC')
+            ->get();
+
+
+        return $employee;
+
+    }
 
 }

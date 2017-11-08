@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers\RecipientGroup;
 
+use GuzzleHttp\Exception\RequestException;
 use Validator;
-use App\User;
 use App\RecipientGroup;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -17,7 +18,8 @@ class RecipientGroupController extends Controller
      */
     public function index()
     {
-        //
+        $recipient = new RecipientGroup();
+        return view('Recipient.lists', ['list' => $recipient->recipientList()]);
     }
 
     /**
@@ -46,7 +48,7 @@ class RecipientGroupController extends Controller
     public function store(Request $request)
     {
         $data = $request->all();
-        $validator = Validator::make($data, ['employee' => 'required', 'group_name' => 'required']);
+        $validator = Validator::make($data, ['employee' => 'required', 'group_name' => 'required|unique:recipient_groups']);
 
         if ($validator->fails()) {
 
@@ -55,8 +57,8 @@ class RecipientGroupController extends Controller
                 ->withInput();
         } else {
 
-            return $this->saveGroup($data);
-            $result = $data;
+            $this->saveGroup($data);
+            $result = redirect(route('recipient.lists'));
         }
 
         return $result;
@@ -126,15 +128,13 @@ class RecipientGroupController extends Controller
      */
     public function saveGroup(array $data)
     {
-        $recipient = \App\User::find($data['employee']);
+        $recipient = \App\User::where('id','=',$data['employee'])->first();
 
-        $recipient->create(['group_name' => $data['group_name'], 'user_id' => $data['employee']])->attach($data['employee']);
+        $insertedId = $recipient->recipient()->create(['group_name' => $data['group_name'], 'email' => Auth::user()->email]);
+        $insertedId->id;
+        $this->saveUserRecipientGroup($insertedId->id, $data['employee']);
 
-//        return $user;
-
-//        $insertedId = $user->testRecipient();
-//        return $insertedId;
-        //$this->saveUserRecipientGroup($insertedId, $data);
+        return Auth::user()->email;
     }
 
     /**
@@ -144,9 +144,8 @@ class RecipientGroupController extends Controller
     {
         $recipientUser = \App\RecipientGroup::find($id);
         $recipientUser->userRecipientGroup()->create([
-            'user_id' => $data['employee']
+            'user_id' => $data
         ]);
     }
-
 
 }
