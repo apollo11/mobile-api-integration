@@ -23,7 +23,7 @@ class PayoutController extends Controller
         $payoutObj = new Payout();
         $output = $payoutObj->payout($param);
 
-        return view('payout.lists', ['list' => $output]);
+        return view('Payout.lists', ['list' => $output]);
     }
 
     /**
