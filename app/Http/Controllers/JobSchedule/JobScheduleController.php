@@ -49,16 +49,17 @@ class JobScheduleController extends Controller
     public function store(Request $request)
     {
         $user = \App\User::find($request->input('user_id'));
+        $job = $this->findJob($request->input('job_id'));
 
         if ($user['employee_status'] == 'pending' || $user['employee_status'] == 'reject') {
 
             $output = $this->errorResponse(['Your account status is pending or blocked'], 'User Verification', 110008, 400);
 
         } else {
-            $job = $this->findJob($request->input('job_id'));
+            $appliedDate = $this->allSchedules();
             $checkJob = $this->isJobExist($request->input('job_id'), $request->input('user_id'));
 
-            if ($job['job_date'] == $checkJob['applied_date']) {
+            if ($appliedDate == $checkJob['applied_date']) {
 
                 $output = $this->errorResponse(['You have already had a job at the same time slot!.'], 'Apply Failure', 110009, 400);
 
@@ -97,6 +98,18 @@ class JobScheduleController extends Controller
 
         return $jobSched;
 
+    }
+
+    public function allSchedules()
+    {
+        $sched = \App\JobSchedule::all();
+
+        foreach ($sched as $key)
+        {
+            $appliedDate[] = $key->applied_date;
+        }
+
+        return $appliedDate;
     }
 
     public function compareJobSchedDate($jobDate)
