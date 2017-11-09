@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\JobSchedule;
 
 use Validator;
+use Carbon\Carbon;
 use App\JobSchedule;
 use App\Http\Traits\JobDetailsOutputTrait;
 use App\Http\Traits\HttpResponse;
@@ -48,36 +49,43 @@ class JobScheduleController extends Controller
      */
     public function store(Request $request)
     {
-        $user = \App\User::find($request->input('user_id'));
-        $job = $this->findJob($request->input('job_id'));
+        $sched = new JobSchedule();
+
+        $jobId = $request->input('job_id');
+        $userId = $request->input('user_id');
+
+        $user = \App\User::find($userId);
+
 
         if ($user['employee_status'] == 'pending' || $user['employee_status'] == 'reject') {
 
             $output = $this->errorResponse(['Your account status is pending or blocked'], 'User Verification', 110008, 400);
 
         } else {
-            $appliedDate = $this->allSchedules();
+
+            $job = $this->findJob($jobId);
+            $validateSched = $sched->schedConflict($jobId, $userId, $job['job_date'], $job['end_date']);
             $checkJob = $this->isJobExist($request->input('job_id'), $request->input('user_id'));
 
-            if ($appliedDate == $checkJob['applied_date']) {
+            if ($checkJob != null) {
 
-                $output = $this->errorResponse(['You have already had a job at the same time slot!.'], 'Apply Failure', 110009, 400);
+                $output = $this->errorResponse(['This job is already on your scheduled job list.'], 'Apply Failure', 110009, 400);
 
+            } elseif ($job['job_date'] < Carbon::now()) {
+
+                $output = $this->errorResponse(['The job is already expired!.'], 'Apply Failure', 1100015, 400);
+
+            } elseif (count($validateSched) > 0) {
+
+                $output = $this->errorResponse(['You have an schedule that overlaps with this job start date or end date.'], 'Apply Failure', 1100014, 400);
             } else {
 
-                if ($checkJob != null) {
 
-                    $output = $this->errorResponse(['This job is already on your scheduled job list.'], 'Apply Failure', 110009, 400);
+                $user->jobSchedule()->create(['name' => null, 'job_id' => $request->input('job_id'), 'job_status' => "accepted"]);
 
-                } else {
+                $this->updateJobStatus($request->input('job_id'));
 
-                    $user->jobSchedule()->create(['name' => null, 'job_id' => $request->input('job_id'), 'job_status' => "accepted", 'applied_date' => $job['job_date']]);
-
-                    $this->updateJobStatus($request->input('job_id'));
-
-                    $output = $this->show($request->input('job_id'));
-
-                }
+                $output = $this->show($request->input('job_id'));
 
             }
 
