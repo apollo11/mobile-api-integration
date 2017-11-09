@@ -336,7 +336,7 @@ class JobSchedule extends Model
      * @param $endDate
      * @return mixed
      */
-    public function schedConflict($jobId, $userId, $startDate, $endDate)
+    public function schedConflict($userId, $startDate, $endDate)
     {
         $sched = DB::table('job_schedules')
             ->select('job_schedules.job_id as schedId'
@@ -358,7 +358,6 @@ class JobSchedule extends Model
                         $query->where('jobs.end_date', '>=', $endDate);
                 });
             })
-            ->where('job_schedules.job_id', $jobId)
             ->where('job_schedules.user_id', $userId)
             ->get();
 

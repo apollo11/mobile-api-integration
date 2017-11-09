@@ -64,7 +64,9 @@ class JobScheduleController extends Controller
         } else {
 
             $job = $this->findJob($jobId);
-            $validateSched = $sched->schedConflict($jobId, $userId, $job['job_date'], $job['end_date']);
+
+            $validateSched = $sched->schedConflict($userId, $job['job_date'], $job['end_date']);
+
             $checkJob = $this->isJobExist($request->input('job_id'), $request->input('user_id'));
 
             if ($checkJob != null) {
