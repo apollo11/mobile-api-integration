@@ -74,7 +74,7 @@ class JobScheduleController extends Controller
 
             } elseif ($jobSched->job_date < Carbon::now()) {
 
-                $output = $this->errorResponse(['The job has already expired!.'], 'Apply Failure', 1100015, 400);
+                $output = $this->errorResponse(['The job has already expired.'], 'Apply Failure', 1100015, 400);
 
             } elseif (count($validateSched) > 0) {
 
@@ -91,7 +91,6 @@ class JobScheduleController extends Controller
         }
 
         return $output;
-
     }
 
     /**
