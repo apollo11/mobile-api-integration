@@ -82,7 +82,7 @@
                                                     <table class="table table-hover">
                                                         <tbody>
                                                         <tr>
-                                                            <td colspan="2" align="center"><img class="img-circle" src="/{{ $employer->profile_image_path }}" width="400px" height="200px"/></td>
+                                                            <td colspan="2" align="center"><img src="/{{ $employer->profile_image_path }}" style="max-width:30%;"/></td>
                                                         </tr>
                                                         <tr>
                                                             <td><strong>Company Name</strong></td>

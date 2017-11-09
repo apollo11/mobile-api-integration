@@ -329,14 +329,51 @@ class JobSchedule extends Model
 
     }
 
-    public function checkScheduleDate($JobDate)
+    /**
+     * @param $jobId
+     * @param $userId
+     * @param $startDate
+     * @param $endDate
+     * @return mixed
+     */
+    public function schedConflict($userId, $startDate, $endDate)
     {
-        $schedule = DB::table('job_schedules')
-            ->where('checkin_datetime',$JobDate)
-        ->get();
+        $sched = DB::table('job_schedules')
+            ->select('job_schedules.job_id as schedId'
+                , 'job_schedules.user_id as schedUserId'
+                , 'users.id as userId'
+                , 'jobs.id as jobId'
+                , 'jobs.job_date as start_date'
+                , 'jobs.end_date'
+            )
+            ->join('users', 'users.id', '=', 'job_schedules.user_id')
+            ->join('jobs', 'jobs.id', '=', 'job_schedules.job_id')
+            ->where(function ($query) use ($startDate, $endDate) {
+                $query->where(function ($query) use ($startDate) {
+                    $query->where('jobs.job_date', '<=', $startDate);
+                    $query->where('jobs.end_date', '>=', $startDate);
+                });
+                 $query->orWhere(function ($query) use ($endDate){
+                        $query->where('jobs.job_date', '<=', $endDate);
+                        $query->where('jobs.end_date', '>=', $endDate);
+                });
+            })
+            ->where('job_schedules.job_status', 'accepted')
+            ->where('job_schedules.user_id', $userId)
+            ->get();
 
-        return $schedule;
+        return $sched;
     }
 
+    public function listofDatebyId($id)
+    {
+        $job = db::table('jobs')
+            ->select('id', 'job_date', 'end_date')
+            ->where('id', $id)
+            ->first();
+
+        return $job;
+
+    }
 
 }
