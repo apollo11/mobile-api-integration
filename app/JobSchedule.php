@@ -364,5 +364,15 @@ class JobSchedule extends Model
         return $sched;
     }
 
+    public function listofDatebyId($id)
+    {
+        $job = db::table('jobs')
+            ->select('id', 'job_date', 'end_date')
+            ->where('id', $id)
+            ->first();
+
+        return $job;
+
+    }
 
 }

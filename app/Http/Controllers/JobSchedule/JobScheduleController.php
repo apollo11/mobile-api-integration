@@ -62,10 +62,9 @@ class JobScheduleController extends Controller
             $output = $this->errorResponse(['Your account status is pending or blocked'], 'User Verification', 110008, 400);
 
         } else {
+            $jobSched = $sched->listofDatebyId($jobId);
 
-            $job = $this->findJob($jobId);
-
-            $validateSched = $sched->schedConflict($userId, $job['job_date'], $job['end_date']);
+            $validateSched = $sched->schedConflict($userId, $jobSched->job_date, $jobSched->end_date);
 
             $checkJob = $this->isJobExist($request->input('job_id'), $request->input('user_id'));
 
@@ -73,16 +72,14 @@ class JobScheduleController extends Controller
 
                 $output = $this->errorResponse(['This job is already on your scheduled job list.'], 'Apply Failure', 110009, 400);
 
-            } elseif ($job['job_date'] < Carbon::now()) {
+            } elseif ($jobSched->job_date < Carbon::now()) {
 
-                $output = $this->errorResponse(['The job is already expired!.'], 'Apply Failure', 1100015, 400);
+                $output = $this->errorResponse(['The job has already expired!.'], 'Apply Failure', 1100015, 400);
 
             } elseif (count($validateSched) > 0) {
 
                 $output = $this->errorResponse(['You have an schedule that overlaps with this job start date or end date.'], 'Apply Failure', 1100014, 400);
             } else {
-
-
                 $user->jobSchedule()->create(['name' => null, 'job_id' => $request->input('job_id'), 'job_status' => "accepted"]);
 
                 $this->updateJobStatus($request->input('job_id'));
