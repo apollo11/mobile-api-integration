@@ -358,6 +358,7 @@ class JobSchedule extends Model
                         $query->where('jobs.end_date', '>=', $endDate);
                 });
             })
+            ->where('job_schedules.job_status', 'accepted')
             ->where('job_schedules.user_id', $userId)
             ->get();
 
