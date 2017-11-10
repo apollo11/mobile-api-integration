@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class JobSchedJobStatus extends Migration
+class AddFieldAddress extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,8 @@ class JobSchedJobStatus extends Migration
      */
     public function up()
     {
-        Schema::table('job_schedules', function (Blueprint $table) {
-
-            $table->enum('job_status', ["available", "accepted", "cancelled", "completed", "rejected", "auto_completed", "auto_cancelled", "approved", "pending"])
-                ->default("available");
+        Schema::table('jobs', function (Blueprint $table) {
+            $table->string('geolocation_address')->nullable();
         });
     }
 
@@ -27,7 +25,7 @@ class JobSchedJobStatus extends Migration
      */
     public function down()
     {
-        Schema::table('job_schedules', function (Blueprint $table) {
+        Schema::table('jobs', function (Blueprint $table) {
             //
         });
     }

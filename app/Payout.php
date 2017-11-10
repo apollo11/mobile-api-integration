@@ -26,6 +26,7 @@ class Payout extends Model
                 , 'jobs.rate'
                 , 'jobs.job_date as start_date'
                 , 'jobs.job_title'
+                , 'jobs.geolocation_address'
                 , 'users.nric_no'
                 , 'users.contact_no'
                 , 'users.employee_points'
@@ -64,6 +65,7 @@ class Payout extends Model
                 , 'jobs.rate'
                 , 'jobs.job_date as start_date'
                 , 'jobs.job_title'
+                , 'jobs.geolocation_address'
                 , 'users.nric_no'
                 , 'users.contact_no'
                 , 'users.employee_points'
@@ -78,6 +80,13 @@ class Payout extends Model
 
     }
 
+    /**
+     * Approve job via user
+     *
+     * @param $id
+     * @param $userId
+     * @return mixed
+     */
     public function approveJob($id, $userId)
     {
         $approved = DB::table('job_schedules')
@@ -88,6 +97,13 @@ class Payout extends Model
         return $approved;
     }
 
+    /**
+     * Change status to processed
+     *
+     * @param $id
+     * @param $userId
+     * @return mixed
+     */
     public function processedJob($id, $userId)
     {
         $processed = DB::table('job_schedules')
@@ -98,6 +114,12 @@ class Payout extends Model
         return $processed;
     }
 
+    /**
+     * Multitple update processed
+     *
+     * @param $id
+     * @return mixed
+     */
     public function multipleProcessed($id)
     {
         $processed = DB::table('job_schedules')
@@ -107,6 +129,13 @@ class Payout extends Model
         return $processed;
     }
 
+    /**
+     * Rejecting Job
+     *
+     * @param $id
+     * @param $userId
+     * @return mixed
+     */
     public function rejectJob($id, $userId)
     {
         $processed = DB::table('job_schedules')
@@ -117,6 +146,13 @@ class Payout extends Model
         return $processed;
     }
 
+    /**
+     * Updating working hours
+     *
+     * @param $id
+     * @param $data
+     * @return mixed
+     */
     public function updateWorkingHours($id, $data)
     {
         $processed = DB::table('job_schedules')
@@ -124,6 +160,23 @@ class Payout extends Model
             ->update(['working_hours' => $data]);
 
         return $processed;
+    }
+
+    /**
+     * accepting Job
+     *
+     * @param $id
+     * @param $userId
+     * @return mixed
+     */
+    public function changeStatustoAccepted($id, $userId)
+    {
+        $accept = DB::table('job_schedules')
+            ->where('id', $id)
+            ->where('user_id', $userId)
+            ->update(['job_status' => 'accepted']);
+
+        return $accept;
     }
 
 

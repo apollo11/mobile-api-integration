@@ -179,6 +179,7 @@ class Employer extends Model
                 , 'jobs.job_requirements'
                 , 'jobs.latitude'
                 , 'jobs.longitude'
+                , 'jobs.geolocation_address'
 
             )
             ->where('users.id', '=', $userId)

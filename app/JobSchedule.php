@@ -102,6 +102,7 @@ class JobSchedule extends Model
                 ,'jobs.job_requirements'
                 , 'jobs.latitude'
                 , 'jobs.longitude'
+                , 'jobs.geolocation_address'
 
             )
             ->when(!empty($param['industries']), function ($query) use ($param) {
@@ -192,6 +193,7 @@ class JobSchedule extends Model
                 ,'jobs.job_requirements'
                 , 'jobs.latitude'
                 , 'jobs.longitude'
+                , 'jobs.geolocation_address'
 
             )
             ->where($columName , '=', $id)
@@ -227,6 +229,7 @@ class JobSchedule extends Model
                 , 'users.employee_points'
                 , 'jobs.rate'
                 , 'jobs.id'
+                , 'jobs.geolocation_address'
             )
             ->where('users.id' , '=', $id)
             ->whereIn('job_schedules.job_status',[
@@ -236,6 +239,7 @@ class JobSchedule extends Model
                 , 'rejected'
                 , 'auto_complete'
                 , 'auto_cancelled'
+                , 'pending'
             ])
             ->get();
 
@@ -262,6 +266,7 @@ class JobSchedule extends Model
                 , 'jobs.job_title'
                 , 'jobs.job_date as start_date'
                 , 'jobs.id as jobid'
+                , 'jobs.geolocation_address'
                 , 'users.company_name'
                 , 'users.nric_no'
                 , 'users.name'
@@ -365,15 +370,33 @@ class JobSchedule extends Model
         return $sched;
     }
 
+    /**
+     * @param $id
+     * @return mixed
+     */
     public function listofDatebyId($id)
     {
-        $job = db::table('jobs')
+        $job = DB::table('jobs')
             ->select('id', 'job_date', 'end_date')
             ->where('id', $id)
             ->first();
 
         return $job;
 
+    }
+
+    /**
+     * @param $userId
+     * @return mixed
+     */
+    public function userPoints($userId)
+    {
+        $points = DB::table('users')
+           ->select('id', 'employee_points')
+            ->where('id', $userId)
+            ->first();
+
+        return $points;
     }
 
 }

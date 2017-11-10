@@ -119,7 +119,9 @@ class JobController extends Controller
                 ->withErrors($validator)
                 ->withInput();
         } else {
+            $data['address'] = $this->getFormattedAddress($data['postal_code']['lat'],$data['postal_code']['lng']);
             $profile['job_image'] = $request->file('job_image')->store('jobs');
+
             $mergeData = array_merge($data, $profile, $split);
 
             $this->saveData($mergeData);
@@ -164,7 +166,8 @@ class JobController extends Controller
             'min_age' => $data['min_age'],
             'max_age' => $data['max_age'],
             'latitude' => $data['postal_code']['lat'],
-            'longitude' =>  $data['postal_code']['lng']
+            'longitude' =>  $data['postal_code']['lng'],
+            'geolocation_address' => $data['address']
         ]);
 
         $this->lastInsertedId = $insertedId->id;
@@ -502,7 +505,7 @@ class JobController extends Controller
         $push['title'] = 'New Job Available';
         $push['type'] = constant('NEW_JOB');
         $push['badge'] = 1;
-        $push['body'] = $employer[1].' is hiring for '. $data['job_title']. ' at '. $data['location'].' on '.$date.'.';
+        $push['body'] = $employer[1].' is hiring for '. $data['job_title']. ' at '. $data['address'].' on '.$date.'.';
         $push['registration_ids'] = $this->returnToken();
 
         return $this->pushNotif($push);
@@ -593,5 +596,35 @@ class JobController extends Controller
 
     }
 
+    /**
+     * @param $lat
+     * @param $lng
+     * @return string
+     */
+    public function getFormattedAddress($lat, $lng)
+    {
+        $http = new Client();
+        try {
+            $response = $http->get($this->googleMap . '?latlng=' . $lat . ',' . $lng . '&key=' . env('GOOGLE_API_KEY'));
+            $result = json_decode((string)$response->getBody(), true);
+
+            if (!empty($result['results'])) {
+                $param = $result['results'][0]['formatted_address'];
+            } else {
+
+                $param = '';
+            }
+
+            return $param;
+
+        } catch (RequestException $e) {
+
+            if ($e->hasResponse()) {
+
+                return 'Unknown Address';
+            }
+        }
+
+    }
 
 }

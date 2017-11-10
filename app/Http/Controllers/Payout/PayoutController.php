@@ -142,6 +142,22 @@ class PayoutController extends Controller
     }
 
     /**
+     * Change status to accepted
+     * @param $id
+     * @param $userId
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function acceptedJob($id, $userId)
+    {
+        $payoutObj = new Payout();
+        $payoutObj->changeStatustoAccepted($id, $userId);
+
+        return back();
+    }
+
+
+
+    /**
      * Rejecting job
      * @param $id
      * @param $userId

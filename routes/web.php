@@ -90,6 +90,7 @@ Route::group(['middleware' => ['auth']], function () {
        Route::post('approved/{id}/{userId}', 'Payout\PayoutController@approvedJob')->name('payout.approved');
        Route::post('processed/{id}/{userId}', 'Payout\PayoutController@processedJob')->name('payout.processed');
        Route::post('rejected/{id}/{userId}', 'Payout\PayoutController@rejectJob')->name('payout.rejected');
+       Route::post('accepted/{id}/{userId}', 'Payout\PayoutController@acceptedJob')->name('payout.accepted');
        Route::post('multiprocessed', 'Payout\PayoutController@multiProcessed')->name('payout.multiple');
     });
 
@@ -100,8 +101,13 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('add', 'RecipientGroup\RecipientGroupController@store')->name('recipient.store');
     });
 
+    Route::prefix('settings')->group(function() {
+       Route::get('/', 'Settings\SettingsController@index')->name('settings');
+    });
+
 });
 
 Route::get('/home', 'HomeController@index')->name('home');
+//Route::get('/settings', 'SettingsController@index')->name('settings');
 
 
