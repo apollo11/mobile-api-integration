@@ -420,7 +420,7 @@ class NotificationController extends Controller
                     ],
                     'location' => [
                         'id' => $output->location_id,
-                        'name' => $output->location,
+                        'name' => $output->geolocation_address,
                         'latitude' => 1.2836402,
                         'longitude' => 103.8603731,
                     ],
