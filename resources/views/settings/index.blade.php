@@ -4,27 +4,27 @@
     <div class="page-content-wrapper">
         <div class="page-content">
             <div class="row">
-                <div class="col-md-8">
+                <div class="col-md-12">
                     <div class="portlet light bordered">
                         <div class="portlet-title">
                             <div class="caption">
                                 <i class="icon-settings font-dark"></i>
-                                <span class="caption-subject font-dark sbold uppercase">Industry</span>
+                                <span class="caption-subject font-dark sbold uppercase">Settings</span>
                             </div>
                         </div>
                         <div class="portlet-body form">
-                            <form class="form-horizontal" method="POST" role="form" action="{{ route('industry.add') }}"
-                                  enctype="multipart/form-data">
+                            <form class="form-horizontal" method="POST" role="form">
                                 {{ csrf_field() }}
                                 <div class="form-body">
                                     <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
-                                        <label class="col-md-3 control-label">Industry</label>
-                                        <div class="col-md-7">
+                                        <label class="col-md-12 text-left">Terms &amp; Conditions</label>
+                                        <div class="col-md-12">
+                                            <textarea class="form-control"  name="terms-conditions"></textarea>
                                             <input type="text" class="form-control" placeholder="Enter Industry"
                                                    value="{{ old('name') }}" name="name">
-                                            @if ($errors->has('name'))
+                                            @if ($errors->has('terms-conditions'))
                                                 <span class="help-block">
-                                                {{ $errors->first('name') }}
+                                                {{ $errors->first('terms-conditions') }}
                                                </span>
                                             @endif
                                         </div>
@@ -46,4 +46,8 @@
             </div>
         </div>
     </div>
+
+<script>
+
+</script>
 @endsection
