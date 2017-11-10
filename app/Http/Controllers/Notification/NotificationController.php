@@ -336,8 +336,9 @@ class NotificationController extends Controller
         ];
 
         $notifList = $notif->notificationByUser($userId, $param);
+        $countNotif = $notif->countNotifByUser($userId);
 
-        return $this->notifRespponse($notifList);
+        return $this->notifRespponse($notifList, $countNotif);
     }
 
     /**
@@ -380,28 +381,11 @@ class NotificationController extends Controller
         return $this->errorResponse($data, 'Validation Error', $errorCode, 400);
     }
 
-    /**
-     * Notification response
-     */
-//    public function notifResponse($notif)
-//    {
-//        foreach ($notif as $value)
-//        {
-//            $data[] = [
-//                'id' => $value->id,
-//                'title' => $value->title,
-//                'message' => $value->message,
-//                'type' => $value->type,
-//                'job_id' => $value->job_id,
-//                'created_at' => $this->dateFormat($value->created_at),
-//                'updated_at' => $this->dateFormat($value->updated_at)
-//            ];
-//        }
-//        $dataUndefined = !empty($data) ? $data : [];
-//
-//        return response()->json(['notifications' => $dataUndefined]);
-//    }
 
+    /**
+     * @param $date
+     * @return false|string
+     */
     public function dateFormat($date)
     {
         $format = date_create($date, timezone_open('UTC'));
@@ -410,7 +394,7 @@ class NotificationController extends Controller
         return $return;
     }
 
-    public function notifRespponse($data)
+    public function notifRespponse($data, $count)
     {
         foreach ($data as $output)
         {
@@ -480,7 +464,7 @@ class NotificationController extends Controller
         }
         $dataUndefined = !empty($details) ? $details : [];
 
-        return response()->json(['notifications' => $dataUndefined]);
+        return response()->json(['notifications' => $dataUndefined, 'is_unread' => $count]);
 
     }
 
