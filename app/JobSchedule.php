@@ -364,15 +364,29 @@ class JobSchedule extends Model
         return $sched;
     }
 
+    /**
+     * @param $id
+     * @return mixed
+     */
     public function listofDatebyId($id)
     {
-        $job = db::table('jobs')
+        $job = DB::table('jobs')
             ->select('id', 'job_date', 'end_date')
             ->where('id', $id)
             ->first();
 
         return $job;
 
+    }
+
+    public function userPoints($userId)
+    {
+        $points = DB::table('users')
+           ->select('id', 'employee_points')
+            ->where('id', $userId)
+            ->first();
+
+        return $points;
     }
 
 }

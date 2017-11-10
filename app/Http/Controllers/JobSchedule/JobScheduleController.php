@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers\JobSchedule;
 
+use Illuminate\Console\Scheduling\Schedule;
 use Validator;
+use App\History;
 use Carbon\Carbon;
 use App\JobSchedule;
+use App\AdditionalInfo;
+use App\Http\Traits\ProfileTrait;
 use App\Http\Traits\JobDetailsOutputTrait;
 use App\Http\Traits\HttpResponse;
 use Illuminate\Http\Request;
@@ -14,6 +18,7 @@ class JobScheduleController extends Controller
 {
     use JobDetailsOutputTrait;
     use HttpResponse;
+    use ProfileTrait;
 
     private $request;
     protected $data;
@@ -80,11 +85,14 @@ class JobScheduleController extends Controller
 
                 $output = $this->errorResponse(['You have an schedule that overlaps with this job start date or end date.'], 'Apply Failure', 1100014, 400);
             } else {
-                $user->jobSchedule()->create(['name' => null, 'job_id' => $request->input('job_id'), 'job_status' => "accepted"]);
+
+                $statusPoints = $this->comparePoints($userId);
+
+                $user->jobSchedule()->create(['name' => null, 'job_id' => $request->input('job_id'), 'job_status' => $statusPoints]);
 
                 $this->updateJobStatus($request->input('job_id'));
 
-                $output = $this->show($request->input('job_id'));
+                $output = $this->show($jobId, $userId);
 
             }
 
@@ -118,30 +126,21 @@ class JobScheduleController extends Controller
         return $appliedDate;
     }
 
-    public function compareJobSchedDate($jobDate)
-    {
-        $findSched = new JobSchedule();
-
-        $result = $findSched->checkScheduleDate($jobDate);
-
-        return $result;
-    }
-
-
     /**
      * Display the specified resource.
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($jobId, $userId)
     {
         $job = new JobSchedule();
 
-        $output = $job->getJobScheduleDetails($id, 'jobs.id');
+        $output = $job->getJobScheduleDetails($jobId, 'jobs.id');
 
-        $details = $this->jobDetailsoutput($output);
+        $jobDetails = $this->jobDetailsoutput($output);
+        $userDetails = $this->profileIteration($userId);
 
-        return response()->json(['job_details' => $details, 'status' => ['status_code' => 200, 'success' => true]]);
+        return response()->json(['job_details' => $jobDetails, 'user_details' => $userDetails,'status' => ['status_code' => 200, 'success' => true]]);
 
     }
 
@@ -262,6 +261,44 @@ class JobScheduleController extends Controller
         $job::find($data);
         $job->job_status = "cancelled";
 
+    }
+
+    /**
+     * Iteration of profile output
+     */
+    public function profileIteration($userId)
+    {
+        $info = new AdditionalInfo();
+        $history = new History();
+
+        $complete = $history->countCompletedJobs($userId);
+        $money = $history->countEarnedJobs($userId);
+        $count = $info->countPendingJobs($userId);
+        $data = $info->userInfo($userId);
+
+        $data = $this->userDetailsOutput($data, $count);
+        $data['completed_job_count'] = $complete;
+        $data['money_earned'] = $money;
+
+        return $data;
+    }
+
+    /**
+     * @param $userId
+     * @return string
+     */
+    public function comparePoints($userId)
+    {
+        $sched = new JobSchedule();
+        $result = $sched->userPoints($userId);
+        if ($result->employee_points < 70) {
+            $output = 'pending';
+        } else {
+
+            $output = 'accepted';
+        }
+
+        return $output;
     }
 
 }
