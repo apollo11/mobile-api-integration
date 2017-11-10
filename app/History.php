@@ -155,6 +155,8 @@ class History extends Model
                 , 'jobs.choices'
                 , 'jobs.job_requirements'
                 , 'jobs.geolocation_address'
+                , 'jobs.latitude'
+                , 'jobs.longitude'
             )
             ->when(!empty($param['industries']), function ($query) use ($param) {
 
@@ -252,6 +254,10 @@ class History extends Model
                 , 'jobs.choices'
                 , 'jobs.job_requirements'
                 , 'jobs.geolocation_address'
+                , 'jobs.latitude'
+                , 'jobs.longitude'
+                , 'jobs.geolocation_address'
+
             )
             ->where($columName, '=', $id)
             ->first();
