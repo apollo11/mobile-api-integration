@@ -101,8 +101,13 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('add', 'RecipientGroup\RecipientGroupController@store')->name('recipient.store');
     });
 
+    Route::prefix('settings')->group(function() {
+       Route::get('/', 'Settings\SettingsController@index')->name('settings');
+    });
+
 });
 
 Route::get('/home', 'HomeController@index')->name('home');
+//Route::get('/settings', 'SettingsController@index')->name('settings');
 
 
