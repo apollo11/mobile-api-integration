@@ -107,6 +107,10 @@ class Notification extends Model
         return $notif;
     }
 
+    /**
+     * @param $userId
+     * @return mixed
+     */
     public function deviceTokenList($userId)
     {
         $token = DB::table('user_push_notification_tokens')
@@ -116,5 +120,22 @@ class Notification extends Model
 
         return $token;
     }
+
+    /**
+     * Count notification list via user
+     * @param $userId
+     * @return mixed
+     */
+    public function countNotifByUser($userId)
+    {
+        $count = DB::table('user_notifications')
+            ->where('is_read', false)
+            ->where('user_id', $userId)
+            ->count();
+
+        return $count;
+
+    }
+
 
 }
