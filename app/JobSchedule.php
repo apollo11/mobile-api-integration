@@ -381,6 +381,10 @@ class JobSchedule extends Model
 
     }
 
+    /**
+     * @param $userId
+     * @return mixed
+     */
     public function userPoints($userId)
     {
         $points = DB::table('users')
