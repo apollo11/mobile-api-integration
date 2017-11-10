@@ -69,7 +69,9 @@ class AssignJob extends Model
                 , 'jobs.notes'
                 , 'jobs.language'
                 , 'jobs.choices'
-                , 'jobs.job_requirements')
+                , 'jobs.job_requirements'
+                , 'jobs.geolocation_address'
+            )
             ->whereNull('assign_job_job.id')
             ->get();
 

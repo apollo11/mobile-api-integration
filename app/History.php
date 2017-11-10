@@ -59,6 +59,7 @@ class History extends Model
                 , 'jobs.job_requirements'
                 , 'jobs.latitude'
                 , 'jobs.longitude'
+                , 'jobs.geolocation_address'
 
             )
             ->when(!empty($param['industries']), function ($query) use ($param) {
@@ -153,6 +154,7 @@ class History extends Model
                 , 'jobs.language'
                 , 'jobs.choices'
                 , 'jobs.job_requirements'
+                , 'jobs.geolocation_address'
             )
             ->when(!empty($param['industries']), function ($query) use ($param) {
 
@@ -188,7 +190,7 @@ class History extends Model
 
                 $query->where('users.id', '=', $param['id']);
             })
-            ->where('job_schedules.job_status', '=', 'completed')
+            ->where('job_schedules.job_status', '=', 'approved')
             ->limit($param['limit'])
             ->orderBy('jobs.job_date', 'desc')
             ->orderBy('jobs.created_at', 'desc')
@@ -249,6 +251,7 @@ class History extends Model
                 , 'jobs.language'
                 , 'jobs.choices'
                 , 'jobs.job_requirements'
+                , 'jobs.geolocation_address'
             )
             ->where($columName, '=', $id)
             ->first();
@@ -274,8 +277,7 @@ class History extends Model
         $count = DB::table('users')
             ->join('job_schedules', 'job_schedules.user_id', '=', 'users.id')
             ->join('jobs', 'jobs.id', '=', 'job_schedules.job_id')
-            ->where('job_schedules.job_status', '=', 'completed')
-            ->where('job_schedules.payment_status', '=', 'Completed')
+            ->where('job_schedules.job_status', '=', 'approved')
             ->where('users.id', '=', $userid)
             ->sum('jobs.rate');
 

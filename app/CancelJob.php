@@ -84,6 +84,8 @@ class CancelJob extends Model
                 , 'jobs.choices'
                 , 'jobs.job_requirements'
                 , 'jobs.latitude'
+                , 'jobs.longitude'
+                , 'jobs.geolocation_address'
                 , 'job_schedules.job_id'
                 , 'job_schedules.cancel_status'
                 , 'job_schedules.cancel_file_path'

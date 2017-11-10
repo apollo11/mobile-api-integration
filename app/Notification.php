@@ -74,6 +74,7 @@ class Notification extends Model
                 , 'jobs.job_requirements'
                 , 'jobs.latitude'
                 , 'jobs.longitude'
+                , 'jobs.geolocation_address'
                 , 'job_schedules.id as schedule_id'
                 , 'job_schedules.user_id'
                 , 'job_schedules.job_id'
