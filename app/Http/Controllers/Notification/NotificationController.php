@@ -464,7 +464,7 @@ class NotificationController extends Controller
         }
         $dataUndefined = !empty($details) ? $details : [];
 
-        return response()->json(['notifications' => $dataUndefined, 'is_unread' => $count]);
+        return response()->json(['notifications' => $dataUndefined, 'unread_count' => $count]);
 
     }
 

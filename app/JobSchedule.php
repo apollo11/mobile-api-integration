@@ -286,6 +286,7 @@ class JobSchedule extends Model
                 , 'rejected'
                 , 'auto_complete'
                 , 'auto_cancelled'
+                , 'pending'
             ])
             ->get();
 
