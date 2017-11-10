@@ -505,7 +505,7 @@ class JobController extends Controller
         $push['title'] = 'New Job Available';
         $push['type'] = constant('NEW_JOB');
         $push['badge'] = 1;
-        $push['body'] = $employer[1].' is hiring for '. $data['job_title']. ' at '. $data['location'].' on '.$date.'.';
+        $push['body'] = $employer[1].' is hiring for '. $data['job_title']. ' at '. $data['address'].' on '.$date.'.';
         $push['registration_ids'] = $this->returnToken();
 
         return $this->pushNotif($push);
