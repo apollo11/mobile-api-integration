@@ -40,9 +40,10 @@ class Job extends Model
         'max_age',
         'job_requirements',
         'employee_status',
-        'job_status'
-        ,'latitude'
-        ,'longitude'
+        'job_status',
+        'latitude',
+        'longitude',
+        'geolocation_address'
     ];
 
     /**
@@ -137,6 +138,7 @@ class Job extends Model
                 , 'jobs.job_requirements'
                 , 'jobs.latitude'
                 , 'jobs.longitude'
+                , 'jobs.geolocation_address'
             )
             ->when(!empty($param['industries']), function ($query) use ($param) {
 
@@ -227,6 +229,7 @@ class Job extends Model
                 , 'jobs.job_requirements'
                 , 'jobs.latitude'
                 , 'jobs.longitude'
+                , 'jobs.geolocation_address'
 
             )
             ->where('jobs.id', '=', $id)
@@ -278,6 +281,7 @@ class Job extends Model
                 , 'jobs.job_requirements'
                 , 'jobs.latitude'
                 , 'jobs.longitude'
+                , 'jobs.geolocation_address'
 
             )
             ->when(!empty($param['status']), function ($query) use ($param) {
@@ -331,6 +335,7 @@ class Job extends Model
                 , 'jobs.job_requirements'
                 , 'jobs.latitude'
                 , 'jobs.longitude'
+                , 'jobs.geolocation_address'
 
             )
             ->where('jobs.id', '=', $id)

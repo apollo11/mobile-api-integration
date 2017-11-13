@@ -419,8 +419,8 @@ class NotificationController extends Controller
                         'name' => $output->industry
                     ],
                     'location' => [
-                        'id' => $output->location_id,
-                        'name' => $output->location,
+                        'id' => $output->jobid,
+                        'name' => $output->geolocation_address,
                         'latitude' => 1.2836402,
                         'longitude' => 103.8603731,
                     ],

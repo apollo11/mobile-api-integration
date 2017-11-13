@@ -23,8 +23,8 @@ trait JobDetailsOutputTrait
                     'name' => $output->industry
                 ],
                 'location' => [
-                    'id' => $output->location_id,
-                    'name' => $output->location,
+                    'id' => $output->id,
+                    'name' => is_null($output->geolocation_address) ? '10 Bayfront Ave, Singapore 018956' : $output->geolocation_address,
                     'latitude' => is_null($output->latitude) ? 1.2836402 : $output->latitude,
                     'longitude' => is_null($output->longitude) ? 103.8603731 : $output->longitude,
                 ],

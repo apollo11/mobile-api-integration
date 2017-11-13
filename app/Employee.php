@@ -66,9 +66,4 @@ class Employee extends Model
 
     }
 
-
-
-
-
-
 }
