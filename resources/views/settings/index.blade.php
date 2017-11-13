@@ -13,18 +13,38 @@
                             </div>
                         </div>
                         <div class="portlet-body form">
-                            <form class="form-horizontal" method="POST" role="form">
+                            @if(session()->has('message'))
+                                <div class="alert alert-success">
+                                    {{ session()->get('message') }}
+                                </div>
+
+                                <script type="text/javascript">
+                                   setTimeout(function(){  $('.alert-success').hide().remove(); }, 3000);
+                                </script>
+                            @endif
+
+                            <form class="form-horizontal" method="POST" role="form" action="{{ route('settings.update') }}">
                                 {{ csrf_field() }}
                                 <div class="form-body">
-                                    <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
+                                    <div class="form-group{{ $errors->has('terms_conditions') ? ' has-error' : '' }}">
                                         <label class="col-md-12 text-left">Terms &amp; Conditions</label>
                                         <div class="col-md-12">
-                                            <textarea class="form-control"  name="terms-conditions"></textarea>
-                                            <input type="text" class="form-control" placeholder="Enter Industry"
-                                                   value="{{ old('name') }}" name="name">
-                                            @if ($errors->has('terms-conditions'))
+                                            <textarea class="form-control ckeditor "  name="terms_conditions" id="editor1">{{ $settings->terms_conditions }}</textarea>
+                                            @if ($errors->has('terms_conditions'))
                                                 <span class="help-block">
-                                                {{ $errors->first('terms-conditions') }}
+                                                {{ $errors->first('terms_conditions') }}
+                                               </span>
+                                            @endif
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group{{ $errors->has('privacy_policy') ? ' has-error' : '' }}">
+                                        <label class="col-md-12 text-left">Privacy Policy</label>
+                                        <div class="col-md-12">
+                                            <textarea class="form-control ckeditor "  name="privacy_policy" id="editor2">{{ $settings->privacy_policy }}</textarea>
+                                            @if ($errors->has('privacy_policy'))
+                                                <span class="help-block">
+                                                {{ $errors->first('privacy_policy') }}
                                                </span>
                                             @endif
                                         </div>
@@ -47,7 +67,5 @@
         </div>
     </div>
 
-<script>
 
-</script>
 @endsection

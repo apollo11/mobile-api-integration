@@ -103,6 +103,7 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::prefix('settings')->group(function() {
        Route::get('/', 'Settings\SettingsController@index')->name('settings');
+       Route::post('update', 'Settings\SettingsController@store')->name('settings.update');
     });
 
 });
