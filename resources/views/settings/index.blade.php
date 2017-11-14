@@ -67,5 +67,18 @@
         </div>
     </div>
 
-
+<script src="{{ asset('assets/global/plugins/ckeditor/ckeditor.js') }}" type="text/javascript"></script>
+<script>
+    var custom_ckconfig = {
+                toolbar: [
+                    { name: 'basicstyles', items: [ 'Bold', 'Italic', 'Underline','Strike', '-', 'RemoveFormat' ] },
+                    { name: 'styles', items: [ 'Styles', 'Format' ] },
+                    { name: 'paragraph', items: [ 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote' ] },
+                    { name: 'links', items: [ 'Link', 'Unlink' ] },
+                    { name: 'insert', items: [ 'Image', 'EmbedSemantic', 'Table' ] },
+                ],
+            }
+            CKEDITOR.replace('editor1',custom_ckconfig);
+            CKEDITOR.replace('editor2',custom_ckconfig);
+</script>
 @endsection

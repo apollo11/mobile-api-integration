@@ -226,7 +226,7 @@
     <script src="{{ asset('assets/pages/scripts/table-datatables-buttons.min.js') }}" type="text/javascript"></script>
     <script src="{{ asset('assets/pages/scripts/ui-modals.min.js') }}" type="text/javascript"></script>
     <script src="{{ asset('assets/pages/scripts/dashboard.min.js') }}" type="text/javascript"></script>
-    <script src="{{ asset('assets/global/plugins/ckeditor/ckeditor.js') }}" type="text/javascript"></script>
+    
     <!-- END PAGE LEVEL SCRIPTS -->
     <!-- BEGIN THEME LAYOUT SCRIPTS -->
     <script src="{{ asset('assets/layouts/layout/scripts/layout.min.js') }}" type="text/javascript"></script>
@@ -309,20 +309,6 @@
                 "keyboard"  : true,
                 "show"      : false                     // ensure the modal is shown immediately
             });
-
-           
-            /*custom ckeditor settings*/
-            var custom_ckconfig = {
-                toolbar: [
-                    { name: 'basicstyles', items: [ 'Bold', 'Italic', 'Underline','Strike', '-', 'RemoveFormat' ] },
-                    { name: 'styles', items: [ 'Styles', 'Format' ] },
-                    { name: 'paragraph', items: [ 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote' ] },
-                    { name: 'links', items: [ 'Link', 'Unlink' ] },
-                    { name: 'insert', items: [ 'Image', 'EmbedSemantic', 'Table' ] },
-                ],
-            }
-            CKEDITOR.replace('editor1',custom_ckconfig);
-            CKEDITOR.replace('editor2',custom_ckconfig);
         });
 
         //select all checkboxes

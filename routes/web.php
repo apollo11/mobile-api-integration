@@ -106,6 +106,10 @@ Route::group(['middleware' => ['auth']], function () {
        Route::post('update', 'Settings\SettingsController@store')->name('settings.update');
     });
 
+    Route::prefix('myprofile')->group(function() {
+       Route::get('/', 'MyProfile\ProfileController@index')->name('myprofile');
+       Route::post('update', 'MyProfile\ProfileController@update')->name('myprofile.update');
+    });
 });
 
 Route::get('/home', 'HomeController@index')->name('home');
