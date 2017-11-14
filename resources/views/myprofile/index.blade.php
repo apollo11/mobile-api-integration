@@ -43,7 +43,7 @@
                                     <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
                                         <label class="col-md-3 control-label">Email<span class="is-required">*</span></label>
                                         <div class="col-md-7">
-                                            <input type="text" class="form-control" placeholder="Email" value="{{ $user->email }}" name="email">
+                                            <input type="text" class="form-control" placeholder="Email" value="{{ old('email',$user->email) }}" name="email">
                                             @if ($errors->has('email'))
                                                 <span class="help-block">
                                                 {{ $errors->first('email') }}

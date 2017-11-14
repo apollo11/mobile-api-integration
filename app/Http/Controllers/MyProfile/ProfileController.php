@@ -12,13 +12,7 @@ class ProfileController extends Controller
 {
     //
     public function index(){
-    /*	$settings = new Settings();
-    	$allsettings = $settings->allSettings();*/
-        // $user = Auth::user();
-        // print_r($user);
         $user = User::find( Auth::user()->id );
-        // $user = $userModel->getUserDetails(Auth::user()->);
-        // print_r($user);
     	return view('myprofile.index',['user'=>$user]);
     }
 
@@ -62,7 +56,6 @@ class ProfileController extends Controller
             if(!empty($merge['password'])){
                 $employer->password = bcrypt($merge['password']);
             }
-
             $employer->save();
 
             return redirect()->back()->with('message', 'Updated successfully.');
