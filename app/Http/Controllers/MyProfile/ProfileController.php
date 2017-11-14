@@ -13,6 +13,7 @@ class ProfileController extends Controller
     //
     public function index(){
         $user = User::find( Auth::user()->id );
+        if(empty($user)){abort(404);}
     	return view('myprofile.index',['user'=>$user]);
     }
 
@@ -27,15 +28,17 @@ class ProfileController extends Controller
     {
     	$data = $request->all();
         $id = Auth::user()->id;
+        $employer = \App\User::find($id);
+        if(empty($employer)){abort(404);}
         
-        $validator = $this->updateRules($data,$id);
+        $validator = $this->updateRules($data,$id,$employer->role);
+        
 
         if ($validator->fails()) {
             return redirect(route('myprofile'))
                 ->withErrors($validator)
                 ->withInput();
         } else {
-            $employer = \App\User::find($id);
             $old_email = $employer->email;
 
             if ($request->hasFile('user_profile_image')) {
@@ -47,7 +50,8 @@ class ProfileController extends Controller
             }
             
             if($employer->role == 'employer'){ 
-                $employer->company_name = $merge['name'];    
+                $employer->company_name = $merge['name']; 
+                $employer->contact_no = $merge['contact_no'];   
             }else{
                 $employer->name = $merge['name'];
             }
@@ -65,12 +69,18 @@ class ProfileController extends Controller
     /**
      * Update validation Rules
      */
-    public function updateRules(array $data, $id)
+    public function updateRules(array $data, $id, $role)
     {
-        return Validator::make($data, [
+        $validations = [
             'name' => 'required|string',
             'email' => 'email|required|string|email|max:255|unique:users,email,'.$id
-        ]);
+        ];
+
+        if($role=='employer'){
+            $validations['contact_no'] = 'required|string';
+        }
+
+        return Validator::make($data, $validations);
 
     }
 }

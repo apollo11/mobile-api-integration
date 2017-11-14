@@ -28,7 +28,7 @@
                                 {{ csrf_field() }}
                                 <div class="form-body">
                                     <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
-                                        <label class="col-md-3 control-label">Name<span class="is-required">*</span></label>
+                                        <label class="col-md-3 control-label">Name <span class="is-required">*</span></label>
                                         <div class="col-md-7">
                                             <input type="text" class="form-control" placeholder="Name" value="{{  old('name', $user->role == 'employer' ? $user->company_name : $user->name ) }}" name="name">
                                            
@@ -41,7 +41,7 @@
                                     </div>
 
                                     <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
-                                        <label class="col-md-3 control-label">Email<span class="is-required">*</span></label>
+                                        <label class="col-md-3 control-label">Email <span class="is-required">*</span></label>
                                         <div class="col-md-7">
                                             <input type="text" class="form-control" placeholder="Email" value="{{ old('email',$user->email) }}" name="email">
                                             @if ($errors->has('email'))
@@ -75,6 +75,20 @@
                                             @endif
                                         </div>
                                     </div>
+
+                                    @if ( $user->role == 'employer')
+                                    <div class="form-group{{ $errors->has('contact_no') ? ' has-error' : '' }}">
+                                        <label class="col-md-3 control-label">Contact No. <span class="is-required">*</span></label>
+                                        <div class="col-md-7">
+                                            <input type="text" class="form-control" placeholder="Contact No." value="{{ old('contact_no',$user->contact_no) }}" name="contact_no">
+                                            @if ($errors->has('contact_no'))
+                                                <span class="help-block">
+                                                {{ $errors->first('contact_no') }}
+                                               </span>
+                                            @endif
+                                        </div>
+                                    </div>
+                                    @endif
                                 </div>
 
                                 <div class="form-actions">
