@@ -13,12 +13,14 @@ class CreateSettingsTable extends Migration
      */
     public function up()
     {
-        Schema::table('settings', function (Blueprint $table) {
-            $table->increments('id');
-            $table->text('terms_conditions');
-            $table->text('privacy_policy');
-            $table->dateTime('updated_at');
-        });
+        if (!Schema::hasTable('settings')) {
+            Schema::create('settings', function (Blueprint $table) {
+                $table->increments('id');
+                $table->text('terms_conditions');
+                $table->text('privacy_policy');
+                $table->dateTime('updated_at');
+            });
+        }
     }
 
     /**
