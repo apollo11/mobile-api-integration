@@ -274,3 +274,5 @@
     </div>
     @include('job.assign-job')
 @endsection
+
+@include('layouts.employee-datatables-include')

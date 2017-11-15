@@ -170,7 +170,9 @@
             </div>
         </div>
     </div>
+@endsection
 
+@section('custom_page_js')
 <script src="{{ asset('assets/global/plugins/ckeditor/ckeditor.js') }}" type="text/javascript"></script>
 <script>
     var custom_ckconfig = {
@@ -185,4 +187,4 @@
             CKEDITOR.replace('editor1',custom_ckconfig);
             CKEDITOR.replace('editor2',custom_ckconfig);
 </script>
-@endsection
+@stop

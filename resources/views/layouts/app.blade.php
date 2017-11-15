@@ -34,7 +34,6 @@
 
         <link href="{{ asset('assets/global/plugins/fullcalendar/fullcalendar.css') }}" rel="stylesheet" type="text/css"/>
         <link href="{{ asset('assets/global/plugins/jqvmap/jqvmap/jqvmap.css') }}" rel="stylesheet" type="text/css"/>
-        <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.16/css/jquery.dataTables.css">
         <!-- END PAGE LEVEL PLUGIN STYLES -->
 
         <!-- BEGIN PAGE STYLES -->
@@ -50,6 +49,9 @@
         <link href="{{ asset('assets/layouts/layout/css/themes/darkblue.css') }}" rel="stylesheet" type="text/css" id="style_color"/>
         <link href="{{ asset('assets/layouts/layout/css/custom.css') }}" rel="stylesheet" type="text/css"/>
 
+        <!-- page level javascripts -->
+           @yield ('custom_page_css')
+        <!-- end page level javascripts -->
 
         <!-- END THEME STYLES -->
 </head>
@@ -136,7 +138,7 @@
     <!-- BEGIN JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time) -->
     <!-- BEGIN CORE PLUGINS -->
     <!--[if lt IE 9]>
-    <script src="{{ asset('assets/global/plugins/respond.min.js') }}"></script>
+    <script src="{{ asset('assets/global/plugins/respond.min.js') }}"></sdatatcript>
     <script src="{{ asset('assets/global/plugins/excanvas.min.js') }}"></script>
     <script src="{{ asset('assets/global/plugins/ie8.fix.min.js') }}"></script>
     <![endif]-->
@@ -202,9 +204,6 @@
     <script src="{{ asset('assets/global/plugins/gritter/js/jquery.gritter.js') }}" type="text/javascript"></script>
 
     <script src="{{ asset('assets/global/plugins/bootbox/bootbox.min.js') }}" type="text/javascript"></script>
-
-    <script src="{{ asset('assets/global/scripts/datatable.js') }}" type="text/javascript"></script>
-    <script src="{{ asset('assets/global/plugins/datatables/datatables.min.js') }}" type="text/javascript"></script>
     <!-- END PAGE LEVEL PLUGINS -->
 
     <!-- BEGIN PAGE LEVEL SCRIPTS -->
@@ -223,7 +222,6 @@
     <!-- END THEME GLOBAL SCRIPTS -->
 
     <!-- BEGIN PAGE LEVEL SCRIPTS -->
-    <script src="{{ asset('assets/pages/scripts/table-datatables-buttons.min.js') }}" type="text/javascript"></script>
     <script src="{{ asset('assets/pages/scripts/ui-modals.min.js') }}" type="text/javascript"></script>
     <script src="{{ asset('assets/pages/scripts/dashboard.min.js') }}" type="text/javascript"></script>
     
@@ -249,34 +247,6 @@
                 $('#birthdate').datetimepicker();
 
 
-            });
-
-            $('#employee-table').DataTable({
-                dom: 'Bfrtip',
-                buttons: [
-                    { "extend": 'excel', "text":'Export',"className": 'btn sbold red' }
-                ],
-                autoFill: true,
-//                "scrollCollapse": true,
-                "scrollY":"500"
-            });
-
-            $('#select-group, #select-employer ').DataTable({
-                autoFill: true,
-                "scrollY":"200",
-                "searching": false,
-                "bPaginate": false,
-                "paging":   false,
-                "info":     false
-            });
-
-            $('#recipient-form-list').DataTable({
-                autoFill: true,
-                "scrollY":"300",
-                "searching": false,
-                "bPaginate": true,
-                "paging":   false,
-                "info":     false
             });
 
             $("#myModal").on("show", function() {    // wire up the OK button to dismiss the modal when shown
@@ -321,7 +291,6 @@
     <script type="text/javascript">
         @if ($errors->has('profile_image'))
             $('#profile-img').modal('show');
-
         @endif
 
         @if ($errors->has('profile_front_ic'))
@@ -345,7 +314,7 @@
     <script>
         jQuery(document).ready(function() {
             App.init(); // init metronic core componets
-            Layout.init(); // init layout
+           // Layout.init(); // init layout
             QuickSidebar.init(); // init quick sidebar
 //            Index.init();
 //            Index.initDashboardDaterange();
@@ -359,5 +328,11 @@
         });
     </script>
     <!-- END JAVASCRIPTS -->
+
+
+<!-- page level javascripts -->
+   @yield ('custom_page_js')
+<!-- end page level javascripts -->
+
 </body>
 </html>

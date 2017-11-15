@@ -45,7 +45,6 @@
                 <a href="{{ route('employee.lists') }}">
                     <i class="fa fa-user"></i>
                     <span class="title">Employees</span>
-                    <span class="arrow "></span>
                 </a>
             </li>
              @if (Auth::user()->role_id == 0)
@@ -84,30 +83,37 @@
                     Location</a>
             </li>
 
-            <li>
-                <a href="javascript:;">
-                    <i class="icon-pencil"></i>
-                    Report</a>
-            </li>
+            <li class="nav-item">
+                                <a href="javascript:;" class="nav-link nav-toggle">
+                                    <i class="fa fa-line-chart"></i>
+                                    <span class="title">Reports</span>
+                                    <span class="arrow"></span>
+                                </a>
+                                <ul class="sub-menu" style="display: none;">
+                                    <li class="nav-item  ">
+                                        <a href="{{route('reports.related_jobs') }}" class="nav-link ">
+                                            <span class="title">Related Jobs</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+
             <li>
                 <a href="javascript:;">
                     <i class="fa fa-user"></i>
                     <span class="title">Admin Users</span>
-                    <span class="arrow "></span>
                 </a>
             </li>
             <li>
                 <a href="javascript:;">
                     <i class="icon-settings"></i>
                     <span class="title">Push Notification</span>
-                    <span class="arrow "></span>
                 </a>
             </li>
             <li {{{ ($current_route == 'recipient.lists' ? 'class=active' : '') }}}>
                 <a href="{{ route('recipient.lists') }}">
                     <i class="icon-settings"></i>
                     <span class="title">Recipient Group</span>
-                    <span class="arrow "></span>
                 </a>
             </li>
             @endif
@@ -116,7 +122,7 @@
                 <a href="{{route('settings') }}">
                     <i class="icon-settings"></i>
                     <span class="title">Settings</span>
-                    <span class="arrow "></span>
+                    
                 </a>
             </li>
             <li>
@@ -125,7 +131,6 @@
                                 document.getElementById('logout-form').submit();">
                     <i class="icon-logout"></i>
                     <span class="title">Logout</span>
-                    <span class="arrow "></span>
                 </a>
                 <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                     {{ csrf_field() }}
