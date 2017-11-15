@@ -226,6 +226,7 @@
     <script src="{{ asset('assets/pages/scripts/table-datatables-buttons.min.js') }}" type="text/javascript"></script>
     <script src="{{ asset('assets/pages/scripts/ui-modals.min.js') }}" type="text/javascript"></script>
     <script src="{{ asset('assets/pages/scripts/dashboard.min.js') }}" type="text/javascript"></script>
+    
     <!-- END PAGE LEVEL SCRIPTS -->
     <!-- BEGIN THEME LAYOUT SCRIPTS -->
     <script src="{{ asset('assets/layouts/layout/scripts/layout.min.js') }}" type="text/javascript"></script>
@@ -278,10 +279,6 @@
                 "info":     false
             });
 
-
-
-
-
             $("#myModal").on("show", function() {    // wire up the OK button to dismiss the modal when shown
                 $("#myModal a.btn").on("click", function(e) {
                     console.log("button pressed");   // just as an example...
@@ -312,8 +309,6 @@
                 "keyboard"  : true,
                 "show"      : false                     // ensure the modal is shown immediately
             });
-
-
         });
 
         //select all checkboxes
@@ -363,8 +358,6 @@
 //            Tasks.initDashboardWidget();
         });
     </script>
-
     <!-- END JAVASCRIPTS -->
-
 </body>
 </html>
