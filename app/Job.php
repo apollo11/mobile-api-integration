@@ -243,7 +243,6 @@ class Job extends Model
      */
     public function jobList(array $param)
     {
-
         $jobs = DB::table('users')
             ->join('jobs', 'users.id', '=', 'jobs.user_id')
             ->select(
@@ -282,11 +281,12 @@ class Job extends Model
                 , 'jobs.latitude'
                 , 'jobs.longitude'
                 , 'jobs.geolocation_address'
-
             )
             ->when(!empty($param['status']), function ($query) use ($param) {
-
                 return $query->where('jobs.status', $param['status']);
+            })
+            ->when(!empty($param['userid']), function ($query) use ($param) {
+                return $query->where('jobs.user_id', $param['userid']);
             })
             ->orderBy('jobs.id', 'DESC')
             ->get();

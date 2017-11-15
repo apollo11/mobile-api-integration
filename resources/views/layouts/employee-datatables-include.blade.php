@@ -15,7 +15,8 @@
 	        ],
 	        autoFill: true,
 	//                "scrollCollapse": true,
-	        "scrollY":"500"
+	        "scrollY":"500",
+	        "scrollX" : true
 	    });
     });
 </script>

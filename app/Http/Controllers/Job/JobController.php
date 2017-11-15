@@ -49,13 +49,23 @@ class JobController extends Controller
      */
     public function index(Request $request)
     {
+        $role = Auth::user()->role;
+
+        if($role=='employer'){
+            $userid = Auth::user()->id;
+        }else{
+            $userid = '';
+        }
+
         $param = [
-            'status' => $request->get('status')
+            'status' => $request->get('status'),
+            'userid'=>$userid
         ];
+
 
         $jobsLists = $this->jobLists($param);
 
-        return view('job.lists', ['job' => $jobsLists]);
+        return view('job.lists', ['job' => $jobsLists,'role'=>$role]);
     }
 
     /**

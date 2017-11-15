@@ -245,8 +245,6 @@
                 $('#end-date').datetimepicker();
                 $('#school-expiry-date').datetimepicker();
                 $('#birthdate').datetimepicker();
-
-
             });
 
             $("#myModal").on("show", function() {    // wire up the OK button to dismiss the modal when shown
@@ -255,6 +253,7 @@
                     $("#myModal").modal('hide');     // dismiss the dialog
                 });
             });
+            
             $("#myModal").on("hide", function() {    // remove the event listeners when the dialog is dismissed
                 $("#myModal a.btn").off("click");
             });

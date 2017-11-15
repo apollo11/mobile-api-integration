@@ -5,6 +5,8 @@
     margin-right: 3px;
 }
 
+.reports-wrapper  .portlet.light .dataTables_wrapper .dt-buttons {margin-top:0px;}
+
 .employee-list .dataTables_wrapper .dataTables_filter,
 .payout-list .dataTables_wrapper .dataTables_filter,
 .payout-details .dataTables_wrapper .dataTables_filter,
@@ -45,3 +47,4 @@
     top: 14px;
 }
 
+.no-border.table-scrollable{border:0px}

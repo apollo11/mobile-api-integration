@@ -34,8 +34,10 @@
                                 </div>
                                 {{ csrf_field() }}
                                 <div class="actions">
+                                    @if ($role == 'Administrator')
                                     <input class="btn sbold green" name="multiple" value="Approve" type="submit"/>
                                     <input class="btn sbold green" name="multiple" value="Reject" type="submit"/>
+                                    @endif
                                     <input class="btn sbold green" name="multiple" value="Delete" type="submit"/>
                                     <a href="{{ route('job.create') }}" id="sample_editable_1_new"
                                        class="btn sbold green"> Add New
@@ -55,16 +57,18 @@
                                             </label>
                                         </th>
                                         <th>#</th>
+                                        @if ($role == 'Administrator')
                                         <th>Employer</th>
+                                        @endif
                                         <th>Job Name</th>
-                                        <th> Employees Required</th>
+                                        <th>Employees Required</th>
                                         <th>Employees Applied</th>
                                         <th>Rate</th>
-                                        <th> Job Date & Time</th>
+                                        <th>Job Date & Time</th>
                                         <th>Business Manager</th>
-                                        <th> Job Location</th>
-                                        <th> Status</th>
-                                        <th> Action</th>
+                                        <th>Job Location</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -77,7 +81,9 @@
                                             </label>
                                         </td>
                                         <td>{{ $loop->iteration }}</td>
+                                         @if ($role == 'Administrator')
                                         <td><a href="{{ route('employer.details',['id' => $value->user_id ]) }}">{{ $value->company_name }} </a></td>
+                                        @endif
                                         <td> <a href="{{ route('job.details',['id' =>  $value->id])  }}"> {{ $value->job_title }} </a></td>
                                         <td>{{ $value->no_of_person }}</td>
                                         <td><a href="#">0 </a></td>
@@ -120,6 +126,7 @@
                                                         <a href="{{ route('job.details',['id' =>  $value->id])  }}">
                                                             <i class="fa fa-eye"></i> View </a>
                                                     </li>
+                                                     @if ($role == 'Administrator')
                                                     <li>
                                                         <a href="{{ route('job.multiple',['id' =>  $value->id, 'param' => 'Approve'])  }}"
                                                            onclick="event.preventDefault();
@@ -133,6 +140,7 @@
                                                             <i class="fa fa-close"></i> Reject
                                                         </a>
                                                     </li>
+                                                    @endif
                                                 </ul>
                                             </div>
                                         </td>
