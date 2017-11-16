@@ -12,6 +12,7 @@ class SettingsTableSeeder extends Seeder
     public function run()
     {
         DB::table('settings')->insert([
+            'updated_at'=> date('Y-m-d H:i:s'),
             'terms_conditions' => '',
             'privacy_policy' => '',
             'point_basic'   => '100',
