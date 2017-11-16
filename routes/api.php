@@ -87,13 +87,13 @@ Route::group(['middleware' => ['auth:api']], function () {
 
     });
 
-    /*Route::prefix('v1/user/')->group(function () {
+    Route::prefix('v1/user/')->group(function () {
 
         Route::get('details', 'EmployeeProfile\EmployeeProfileController@show');
         Route::post('edit/info', 'EmployeeProfile\AdditionalInfoController@store');
         Route::post('edit/basic/info', 'EmployeeProfile\BasicInfoController@update');
-
-    });*/
+        Route::post('update_location', 'EmployeeProfile\EmployeeProfileController@update_location');
+    });
 
     Route::prefix('v1/job/schedule/')->group(function () {
 
@@ -141,11 +141,6 @@ Route::group(['middleware' => ['auth:api']], function () {
     });
 
 });
-
-
-Route::prefix('v1/user/')->group(function () {
-        Route::post('update_location', 'EmployeeProfile\EmployeeProfileController@update_location');
-    });
 
 Route::group(['middleware' => ['auth_client']], function () {
 
