@@ -9,6 +9,8 @@ use App\Http\Traits\ProfileTrait;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
+use Validator;
+
 class EmployeeProfileController extends Controller
 {
     use ProfileTrait;
@@ -176,12 +178,47 @@ class EmployeeProfileController extends Controller
     */
     public function update_location(Request $request){
         // print_r($request);
-         $user_id = $request->get('user_id');
-         $lat = $request->get('lat');
-         $long = $request->get('long');
-         echo $user_id.', lat:'.$lat.',long:'.$long;
+        $return_data = array(
+            'status'=>'',
+            'data'=>''
+        );
+        
+        $user_id = $request->get('user_id');
+        $lat = $request->get('lat');
+        $long = $request->get('long');
+        $data = $request->all();
+        $user = \App\User::find($user_id);
+        if(empty($user)  || !is_numeric($user_id) ){
+            $return_data['status'] = 'fail';
+            $return_data['errors'] = array('User not found');
+        }else{
+            $validator = $this->updateRules($data,$user_id);
 
-         
+             if ($validator->fails()) {
+                $return_data['status'] = 'fail';
+                $return_data['errors'] = $validator->errors()->all();
+            } else {
+                $user->employee_current_lat = $lat;
+                $user->employee_current_long = $long;
+                $user->save();
+
+                $return_data['status'] = 'success';
+                $return_data['errors'] = array('User location updated');
+            }
+        }
+
+        echo json_encode($return_data);
         exit;
+    }
+
+    public function updateRules(array $data, $id)
+    {
+        $validations = [
+            'lat' => 'required|numeric',
+            'long' => 'required|numeric',
+        ];
+
+        return Validator::make($data, $validations);
+
     }
 }
