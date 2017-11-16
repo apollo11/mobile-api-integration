@@ -15,8 +15,8 @@ class AddColumnToUsers extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             //
-            $table->decimal('employee_current_lat', 10, 8);
-            $table->decimal('employee_current_long', 11, 8);
+            $table->decimal('employee_current_lat', 10, 8)->nullable();
+            $table->decimal('employee_current_long', 11, 8)->nullable();
         });
     }
 
