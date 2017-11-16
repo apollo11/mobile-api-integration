@@ -169,4 +169,19 @@ class EmployeeProfileController extends Controller
 
         return $data;
     }
+
+
+    /*
+    * Update employee location
+    */
+    public function update_location(Request $request){
+        // print_r($request);
+         $user_id = $request->get('user_id');
+         $lat = $request->get('lat');
+         $long = $request->get('long');
+         echo $user_id.', lat:'.$lat.',long:'.$long;
+
+         
+        exit;
+    }
 }

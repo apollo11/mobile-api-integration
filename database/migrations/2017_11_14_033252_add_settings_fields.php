@@ -21,7 +21,7 @@ class AddSettingsFields extends Migration
             $table->Integer('point_late_job')->default(0)->after('point_reject_job');
             $table->Integer('point_cancel_job_w_reason')->default(0)->after('point_late_job');
             $table->Integer('point_cancel_job_wt_reason')->default(0)->after('point_cancel_job_w_reason');
-            $table->Integer('point_dont_turnup_job')->default(0)->after('point_reject_job_wt_reason');
+            $table->Integer('point_dont_turnup_job')->default(0)->after('point_cancel_job_wt_reason');
         });
     }
 
