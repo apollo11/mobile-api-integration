@@ -43,7 +43,8 @@ class Job extends Model
         'job_status',
         'latitude',
         'longitude',
-        'geolocation_address'
+        'geolocation_address',
+        'zip_code'
     ];
 
     /**
@@ -336,6 +337,7 @@ class Job extends Model
                 , 'jobs.latitude'
                 , 'jobs.longitude'
                 , 'jobs.geolocation_address'
+                , 'jobs.zip_code'
 
             )
             ->where('jobs.id', '=', $id)

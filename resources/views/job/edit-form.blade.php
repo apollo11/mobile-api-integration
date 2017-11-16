@@ -132,7 +132,7 @@
                                         <label class="col-md-3 control-label">Zip Code<span class="is-required">*</span></label>
                                         <div class="col-md-7">
                                             <input type="text" class="form-control" placeholder="Enter Postal Code"
-                                                   value="{{ old('postal_code') }}" name="postal_code">
+                                                   value="{{ $details->zip_code }}" name="postal_code">
                                             <p class="help-block"> Zip Code must be 6 digits ie.(018956)</p>
                                             @if ($errors->has('postal_code'))
                                                 <span class="help-block">
@@ -343,10 +343,11 @@
                                         <div class="col-md-7">
                                             <select class="form-control" name="industry">
                                                 @foreach( $industry as $value)
+                                                    {{ $input = $value->id.'.'.$value->name }}
                                                     @if($loop->count == 0)
                                                         <option value="none">None</option>
                                                     @else
-                                                        <option {{ $details->industry_id == $value->id ? 'selected' : '' }} value="{{ $value->id.'.'.$value->name}}">{{ $value->name }}</option>
+                                                        <option value="{{ $input  }}" {{ old('industry') == $input ? "selected" : "" }}>{{ $value->name }}</option>
                                                     @endif
                                                 @endforeach
                                             </select>

@@ -76,9 +76,9 @@ class JobController extends Controller
     public function create()
     {
         $user = new Employer();
-        $location = $this->location();
+        $location = new Location();
+        $nationality = new Nationality();
         $industry = $this->industry();
-        $nationality = $this->nationalityList();
         $employee = $user->employerList();
         $age = $this->age();
 
@@ -86,10 +86,11 @@ class JobController extends Controller
 
         return view('job.form', ['user' => $user
             , 'industry' => $industry
-            , 'location' => $location
-            , 'nationality' => $nationality
+            , 'location' => $location->locationLists()
+            , 'nationality' => $nationality->nationalityDropdown()
             , 'employee' => $employee
             , 'age' => $age
+            , 'language' => $nationality->language()
         ]);
     }
 
@@ -102,9 +103,9 @@ class JobController extends Controller
     public function store(Request $request)
     {
         $data = $request->all();
-
         $location = explode('.', $request->input('job_location'));
         $zipCode = $this->getAddress($request->input('postal_code'));
+        $data['zip_code'] = $request->input('postal_code');
         $data['postal_code'] = $zipCode;
         $industry = explode('.', $request->input('industry'));
         $age = explode('-', $request->input('age'));
@@ -155,29 +156,30 @@ class JobController extends Controller
             'location_id' => $data['location_id'],
             'location' => $data['location'],
             'description' => $data['job_description'],
-            'job_requirements' => $data['job_requirements'],
+            'job_requirements' => empty($data['job_requirements'])? '' : $data['job_requirements'],
             'role' => $data['job_role'],
-            'gender' => $data['gender'],
-            'nationality' => $data['nationality'],
+            'gender' => empty($data['gender']) ? '' : $data['gender'],
+            'nationality' => empty($data['nationality']) ? '' : $data['nationality'],
             'job_image_path' => $data['job_image'],
             'no_of_person' => $data['no_of_person'],
-            'contact_person' => $data['contact_person'],
-            'contact_no' => $data['contact_no'],
-            'business_manager' => $data['business_manager'],
+            'contact_person' => empty($data['contact_person']) ? '' : $data['contact_person'],
+            'contact_no' => empty($data['contact_no']) ? '' : $data['contact_no'],
+            'business_manager' => empty($data['business_manager']) ? '' : $data['business_manager'],
             'employer' => $data['employer'],
-            'rate' => $data['hourly_rate'],
-            'language' => $data['preferred_language'],
+            'rate' => empty($data['hourly_rate']) ? 0 : $data['hourly_rate'],
+            'language' => empty($data['preferred_language']) ? '' : $data['preferred_language'] ,
             'job_date' => $this->convertToUtc($data['date']),
             'end_date' => $this->convertToUtc($data['end_date']),
             'industry_id' => $data['industry_id'],
             'industry' => $data['industry'],
-            'notes' => $data['notes'],
-            'status' => $data['status'],
+            'notes' => empty($data['notes']) ? '' : $data['notes'],
+            'status' => Auth::user()->role_id == 0 ? 'active' : 'inactive',
             'min_age' => $data['min_age'],
             'max_age' => $data['max_age'],
             'latitude' => $data['postal_code']['lat'],
             'longitude' =>  $data['postal_code']['lng'],
-            'geolocation_address' => $data['address']
+            'geolocation_address' => $data['address'],
+            'zip_code' => $data['zip_code']
         ]);
 
         $this->lastInsertedId = $insertedId->id;
@@ -365,25 +367,25 @@ class JobController extends Controller
         return Validator::make($data, [
             'job_title' => 'required',
             'job_description' => 'required|string',
-            'job_requirements' => 'required|string',
+      //      'job_requirements' => 'required|string',
             'job_role' => 'required|string',
             'job_image' => 'required',
             'no_of_person' => 'required|numeric',
-            'contact_person' => 'required|string',
-            'business_manager' => 'required|string',
+        //    'contact_person' => 'required|string',
+       //     'business_manager' => 'required|string',
             'job_employer' => 'required|string',
-            'hourly_rate' => 'required|numeric',
-            'preferred_language' => 'required|string',
+       //     'hourly_rate' => 'required|numeric',
+      //      'preferred_language' => 'required|string',
             'date' => 'required|date',
             'end_date' => 'required|date',
-            'notes' => 'required|string',
-            'status' => 'required|string',
-            'gender' => 'required|string',
+        //    'notes' => 'required|string',
+        //    'status' => 'required|string',
+        //    'gender' => 'required|string',
             'job_location' => 'required|string',
-            'contact_no' => 'required|string',
-            'industry' => 'required|string',
-            'age' => 'required',
-            'nationality' => 'required|string',
+        //   'contact_no' => 'required|string',
+             'industry' => 'required|string',
+       //     'age' => 'required',
+       //     'nationality' => 'required|string',
             'postal_code' => 'required'
         ]);
     }
