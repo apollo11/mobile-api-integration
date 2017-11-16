@@ -344,13 +344,7 @@ class JobSchedule extends Model
     public function schedConflict($userId, $startDate, $endDate)
     {
         $sched = DB::table('job_schedules')
-            ->select('job_schedules.job_id as schedId'
-                , 'job_schedules.user_id as schedUserId'
-                , 'users.id as userId'
-                , 'jobs.id as jobId'
-                , 'jobs.job_date as start_date'
-                , 'jobs.end_date'
-            )
+            ->select('job_schedules.job_id as schedId' ,'job_schedules.job_status')
             ->join('users', 'users.id', '=', 'job_schedules.user_id')
             ->join('jobs', 'jobs.id', '=', 'job_schedules.job_id')
             ->where(function ($query) use ($startDate, $endDate) {
@@ -363,9 +357,9 @@ class JobSchedule extends Model
                         $query->where('jobs.end_date', '>=', $endDate);
                 });
             })
-            ->where('job_schedules.job_status', 'accepted')
+            ->whereIn('job_schedules.job_status', ['accepted','pending'])
             ->where('job_schedules.user_id', $userId)
-            ->get();
+            ->first();
 
         return $sched;
     }
