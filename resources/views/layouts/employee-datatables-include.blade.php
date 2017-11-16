@@ -16,7 +16,8 @@
 	        autoFill: true,
 	//                "scrollCollapse": true,
 	        "scrollY":"500",
-	        "scrollX" : true
+	        "scrollX" : true,
+	        "sScrollXInner": "100%",
 	    });
     });
 </script>
