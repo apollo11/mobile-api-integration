@@ -110,6 +110,10 @@ Route::group(['middleware' => ['auth']], function () {
        Route::get('/', 'MyProfile\ProfileController@index')->name('myprofile');
        Route::post('update', 'MyProfile\ProfileController@update')->name('myprofile.update');
     });
+
+    Route::prefix('reports')->group(function() {
+       Route::get('/related_jobs', 'Reports\ReportsController@related_jobs')->name('reports.related_jobs');
+    });
 });
 
 Route::get('/home', 'HomeController@index')->name('home');

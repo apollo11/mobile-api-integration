@@ -462,5 +462,6 @@
 
 @include('employee.edit-profile')
 
-
 @endsection
+
+@include('layouts.employee-datatables-include')
