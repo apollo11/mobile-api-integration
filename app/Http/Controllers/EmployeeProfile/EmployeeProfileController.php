@@ -203,7 +203,7 @@ class EmployeeProfileController extends Controller
                 $user->save();
 
                 $return_data['status'] = 'success';
-                $return_data['errors'] = array('User location updated');
+                $return_data['msg'] = array('User location updated');
             }
         }
 
