@@ -17,7 +17,7 @@ trait JobDetailsOutputTrait
                     'image_url' => $output->profile_image_path,
                     'name' => $output->company_name,
                     'description' => $output->company_description,
-                    'hourly_rate' => $output->employee_rate
+                    'hourly_rate' => $output->employer_rate
                 ],
                 'industry' => [
                     'id' => $output->industry_id,
