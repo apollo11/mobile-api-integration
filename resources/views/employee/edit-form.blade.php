@@ -35,7 +35,7 @@
                                         <label class="col-md-3 control-label">Name</label>
                                         <div class="col-md-7">
                                             <input type="text" class="form-control" placeholder="Enter Name"
-                                                   value="{{ $details->userName }}" name="name">
+                                                   value="{{ !old('name') ? $details->userName : old('name') }}" name="name">
                                             @if ($errors->has('name'))
                                                 <span class="help-block">
                                                 {{ $errors->first('name') }}
@@ -140,11 +140,7 @@
                                             <select class="form-control" name="nationality">
                                                 <option value="">-- select one --</option>
                                                 @foreach($nationality as $key => $value)
-                                                  @if($value == $details->nationality)
-                                                    <option value="{{$value}}" {{ old('nationality') == $value ? "selected" : "" }}> {{ $value  }}</option>
-                                                  @else
-                                                    <option value="{{$value}}" {{ old('nationality') == $value ? "selected" : "" }}> {{ $value  }}</option>
-                                                  @endif
+                                                    <option value="{{$value}}" {{ $details->nationality == $value ? 'selected' : '' }}> {{ $value  }}</option>
                                                 @endforeach
                                             </select>
                                             @if ($errors->has('nationality'))
@@ -160,13 +156,8 @@
                                         <label class="col-md-3 control-label">Language<span class="is-required">*</span></label>
                                         <div class="col-md-7">
                                             <select class="form-control" name="language">
-                                                <option value="">-- select one --</option>
                                                 @foreach($language as $key => $value)
-                                                    @if($details->language == $value)
-                                                        <option value="{{$value}}" {{ old('language') == $value ? "selected" : "" }}> {{ ucfirst($value)   }}</option>
-                                                    @else
-                                                        <option value="{{$value}}" {{ old('language') == $value ? "selected" : "" }}> {{ ucfirst($value)   }}</option>
-                                                    @endif
+                                                    <option value="{{$value}}" {{ $details->language == $value ? 'selected' : '' }}> {{ ucfirst($value)   }}</option>
                                                 @endforeach
                                             </select>
 
