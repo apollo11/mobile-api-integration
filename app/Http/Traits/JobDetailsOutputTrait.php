@@ -47,7 +47,6 @@ trait JobDetailsOutputTrait
                 'start_date' => $this->dateFormat($output->start_date),
                 'end_date' => $this->dateFormat($output->end_date),
                 'contact_no' => $output->contact_no,
-                'rate' => $output->rate,
                 'thumbnail_url' => $output->job_image_path,
                 'nationality' => ucfirst($output->nationality),
                 'description' => $output->description,
