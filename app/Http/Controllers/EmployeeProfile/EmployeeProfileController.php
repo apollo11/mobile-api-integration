@@ -179,7 +179,7 @@ class EmployeeProfileController extends Controller
     * Update employee location
     */
     public function update_location(Request $request){
-        $return_data = array();
+        $return_data = '';
         $error_code = 120001;
         
         $user_id = $request->get('user_id');
@@ -197,7 +197,8 @@ class EmployeeProfileController extends Controller
                /* $return_data['success'] = false;
                 $return_data['errors'] = ;*/
                 $errors = $validator->errors()->all();
-                $this->errorResponse($errors, 'Validation Error', $error_code, 400);
+                // print_r($errors);exit;
+                $return_data = $this->errorResponse($errors, 'Validation Error', $error_code, 400);
             } else {
                 $user->employee_current_lat = $lat;
                 $user->employee_current_long = $long;
