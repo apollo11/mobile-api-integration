@@ -274,7 +274,8 @@ class EmployeeController extends Controller
                 'nationality' => $data['nationality'],
                 'front_ic_path' => 'none',
                 'back_ic_path' => 'none',
-                'signature_file_path' => 'none'
+                'signature_file_path' => 'none',
+                'rate' => $data['rate']
             ]);
 
         } else {
@@ -296,6 +297,7 @@ class EmployeeController extends Controller
                 'medication' => $medical,
                 'language' => $data['language'],
                 'nationality' => $data['nationality'],
+                'rate' => $data['rate']
             ]);
 
         }
@@ -316,7 +318,7 @@ class EmployeeController extends Controller
 
         return Validator::make($data, [
                 'name' => 'required|string|max:255',
-                'email' => 'required|string|email|max:255|unique:users',
+                'email' => 'required|string|email|max:255|unique:additional_infos',
                 'mobile_no' => 'required',
                 'birthdate' => 'date|required',
                 'nationality' => 'required|string',
@@ -328,7 +330,8 @@ class EmployeeController extends Controller
                 'contact_method' => 'required',
                 'religion' => 'required|string',
                 'emergency_person_address' => 'required|string',
-                'address' => 'required'
+                'address' => 'required',
+                'rate' => 'required|numeric'
             ]
         );
 

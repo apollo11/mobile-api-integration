@@ -57,7 +57,7 @@
                                     </div>
 
                                     <div class="form-group{{ $errors->has('job_requirements') ? ' has-error' : '' }}">
-                                        <label class="col-md-3 control-label">Job Requirements<span class="is-required">*</span></label>
+                                        <label class="col-md-3 control-label">Job Requirements</label>
                                         <div class="col-md-7">
                                             <textarea class="form-control" name="job_requirements"
                                                       rows="3">{{ old('job_requirements') }}</textarea>
@@ -83,7 +83,7 @@
                                     </div>
 
                                     <div class="form-group{{ $errors->has('age') ? ' has-error' : '' }}">
-                                        <label class="col-md-3 control-label">Age<span class="is-required">*</span></label>
+                                        <label class="col-md-3 control-label">Age</label>
                                         <div class="col-md-7">
                                             <select class="form-control" name="age">
                                                 @foreach($age as $key => $value)
@@ -100,7 +100,7 @@
                                     </div>
 
                                     <div class="form-group {{ $errors->has('gender') ? ' has-error' : '' }}">
-                                        <label class="col-md-3 control-label">Gender<span class="is-required">*</span></label>
+                                        <label class="col-md-3 control-label">Gender</label>
                                         <div class="col-md-7">
                                             <div class="mt-checkbox-inline">
                                                 <label class="mt-checkbox">
@@ -143,7 +143,7 @@
                                     </div>
 
 
-                                    <div class="form-group{{ $errors->has('job_location') ? ' has-error' : '' }}">
+                                    <div class="form-group{{ $errors->has('job_location') ? ' has-error' : '' }}" style="display:none;">
                                         <label class="col-md-3 control-label">Filter by location<span class="is-required">*</span></label>
                                         <div class="col-md-7">
                                             <select class="form-control" name="job_location">
@@ -166,7 +166,7 @@
                                     </div>
 
                                     <div class="form-group{{ $errors->has('nationality') ? ' has-error' : '' }}">
-                                        <label class="col-md-3 control-label">Nationality<span class="is-required">*</span></label>
+                                        <label class="col-md-3 control-label">Nationality</label>
                                         <div class="col-md-7">
                                             <select class="form-control" name="nationality">
                                                 <option value="">-- select one --</option>
@@ -209,7 +209,7 @@
                                     </div>
 
                                     <div class="form-group{{ $errors->has('contact_person') ? ' has-error' : '' }}">
-                                        <label class="col-md-3 control-label">Contact Person<span class="is-required">*</span></label>
+                                        <label class="col-md-3 control-label">Contact Person</label>
                                         <div class="col-md-7">
                                             <input type="text" class="form-control" placeholder="Enter Contact Person"
                                                    value="{{ old('contact_person') }}" name="contact_person">
@@ -222,7 +222,7 @@
                                     </div>
 
                                     <div class="form-group{{ $errors->has('contact_no') ? ' has-error' : '' }}">
-                                        <label class="col-md-3 control-label">Contact No.<span class="is-required">*</span></label>
+                                        <label class="col-md-3 control-label">Contact No.</label>
                                         <div class="col-md-7">
                                             <input type="text" class="form-control" placeholder="Enter Contact No."
                                                    value="{{ old('contact_no') }}" name="contact_no">
@@ -235,7 +235,7 @@
                                     </div>
 
                                     <div class="form-group{{ $errors->has('business_manager') ? ' has-error' : '' }}">
-                                        <label class="col-md-3 control-label">Business Manager<span class="is-required">*</span></label>
+                                        <label class="col-md-3 control-label">Business Manager</label>
                                         <div class="col-md-7">
                                             @if(Auth::user()->role_id == 1)
                                             <input type="text" class="form-control" placeholder="Enter Business Manager"
@@ -257,24 +257,37 @@
                                     <div class="form-group{{ $errors->has('job_employer') ? ' has-error' : '' }}">
                                         <label class="col-md-3 control-label">Employer<span class="is-required">*</span></label>
                                         <div class="col-md-7">
-                                            @if(Auth::user()->role_id == 1)
-                                                <select class="form-control" name="job_employer">
-                                                    <option value="">---Select One ---</option>
-                                                    <option value="{{ Auth::user()->id.'.'.Auth::user()->company_name }}" >{{ Auth::user()->company_name }}</option>
-                                                </select>
-                                            @endif
+                                            {{--@if(Auth::user()->role_id == 1)--}}
+                                                {{--<select class="form-control" name="job_employer">--}}
+                                                    {{--<option value="">---Select One ---</option>--}}
+                                                    {{--<option value="{{ Auth::user()->id.'.'.Auth::user()->company_name }}" >{{ Auth::user()->company_name }}</option>--}}
+                                                {{--</select>--}}
+                                            {{--@endif--}}
+
+                                                @if(Auth::user()->role_id == 1)
+                                                    <select class="form-control" name="job_employer">
+                                                        @foreach( $employer as $value)
+                                                            {{ $input = $value->id.'.'.$value->company_name }}
+                                                            @if($value->company_name == Auth::user()->company_name)
+                                                                <option value="{{ $input }}" {{ old('job_employer') == $input ? "selected" : "" }}>{{ $value->company_name }}</option>
+                                                            @endif
+                                                            @break;
+                                                        @endforeach
+                                                    </select>
+                                                @endif
 
                                             @if(Auth::user()->role_id == 0)
                                                 <select class="form-control" name="job_employer">
-                                                    @foreach( $employee as $value)
+                                                    @foreach( $employer as $value)
                                                         @if($loop->count == 0)
                                                             <option value="">None</option>
                                                         @else
-                                                            <option value="{{ $value->id.'.'.$value->company_name}}">{{ $value->company_name }}</option>
+                                                            <option value="{{ $value->id.'.'.$value->company_name}}" {{ old('job_employer') == $input ? "selected" : "" }}>{{ $value->company_name }}</option>
                                                         @endif
                                                     @endforeach
                                                 </select>
                                             @endif
+
                                             @if ($errors->has('job_employer'))
                                                 <span class="help-block">
                                                 {{ $errors->first('job_employer') }}
@@ -284,28 +297,27 @@
                                     </div>
 
 
-                                    <div class="form-group{{ $errors->has('hourly_rate') ? ' has-error' : '' }}">
-                                        <label class="col-md-3 control-label">Hourly Rate<span class="is-required">*</span></label>
-                                        <div class="col-md-7">
-                                            <input type="text" class="form-control" placeholder="Enter Hourly Rate"
-                                                   value="{{ old('hourly_rate') }}" name="hourly_rate">
-                                            @if ($errors->has('hourly_rate'))
-                                                <span class="help-block">
-                                                {{ $errors->first('hourly_rate') }}
-                                               </span>
-                                            @endif
-                                        </div>
-                                    </div>
+                                    {{--<div class="form-group{{ $errors->has('hourly_rate') ? ' has-error' : '' }}">--}}
+                                        {{--<label class="col-md-3 control-label">Hourly Rate<span class="is-required">*</span></label>--}}
+                                        {{--<div class="col-md-7">--}}
+                                            {{--<input type="text" class="form-control" placeholder="Enter Hourly Rate"--}}
+                                                   {{--value="{{ old('hourly_rate') }}" name="hourly_rate">--}}
+                                            {{--@if ($errors->has('hourly_rate'))--}}
+                                                {{--<span class="help-block">--}}
+                                                {{--{{ $errors->first('hourly_rate') }}--}}
+                                               {{--</span>--}}
+                                            {{--@endif--}}
+                                        {{--</div>--}}
+                                    {{--</div>--}}
 
                                     <div class="form-group{{ $errors->has('preferred_language') ? ' has-error' : '' }}">
-                                        <label class="col-md-3 control-label">Preferred Language<span class="is-required">*</span></label>
+                                        <label class="col-md-3 control-label">Preferred Language</label>
                                         <div class="col-md-7">
                                             <select class="form-control" name="preferred_language">
-                                                <option value="english">English</option>
-                                                <option value="chinese">Chinese</option>
-                                                <option value="malay">Malay</option>
-                                                <option value="tamil">Tamil</option>
-                                                <option value="hindi">Hindi</option>
+                                                <option value="">-- select one --</option>
+                                                @foreach($language as $key => $value)
+                                                    <option value="{{$value}}" {{ old('preferred_language') == $value ? "selected" : "" }}> {{ ucfirst($value)   }}</option>
+                                                @endforeach
                                             </select>
                                             @if ($errors->has('preferred_language'))
                                                 <span class="help-block">
@@ -354,7 +366,7 @@
                                     </div>
 
                                     <div class="form-group{{ $errors->has('notes') ? ' has-error' : '' }}">
-                                        <label class="col-md-3 control-label">Important Notes<span class="is-required">*</span></label>
+                                        <label class="col-md-3 control-label">Important Notes</label>
                                         <div class="col-md-7">
                                             <textarea class="form-control" name="notes" rows="3"> {{ old('notes') }}</textarea>
                                             @if ($errors->has('notes'))
@@ -369,11 +381,13 @@
                                         <label class="col-md-3 control-label">Industry<span class="is-required">*</span></label>
                                         <div class="col-md-7">
                                             <select class="form-control" name="industry">
+
                                                 @foreach( $industry as $value)
+                                                    {{ $input = $value->id.'.'.$value->name }}
                                                     @if($loop->count == 0)
                                                         <option value="none">None</option>
                                                     @else
-                                                        <option value="{{ $value->id.'.'.$value->name}}">{{ $value->name }}</option>
+                                                        <option value="{{ $value->id.'.'.$value->name}}" {{ old('industry') == $input ? "selected" : "" }}>{{ $value->name }}</option>
                                                     @endif
                                                 @endforeach
                                             </select>
@@ -386,21 +400,21 @@
                                     </div>
 
 
-                                    <div class="form-group{{ $errors->has('status') ? ' has-error' : '' }}">
-                                        <label class="col-md-3 control-label">Job Status<span class="is-required">*</span></label>
-                                        <div class="col-md-7">
-                                            <select class="form-control" name="status">
-                                                <option value="draft mode">Draft mode</option>
-                                                <option value="active">Active</option>
-                                                <option value="inactive">Inactive</option>
-                                            </select>
-                                            @if ($errors->has('status'))
-                                                <span class="help-block">
-                                               {{ $errors->first('status') }}
-                                               </span>
-                                            @endif
-                                        </div>
-                                    </div>
+                                    {{--<div class="form-group{{ $errors->has('status') ? ' has-error' : '' }}">--}}
+                                        {{--<label class="col-md-3 control-label">Job Status</label>--}}
+                                        {{--<div class="col-md-7">--}}
+                                            {{--<select class="form-control" name="status">--}}
+                                                {{--<option value="draft mode">Draft mode</option>--}}
+                                                {{--<option value="active">Active</option>--}}
+                                                {{--<option value="inactive">Inactive</option>--}}
+                                            {{--</select>--}}
+                                            {{--@if ($errors->has('status'))--}}
+                                                {{--<span class="help-block">--}}
+                                               {{--{{ $errors->first('status') }}--}}
+                                               {{--</span>--}}
+                                            {{--@endif--}}
+                                        {{--</div>--}}
+                                    {{--</div>--}}
 
                                 </div>
                                 <div class="form-actions">

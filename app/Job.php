@@ -43,7 +43,8 @@ class Job extends Model
         'job_status',
         'latitude',
         'longitude',
-        'geolocation_address'
+        'geolocation_address',
+        'zip_code'
     ];
 
     /**
@@ -110,6 +111,7 @@ class Job extends Model
                 , 'users.company_description'
                 , 'users.company_name'
                 , 'users.profile_image_path'
+                , 'users.rate as employer_rate'
                 , 'users.employee_status as status'
                 , 'users.employee_points'
                 , 'users.id as employer_id'
@@ -204,6 +206,7 @@ class Job extends Model
                 , 'employer.profile_image_path'
                 , 'employer.employee_status as status'
                 , 'employer.id as employer_id'
+                , 'employer.rate as employer_rate'
                 , 'jobs.description as job_description'
                 , 'jobs.job_title'
                 , 'jobs.job_status'
@@ -251,6 +254,7 @@ class Job extends Model
                 , 'users.company_description'
                 , 'users.company_name'
                 , 'users.profile_image_path'
+                , 'users.rate as employer_rate'
                 , 'users.employee_status as status'
                 , 'users.business_manager'
                 , 'users.id as employer_id'
@@ -307,6 +311,7 @@ class Job extends Model
                 , 'employer.employee_status as status'
                 , 'employer.business_manager'
                 , 'employer.id as employer_id'
+                , 'employer.rate as employer_rate'
                 , 'jobs.description as job_description'
                 , 'jobs.job_title'
                 , 'jobs.status'
@@ -336,6 +341,7 @@ class Job extends Model
                 , 'jobs.latitude'
                 , 'jobs.longitude'
                 , 'jobs.geolocation_address'
+                , 'jobs.zip_code'
 
             )
             ->where('jobs.id', '=', $id)
