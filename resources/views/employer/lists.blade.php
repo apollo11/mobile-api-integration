@@ -151,3 +151,5 @@
         </div>
     </div>
 @endsection
+
+@include('layouts.employee-datatables-include')

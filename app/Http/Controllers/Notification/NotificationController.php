@@ -420,7 +420,7 @@ class NotificationController extends Controller
                     ],
                     'location' => [
                         'id' => $output->jobid,
-                        'name' => $output->geolocation_address,
+                        'name' => is_null($output->geolocation_address) ? '10 Bayfront Ave, Singapore 018956' : $output->geolocation_address,
                         'latitude' => 1.2836402,
                         'longitude' => 103.8603731,
                     ],

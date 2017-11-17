@@ -103,11 +103,23 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::prefix('settings')->group(function() {
        Route::get('/', 'Settings\SettingsController@index')->name('settings');
+       Route::post('update', 'Settings\SettingsController@store')->name('settings.update');
     });
 
+    Route::prefix('myprofile')->group(function() {
+       Route::get('/', 'MyProfile\ProfileController@index')->name('myprofile');
+       Route::post('update', 'MyProfile\ProfileController@update')->name('myprofile.update');
+    });
+
+    Route::prefix('reports')->group(function() {
+       Route::get('/weekly_report', 'Reports\ReportsController@weekly_report')->name('reports.weekly_report');
+    });
 });
 
 Route::get('/home', 'HomeController@index')->name('home');
-//Route::get('/settings', 'SettingsController@index')->name('settings');
 
-
+/*content page for mobile app*/
+Route::get('/terms-conditions', 'WebContentController@index')->name('content');
+Route::get('/privacy-policy', 'WebContentController@index')->name('content');
+Route::get('/faq', 'WebContentController@index')->name('content');
+Route::get('/interview-instruction', 'WebContentController@index')->name('content');

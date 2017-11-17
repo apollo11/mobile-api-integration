@@ -4,7 +4,7 @@
     <div class="page-header-inner">
         <!-- BEGIN LOGO -->
         <div class="page-logo">
-            <a href="/home">
+            <a href="{{ route('home') }}">
                 <img src="{{ asset('/assets/pages/img/logo.png') }}" width="30px" height="20px" class="logo-default"/> </a>
             </a>
             <div class="menu-toggler sidebar-toggler hide">
@@ -131,7 +131,11 @@
                 <!-- BEGIN USER LOGIN DROPDOWN -->
                 <li class="dropdown dropdown-user">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-                        <img alt="" class="img-circle" src="../assets/layouts/layout/img/avatar3_small.jpg"/>
+                    <?php $profileurl = Auth::user()->profile_image_path; 
+
+                    if ($profileurl==null || $profileurl == ''){ $profileurl = asset('assets/images/default_user_profile.png');}else{ $profileurl = url( $profileurl ); } ?>
+                        <img alt="" class="img-circle" src={{ $profileurl  }} />
+
                         @if(!Auth::guest())
                         <span class="username username-hide-on-mobile"> {{  Auth::user()->role_id == 0 ? Auth::user()->name : Auth::user()->company_name }}</span>
                         @endif
@@ -139,14 +143,14 @@
                     </a>
                     <ul class="dropdown-menu">
                         <li>
-                            <a href="extra_profile.html">
+                            <a href="{{ route('myprofile') }}">
                                 <i class="icon-user"></i> My Profile </a>
                         </li>
                         <li>
                             <a href="{{ route('logout') }}"
                                onclick="event.preventDefault();
                                 document.getElementById('logout-form').submit();">
-                                <i class="icon-key"></i> Logout
+                                <i class="icon-logout"></i> Logout
                             </a>
                             <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                                 {{ csrf_field() }}

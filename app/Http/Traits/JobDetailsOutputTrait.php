@@ -16,7 +16,8 @@ trait JobDetailsOutputTrait
                     'id' => $output->employer_id,
                     'image_url' => $output->profile_image_path,
                     'name' => $output->company_name,
-                    'description' => $output->company_description
+                    'description' => $output->company_description,
+                    'hourly_rate' => $output->employer_rate
                 ],
                 'industry' => [
                     'id' => $output->industry_id,
@@ -46,7 +47,6 @@ trait JobDetailsOutputTrait
                 'start_date' => $this->dateFormat($output->start_date),
                 'end_date' => $this->dateFormat($output->end_date),
                 'contact_no' => $output->contact_no,
-                'rate' => $output->rate,
                 'thumbnail_url' => $output->job_image_path,
                 'nationality' => ucfirst($output->nationality),
                 'description' => $output->description,

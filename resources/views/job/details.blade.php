@@ -99,7 +99,7 @@
                                                         </tr>
                                                         <tr>
                                                             <td><strong>Job Location: </strong></td>
-                                                            <td>{{ $details->location }}</td>
+                                                            <td>{{ $details->geolocation_address }}</td>
                                                         </tr>
                                                         <tr>
                                                             <td><strong>Job Industry: </strong></td>
@@ -274,3 +274,5 @@
     </div>
     @include('job.assign-job')
 @endsection
+
+@include('layouts.employee-datatables-include')

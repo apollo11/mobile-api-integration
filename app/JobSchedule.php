@@ -78,6 +78,7 @@ class JobSchedule extends Model
                 , 'employer.profile_image_path'
                 , 'employer.employee_status as status'
                 , 'employer.id as employer_id'
+                , 'employer.rate as employer_rate'
                 , 'jobs.description as job_description'
                 , 'jobs.location'
                 , 'jobs.job_title'
@@ -169,6 +170,7 @@ class JobSchedule extends Model
                 , 'employer.company_name'
                 , 'employer.profile_image_path'
                 , 'employer.employee_status as status'
+                , 'employer.rate as employer_rate'
                 , 'jobs.description as job_description'
                 , 'jobs.location'
                 , 'jobs.job_title'
@@ -281,6 +283,7 @@ class JobSchedule extends Model
                 , 'info.birthdate'
                 , 'info.religion'
                 , 'info.nationality'
+                , 'info.rate'
 
             )
             ->where('job_schedules.job_id' , '=', $id)
@@ -344,13 +347,7 @@ class JobSchedule extends Model
     public function schedConflict($userId, $startDate, $endDate)
     {
         $sched = DB::table('job_schedules')
-            ->select('job_schedules.job_id as schedId'
-                , 'job_schedules.user_id as schedUserId'
-                , 'users.id as userId'
-                , 'jobs.id as jobId'
-                , 'jobs.job_date as start_date'
-                , 'jobs.end_date'
-            )
+            ->select('job_schedules.job_id as schedId' ,'job_schedules.job_status')
             ->join('users', 'users.id', '=', 'job_schedules.user_id')
             ->join('jobs', 'jobs.id', '=', 'job_schedules.job_id')
             ->where(function ($query) use ($startDate, $endDate) {
@@ -363,9 +360,9 @@ class JobSchedule extends Model
                         $query->where('jobs.end_date', '>=', $endDate);
                 });
             })
-            ->where('job_schedules.job_status', 'accepted')
+            ->whereIn('job_schedules.job_status', ['accepted','pending'])
             ->where('job_schedules.user_id', $userId)
-            ->get();
+            ->first();
 
         return $sched;
     }

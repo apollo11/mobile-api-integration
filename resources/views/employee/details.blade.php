@@ -225,6 +225,16 @@
                                                             @endif
                                                         </tr>
                                                         <tr>
+                                                            @if($userDetails->points)
+                                                                <td><strong>Points</strong></td>
+                                                                <td> {{ $userDetails->points }}</td>
+                                                            @endif
+                                                        </tr>
+                                                        <tr>
+                                                            <td><strong>Rate</strong></td>
+                                                            <td> {{ $userDetails->rate }}</td>
+                                                        </tr>
+                                                        <tr>
                                                             @if($userDetails->signature_file_path !='none')
                                                                 <td><strong>Signature</strong></td>
                                                                 <td><img src="/{{ $userDetails->signature_file_path }}" width="200px"/></td>
@@ -239,6 +249,8 @@
                                                             @if($userDetails->employee_status == 'approved')
                                                                 <td> <span class="label label-sm label-success">{{ ucfirst($userDetails->employee_status) }} </span></td>
                                                             @endif
+
+
                                                             @if($userDetails->employee_status == 'reject')
                                                                 <td> <span class="label label-sm label-danger">{{ ucfirst($userDetails->employee_status) }} </span></td>
                                                             @endif
@@ -462,5 +474,6 @@
 
 @include('employee.edit-profile')
 
-
 @endsection
+
+@include('layouts.employee-datatables-include')
