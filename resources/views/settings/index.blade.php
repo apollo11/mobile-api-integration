@@ -50,6 +50,31 @@
                                         </div>
                                     </div>
 
+                                    <div class="form-group{{ $errors->has('faq') ? ' has-error' : '' }}">
+                                        <label class="col-md-12 text-left">FAQ</label>
+                                        <div class="col-md-12">
+                                            <textarea class="form-control ckeditor "  name="faq" id="editor3">{{ old('faq',$settings->faq) }}</textarea>
+                                            @if ($errors->has('faq'))
+                                                <span class="help-block">
+                                                {{ $errors->first('faq') }}
+                                               </span>
+                                            @endif
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group{{ $errors->has('interview_instruction') ? ' has-error' : '' }}">
+                                        <label class="col-md-12 text-left">Interview instructions</label>
+                                        <div class="col-md-12">
+                                            <textarea class="form-control ckeditor "  name="interview_instruction" id="editor4">{{ old('interview_instruction',$settings->interview_instruction) }}</textarea>
+                                            @if ($errors->has('interview_instruction'))
+                                                <span class="help-block">
+                                                {{ $errors->first('interview_instruction') }}
+                                               </span>
+                                            @endif
+                                        </div>
+                                    </div>
+
+
                                     <hr>
                                     <h4>Point System</h4>
 
@@ -186,5 +211,7 @@
             }
             CKEDITOR.replace('editor1',custom_ckconfig);
             CKEDITOR.replace('editor2',custom_ckconfig);
+            CKEDITOR.replace('editor3',custom_ckconfig);
+            CKEDITOR.replace('editor4',custom_ckconfig);
 </script>
 @stop

@@ -112,8 +112,14 @@ Route::group(['middleware' => ['auth']], function () {
     });
 
     Route::prefix('reports')->group(function() {
-       Route::get('/related_jobs', 'Reports\ReportsController@related_jobs')->name('reports.related_jobs');
+       Route::get('/weekly_report', 'Reports\ReportsController@weekly_report')->name('reports.weekly_report');
     });
 });
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+/*content page for mobile app*/
+Route::get('/terms-conditions', 'WebContentController@index')->name('content');
+Route::get('/privacy-policy', 'WebContentController@index')->name('content');
+Route::get('/faq', 'WebContentController@index')->name('content');
+Route::get('/interview-instruction', 'WebContentController@index')->name('content');

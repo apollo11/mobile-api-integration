@@ -3,14 +3,14 @@
 @section('content')
 <div class="page-content-wrapper table-datatable-wrapper">
 <div class="page-content reports-wrapper">
-    <form action="{{ route('reports.related_jobs')  }}" method="POST">
+    <form action="{{ route('reports.weekly_report')  }}" method="POST">
         <div class="row">
         <div class="col-md-12">
         <div class="portlet light">
             <div class="portlet-title">
                 <div class="caption font-dark">
                     <i class="fa fa-line-chart font-dark"></i>
-                    <span class="caption-subject bold uppercase">Reports - Related Jobs</span>
+                    <span class="caption-subject bold uppercase">Reports - Weekly Report</span>
                 </div>
                 {{ csrf_field() }}
             </div>
@@ -76,12 +76,16 @@
 <script src="{{ asset('assets/global/plugins/datatables/datatables.min.js') }}" type="text/javascript"></script>
 <script src="{{ asset('assets/pages/scripts/table-datatables-buttons.min.js') }}" type="text/javascript"></script>
 <script>
+    function getExportFileName(){
+        return 'Weekly Report Export';
+    }
+
     $(document).ready(function() {
 
         $('.table-datatable').DataTable({
              dom: '<"toolbar col-md-8">Brtip',
              buttons: [
-                        { "extend": 'excel', "text":'Export',"className": 'btn sbold red' }
+                        { "extend": 'excel', "text":'Export',"className": 'btn sbold red', filename: function () { return getExportFileName();} }
                     ],
             autoFill: true,
             ordering: false,
