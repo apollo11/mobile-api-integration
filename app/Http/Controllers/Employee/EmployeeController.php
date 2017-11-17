@@ -274,7 +274,8 @@ class EmployeeController extends Controller
                 'nationality' => $data['nationality'],
                 'front_ic_path' => 'none',
                 'back_ic_path' => 'none',
-                'signature_file_path' => 'none'
+                'signature_file_path' => 'none',
+                'rate' => $data['rate']
             ]);
 
         } else {
@@ -296,6 +297,7 @@ class EmployeeController extends Controller
                 'medication' => $medical,
                 'language' => $data['language'],
                 'nationality' => $data['nationality'],
+                'rate' => $data['rate']
             ]);
 
         }
@@ -328,7 +330,8 @@ class EmployeeController extends Controller
                 'contact_method' => 'required',
                 'religion' => 'required|string',
                 'emergency_person_address' => 'required|string',
-                'address' => 'required'
+                'address' => 'required',
+                'rate' => 'required|numeric'
             ]
         );
 
