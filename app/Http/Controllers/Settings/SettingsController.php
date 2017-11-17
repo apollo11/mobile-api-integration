@@ -38,6 +38,8 @@ class SettingsController extends Controller
         	$settings = Settings::find(1);
         	$settings->terms_conditions = $data['terms_conditions'];
             $settings->privacy_policy = $data['privacy_policy'];
+            $settings->faq = $data['faq'];
+            $settings->interview_instruction = $data['interview_instruction'];
             $settings->point_basic = $data['point_basic'];
             $settings->point_min = $data['point_min'];
             $settings->point_reject_job = $data['point_reject_job'];

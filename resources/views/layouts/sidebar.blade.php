@@ -91,8 +91,8 @@
                                 </a>
                                 <ul class="sub-menu" style="display: none;">
                                     <li class="nav-item  ">
-                                        <a href="{{route('reports.related_jobs') }}" class="nav-link ">
-                                            <span class="title">Related Jobs</span>
+                                        <a href="{{route('reports.weekly_report') }}" class="nav-link ">
+                                            <span class="title">Weekly Report</span>
                                         </a>
                                     </li>
                                 </ul>
