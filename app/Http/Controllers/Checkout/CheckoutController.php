@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Checkout;
 
 use Carbon\Carbon;
-use App\Checkout;
+use App\AdditionalInfo;
 use App\Job;
 use App\JobSchedule;
 use App\Http\Traits\HttpResponse;
@@ -99,10 +99,10 @@ class CheckoutController extends Controller
         $jobSched = \App\JobSchedule::find($data['schedule_id']);
 
 
-        $jobDetails = $this->getJob($jobSched['user_id'], $jobSched['job_id']);
+        $userRate = $this->getUserSalaryRate($jobSched['user_id']);
         $geolocation = $this->getAddress($data['latitude'], $data['longitude']);
         $minutes = $this->compareDates($jobSched->checkin_datetime);
-        $salaryRate = $this->salaryRate($minutes, $jobDetails->rate);
+        $salaryRate = $this->salaryRate($minutes, $userRate->rate);
 
         $jobSched->update([
             'checkout_datetime' => Carbon::now(),
@@ -132,10 +132,10 @@ class CheckoutController extends Controller
     /**
      * Get job schedule by id
      */
-    public function getJob($userId, $id)
+    public function getUserSalaryRate($userId)
     {
-        $job = new Job();
-        $result = $job->jobDetails($userId, $id);
+        $job = new AdditionalInfo();
+        $result = $job->userInfo($userId);
 
         return $result;
     }
