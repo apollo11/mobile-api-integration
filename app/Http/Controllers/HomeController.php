@@ -141,6 +141,5 @@ class HomeController extends Controller
         $count = $job->approvedJob();
 
         return $count;
-
     }
 }

@@ -6,6 +6,7 @@ use App\EmployeeProfile;
 use App\AdditionalInfo;
 use App\History;
 use App\Http\Traits\ProfileTrait;
+use App\Http\Traits\HttpResponse;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -14,6 +15,7 @@ use Validator;
 class EmployeeProfileController extends Controller
 {
     use ProfileTrait;
+    use HttpResponse;
 
     public function __construct()
     {
@@ -177,11 +179,8 @@ class EmployeeProfileController extends Controller
     * Update employee location
     */
     public function update_location(Request $request){
-        // print_r($request);
-        $return_data = array(
-            'status'=>'',
-            'data'=>''
-        );
+        $return_data = array();
+        $error_code = 120001;
         
         $user_id = $request->get('user_id');
         $lat = $request->get('lat');
@@ -189,25 +188,25 @@ class EmployeeProfileController extends Controller
         $data = $request->all();
         $user = \App\User::find($user_id);
         if(empty($user)  || !is_numeric($user_id) ){
-            $return_data['status'] = 'fail';
-            $return_data['errors'] = array('User not found');
+            $errors = array('User not found');
+            $return_data = $this->errorResponse($errors, 'Validation Error', $error_code, 400);
         }else{
             $validator = $this->updateRules($data,$user_id);
 
              if ($validator->fails()) {
-                $return_data['status'] = 'fail';
-                $return_data['errors'] = $validator->errors()->all();
+               /* $return_data['success'] = false;
+                $return_data['errors'] = ;*/
+                $errors = $validator->errors()->all();
+                $this->errorResponse($errors, 'Validation Error', $error_code, 400);
             } else {
                 $user->employee_current_lat = $lat;
                 $user->employee_current_long = $long;
                 $user->save();
 
-                $return_data['status'] = 'success';
-                $return_data['msg'] = array('User location updated');
+                $return_data = $this->ValidUseSuccessResp(200,true);
             }
         }
-
-        echo json_encode($return_data);
+        echo $return_data;
         exit;
     }
 
