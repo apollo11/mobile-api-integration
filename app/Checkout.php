@@ -60,7 +60,7 @@ class Checkout extends Model
                 ,'jobs.job_requirements'
                 , 'jobs.latitude'
                 , 'jobs.longitude'
-               , 'jobs.geolocation_address'
+                , 'jobs.geolocation_address'
 
             )
             ->when(!empty($param['id']), function ($query) use ($param) {

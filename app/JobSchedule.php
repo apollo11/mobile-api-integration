@@ -281,6 +281,7 @@ class JobSchedule extends Model
                 , 'info.birthdate'
                 , 'info.religion'
                 , 'info.nationality'
+                , 'info.rate'
 
             )
             ->where('job_schedules.job_id' , '=', $id)

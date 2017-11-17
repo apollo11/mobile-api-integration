@@ -59,7 +59,7 @@ class CheckIn extends Model
                 , 'jobs.notes'
                 , 'jobs.language'
                 , 'jobs.choices'
-                ,'jobs.job_requirements'
+                , 'jobs.job_requirements'
                 , 'jobs.latitude'
                 , 'jobs.longitude'
                 , 'jobs.geolocation_address'
