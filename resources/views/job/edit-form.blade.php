@@ -58,7 +58,7 @@
                                     </div>
 
                                     <div class="form-group{{ $errors->has('job_requirements') ? ' has-error' : '' }}">
-                                        <label class="col-md-3 control-label">Job Requirements<span class="is-required">*</span></label>
+                                        <label class="col-md-3 control-label">Job Requirements</label>
                                         <div class="col-md-7">
                                             <textarea class="form-control" name="job_requirements"
                                                       rows="3">{{ $details->job_requirements }}</textarea>
@@ -84,7 +84,7 @@
                                     </div>
 
                                     <div class="form-group{{ $errors->has('age') ? ' has-error' : '' }}">
-                                        <label class="col-md-3 control-label">Age<span class="is-required">*</span></label>
+                                        <label class="col-md-3 control-label">Age</label>
                                         <div class="col-md-7">
                                             <select class="form-control" name="age">
                                                 @foreach($age as $key => $value)
@@ -101,7 +101,7 @@
                                     </div>
 
                                     <div class="form-group {{ $errors->has('gender') ? ' has-error' : '' }}">
-                                        <label class="col-md-3 control-label">Gender<span class="is-required">*</span></label>
+                                        <label class="col-md-3 control-label">Gender</label>
                                         <div class="col-md-7">
                                             <div class="mt-checkbox-inline">
                                                 <label class="mt-checkbox">
@@ -142,7 +142,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="form-group{{ $errors->has('job_location') ? ' has-error' : '' }}">
+                                    <div class="form-group{{ $errors->has('job_location') ? ' has-error' : '' }}" style="display:none;">
                                         <label class="col-md-3 control-label">Filter by location<span class="is-required">*</span></label>
                                         <div class="col-md-7">
                                             <select class="form-control" name="job_location">
@@ -183,7 +183,7 @@
                                     </div>
 
                                     <div class="form-group{{ $errors->has('job_image') ? ' has-error' : '' }}">
-                                        <label for="Image Upload" class="col-md-3 control-label">Job Image</label>
+                                        <label for="Image Upload" class="col-md-3 control-label">Job Image<span class="is-required">*</span></label>
                                         <div class="col-md-9">
                                             <input type="file" name="job_image" value="{{ old('job_image') }}">
                                             @if ($errors->has('job_image'))
@@ -195,7 +195,7 @@
                                     </div>
 
                                     <div class="form-group{{ $errors->has('no_of_person') ? ' has-error' : '' }}">
-                                        <label class="col-md-3 control-label">No. of person requested</label>
+                                        <label class="col-md-3 control-label">No. of person requested<span class="is-required">*</span></label>
                                         <div class="col-md-7">
                                             <input type="text" class="form-control"
                                                    placeholder="Enter no. of person requested"
@@ -247,11 +247,55 @@
                                         </div>
                                     </div>
 
+                                    {{--<div class="form-group{{ $errors->has('job_employer') ? ' has-error' : '' }}">--}}
+                                        {{--<label class="col-md-3 control-label">Employer</label>--}}
+                                        {{--<div class="col-md-7">--}}
+                                            {{--<input type="text" class="form-control" value="{{ $details->company_name }}"--}}
+                                                   {{--name="job_employer">--}}
+                                            {{--@if ($errors->has('job_employer'))--}}
+                                                {{--<span class="help-block">--}}
+                                                {{--{{ $errors->first('job_employer') }}--}}
+                                               {{--</span>--}}
+                                            {{--@endif--}}
+                                        {{--</div>--}}
+                                    {{--</div>--}}
+
                                     <div class="form-group{{ $errors->has('job_employer') ? ' has-error' : '' }}">
-                                        <label class="col-md-3 control-label">Employer</label>
+                                        <label class="col-md-3 control-label">Employer<span class="is-required">*</span></label>
                                         <div class="col-md-7">
-                                            <input type="text" class="form-control" value="{{ $details->company_name }}"
-                                                   name="job_employer">
+                                            {{--@if(Auth::user()->role_id == 1)--}}
+                                                {{--<select class="form-control" name="job_employer">--}}
+                                                    {{--<option value="">---Select One ---</option>--}}
+                                                    {{--<option value="{{ Auth::user()->id.'.'.Auth::user()->company_name }}" >{{ Auth::user()->company_name }}</option>--}}
+                                                {{--</select>--}}
+                                            {{--@endif--}}
+
+                                                @if(Auth::user()->role_id == 1)
+                                                    <select class="form-control" name="job_employer">
+                                                        @foreach( $employer as $value)
+                                                            {{ $input = $value->id.'.'.$value->company_name }}
+                                                            @if($details->company_name == Auth::user()->company_name)
+                                                                <option value="{{ $input }}" {{ old('job_employer') == $input ? "selected" : "" }}>{{ $value->company_name }}</option>
+                                                            @endif
+                                                            @break
+                                                        @endforeach
+                                                    </select>
+                                                @endif
+
+                                                @if(Auth::user()->role_id == 0)
+                                                    <select class="form-control" name="job_employer">
+                                                        @foreach( $employer as $value)
+                                                            {{ $input = $value->id.'.'.$value->company_name }}
+                                                        @if($details->company_name == $value->company_name)
+                                                            <option value="{{ $input }}" {{ old('job_employer') == $input ? "selected" : "" }}>{{ $value->company_name }}</option>
+                                                        @else
+                                                            <option value="{{ $input }}" {{ old('job_employer') == $input ? "selected" : "" }}>{{ $value->company_name }}</option>
+                                                        @endif
+
+                                                        @endforeach
+                                                    </select>
+                                                @endif
+
                                             @if ($errors->has('job_employer'))
                                                 <span class="help-block">
                                                 {{ $errors->first('job_employer') }}
@@ -261,18 +305,18 @@
                                     </div>
 
 
-                                    <div class="form-group{{ $errors->has('hourly_rate') ? ' has-error' : '' }}">
-                                        <label class="col-md-3 control-label">Hourly Rate</label>
-                                        <div class="col-md-7">
-                                            <input type="text" class="form-control" placeholder="Enter Hourly Rate"
-                                                   value="{{ $details->rate }}" name="hourly_rate">
-                                            @if ($errors->has('hourly_rate'))
-                                                <span class="help-block">
-                                                {{ $errors->first('hourly_rate') }}
-                                               </span>
-                                            @endif
-                                        </div>
-                                    </div>
+                                    {{--<div class="form-group{{ $errors->has('hourly_rate') ? ' has-error' : '' }}">--}}
+                                        {{--<label class="col-md-3 control-label">Hourly Rate</label>--}}
+                                        {{--<div class="col-md-7">--}}
+                                            {{--<input type="text" class="form-control" placeholder="Enter Hourly Rate"--}}
+                                                   {{--value="{{ $details->rate }}" name="hourly_rate">--}}
+                                            {{--@if ($errors->has('hourly_rate'))--}}
+                                                {{--<span class="help-block">--}}
+                                                {{--{{ $errors->first('hourly_rate') }}--}}
+                                               {{--</span>--}}
+                                            {{--@endif--}}
+                                        {{--</div>--}}
+                                    {{--</div>--}}
 
                                     <div class="form-group{{ $errors->has('preferred_language') ? ' has-error' : '' }}">
                                         <label class="col-md-3 control-label">Preferred Language</label>
@@ -289,7 +333,7 @@
                                     </div>
 
                                     <div class="form-group{{ $errors->has('date') ? ' has-error' : '' }}">
-                                        <label class="control-label col-md-3">Start Job Date and Time</label>
+                                        <label class="control-label col-md-3">Start Job Date and Time<span class="is-required">*</span></label>
                                         <div class="col-md-7">
                                             <div class="input-group date form_datetime form_datetime bs-datetime" id="start-date">
                                                 <input type="text" name="date" value="{{ $details->start_date }}" size="16" class="form-control">
@@ -308,7 +352,7 @@
                                     </div>
 
                                     <div class="form-group{{ $errors->has('end_date') ? ' has-error' : '' }}">
-                                        <label class="control-label col-md-3">Job End Date and Time</label>
+                                        <label class="control-label col-md-3">Job End Date and Time<span class="is-required">*</span></label>
                                         <div class="col-md-7">
                                             <div class="input-group date form_datetime form_datetime bs-datetime" id="end-date">
                                                 <input type="text" name="end_date" value="{{ $details->end_date }}" size="16" class="form-control">
@@ -360,21 +404,21 @@
                                     </div>
 
 
-                                    <div class="form-group{{ $errors->has('status') ? ' has-error' : '' }}">
-                                        <label class="col-md-3 control-label">Job Status</label>
-                                        <div class="col-md-7">
-                                            <select class="form-control" name="status">
-                                                <option value="draft mode">Draft mode</option>
-                                                <option value="active">Active</option>
-                                                <option value="inactive">Inactive</option>
-                                            </select>
-                                            @if ($errors->has('status'))
-                                                <span class="help-block">
-                                               {{ $errors->first('status') }}
-                                               </span>
-                                            @endif
-                                        </div>
-                                    </div>
+                                    {{--<div class="form-group{{ $errors->has('status') ? ' has-error' : '' }}">--}}
+                                        {{--<label class="col-md-3 control-label">Job Status</label>--}}
+                                        {{--<div class="col-md-7">--}}
+                                            {{--<select class="form-control" name="status">--}}
+                                                {{--<option value="draft mode">Draft mode</option>--}}
+                                                {{--<option value="active">Active</option>--}}
+                                                {{--<option value="inactive">Inactive</option>--}}
+                                            {{--</select>--}}
+                                            {{--@if ($errors->has('status'))--}}
+                                                {{--<span class="help-block">--}}
+                                               {{--{{ $errors->first('status') }}--}}
+                                               {{--</span>--}}
+                                            {{--@endif--}}
+                                        {{--</div>--}}
+                                    {{--</div>--}}
 
                                 </div>
                                 <div class="form-actions">

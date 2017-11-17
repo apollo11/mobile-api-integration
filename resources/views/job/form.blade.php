@@ -257,24 +257,37 @@
                                     <div class="form-group{{ $errors->has('job_employer') ? ' has-error' : '' }}">
                                         <label class="col-md-3 control-label">Employer<span class="is-required">*</span></label>
                                         <div class="col-md-7">
-                                            @if(Auth::user()->role_id == 1)
-                                                <select class="form-control" name="job_employer">
-                                                    <option value="">---Select One ---</option>
-                                                    <option value="{{ Auth::user()->id.'.'.Auth::user()->company_name }}" >{{ Auth::user()->company_name }}</option>
-                                                </select>
-                                            @endif
+                                            {{--@if(Auth::user()->role_id == 1)--}}
+                                                {{--<select class="form-control" name="job_employer">--}}
+                                                    {{--<option value="">---Select One ---</option>--}}
+                                                    {{--<option value="{{ Auth::user()->id.'.'.Auth::user()->company_name }}" >{{ Auth::user()->company_name }}</option>--}}
+                                                {{--</select>--}}
+                                            {{--@endif--}}
+
+                                                @if(Auth::user()->role_id == 1)
+                                                    <select class="form-control" name="job_employer">
+                                                        @foreach( $employer as $value)
+                                                            {{ $input = $value->id.'.'.$value->company_name }}
+                                                            @if($value->company_name == Auth::user()->company_name)
+                                                                <option value="{{ $input }}" {{ old('job_employer') == $input ? "selected" : "" }}>{{ $value->company_name }}</option>
+                                                            @endif
+                                                            @break;
+                                                        @endforeach
+                                                    </select>
+                                                @endif
 
                                             @if(Auth::user()->role_id == 0)
                                                 <select class="form-control" name="job_employer">
-                                                    @foreach( $employee as $value)
+                                                    @foreach( $employer as $value)
                                                         @if($loop->count == 0)
                                                             <option value="">None</option>
                                                         @else
-                                                            <option value="{{ $value->id.'.'.$value->company_name}}">{{ $value->company_name }}</option>
+                                                            <option value="{{ $value->id.'.'.$value->company_name}}" {{ old('job_employer') == $input ? "selected" : "" }}>{{ $value->company_name }}</option>
                                                         @endif
                                                     @endforeach
                                                 </select>
                                             @endif
+
                                             @if ($errors->has('job_employer'))
                                                 <span class="help-block">
                                                 {{ $errors->first('job_employer') }}
