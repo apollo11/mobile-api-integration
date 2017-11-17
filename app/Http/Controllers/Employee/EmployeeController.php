@@ -318,7 +318,7 @@ class EmployeeController extends Controller
 
         return Validator::make($data, [
                 'name' => 'required|string|max:255',
-                'email' => 'required|string|email|max:255|unique:additional_infos',
+                'email' => 'required|string|email|max:255',
                 'mobile_no' => 'required',
                 'birthdate' => 'date|required',
                 'nationality' => 'required|string',

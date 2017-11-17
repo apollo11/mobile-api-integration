@@ -33,7 +33,7 @@ class AdditionalInfo extends Model
         , 'bank_statement'
         , 'nationality'
         , 'points'
-        , 'info.rate'
+        , 'rate'
     ];
 
     /**
