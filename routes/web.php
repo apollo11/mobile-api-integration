@@ -114,6 +114,14 @@ Route::group(['middleware' => ['auth']], function () {
     Route::prefix('reports')->group(function() {
        Route::get('/weekly_report', 'Reports\ReportsController@weekly_report')->name('reports.weekly_report');
     });
+
+    Route::prefix('user/mgt')->group(function() {
+        Route::get('create', 'UserMgt\UserMgtController@create')->name('mgt.create');
+        Route::post('store', 'UserMgt\UserMgtController@store')->name('mgt.store');
+    });
+
+
+
 });
 
 Route::get('/home', 'HomeController@index')->name('home');
@@ -123,3 +131,5 @@ Route::get('/terms-conditions', 'WebContentController@index')->name('content');
 Route::get('/privacy-policy', 'WebContentController@index')->name('content');
 Route::get('/faq', 'WebContentController@index')->name('content');
 Route::get('/interview-instruction', 'WebContentController@index')->name('content');
+
+Route::get('/view','Job\JobController@view')->name('job.view');

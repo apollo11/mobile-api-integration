@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 use Carbon\Carbon;
+use App\Job;
+use App\Policies\JobPolicy;
 use Laravel\Passport\Passport;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
@@ -16,6 +18,7 @@ class AuthServiceProvider extends ServiceProvider
      */
     protected $policies = [
         'App\Model' => 'App\Policies\ModelPolicy',
+        Job::class => JobPolicy::class
     ];
 
     /**
@@ -29,6 +32,12 @@ class AuthServiceProvider extends ServiceProvider
 
         Passport::routes();
         Passport::enableImplicitGrant();
+
+        Gate::define('update-post', function ($user) {
+            return $user->email == 'apollomalapote@gmail.com' ;
+        });
+
+
 
 //        Passport::tokensExpireIn(Carbon::now()->addDays(15));
 //
