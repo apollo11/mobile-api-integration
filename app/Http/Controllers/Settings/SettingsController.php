@@ -6,11 +6,13 @@ use Validator;
 use App\Settings;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Traits\HttpResponse;
 
 use Illuminate\Support\Facades\DB;
 
 class SettingsController extends Controller
 {
+    use HttpResponse;
     //
     public function index(){
     	$settings = new Settings();
@@ -80,5 +82,27 @@ class SettingsController extends Controller
         $validator->setAttributeNames($niceNames); 
 
         return $validator;
+    }
+
+    public function point_settings(){
+        $settings = new Settings();
+        $settings = $settings->allSettings();
+
+        $error_code = 120002;
+        if(empty($settings) ){
+            $errors = array('Settings not found.');
+            return $this->errorResponse($errors, 'Unexpected Error', $error_code, 400);
+        }else{
+            $data = array(
+                'point_basic' => $settings->point_basic,
+                'point_min' => $settings->point_min,
+                'point_reject_job' => $settings->point_reject_job,
+                'point_late_job' => $settings->point_late_job,
+                'point_cancel_job_w_reason' => $settings->point_cancel_job_w_reason,
+                'point_cancel_job_wt_reason' => $settings->point_cancel_job_wt_reason,
+                'point_dont_turnup_job' => $settings->point_dont_turnup_job,
+            );
+            return response()->json($data);
+        }
     }
 }

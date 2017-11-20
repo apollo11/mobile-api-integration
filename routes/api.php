@@ -140,6 +140,10 @@ Route::group(['middleware' => ['auth:api']], function () {
 
     });
 
+     Route::prefix('v1/settings/')->group(function () {
+        Route::get('points', 'Settings\SettingsController@point_settings');
+    });
+
 });
 
 Route::group(['middleware' => ['auth_client']], function () {
