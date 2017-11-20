@@ -78,6 +78,7 @@ class JobSchedule extends Model
                 , 'employer.profile_image_path'
                 , 'employer.employee_status as status'
                 , 'employer.id as employer_id'
+                , 'employer.rate as employer_rate'
                 , 'jobs.description as job_description'
                 , 'jobs.location'
                 , 'jobs.job_title'
@@ -169,6 +170,7 @@ class JobSchedule extends Model
                 , 'employer.company_name'
                 , 'employer.profile_image_path'
                 , 'employer.employee_status as status'
+                , 'employer.rate as employer_rate'
                 , 'jobs.description as job_description'
                 , 'jobs.location'
                 , 'jobs.job_title'
@@ -319,6 +321,7 @@ class JobSchedule extends Model
                 , 'info.birthdate'
                 , 'info.religion'
                 , 'info.nationality'
+                , 'info.rate'
 
             )
             ->where('job_schedules.job_id' , '=', $id)

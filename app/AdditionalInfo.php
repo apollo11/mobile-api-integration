@@ -33,6 +33,7 @@ class AdditionalInfo extends Model
         , 'bank_statement'
         , 'nationality'
         , 'points'
+        , 'rate'
     ];
 
     /**
@@ -90,6 +91,8 @@ class AdditionalInfo extends Model
                 , 'info.nationality'
                 , 'info.points'
                 , 'info.bank_statement as bank_account'
+                , 'info.rate'
+                , 'info.address'
             )
             ->where('users.id', '=', $id)
             ->first();

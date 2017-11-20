@@ -36,6 +36,7 @@ class Checkout extends Model
                 , 'employer.profile_image_path'
                 , 'employer.employee_status as status'
                 , 'employer.id as employer_id'
+                , 'employer.rate as employer_rate'
                 , 'jobs.description as job_description'
                 , 'jobs.location'
                 , 'jobs.job_title'
@@ -60,7 +61,7 @@ class Checkout extends Model
                 ,'jobs.job_requirements'
                 , 'jobs.latitude'
                 , 'jobs.longitude'
-               , 'jobs.geolocation_address'
+                , 'jobs.geolocation_address'
 
             )
             ->when(!empty($param['id']), function ($query) use ($param) {
