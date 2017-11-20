@@ -154,12 +154,6 @@
                                                     <span></span>
                                                 </label>
                                             @endforeach
-                                            @if ($errors->has('permission'))
-                                                <span class="help-block">
-                                                {{ $errors->first('permission') }}
-                                               </span>
-                                            @endif
-
                                         </div>
                                     </div>
 
@@ -173,11 +167,6 @@
                                                     <span></span>
                                                 </label>
                                             @endforeach
-                                            @if ($errors->has('permission'))
-                                                <span class="help-block">
-                                                {{ $errors->first('permission') }}
-                                               </span>
-                                            @endif
                                         </div>
                                     </div>
 
@@ -191,11 +180,6 @@
                                                     <span></span>
                                                 </label>
                                             @endforeach
-                                            @if ($errors->has('permission'))
-                                                <span class="help-block">
-                                                {{ $errors->first('permission') }}
-                                               </span>
-                                            @endif
                                         </div>
                                     </div>
 
@@ -209,11 +193,6 @@
                                                     <span></span>
                                                 </label>
                                             @endforeach
-                                            @if ($errors->has('permission'))
-                                                <span class="help-block">
-                                                {{ $errors->first('permission') }}
-                                               </span>
-                                            @endif
                                         </div>
                                     </div>
 
@@ -227,11 +206,6 @@
                                                     <span></span>
                                                 </label>
                                             @endforeach
-                                            @if ($errors->has('permission'))
-                                                <span class="help-block">
-                                                {{ $errors->first('permission') }}
-                                               </span>
-                                            @endif
                                         </div>
                                     </div>
 
@@ -245,11 +219,6 @@
                                                     <span></span>
                                                 </label>
                                             @endforeach
-                                            @if ($errors->has('permission'))
-                                                <span class="help-block">
-                                                {{ $errors->first('permission') }}
-                                               </span>
-                                            @endif
                                         </div>
                                     </div>
 
@@ -263,11 +232,6 @@
                                                     <span></span>
                                                 </label>
                                             @endforeach
-                                            @if ($errors->has('permission'))
-                                                <span class="help-block">
-                                                {{ $errors->first('permission') }}
-                                               </span>
-                                            @endif
                                         </div>
                                     </div>
 
