@@ -20,12 +20,6 @@
             <pre>
                 {{$test[0] }}
             </pre>
-        @can('update-post')
-            <h1>Allowed</h1>
-            @else
-            <h1>Not Allowed</h1>
-
-            @endcan
             @if($errors->has('multicheck'))
                 <div class="alert alert-danger alert-dismissable">
                     <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>

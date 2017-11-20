@@ -63,6 +63,7 @@ class UserMgtController extends Controller
             'push_permissions' => $data['push'],
             'recipient_permissions' =>  $data['recipient'],
             'settings_permissions' => $data['settings'],
+            'role_id' => 0,
         ]);
 
         return redirect()->back()->with('message', 'Updated successfully.');
