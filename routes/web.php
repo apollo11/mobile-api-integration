@@ -67,7 +67,7 @@ Route::group(['middleware' => ['auth']], function () {
        Route::get('/create','Job\JobController@create')->name('job.create');
        Route::get('/edit/{id?}','Job\JobController@edit')->name('job.edit');
        Route::post('/update/{id}','Job\JobController@update')->name('job.update');
-       Route::get('/lists','Job\JobController@index')->name('job.lists');
+       Route::get('/lists','Job\JobController@index')->name('job.lists')->middleware('can:update-post');;
        Route::post('/add','Job\JobController@store')->name('job.add');
        Route::post('multiple/{id?}/{param?}','Job\JobController@destroy')->name('job.multiple');
        Route::get('details/{id}','Job\JobController@details')->name('job.details');
@@ -118,6 +118,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::prefix('user/mgt')->group(function() {
         Route::get('create', 'UserMgt\UserMgtController@create')->name('mgt.create');
         Route::post('store', 'UserMgt\UserMgtController@store')->name('mgt.store');
+        Route::get('list', 'UserMgt\UserMgtController@index')->name('mgt.list');
     });
 
 

@@ -17,6 +17,9 @@
         @endforeach
     <div class="page-content-wrapper employee-list">
         <div class="page-content">
+            <pre>
+                {{$test[0] }}
+            </pre>
         @can('update-post')
             <h1>Allowed</h1>
             @else

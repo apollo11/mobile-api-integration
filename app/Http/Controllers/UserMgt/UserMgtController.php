@@ -18,7 +18,9 @@ class UserMgtController extends Controller
      */
     public function index()
     {
-        //
+        $user = new User();
+        $you = $user->testYou();
+        return view('usermgt.lists',['test' => $you]);
     }
 
     /**

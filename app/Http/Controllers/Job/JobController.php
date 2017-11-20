@@ -52,6 +52,7 @@ class JobController extends Controller
     {
         $role = Auth::user()->role;
 
+
         if ($role == 'employer') {
             $userid = Auth::user()->id;
         } else {
@@ -66,7 +67,7 @@ class JobController extends Controller
 
         $jobsLists = $this->jobLists($param);
 
-        return view('job.lists', ['job' => $jobsLists, 'role' => $role]);
+        return view('job.lists', ['job' => $jobsLists, 'role' => $role, 'test' =>Auth::user()->dashboard_permissions ]);
     }
 
     /**

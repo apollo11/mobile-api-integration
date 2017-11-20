@@ -34,7 +34,7 @@ class AuthServiceProvider extends ServiceProvider
         Passport::enableImplicitGrant();
 
         Gate::define('update-post', function ($user) {
-            return $user->email == 'apollomalapote@gmail.com' ;
+            return $user->dashboard_permissions[0];
         });
 
 
