@@ -194,10 +194,7 @@ class EmployeeProfileController extends Controller
             $validator = $this->updateRules($data,$user_id);
 
              if ($validator->fails()) {
-               /* $return_data['success'] = false;
-                $return_data['errors'] = ;*/
                 $errors = $validator->errors()->all();
-                // print_r($errors);exit;
                 $return_data = $this->errorResponse($errors, 'Validation Error', $error_code, 400);
             } else {
                 $user->employee_current_lat = $lat;
@@ -207,18 +204,16 @@ class EmployeeProfileController extends Controller
                 $return_data = $this->ValidUseSuccessResp(200,true);
             }
         }
-        echo $return_data;
-        exit;
+        return $return_data;
     }
 
     public function updateRules(array $data, $id)
     {
         $validations = [
-            'lat' => 'required|numeric',
-            'long' => 'required|numeric',
+            'lat' => 'required|numeric|is_valid_lat',
+            'long' => 'required|numeric|is_valid_long',
         ];
 
         return Validator::make($data, $validations);
-
     }
 }

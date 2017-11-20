@@ -756,5 +756,49 @@ class EmployeeController extends Controller
     }
 
 
+    function jobdetail($user_id,$job_schedule_id){
+        $response = array('success'=>false,'data'=>array());
+        if(empty($user_id) || empty($job_schedule_id)){
+           $response['data'] = array('error'=>'Invalid data');
+        }else{
+            $JobSchedule = new JobSchedule();
+            $jobdetail = $JobSchedule->getJobByUser($user_id,$job_schedule_id);
+            if(empty($jobdetail)){
+                $response['data'] = array('error'=>'Invalid data');
+            }else{
+                $total_working_hours = '-';
+                if(
+                    !empty($jobdetail->checkin_datetime) && $jobdetail->checkin_datetime !=null && 
+                    !empty($jobdetail->checkout_datetime) && $jobdetail->checkout_datetime !=null 
+                ){
+                    $d1 = new \DateTime($jobdetail->checkin_datetime); 
+                    $d2 = new \DateTime($jobdetail->checkout_datetime);
+                    $interval= $d1->diff($d2);
+                    $total_working_hours = $interval->format('%hhrs %imins');
+                }
+                $jobdetail->total_working_hours = $total_working_hours;
+                $response['success'] = true;
+                $response['data'] = $jobdetail;
+            }
+        }
+        echo json_encode($response);
+        exit;
+    }
 
+    function rate_job($user_id,$job_schedule_id){
+         $response = array('success'=>false,'data'=>array());
+        if(empty($user_id) || empty($job_schedule_id)){
+           $response['data'] = array('error'=>'Invalid data');
+        }else{
+            $JobSchedule = new JobSchedule();
+            $jobdetail = $JobSchedule->getJobByUser($user_id,$job_schedule_id);
+            if(empty($jobdetail)){
+                $response['data'] = array('error'=>'Invalid data');
+            }else{
+                // echo 'XXXXXX';
+            }
+        }
+        echo json_encode($response);
+        exit;
+    }
 }
