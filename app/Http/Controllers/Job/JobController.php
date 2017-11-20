@@ -337,7 +337,7 @@ class JobController extends Controller
         $job = new Job();
 
         $submit = empty($request->input('multiple')) ? $param : $request->input('multiple');
-        $multi['multicheck'] = is_null($id) ? (array)$request->input('multicheck') : (array)$id;
+        $multi['multicheck'] = is_null($id) ? (array)$request->input('multicheck') : (array) $id;
 
         $validator = Validator::make($multi, ['multicheck' => 'required']);
 
@@ -363,7 +363,6 @@ class JobController extends Controller
         }
 
         return $result;
-
     }
 
     /**

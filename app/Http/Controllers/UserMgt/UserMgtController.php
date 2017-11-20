@@ -6,8 +6,10 @@ use Validator;
 use App\Permission;
 use App\UserManagement;
 use App\User;
+use App\Mail\UserMgtMail;
 use App\Http\Requests\UserMgt;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use App\Http\Controllers\Controller;
 
 class UserMgtController extends Controller
@@ -68,7 +70,9 @@ class UserMgtController extends Controller
             'role_id' => 0,
         ]);
 
-        return redirect()->back()->with('message', 'Updated successfully.');
+        $this->sendEmailToUser($data);
+
+        return redirect()->back()->with('message', 'User saved.');
     }
 
 
@@ -114,7 +118,37 @@ class UserMgtController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $user = new UserManagement();
+
+        $user->deleteUserMgt($id);
+
+        return redirect()->back()->with('message', 'Record deleted successful saved.');
+
+    }
+
+    public function multiDestroy(Request $request)
+    {
+
+        //return $request->all();
+        $user = new UserManagement();
+
+        $multi['multicheck'] = (array)$request->input('multicheck');
+
+        $validator = Validator::make($multi, ['multicheck' => 'required']);
+        if ($validator->fails()) {
+
+            $result = redirect(route('mgt.list'))
+                ->withErrors($validator)
+                ->withInput();
+
+        } else {
+
+            $user->multiDelete($multi['multicheck']);
+
+            $result = redirect()->back()->with('message', 'Record deleted successful saved.');
+        }
+
+        return $result;
     }
 
     /**
@@ -128,5 +162,15 @@ class UserMgtController extends Controller
         return $validator;
 
     }
+
+    /**
+     * Send Email
+     */
+    public function sendEmailToUser(array $data)
+    {
+        Mail::to($data['email'])->send( new UserMgtMail($data));
+
+    }
+
 
 }

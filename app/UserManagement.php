@@ -7,7 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class UserManagement extends Model
 {
-
+    /**
+     * @return mixed
+     */
     public function userMgtList()
     {
         $userMgtList = DB::table('users')
@@ -28,9 +30,33 @@ class UserManagement extends Model
                 , 'recipient_permissions'
                 , 'settings_permissions'
             )
-            ->whereIn('role', ['business_manager', 'admin', 'Administrator'])
+            ->whereIn('role', ['business_manager', 'admin'])
+            ->orderby('id', 'DESC')
             ->get();
 
         return $userMgtList;
     }
+
+    /**
+     * Multiple delete
+     * @param $multiId
+     * @return mixed
+     */
+    public function multiDelete($multiId)
+    {
+        $delete = DB::table('users')->whereIn('id', $multiId)
+            ->delete();
+
+        return $delete;
+    }
+
+    public function deleteUserMgt($id)
+    {
+        $delete = DB::table('users')->where('id', $id)
+            ->delete();
+
+        return $delete;
+
+    }
+
 }

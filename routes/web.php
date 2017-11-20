@@ -122,6 +122,8 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('create', 'UserMgt\UserMgtController@create')->name('mgt.create');
         Route::post('store', 'UserMgt\UserMgtController@store')->name('mgt.store');
         Route::get('list', 'UserMgt\UserMgtController@index')->name('mgt.list');
+        Route::post('delete/{id}', 'UserMgt\UserMgtController@destroy')->name('mgt.delete');
+        Route::post('multi/delete', 'UserMgt\UserMgtController@multiDestroy')->name('mgt.multi.delete');
     });
 
 });
