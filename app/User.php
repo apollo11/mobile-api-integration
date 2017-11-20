@@ -30,6 +30,28 @@ class User extends Authenticatable
         , 'status'
         , 'profile_image_path'
         , 'employee_points'
+        , 'dashboard_permissions'
+        , 'employees_permissions'
+        , 'employers_permissions'
+        , 'payout_permissions'
+        , 'job_permissions'
+        , 'reports_permissions'
+        , 'push_permissions'
+        , 'recipient_permissions'
+        , 'settings_permissions'
+        , 'employer'
+    ];
+
+    protected $casts = [
+        'dashboard_permissions' => 'array',
+        'employees_permissions' => 'array',
+        'employers_permissions' => 'array',
+        'payout_permissions' => 'array',
+        'job_permissions' => 'array',
+        'reports_permissions' => 'array',
+        'push_permissions' => 'array',
+        'recipient_permissions' => 'array',
+        'settings_permissions' => 'array',
     ];
 
     /**

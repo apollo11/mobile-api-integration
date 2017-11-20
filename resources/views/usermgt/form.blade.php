@@ -22,7 +22,7 @@
                         <div class="portlet-title">
                             <div class="caption">
                                 <i class="icon-settings font-dark"></i>
-                                <span class="caption-subject font-dark sbold uppercase">Register Employee</span>
+                                <span class="caption-subject font-dark sbold uppercase">Add User</span>
                             </div>
                         </div>
                         <div class="portlet-body form">
@@ -30,7 +30,12 @@
                                 <div class="alert alert-success">
                                     {{ session()->get('message') }}
                                 </div>
+
+                                <script type="text/javascript">
+                                    setTimeout(function(){  $('.alert-success').hide().remove(); }, 3000);
+                                </script>
                             @endif
+
                             <form class="form-horizontal" method="POST" role="form"
                                   action="{{ route('mgt.store') }}"
                                   enctype="multipart/form-data">
@@ -127,135 +132,179 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="form-group {{ $errors->has('permission') ? ' has-error' : '' }}">
+                                <div class="form-group">
                                     <h4 class="col-md-3 control-label"> Permission </h4>
                                 </div>
-                                <div class="form-group {{ $errors->has('permission') ? ' has-error' : '' }}">
+                                <div class="form-group {{ $errors->has('dashboard') ? ' has-error' : '' }}">
                                     <label class="col-md-3 control-label">Dashboard</label>
                                     <div class="col-md-7">
                                         <div class="mt-checkbox-inline">
                                             @foreach($permissionValue as $key)
                                                 <label class="mt-checkbox">
-                                                    <input type="checkbox" name="permission[]" value="dash-{{ $key }}" {{ (is_array(old('permission')) && in_array('dash-'.$key, old('permission'))) ? ' checked' : '' }} >
+                                                    <input type="checkbox" name="dashboard[]" value="{{ $key }}" {{ (is_array(old('dashboard')) && in_array($key, old('dashboard'))) ? ' checked' : '' }} >
                                                     {{ ucfirst($key) }}
                                                     <span></span>
                                                 </label>
                                             @endforeach
+                                            @if ($errors->has('dashboard'))
+                                                <span class="help-block">
+                                            {{ $errors->first('dashboard') }}
+                                                </span>
+                                            @endif
                                         </div>
                                     </div>
-
+                                </div>
+                                <div class="form-group {{ $errors->has('employees') ? ' has-error' : '' }}">
                                     <label class="col-md-3 control-label">Employees</label>
                                     <div class="col-md-7">
                                         <div class="mt-checkbox-inline">
                                             @foreach($permissionValue as $key)
                                                 <label class="mt-checkbox">
-                                                    <input type="checkbox" name="permission[]" value="employees-{{ $key }}" {{ (is_array(old('permission')) && in_array('employees-'.$key, old('permission'))) ? ' checked' : '' }} >
+                                                    <input type="checkbox" name="employees[]" value="{{ $key }}" {{ (is_array(old('employees')) && in_array($key, old('employees'))) ? ' checked' : '' }} >
                                                     {{ ucfirst($key) }}
                                                     <span></span>
                                                 </label>
                                             @endforeach
+                                            @if ($errors->has('employees'))
+                                                <span class="help-block">
+                                                {{ $errors->first('employees') }}
+                                            </span>
+                                            @endif
                                         </div>
                                     </div>
-
+                                </div>
+                                <div class="form-group {{ $errors->has('employers') ? ' has-error' : '' }}">
                                     <label class="col-md-3 control-label">Employers</label>
                                     <div class="col-md-7">
                                         <div class="mt-checkbox-inline">
                                             @foreach($permissionValue as $key)
                                                 <label class="mt-checkbox">
-                                                    <input type="checkbox" name="permission[]" value="employers-{{ $key }}" {{ (is_array(old('permission')) && in_array('employers-'.$key, old('permission'))) ? ' checked' : '' }} >
+                                                    <input type="checkbox" name="employers[]" value="{{ $key }}" {{ (is_array(old('employers')) && in_array($key, old('employers'))) ? ' checked' : '' }} >
                                                     {{ ucfirst($key) }}
                                                     <span></span>
                                                 </label>
                                             @endforeach
+                                            @if ($errors->has('employers'))
+                                                <span class="help-block">
+                                                    {{ $errors->first('employers') }}
+                                                </span>
+                                            @endif
                                         </div>
                                     </div>
-
+                                </div>
+                                <div class="form-group {{ $errors->has('payout') ? ' has-error' : '' }}">
                                     <label class="col-md-3 control-label">Payout</label>
                                     <div class="col-md-7">
                                         <div class="mt-checkbox-inline">
                                             @foreach($permissionValue as $key)
                                                 <label class="mt-checkbox">
-                                                    <input type="checkbox" name="permission[]" value="payout-{{ $key }}" {{ (is_array(old('permission')) && in_array('payout-'.$key, old('permission'))) ? ' checked' : '' }} >
+                                                    <input type="checkbox" name="payout[]" value="{{ $key }}" {{ (is_array(old('payout')) && in_array($key, old('payout'))) ? ' checked' : '' }} >
                                                     {{ ucfirst($key) }}
                                                     <span></span>
                                                 </label>
                                             @endforeach
+                                            @if ($errors->has('payout'))
+                                                <span class="help-block">
+                                                {{ $errors->first('payout') }}
+                                            </span>
+                                            @endif
                                         </div>
                                     </div>
-
+                                </div>
+                                <div class="form-group {{ $errors->has('job') ? ' has-error' : '' }}">
                                     <label class="col-md-3 control-label">Job Management</label>
                                     <div class="col-md-7">
                                         <div class="mt-checkbox-inline">
                                             @foreach($permissionValue as $key)
                                                 <label class="mt-checkbox">
-                                                    <input type="checkbox" name="permission[]" value="job-{{ $key }}" {{ (is_array(old('permission')) && in_array('job-'.$key, old('permission'))) ? ' checked' : '' }} >
+                                                    <input type="checkbox" name="job[]" value="{{ $key }}" {{ (is_array(old('job')) && in_array($key, old('job'))) ? ' checked' : '' }} >
                                                     {{ ucfirst($key) }}
                                                     <span></span>
                                                 </label>
                                             @endforeach
+                                            @if ($errors->has('job'))
+                                                <span class="help-block">
+                                            {{ $errors->first('job') }}
+                                                </span>
+                                            @endif
                                         </div>
                                     </div>
-
+                                </div>
+                                <div class="form-group {{ $errors->has('reports') ? ' has-error' : '' }}">
                                     <label class="col-md-3 control-label">Reports</label>
                                     <div class="col-md-7">
                                         <div class="mt-checkbox-inline">
                                             @foreach($permissionValue as $key)
-                                                <label class="mt-checkbox">
-                                                    <input type="checkbox" name="permission[]" value="reports-{{ $key }}" {{ (is_array(old('permission')) && in_array('reports-'.$key, old('permission'))) ? ' checked' : '' }} >
-                                                    {{ ucfirst($key) }}
-                                                    <span></span>
-                                                </label>
+                                            <label class="mt-checkbox">
+                                                <input type="checkbox" name="reports[]" value="{{ $key }}" {{ (is_array(old('reports')) && in_array($key, old('reports'))) ? ' checked' : '' }} >
+                                                {{ ucfirst($key) }}
+                                                <span></span>
+                                            </label>
                                             @endforeach
+                                            @if ($errors->has('reports'))
+                                                <span class="help-block">
+                                                {{ $errors->first('reports') }}
+                                            </span>
+                                            @endif
                                         </div>
                                     </div>
-
+                                </div>
+                                <div class="form-group {{ $errors->has('push') ? ' has-error' : '' }}">
                                     <label class="col-md-3 control-label">Push Notification</label>
                                     <div class="col-md-7">
                                         <div class="mt-checkbox-inline">
                                             @foreach($permissionValue as $key)
                                                 <label class="mt-checkbox">
-                                                    <input type="checkbox" name="permission[]" value="push-{{ $key }}" {{ (is_array(old('permission')) && in_array('push-'.$key, old('permission'))) ? ' checked' : '' }} >
+                                                    <input type="checkbox" name="push[]" value="{{ $key }}" {{ (is_array(old('push')) && in_array($key, old('push'))) ? ' checked' : '' }} >
                                                     {{ ucfirst($key) }}
                                                     <span></span>
                                                 </label>
                                             @endforeach
+                                            @if ($errors->has('push'))
+                                            <span class="help-block">
+                                                {{ $errors->first('push') }}
+                                            </span>
+                                            @endif
                                         </div>
                                     </div>
-
+                                </div>
+                                <div class="form-group {{ $errors->has('recipient') ? ' has-error' : '' }}">
                                     <label class="col-md-3 control-label">Recipient Group</label>
                                     <div class="col-md-7">
                                         <div class="mt-checkbox-inline">
                                             @foreach($permissionValue as $key)
                                                 <label class="mt-checkbox">
-                                                    <input type="checkbox" name="permission[]" value="recipient-{{ $key }}" {{ (is_array(old('permission')) && in_array('recipient-'.$key, old('permission'))) ? ' checked' : '' }} >
+                                                    <input type="checkbox" name="recipient[]" value="{{ $key }}" {{ (is_array(old('recipient')) && in_array($key, old('recipient'))) ? ' checked' : '' }} >
                                                     {{ ucfirst($key) }}
                                                     <span></span>
                                                 </label>
                                             @endforeach
+                                            @if ($errors->has('recipient'))
+                                                <span class="help-block">
+                                                {{ $errors->first('recipient') }}
+                                           </span>
+                                            @endif
                                         </div>
                                     </div>
-
+                                </div>
+                                <div class="form-group {{ $errors->has('settings') ? ' has-error' : '' }}">
                                     <label class="col-md-3 control-label">Settings</label>
                                     <div class="col-md-7">
                                         <div class="mt-checkbox-inline">
                                             @foreach($permissionValue as $key)
                                                 <label class="mt-checkbox">
-                                                    <input type="checkbox" name="permission[]" value="settings-{{ $key }}" {{ (is_array(old('permission')) && in_array('settings-'.$key, old('permission'))) ? ' checked' : '' }} >
+                                                    <input type="checkbox" name="settings[]" value="{{ $key }}" {{ (is_array(old('settings')) && in_array($key, old('settings'))) ? ' checked' : '' }} />
                                                     {{ ucfirst($key) }}
                                                     <span></span>
                                                 </label>
                                             @endforeach
-                                            @if ($errors->has('permission'))
+                                            @if ($errors->has('settings'))
                                                 <span class="help-block">
-                                                {{ $errors->first('permission') }}
+                                                {{ $errors->first('settings') }}
                                                </span>
                                             @endif
                                         </div>
                                     </div>
-                                </div>
-
-                                <div class="form-group {{ $errors->has('permission') ? ' has-error' : '' }}">
-
                                 </div>
 
                                 <div class="form-actions">

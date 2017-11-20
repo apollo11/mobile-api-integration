@@ -43,11 +43,29 @@ class UserMgtController extends Controller
      */
     public function store(UserMgt $request)
     {
+        $data = request()->all();
 
-        return $request->all();
+        User::create([
+            'name' => $data['name'], //$request->input('name'),
+            'email' => $data['email'] ,//$request->input('email'),
+            'password' => bcrypt($data['password']),
+            'role' => $data['role'], //$request->input('role'),
+            'employer' => $data['employer'],
+            'mobile_no' => $data['mobile_no'], //$request->input('mobile_no'),
+            'dashboard_permissions' =>  $data['dashboard'],
+            'employees_permissions' => $data['employees'],
+            'employers_permissions' => $data['employers'],
+            'payout_permissions' => $data['payout'],
+            'job_permissions' => $data['job'],
+            'reports_permissions' => $data['reports'],
+            'push_permissions' => $data['push'],
+            'recipient_permissions' =>  $data['recipient'],
+            'settings_permissions' => $data['settings'],
+        ]);
 
-        //return redirect()->back()->with('message', 'Updated successfully.');
+        return redirect()->back()->with('message', 'Updated successfully.');
     }
+
 
     /**
      * Display the specified resource.

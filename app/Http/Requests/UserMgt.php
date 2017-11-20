@@ -25,11 +25,19 @@ class UserMgt extends FormRequest
     {
         return [
             'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
             'role' => 'required',
             'employer' => 'required',
-            'permission' => 'required',
-            'password' => 'required'
+            'dashboard' => 'required',
+            'employees' => 'required',
+            'employers' => 'required',
+            'payout' => 'required',
+            'job' => 'required',
+            'reports' => 'required',
+            'push' => 'required',
+            'recipient' => 'required',
+            'settings' => 'required',
+            'password' => 'required|min:8'
         ];
     }
 }
