@@ -102,7 +102,7 @@ class SettingsController extends Controller
                 'point_cancel_job_wt_reason' => $settings->point_cancel_job_wt_reason,
                 'point_dont_turnup_job' => $settings->point_dont_turnup_job,
             );
-            return response()->json($data);
+            return response()->json(['success'=>true,'point_settings' => $data]);
         }
     }
 }
