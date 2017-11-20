@@ -94,6 +94,8 @@ class Notification extends Model
                 , 'employer.profile_image_path'
                 , 'employer.employee_status as status'
                 , 'employer.id as employer_id'
+                , 'users.rate as employer_rate'
+
 
             )
             ->when(!empty($param['last_notification_id']) , function ($query) use ($param) {
