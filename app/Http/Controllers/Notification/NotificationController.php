@@ -412,7 +412,8 @@ class NotificationController extends Controller
                         'id' => $output->employer_id,
                         'image_url' => $output->profile_image_path,
                         'name' => $output->company_name,
-                        'description' => $output->company_description
+                        'description' => $output->company_description,
+                        'hourly_rate' => $output->employer_rate
                     ],
                     'industry' => [
                         'id' => $output->industry_id,
