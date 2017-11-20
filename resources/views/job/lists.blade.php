@@ -17,9 +17,6 @@
         @endforeach
     <div class="page-content-wrapper employee-list">
         <div class="page-content">
-            <pre>
-                {{$test[0] }}
-            </pre>
             @if($errors->has('multicheck'))
                 <div class="alert alert-danger alert-dismissable">
                     <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
@@ -93,7 +90,7 @@
                                         <td> {{ '$'.$value->rate.'/hr' }}</td>
                                         <td> {{ Carbon\Carbon::parse($value->start_date)->format('H:i:s d-m-Y') }}</td>
                                         <td> {{ $value->business_manager }}</td>
-                                        <td>{{ $value->location }}</td>
+                                        <td>{{ $value->geolocation_address  }}</td>
 
                                         @if($value->status == 'inactive')
 

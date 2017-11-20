@@ -4,6 +4,7 @@ namespace App\Http\Controllers\UserMgt;
 
 use Validator;
 use App\Permission;
+use App\UserManagement;
 use App\User;
 use App\Http\Requests\UserMgt;
 use Illuminate\Http\Request;
@@ -18,9 +19,10 @@ class UserMgtController extends Controller
      */
     public function index()
     {
-        $user = new User();
-        $you = $user->testYou();
-        return view('usermgt.lists',['test' => $you]);
+        $user = new UserManagement();
+        $users = $user->userMgtList();
+
+        return view('usermgt.lists',['user' => $users]);
     }
 
     /**
@@ -45,7 +47,7 @@ class UserMgtController extends Controller
      */
     public function store(UserMgt $request)
     {
-        $data = request()->all();
+        $data = $request->all();
 
         User::create([
             'name' => $data['name'], //$request->input('name'),
