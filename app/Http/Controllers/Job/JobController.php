@@ -14,7 +14,6 @@ use App\Location;
 use App\Industry;
 use Carbon\Carbon;
 use GuzzleHttp\Client;
-use Illuminate\Support\Facades\Gate;
 use GuzzleHttp\Exception\RequestException;
 use App\Http\Traits\DateFormatDate;
 use App\Http\Traits\PushNotiftrait;
@@ -83,6 +82,7 @@ class JobController extends Controller
         $industry = $this->industry();
         $employee = $user->employerList();
         $age = $this->age();
+        $businessMngr = \App\User::where('role', 'business_manager')->pluck('name', 'id');
 
 
         return view('job.form', ['user' => $user
@@ -92,7 +92,7 @@ class JobController extends Controller
             , 'employer' => $employee
             , 'age' => $age
             , 'language' => $nationality->language()
-        ]);
+        ], compact('businessMngr'));
     }
 
     /**
@@ -631,40 +631,6 @@ class JobController extends Controller
                 return 'Unknown Address';
             }
         }
-
-    }
-
-
-    public function view()
-    {
-
-        response()->json((Gate::allows('update-post')));
-
-
-        // get current logged in user
-        //$user = Auth::user();
-//
-        if (Gate::allows('update-post')) {
-
-            echo 'Allowed';
-        } else {
-
-            abort(403, 'Unauthorized action.');
-        }
-
-
-        // get current logged in user
-//        $user = Auth::user();
-//        return response()->json($user->can('view'));
-//
-//        // load post
-//        $post = Job::find(1);
-//
-//        if ($user->can('create')) {
-//            echo "Current logged in user is allowed to update the Post: {$post->id}";
-//        } else {
-//            echo 'Not Authorized.';
-//        }
 
     }
 
