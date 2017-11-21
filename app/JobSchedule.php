@@ -214,6 +214,11 @@ class JobSchedule extends Model
             ->join('job_schedules', 'job_schedules.user_id', '=', 'users.id')
             ->leftJoin('jobs', 'jobs.id', '=', 'job_schedules.job_id')
             ->leftJoin('users as employee', 'employee.id', '=', 'jobs.user_id')
+            ->leftJoin('job_ratings', function($join)
+                 {
+                     $join->on('job_schedules.id', '=', 'job_ratings.job_schedule_id');
+                     $join->on('job_schedules.user_id','=','job_ratings.employee_id');
+                 })
             ->select(
                   'job_schedules.id as schedule_id'
                 , 'job_schedules.user_id'
@@ -232,6 +237,8 @@ class JobSchedule extends Model
                 , 'jobs.rate'
                 , 'jobs.id'
                 , 'jobs.geolocation_address'
+                , 'job_ratings.rating_point'
+                , 'job_ratings.rating_comment'
             )
             ->where('users.id' , '=', $id)
             ->whereIn('job_schedules.job_status',[
@@ -254,11 +261,16 @@ class JobSchedule extends Model
      */
     public function getJobByUser($user_id,$job_id)
     {
-        $jobs = DB::table('users')
-            ->join('job_schedules', 'job_schedules.user_id', '=', 'users.id')
-            ->leftJoin('jobs', 'jobs.id', '=', 'job_schedules.job_id')
-            ->leftJoin('users as employer', 'employer.id', '=', 'jobs.user_id')
-            ->select(
+        $jobs = DB::table('job_schedules')
+        ->join('users','job_schedules.user_id', '=', 'users.id')
+        ->leftJoin('jobs', 'jobs.id', '=', 'job_schedules.job_id')
+        ->leftJoin('users as employer', 'employer.id', '=', 'jobs.user_id')
+        ->leftJoin('job_ratings', function($join)
+                 {
+                     $join->on('job_schedules.id', '=', 'job_ratings.job_schedule_id');
+                     $join->on('job_schedules.user_id','=','job_ratings.employee_id');
+                 })
+        ->select(
                 'job_schedules.job_status as schedule_status'
                 , 'job_schedules.checkin_datetime'
                 , 'job_schedules.checkout_datetime'
@@ -268,10 +280,12 @@ class JobSchedule extends Model
                 , 'jobs.job_date as start_date'
                 , 'jobs.id as jobid'
                 , 'employer.company_name'
+                , 'job_ratings.rating_point'
+                , 'job_ratings.rating_comment'
             )
-            ->where('users.id' , '=', $user_id)
-            ->where('job_schedules.id' , '=', $job_id)
-            ->whereIn('job_schedules.job_status',[
+        ->where('job_schedules.user_id' , '=', $user_id)
+        ->where('job_schedules.id' , '=', $job_id)
+        ->whereIn('job_schedules.job_status',[
                 'accepted'
                 , 'cancelled'
                 , 'completed'
