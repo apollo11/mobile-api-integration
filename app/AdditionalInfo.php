@@ -64,7 +64,7 @@ class AdditionalInfo extends Model
                 , 'users.employee_status'
                 , 'users.social_google_id'
                 , 'users.social_fb_id'
-                , 'users.rate'
+//                , 'users.rate as employee_rate'
                 , 'users.employee_points'
                 , 'users.profile_image_path as profile_photo'
                 , 'users.business_manager as agent_name'

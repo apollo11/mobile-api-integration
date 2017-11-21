@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class UserManagement extends Model
 {
+
     /**
      * @return mixed
      */
@@ -50,6 +51,10 @@ class UserManagement extends Model
         return $delete;
     }
 
+    /**
+     * @param $id
+     * @return mixed
+     */
     public function deleteUserMgt($id)
     {
         $delete = DB::table('users')->where('id', $id)
@@ -57,6 +62,35 @@ class UserManagement extends Model
 
         return $delete;
 
+    }
+
+    /**
+     * @return mixed
+     */
+    public function user($id)
+    {
+        $userMgtList = DB::table('users')
+            ->select(
+                'id'
+                , 'name'
+                , 'role'
+                , 'email'
+                , 'mobile_no'
+                , 'employer'
+                , 'dashboard_permissions'
+                , 'employees_permissions'
+                , 'employers_permissions'
+                , 'payout_permissions'
+                , 'job_permissions'
+                , 'reports_permissions'
+                , 'push_permissions'
+                , 'recipient_permissions'
+                , 'settings_permissions'
+            )
+            ->where('id', $id)
+            ->first();
+
+        return $userMgtList;
     }
 
 }

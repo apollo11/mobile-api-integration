@@ -111,11 +111,11 @@
                                                             <i class="fa fa-trash"></i> Delete</a>
                                                     </li>
                                                     <li>
-                                                        <a href="{{ route('job.edit',['id' => $value->id]) }}">
+                                                        <a href="{{ route('mgt.edit',['id' => $value->id]) }}">
                                                             <i class="fa fa-edit"></i> Edit </a>
                                                     </li>
                                                     <li>
-                                                        <a href="{{ route('job.details',['id' =>  $value->id])  }}">
+                                                        <a href="{{ route('mgt.details',['id' =>  $value->id])  }}">
                                                             <i class="fa fa-eye"></i> View </a>
                                                     </li>
                                                 </ul>

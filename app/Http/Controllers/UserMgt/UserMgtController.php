@@ -7,6 +7,7 @@ use App\Permission;
 use App\UserManagement;
 use App\User;
 use App\Mail\UserMgtMail;
+use App\Http\Requests\UpdateUserMgt;
 use App\Http\Requests\UserMgt;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
@@ -72,7 +73,7 @@ class UserMgtController extends Controller
 
         $this->sendEmailToUser($data);
 
-        return redirect()->back()->with('message', 'User saved.');
+        return redirect()->back()->with('message', 'Adding new user successfully saved.');
     }
 
 
@@ -84,7 +85,24 @@ class UserMgtController extends Controller
      */
     public function show($id)
     {
-        //
+        $mgt = new UserManagement();
+        $details  = $mgt->user($id);
+
+
+        return view('usermgt.details',
+            [
+                'details' => $details
+            , 'dashboard' => $this->parseObject($details->dashboard_permissions)
+            , 'employees' => $this->parseObject($details->employees_permissions)
+            , 'employers' => $this->parseObject($details->payout_permissions)
+            , 'job' => $this->parseObject($details->job_permissions)
+            , 'reports' => $this->parseObject($details->reports_permissions)
+            , 'push'=> $this->parseObject($details->push_permissions)
+            , 'recipient' => $this->parseObject($details->recipient_permissions)
+            , 'settings' => $this->parseObject($details->settings_permissions)
+            , 'payout' => $this->parseObject($details->payout_permissions)
+        ]);
+
     }
 
     /**
@@ -95,20 +113,96 @@ class UserMgtController extends Controller
      */
     public function edit($id)
     {
-        //
+        $mgt = new UserManagement();
+        $permission = new Permission();
+        $permissionValue = $permission->crud();
+        $details  = $mgt->user($id);
+
+        $employer = User::where('role_id',1)->pluck('company_name', 'id');
+
+        return view('usermgt.edit-form',['details' => $details
+            , 'employer' =>  $employer
+            , 'dashboard' => $this->parseObject($details->dashboard_permissions)
+            , 'employees' => $this->parseObject($details->employees_permissions)
+            , 'employers' => $this->parseObject($details->payout_permissions)
+            , 'job' => $this->parseObject($details->job_permissions)
+            , 'reports' => $this->parseObject($details->reports_permissions)
+            , 'push'=> $this->parseObject($details->push_permissions)
+            , 'recipient' => $this->parseObject($details->recipient_permissions)
+            , 'settings' => $this->parseObject($details->settings_permissions)
+            , 'payout' => $this->parseObject($details->payout_permissions)
+        ], compact('permissionValue'));
     }
 
     /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param $data
+     * @return mixed
+     */
+    public function parseObject($data)
+    {
+        $parse = json_decode($data, true);
+
+        return $parse;
+
+    }
+
+    /**
+     * @param Requqest $request
+     * @param $id
+     * @return $this|\Illuminate\Http\RedirectResponse
      */
     public function update(Request $request, $id)
     {
-        //
+        $data = $request->all();
+
+        $validator = Validator::make($data, [
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255',
+            'role' => 'required',
+            'employer' => 'required',
+            'dashboard' => 'required',
+            'employees' => 'required',
+            'employers' => 'required',
+            'payout' => 'required',
+            'job' => 'required',
+            'reports' => 'required',
+            'push' => 'required',
+            'recipient' => 'required',
+            'settings' => 'required'
+        ]);
+
+        if ($validator->fails()) {
+
+            return redirect(route('mgt.edit', ['id' => $id]))
+                ->withErrors($validator)
+                ->withInput();
+        } else {
+
+            $user = \App\User::find( $id);
+            $user->update([
+                'name' => $data['name'],
+                'email' => $data['email'],
+                'role' => $data['role'],
+                'employer' => $data['employer'],
+                'mobile_no' => $data['mobile_no'],
+                'dashboard_permissions' =>  $data['dashboard'],
+                'employees_permissions' => $data['employees'],
+                'employers_permissions' => $data['employers'],
+                'payout_permissions' => $data['payout'],
+                'job_permissions' => $data['job'],
+                'reports_permissions' => $data['reports'],
+                'push_permissions' => $data['push'],
+                'recipient_permissions' =>  $data['recipient'],
+                'settings_permissions' => $data['settings'],
+                'role_id' => 0,
+            ]);
+
+            return redirect()->back()->with('message', 'Updating details successful.');
+        }
+
     }
+
+
 
     /**
      * Remove the specified resource from storage.

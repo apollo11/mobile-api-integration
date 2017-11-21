@@ -123,8 +123,11 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::prefix('user/mgt')->group(function() {
         Route::get('create', 'UserMgt\UserMgtController@create')->name('mgt.create');
-        Route::post('store', 'UserMgt\UserMgtController@store')->name('mgt.store');
+        Route::get('edit/{id}', 'UserMgt\UserMgtController@edit')->name('mgt.edit');
         Route::get('list', 'UserMgt\UserMgtController@index')->name('mgt.list');
+        Route::get('details/{id}', 'UserMgt\UserMgtController@show')->name('mgt.details');
+        Route::post('update/{id}', 'UserMgt\UserMgtController@update')->name('mgt.update');
+        Route::post('store', 'UserMgt\UserMgtController@store')->name('mgt.store');
         Route::post('delete/{id}', 'UserMgt\UserMgtController@destroy')->name('mgt.delete');
         Route::post('multi/delete', 'UserMgt\UserMgtController@multiDestroy')->name('mgt.multi.delete');
     });
