@@ -51,6 +51,7 @@ class JobController extends Controller
     {
         $role = Auth::user()->role;
 
+
         if ($role == 'employer') {
             $userid = Auth::user()->id;
         } else {
@@ -65,7 +66,7 @@ class JobController extends Controller
 
         $jobsLists = $this->jobLists($param);
 
-        return view('job.lists', ['job' => $jobsLists, 'role' => $role]);
+        return view('job.lists', ['job' => $jobsLists, 'role' => $role ]);
     }
 
     /**
@@ -81,6 +82,7 @@ class JobController extends Controller
         $industry = $this->industry();
         $employee = $user->employerList();
         $age = $this->age();
+        $businessMngr = \App\User::where('role', 'business_manager')->pluck('name', 'id');
 
 
         return view('job.form', ['user' => $user
@@ -90,7 +92,7 @@ class JobController extends Controller
             , 'employer' => $employee
             , 'age' => $age
             , 'language' => $nationality->language()
-        ]);
+        ], compact('businessMngr'));
     }
 
     /**
@@ -335,7 +337,7 @@ class JobController extends Controller
         $job = new Job();
 
         $submit = empty($request->input('multiple')) ? $param : $request->input('multiple');
-        $multi['multicheck'] = is_null($id) ? (array)$request->input('multicheck') : (array)$id;
+        $multi['multicheck'] = is_null($id) ? (array)$request->input('multicheck') : (array) $id;
 
         $validator = Validator::make($multi, ['multicheck' => 'required']);
 
@@ -361,7 +363,6 @@ class JobController extends Controller
         }
 
         return $result;
-
     }
 
     /**

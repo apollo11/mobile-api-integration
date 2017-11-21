@@ -98,8 +98,8 @@
                                 </ul>
                             </li>
 
-            <li>
-                <a href="javascript:;">
+            <li {{ ($current_route == 'mgt.list' ? 'class=active' : '') }}>
+                <a href="{{ route('mgt.list') }}">
                     <i class="fa fa-user"></i>
                     <span class="title">Admin Users</span>
                 </a>

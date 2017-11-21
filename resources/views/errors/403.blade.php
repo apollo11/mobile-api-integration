@@ -48,7 +48,7 @@
 <div class="flex-center position-ref full-height">
     <div class="content">
         <div class="title">
-            Page not found.
+            Access Denied
         </div>
         <p><a href="{{ url()->previous() }}"> Go back to previous page.</a></p>
     </div>

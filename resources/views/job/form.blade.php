@@ -237,14 +237,15 @@
                                     <div class="form-group{{ $errors->has('business_manager') ? ' has-error' : '' }}">
                                         <label class="col-md-3 control-label">Business Manager</label>
                                         <div class="col-md-7">
-                                            @if(Auth::user()->role_id == 1)
-                                            <input type="text" class="form-control" placeholder="Enter Business Manager"
-                                                   value="{{ Auth::user()->business_manager }}" name="business_manager">
-                                            @endif
-                                             @if(Auth::user()->role_id == 0)
-                                                <input type="text" class="form-control" placeholder="Enter Business Manager"
-                                                       value="{{ old('business_manager') }}" name="business_manager">
-                                                @endif
+                                            <select class="form-control" name="business_manager">
+                                                @foreach($businessMngr as $key => $value)
+                                                    @if($loop->count > 0)
+                                                        <option value="{{ $key }}" {{ old('business_manager') == $key ? "selected" : "" }}>{{ $value }}</option>
+                                                    @else
+                                                        <option value=""> No Available Business </option>
+                                                    @endif
+                                                @endforeach
+                                            </select>
 
                                             @if ($errors->has('business_manager'))
                                                 <span class="help-block">
@@ -256,14 +257,8 @@
 
                                     <div class="form-group{{ $errors->has('job_employer') ? ' has-error' : '' }}">
                                         <label class="col-md-3 control-label">Employer<span class="is-required">*</span></label>
-                                        <div class="col-md-7">
-                                            {{--@if(Auth::user()->role_id == 1)--}}
-                                                {{--<select class="form-control" name="job_employer">--}}
-                                                    {{--<option value="">---Select One ---</option>--}}
-                                                    {{--<option value="{{ Auth::user()->id.'.'.Auth::user()->company_name }}" >{{ Auth::user()->company_name }}</option>--}}
-                                                {{--</select>--}}
-                                            {{--@endif--}}
 
+                                        <div class="col-md-7">
                                                 @if(Auth::user()->role_id == 1)
                                                     <select class="form-control" name="job_employer">
                                                         @foreach( $employer as $value)
