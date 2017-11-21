@@ -38,6 +38,9 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('update/profile/backic/{id?}', 'Employee\EmployeeController@updateBacktIc')->name('employee.edit.backic')->middleware('can:employee-edit');;
         Route::post('update/profile/bank/{id?}', 'Employee\EmployeeController@updateBankStmnt')->name('employee.edit.bank')->middleware('can:employee-edit');;
 
+
+        Route::get('/job/detail/{user_id}/{id}', 'Employee\EmployeeController@jobdetail')->name('employee.job.detail');
+        Route::get('/job/rate_job/{user_id}/{id}', 'Employee\EmployeeController@rate_job')->name('employee.job.rate_job');
     });
 
     Route::prefix('employer')->group(function () {

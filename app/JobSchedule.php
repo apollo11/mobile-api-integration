@@ -252,6 +252,44 @@ class JobSchedule extends Model
      * @param $id
      * @return mixed
      */
+    public function getJobByUser($user_id,$job_id)
+    {
+        $jobs = DB::table('users')
+            ->join('job_schedules', 'job_schedules.user_id', '=', 'users.id')
+            ->leftJoin('jobs', 'jobs.id', '=', 'job_schedules.job_id')
+            ->leftJoin('users as employer', 'employer.id', '=', 'jobs.user_id')
+            ->select(
+                'job_schedules.job_status as schedule_status'
+                , 'job_schedules.checkin_datetime'
+                , 'job_schedules.checkout_datetime'
+                , 'jobs.job_title'
+                , 'jobs.job_date'
+                , 'jobs.location'
+                , 'jobs.job_date as start_date'
+                , 'jobs.id as jobid'
+                , 'employer.company_name'
+            )
+            ->where('users.id' , '=', $user_id)
+            ->where('job_schedules.id' , '=', $job_id)
+            ->whereIn('job_schedules.job_status',[
+                'accepted'
+                , 'cancelled'
+                , 'completed'
+                , 'rejected'
+                , 'auto_complete'
+                , 'auto_cancelled'
+                , 'pending'
+            ])
+            ->first();
+
+        return $jobs;
+    }
+
+
+    /**
+     * @param $id
+     * @return mixed
+     */
     public function getRelatedCandidates($id)
     {
         $jobs = DB::table('users')
