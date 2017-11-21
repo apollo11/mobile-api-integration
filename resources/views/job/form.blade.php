@@ -256,7 +256,8 @@
                                     </div>
 
                                     <div class="form-group{{ $errors->has('job_employer') ? ' has-error' : '' }}">
-                                        <label class="col-md-3 control-label">Employer<span class="is-required">*</span></
+                                        <label class="col-md-3 control-label">Employer<span class="is-required">*</span></label>
+
                                         <div class="col-md-7">
                                                 @if(Auth::user()->role_id == 1)
                                                     <select class="form-control" name="job_employer">
