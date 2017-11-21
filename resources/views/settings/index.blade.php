@@ -206,7 +206,7 @@
                     { name: 'styles', items: [ 'Styles', 'Format' ] },
                     { name: 'paragraph', items: [ 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote' ] },
                     { name: 'links', items: [ 'Link', 'Unlink' ] },
-                    { name: 'insert', items: [ 'Image', 'EmbedSemantic', 'Table' ] },
+                    { name: 'insert', items: [ 'Image', 'EmbedSemantic', 'Table' ,'Source'] },
                 ],
             }
             CKEDITOR.replace('editor1',custom_ckconfig);
