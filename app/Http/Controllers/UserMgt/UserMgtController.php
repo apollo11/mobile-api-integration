@@ -59,15 +59,15 @@ class UserMgtController extends Controller
             'role' => $data['role'], //$request->input('role'),
             'employer' => $data['employer'],
             'mobile_no' => $data['mobile_no'], //$request->input('mobile_no'),
-            'dashboard_permissions' =>  $data['dashboard'],
-            'employees_permissions' => $data['employees'],
-            'employers_permissions' => $data['employers'],
-            'payout_permissions' => $data['payout'],
-            'job_permissions' => $data['job'],
-            'reports_permissions' => $data['reports'],
-            'push_permissions' => $data['push'],
-            'recipient_permissions' =>  $data['recipient'],
-            'settings_permissions' => $data['settings'],
+            'dashboard_permissions' =>  $data['dashboard'] ?? null,
+            'employees_permissions' => $data['employees'] ?? null,
+            'employers_permissions' => $data['employers'] ?? null,
+            'payout_permissions' => $data['payout'] ?? null,
+            'job_permissions' => $data['job'] ?? null,
+            'reports_permissions' => $data['reports'] ?? null,
+            'push_permissions' => $data['push'] ?? null,
+            'recipient_permissions' =>  $data['recipient'] ?? null,
+            'settings_permissions' => $data['settings'] ?? null,
             'role_id' => 0,
         ]);
 
@@ -124,7 +124,7 @@ class UserMgtController extends Controller
             , 'employer' =>  $employer
             , 'dashboard' => $this->parseObject($details->dashboard_permissions)
             , 'employees' => $this->parseObject($details->employees_permissions)
-            , 'employers' => $this->parseObject($details->payout_permissions)
+            , 'employers' => $this->parseObject($details->employers_permissions)
             , 'job' => $this->parseObject($details->job_permissions)
             , 'reports' => $this->parseObject($details->reports_permissions)
             , 'push'=> $this->parseObject($details->push_permissions)
@@ -160,15 +160,15 @@ class UserMgtController extends Controller
             'email' => 'required|string|email|max:255',
             'role' => 'required',
             'employer' => 'required',
-            'dashboard' => 'required',
-            'employees' => 'required',
-            'employers' => 'required',
-            'payout' => 'required',
-            'job' => 'required',
-            'reports' => 'required',
-            'push' => 'required',
-            'recipient' => 'required',
-            'settings' => 'required'
+//            'dashboard' => 'required',
+//            'employees' => 'required',
+//            'employers' => 'required',
+//            'payout' => 'required',
+//            'job' => 'required',
+//            'reports' => 'required',
+//            'push' => 'required',
+//            'recipient' => 'required',
+//            'settings' => 'required'
         ]);
 
         if ($validator->fails()) {
@@ -185,15 +185,15 @@ class UserMgtController extends Controller
                 'role' => $data['role'],
                 'employer' => $data['employer'],
                 'mobile_no' => $data['mobile_no'],
-                'dashboard_permissions' =>  $data['dashboard'],
-                'employees_permissions' => $data['employees'],
-                'employers_permissions' => $data['employers'],
-                'payout_permissions' => $data['payout'],
-                'job_permissions' => $data['job'],
-                'reports_permissions' => $data['reports'],
-                'push_permissions' => $data['push'],
-                'recipient_permissions' =>  $data['recipient'],
-                'settings_permissions' => $data['settings'],
+                'dashboard_permissions' =>  $data['dashboard'] ?? null,
+                'employees_permissions' => $data['employees'] ?? null,
+                'employers_permissions' => $data['employers'] ?? null,
+                'payout_permissions' => $data['payout'] ?? null ,
+                'job_permissions' => $data['job'] ?? null,
+                'reports_permissions' => $data['reports'] ?? null,
+                'push_permissions' => $data['push'] ?? null,
+                'recipient_permissions' =>  $data['recipient'] ?? null,
+                'settings_permissions' => $data['settings'] ?? null,
                 'role_id' => 0,
             ]);
 

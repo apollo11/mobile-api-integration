@@ -136,13 +136,22 @@
                                 </div>
                                 <div class="form-group">
                                     <h4 class="col-md-3 control-label"> Permission </h4>
+                                    <div class="col-md-7">
+                                        <div class="mt-checkbox-inline">
+                                            <label class="mt-checkbox">
+                                                <input type="checkbox" class="group-checkable"
+                                                       data-set="#employee-table .checkboxes"/>
+                                                <span></span>
+                                            </label>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="form-group {{ $errors->has('dashboard') ? ' has-error' : '' }}">
                                     <label class="col-md-3 control-label">Dashboard</label>
                                     <div class="col-md-7">
                                         <div class="mt-checkbox-inline">
                                                 <label class="mt-checkbox">
-                                                    <input type="checkbox" name="dashboard[]" value="true" {{ old('dashboard') ? 'checked' : '' }} />
+                                                    <input class="checkboxes" type="checkbox" name="dashboard[]" value="true" {{ old('dashboard') ? 'checked' : '' }} />
                                                     <span></span>
                                                 </label>
                                             @if ($errors->has('dashboard'))
@@ -158,7 +167,7 @@
                                     <div class="col-md-7">
                                         <div class="mt-checkbox-inline">
                                                 <label class="mt-checkbox">
-                                                    <input type="checkbox" name="employees[]" value="true" {{ old('employees') ? 'checked' : '' }} />
+                                                    <input class="checkboxes" type="checkbox" name="employees[]" value="true" {{ old('employees') ? 'checked' : '' }} />
                                                     <span></span>
                                                 </label>
                                             @if ($errors->has('employees'))
@@ -174,7 +183,7 @@
                                     <div class="col-md-7">
                                         <div class="mt-checkbox-inline">
                                                 <label class="mt-checkbox">
-                                                    <input type="checkbox" name="employers[]" value="true" {{ old('employers') ? 'checked' : '' }} />
+                                                    <input class="checkboxes" type="checkbox" name="employers[]" value="true" {{ old('employers') ? 'checked' : '' }} />
                                                     <span></span>
                                                 </label>
                                             @if ($errors->has('employers'))
@@ -190,7 +199,7 @@
                                     <div class="col-md-7">
                                         <div class="mt-checkbox-inline">
                                                 <label class="mt-checkbox">
-                                                    <input type="checkbox" name="payout[]" value="true" {{ old('payout') ? 'checked' : '' }} />
+                                                    <input class="checkboxes" type="checkbox" name="payout[]" value="true" {{ old('payout') ? 'checked' : '' }} />
                                                     <span></span>
                                                 </label>
                                             @if ($errors->has('payout'))
@@ -206,7 +215,7 @@
                                     <div class="col-md-7">
                                         <div class="mt-checkbox-inline">
                                                 <label class="mt-checkbox">
-                                                    <input type="checkbox" name="job[]" value="true" {{ old('job') ? 'checked' : '' }} />
+                                                    <input class="checkboxes" type="checkbox" name="job[]" value="true" {{ old('job') ? 'checked' : '' }} />
                                                     <span></span>
                                                 </label>
                                             @if ($errors->has('job'))
@@ -222,7 +231,7 @@
                                     <div class="col-md-7">
                                         <div class="mt-checkbox-inline">
                                             <label class="mt-checkbox">
-                                                <input type="checkbox" name="reports[]" value="true" {{ old('reports') ? 'checked' : '' }} />
+                                                <input class="checkboxes" type="checkbox" name="reports[]" value="true" {{ old('reports') ? 'checked' : '' }} />
                                                 <span></span>
                                             </label>
                                             @if ($errors->has('reports'))
@@ -238,7 +247,7 @@
                                     <div class="col-md-7">
                                         <div class="mt-checkbox-inline">
                                                 <label class="mt-checkbox">
-                                                    <input type="checkbox" name="push[]" value="true"  {{ old('push') ? 'checked' : '' }} />
+                                                    <input class="checkboxes" type="checkbox" name="push[]" value="true"  {{ old('push') ? 'checked' : '' }} />
                                                     <span></span>
                                                 </label>
                                             @if ($errors->has('push'))
@@ -254,7 +263,7 @@
                                     <div class="col-md-7">
                                         <div class="mt-checkbox-inline">
                                                 <label class="mt-checkbox">
-                                                    <input type="checkbox" name="recipient[]" value="true" {{ old('recipient') ? 'checked' : '' }} />
+                                                    <input class="checkboxes" type="checkbox" name="recipient[]" value="true" {{ old('recipient') ? 'checked' : '' }} />
                                                     <span></span>
                                                 </label>
                                             @if ($errors->has('recipient'))
@@ -270,7 +279,7 @@
                                     <div class="col-md-7">
                                         <div class="mt-checkbox-inline">
                                                 <label class="mt-checkbox">
-                                                    <input type="checkbox" name="settings[]" value="true" {{ old('settings') ? 'checked' : '' }} />
+                                                    <input class="checkboxes" type="checkbox" name="settings[]" value="true" {{ old('settings') ? 'checked' : '' }} />
                                                     <span></span>
                                                 </label>
                                             @if ($errors->has('settings'))

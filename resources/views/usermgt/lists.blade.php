@@ -66,7 +66,6 @@
                                     <th>Role</th>
                                     <th>Email</th>
                                     <th>Contact number</th>
-                                    <th>Permission</th>
                                     <th>Employer's Name</th>
                                     <th>Action</th>
                                 </tr>
@@ -86,16 +85,6 @@
                                         <td> {{ $value->role }}</td>
                                         <td> {{ $value->email }}</td>
                                         <td>{{ $value->mobile_no }}</td>
-                                        <td> {{ 'Dashboard: '. $value->dashboard_permissions }} <br/>
-                                            {{ 'Employees : '. $value->employees_permissions }} <br/>
-                                            {{ 'Employers : '. $value->employers_permissions }} <br/>
-                                            {{ 'Payout: '. $value->payout_permissions }} <br/>
-                                            {{ 'Job Mgt : '. $value->job_permissions }} <br/>
-                                            {{ 'Reports : '. $value->reports_permissions }} <br/>
-                                            {{ 'Push Notification : '. $value->push_permissions }} <br/>
-                                            {{ 'Recipient Group : '. $value->recipient_permissions }} <br/>
-                                            {{ 'Settings : '. $value->settings_permissions }} <br/>
-                                        </td>
                                         <td> {{ $value->employer }}</td>
                                         <td>
                                             <div class="btn-group">
