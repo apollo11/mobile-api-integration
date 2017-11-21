@@ -55,14 +55,14 @@ Route::group(['middleware' => ['auth']], function () {
     });
 
     Route::prefix('industry')->group(function () {
-        Route::get('/create', 'Industry\IndustryController@create')->name('industry.create');
-        Route::get('/lists', 'Industry\IndustryController@index')->name('industry.lists');
+        Route::get('/create', 'Industry\IndustryController@create')->name('industry.create')->middleware('can:admin-view');;
+        Route::get('/lists', 'Industry\IndustryController@index')->name('industry.lists')->middleware('can:admin-view');;
         Route::post('/add', 'Industry\IndustryController@store')->name('industry.add');
     });
 
     Route::prefix('location')->group(function () {
-        Route::get('/create', 'Location\LocationController@create')->name('location.create');
-        Route::get('/lists', 'Location\LocationController@index')->name('location.lists');
+        Route::get('/create', 'Location\LocationController@create')->name('location.create')->middleware('can:admin-view');;
+        Route::get('/lists', 'Location\LocationController@index')->name('location.lists')->middleware('can:admin-view');;
         Route::post('/add', 'Location\LocationController@store')->name('location.add');
     });
 
@@ -122,10 +122,10 @@ Route::group(['middleware' => ['auth']], function () {
     });
 
     Route::prefix('user/mgt')->group(function() {
-        Route::get('create', 'UserMgt\UserMgtController@create')->name('mgt.create');
-        Route::get('edit/{id}', 'UserMgt\UserMgtController@edit')->name('mgt.edit');
-        Route::get('list', 'UserMgt\UserMgtController@index')->name('mgt.list');
-        Route::get('details/{id}', 'UserMgt\UserMgtController@show')->name('mgt.details');
+        Route::get('create', 'UserMgt\UserMgtController@create')->name('mgt.create')->middleware('can:admin-view');
+        Route::get('edit/{id}', 'UserMgt\UserMgtController@edit')->name('mgt.edit')->middleware('can:admin-view');
+        Route::get('list', 'UserMgt\UserMgtController@index')->name('mgt.list')->middleware('can:admin-view');
+        Route::get('details/{id}', 'UserMgt\UserMgtController@show')->name('mgt.details')->middleware('can:admin-view');
         Route::post('update/{id}', 'UserMgt\UserMgtController@update')->name('mgt.update');
         Route::post('store', 'UserMgt\UserMgtController@store')->name('mgt.store');
         Route::post('delete/{id}', 'UserMgt\UserMgtController@destroy')->name('mgt.delete');

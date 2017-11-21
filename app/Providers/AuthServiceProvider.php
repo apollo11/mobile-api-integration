@@ -150,6 +150,13 @@ class AuthServiceProvider extends ServiceProvider
             return $user->settings_permissions[3] || $user->role_id == 0;
         });
 
+        // Administrator
+        Gate::define('admin-view', function ($user) {
+            return $user->role == 'Administrator';
+        });
+
+
+
 //        Passport::tokensExpireIn(Carbon::now()->addDays(15));
 //
 //        Passport::refreshTokensExpireIn(Carbon::now()->addDays(30));

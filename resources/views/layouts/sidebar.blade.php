@@ -72,38 +72,43 @@
             </li>
 
              @if (Auth::user()->role_id == 0)
-             <li {{{ ($current_route == 'industry.create' ? 'class=active' : '') }}}>
-                <a href="{{ route('industry.create') }}">
-                    <i class="icon-handbag"></i>
-                    Industry</a>
-            </li>
+                @can('admin-view')
+                     <li {{{ ($current_route == 'industry.create' ? 'class=active' : '') }}}>
+                        <a href="{{ route('industry.create') }}">
+                            <i class="icon-handbag"></i>
+                            Industry</a>
+                    </li>
+                @endcan
+            @can('admin-view')
              <li {{{ ($current_route == 'location.create' ? 'class=active' : '') }}}>
                 <a href="{{ route('location.create') }}">
                     <i class="icon-handbag"></i>
                     Location</a>
             </li>
+            @endcan
 
-            <li class="nav-item">
-                                <a href="javascript:;" class="nav-link nav-toggle">
-                                    <i class="fa fa-line-chart"></i>
-                                    <span class="title">Reports</span>
-                                    <span class="arrow"></span>
-                                </a>
-                                <ul class="sub-menu" style="display: none;">
-                                    <li class="nav-item  ">
-                                        <a href="{{route('reports.weekly_report') }}" class="nav-link ">
-                                            <span class="title">Weekly Report</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-
-            <li {{ ($current_route == 'mgt.list' ? 'class=active' : '') }}>
-                <a href="{{ route('mgt.list') }}">
-                    <i class="fa fa-user"></i>
-                    <span class="title">Admin Users</span>
-                </a>
-            </li>
+                <li class="nav-item">
+                    <a href="javascript:;" class="nav-link nav-toggle">
+                        <i class="fa fa-line-chart"></i>
+                        <span class="title">Reports</span>
+                        <span class="arrow"></span>
+                    </a>
+                    <ul class="sub-menu" style="display: none;">
+                        <li class="nav-item  ">
+                            <a href="{{route('reports.weekly_report') }}" class="nav-link ">
+                                <span class="title">Weekly Report</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                @can('admin-view')
+                     <li {{ ($current_route == 'mgt.list' ? 'class=active' : '') }}>
+                        <a href="{{ route('mgt.list') }}">
+                            <i class="fa fa-user"></i>
+                            <span class="title">Admin Users</span>
+                        </a>
+                    </li>
+                @endcan
             <li>
                 <a href="javascript:;">
                     <i class="icon-settings"></i>

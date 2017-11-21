@@ -67,7 +67,7 @@
                                                                 {{ empty($dashboard[0])  ? '' : $dashboard[0] }} ,
                                                                 {{ empty($dashboard[1])  ? '' : $dashboard[1] }} ,
                                                                 {{ empty($dashboard[2])  ? '' : $dashboard[2] }} ,
-                                                                {{ empty($dashboard[3])  ? '' : $dashboard[3] }} ,
+                                                                {{ empty($dashboard[3])  ? '' : $dashboard[3] }}
                                                             </td>
                                                         </tr>
                                                         <tr>
@@ -76,7 +76,7 @@
                                                                 {{ empty($employees[0])  ? '' : $employees[0] }} ,
                                                                 {{ empty($employees[1])  ? '' : $employees[1] }} ,
                                                                 {{ empty($employees[2])  ? '' : $employees[2] }} ,
-                                                                {{ empty($employees[3])  ? '' : $employees[3] }} ,
+                                                                {{ empty($employees[3])  ? '' : $employees[3] }}
                                                             </td>
                                                         </tr>
                                                         <tr>
@@ -85,7 +85,7 @@
                                                                 {{ empty($employers[0])  ? '' : $employers[0] }} ,
                                                                 {{ empty($employers[1])  ? '' : $employers[1] }} ,
                                                                 {{ empty($employers[2])  ? '' : $employers[2] }} ,
-                                                                {{ empty($employers[3])  ? '' : $employers[3] }} ,
+                                                                {{ empty($employers[3])  ? '' : $employers[3] }}
                                                             </td>
                                                         </tr>
                                                         <tr>
@@ -94,7 +94,7 @@
                                                                 {{ empty($job[0])  ? '' : $job[0] }} ,
                                                                 {{ empty($job[1])  ? '' : $job[1] }} ,
                                                                 {{ empty($job[2])  ? '' : $job[2] }} ,
-                                                                {{ empty($job[3])  ? '' : $job[3] }} ,
+                                                                {{ empty($job[3])  ? '' : $job[3] }}
                                                             </td>
                                                         </tr>
                                                         <tr>
@@ -103,7 +103,7 @@
                                                                 {{ empty($reports[0])  ? '' : $reports[0] }} ,
                                                                 {{ empty($reports[1])  ? '' : $reports[1] }} ,
                                                                 {{ empty($reports[2])  ? '' : $reports[2] }} ,
-                                                                {{ empty($reports[3])  ? '' : $reports[3] }} ,
+                                                                {{ empty($reports[3])  ? '' : $reports[3] }}
                                                             </td>
                                                         </tr>
                                                         <tr>
@@ -112,7 +112,7 @@
                                                                 {{ empty($push[0])  ? '' : $push[0] }} ,
                                                                 {{ empty($push[1])  ? '' : $push[1] }} ,
                                                                 {{ empty($push[2])  ? '' : $push[2] }} ,
-                                                                {{ empty($push[3])  ? '' : $push[3] }} ,
+                                                                {{ empty($push[3])  ? '' : $push[3] }}
                                                             </td>
                                                         </tr>
                                                         <tr>
@@ -121,7 +121,7 @@
                                                                 {{ empty($recipient[0])  ? '' : $recipient[0] }} ,
                                                                 {{ empty($recipient[1])  ? '' : $recipient[1] }} ,
                                                                 {{ empty($recipient[2])  ? '' : $recipient[2] }} ,
-                                                                {{ empty($recipient[3])  ? '' : $recipient[3] }} ,
+                                                                {{ empty($recipient[3])  ? '' : $recipient[3] }}
                                                             </td>
                                                         </tr>
                                                         <tr>
@@ -130,7 +130,7 @@
                                                                 {{ empty($settings[0])  ? '' : $settings[0] }} ,
                                                                 {{ empty($settings[1])  ? '' : $settings[1] }} ,
                                                                 {{ empty($settings[2])  ? '' : $settings[2] }} ,
-                                                                {{ empty($settings[3])  ? '' : $settings[3] }} ,
+                                                                {{ empty($settings[3])  ? '' : $settings[3] }}
                                                             </td>
                                                         </tr>
                                                         <tr>
@@ -139,7 +139,7 @@
                                                                 {{ empty($payout[0])  ? '' : $payout[0] }} ,
                                                                 {{ empty($payout[1])  ? '' : $payout[1] }} ,
                                                                 {{ empty($payout[2])  ? '' : $payout[2] }} ,
-                                                                {{ empty($payout[3])  ? '' : $payout[3] }} ,
+                                                                {{ empty($payout[3])  ? '' : $payout[3] }}
                                                             </td>
                                                         </tr>
                                                         </tbody>
@@ -149,15 +149,6 @@
 
                                         </div>
                                     </div>
-                                    {{--<div class="col-md-6">--}}
-                                    {{--<div class="btn-group">--}}
-                                    {{--<div class="row">--}}
-                                    {{--<div class="col-md-12">--}}
-                                    {{--<img class="img-circle" src="/{{ $employer->profile_image_path }}" height="80px"/>--}}
-                                    {{--</div>--}}
-                                    {{--</div>--}}
-                                    {{--</div>--}}
-                                    {{--</div>--}}
                                 </div>
                             </div>
                         </div>
