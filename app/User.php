@@ -213,11 +213,4 @@ class User extends Authenticatable
         return $this->roles()->where('slug', $roleSlug)->count() == 1;
     }
 
-    public function testYou()
-    {
-        $testYou = DB::table('users')->get();
-
-        return $testYou;
-
-    }
 }

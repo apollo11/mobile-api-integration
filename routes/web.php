@@ -33,10 +33,10 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('delete/{id}','Employee\EmployeeController@destroyOne')->name('employee.destroy-one')->middleware('can:employee-delete');
         Route::post('update/{id?}', 'Employee\EmployeeController@update')->name('employee.update')->middleware('can:employee-edit');
 
-        Route::post('update/profile/img/{id?}', 'Employee\EmployeeController@updateProfileImg')->name('employee.edit.img')->middleware('can:employee-edit');;
-        Route::post('update/profile/frontic/{id?}', 'Employee\EmployeeController@updateFrontIc')->name('employee.edit.frontic')->middleware('can:employee-edit');;
-        Route::post('update/profile/backic/{id?}', 'Employee\EmployeeController@updateBacktIc')->name('employee.edit.backic')->middleware('can:employee-edit');;
-        Route::post('update/profile/bank/{id?}', 'Employee\EmployeeController@updateBankStmnt')->name('employee.edit.bank')->middleware('can:employee-edit');;
+        Route::post('update/profile/img/{id?}', 'Employee\EmployeeController@updateProfileImg')->name('employee.edit.img')->middleware('can:employee-edit');
+        Route::post('update/profile/frontic/{id?}', 'Employee\EmployeeController@updateFrontIc')->name('employee.edit.frontic')->middleware('can:employee-edit');
+        Route::post('update/profile/backic/{id?}', 'Employee\EmployeeController@updateBacktIc')->name('employee.edit.backic')->middleware('can:employee-edit');
+        Route::post('update/profile/bank/{id?}', 'Employee\EmployeeController@updateBankStmnt')->name('employee.edit.bank')->middleware('can:employee-edit');
 
 
         Route::get('/job/detail/{user_id}/{id}', 'Employee\EmployeeController@jobdetail')->name('employee.job.detail');

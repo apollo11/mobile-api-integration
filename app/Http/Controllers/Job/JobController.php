@@ -66,7 +66,7 @@ class JobController extends Controller
 
         $jobsLists = $this->jobLists($param);
 
-        return view('job.lists', ['job' => $jobsLists, 'role' => $role, 'test' =>Auth::user()->dashboard_permissions ]);
+        return view('job.lists', ['job' => $jobsLists, 'role' => $role ]);
     }
 
     /**
