@@ -552,11 +552,16 @@ class EmployeeController extends Controller
         $userDetails = new AdditionalInfo();
 
         $details = $userDetails->userInfo($id);
+
         $jobInfo = $this->availableJobs($id);
-        // $applied = $this->completedJobs($id);
-        // $completed = $this->appliedJobs($id);
+        
         $applied = $this->appliedJobs($id);
         $completed = $this->completedJobs($id);
+
+        $ratings = new JobRatings();
+        $avg_rating = $ratings->getUserAvgRatings($id);
+
+        $details->avg_rating = $avg_rating;
 
         return view('employee.details', ['userDetails' => $details
             , 'jobInfo' => $jobInfo
