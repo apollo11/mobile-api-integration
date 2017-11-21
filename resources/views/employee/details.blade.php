@@ -25,7 +25,6 @@
         </form>
 
     @endforeach
-
     <form id="approve-{{ $userDetails->id }}" action="{{ route('employee.approve',['id' => $userDetails->id]) }}"
           method="POST" style="display: none;">
         {{ csrf_field() }}
@@ -61,10 +60,10 @@
                                 <span class="caption-subject bold uppercase">Employees</span>
                             </div>
                             <div class="actions">
+                                @can('employee-edit')
                                 <a class="btn sbold green"
                                    href="{{ route('employee.edit',['id' => $userDetails->id])  }}">
                                     Update</a>
-
                                 <a class="btn sbold green"
                                    href="{{ route('employee.approve',['id' => $userDetails->id])  }}"
                                    onclick="event.preventDefault();
@@ -76,6 +75,7 @@
                                            document.getElementById('{{'reject-'.$userDetails->id }}').submit();">
                                     Reject
                                 </a>
+                                @endcan
                                 <input class="btn sbold green" name="multiple" onclick="window.print()" value="Print"
                                        type="submit"/>
                             </div>
@@ -288,25 +288,23 @@
                                         <div class="row">
                                             <div class="col-sm-offset-2 col-sm-4">
                                                 <div class="mt-overlay-1 mt-scroll-right">
-                                                    <div>
                                                     @if(!empty($userDetails->profile_photo))
                                                         <img class="img-circle main-profile-img" src="{{ url($userDetails->profile_photo) }}" />
                                                     @else
                                                         <img class="img-circle main-profile-img" src="http://via.placeholder.com/300x300" />
                                                     @endif
-                                                    </div>
-                                                    
+
                                                     <div class="mt-overlay">
                                                         <ul class="mt-info">
                                                             <li>
-                                                                <div class="btn sbold red" data-toggle="modal" data-target="#profile-img">
+                                                                <button @cannot('employee-edit') disabled @endcannot class="btn sbold red" data-toggle="modal" data-target="#profile-img">
                                                                    Update Profile Image
-                                                                </div>
+                                                                </button>
                                                             </li>
                                                         </ul>
                                                     </div>
                                                 </div>
-                                                    <h3><a href="#" class="btn sbold green" data-toggle="modal" data-target="#profile-img">Update Profile Image</a></h3>
+                                                    <h3><button href="#" @cannot('employee-edit') disabled @endcannot class="btn sbold green" data-toggle="modal" data-target="#profile-img">Update Profile Image</button></h3>
                                             </div>
                                         </div>
                                         <div class="row">
@@ -320,14 +318,14 @@
                                                     <div class="mt-overlay">
                                                         <ul class="mt-info">
                                                             <li>
-                                                                <div class="btn sbold red" data-toggle="modal" data-target="#profile-front-ic">
+                                                                <button @cannot('employee-edit') disabled @endcannot class="btn sbold red" data-toggle="modal" data-target="#profile-front-ic">
                                                                     Update Front IC
-                                                                </div>
+                                                                </button>
                                                             </li>
                                                         </ul>
                                                     </div>
                                                 </div>
-                                                <h3><a href="#" class="btn sbold green" data-toggle="modal" data-target="#profile-front-ic">Update Front IC</a></h3>
+                                                <h3><button @cannot('employee-edit') disabled @endcannot href="#" class="btn sbold green" data-toggle="modal" data-target="#profile-front-ic">Update Front IC</button></h3>
                                             </div>
                                         </div>
                                         <div class="row">
@@ -341,14 +339,14 @@
                                                     <div class="mt-overlay">
                                                         <ul class="mt-info">
                                                             <li>
-                                                                <div class="btn sbold red" data-toggle="modal" data-target="#profile-back-ic">
+                                                                <button @cannot('employee-edit') disabled @endcannot class="btn sbold red" data-toggle="modal" data-target="#profile-back-ic">
                                                                     Update Back IC
-                                                                </div>
+                                                                </button>
                                                             </li>
                                                         </ul>
                                                     </div>
                                                 </div>
-                                                <h3><a href="#" class="btn sbold green" data-toggle="modal" data-target="#profile-back-ic">Update Back IC</a></h3>
+                                                <h3><button @cannot('employee-edit') disabled @endcannot href="#" class="btn sbold green" data-toggle="modal" data-target="#profile-back-ic">Update Back IC</button></h3>
                                             </div>
                                         </div>
                                     </div>

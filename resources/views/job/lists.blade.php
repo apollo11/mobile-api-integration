@@ -90,7 +90,7 @@
                                         <td> {{ '$'.$value->rate.'/hr' }}</td>
                                         <td> {{ Carbon\Carbon::parse($value->start_date)->format('H:i:s d-m-Y') }}</td>
                                         <td> {{ $value->business_manager }}</td>
-                                        <td>{{ $value->location }}</td>
+                                        <td>{{ $value->geolocation_address  }}</td>
 
                                         @if($value->status == 'inactive')
 
