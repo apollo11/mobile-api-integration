@@ -94,6 +94,8 @@
                                                 @foreach($employer as $key )
                                                     @if(!empty($key))
                                                         <option value="{{ $key }}" {{ old('employer') == $key ? 'selected' : '' }}>{{ $key }}</option>
+                                                    @else
+                                                        <option value="">None</option>
                                                     @endif
                                                 @endforeach
                                             </select>

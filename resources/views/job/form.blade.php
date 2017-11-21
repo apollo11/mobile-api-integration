@@ -239,7 +239,11 @@
                                         <div class="col-md-7">
                                             <select class="form-control" name="business_manager">
                                                 @foreach($businessMngr as $key => $value)
-                                                    <option value="{{ $key }}" {{ old('business_manager') == $key ? "selected" : "" }}>{{ $value }}</option>
+                                                    @if($loop->count > 0)
+                                                        <option value="{{ $key }}" {{ old('business_manager') == $key ? "selected" : "" }}>{{ $value }}</option>
+                                                    @else
+                                                        <option value=""> No Available Business </option>
+                                                    @endif
                                                 @endforeach
                                             </select>
 
@@ -252,7 +256,7 @@
                                     </div>
 
                                     <div class="form-group{{ $errors->has('job_employer') ? ' has-error' : '' }}">
-                                        <label class="col-md-3 control-label">Employer<span class="is-required">*</span></label>
+                                        <label class="col-md-3 control-label">Employer<span class="is-required">*</span></
                                         <div class="col-md-7">
                                                 @if(Auth::user()->role_id == 1)
                                                     <select class="form-control" name="job_employer">
