@@ -30,6 +30,28 @@ class User extends Authenticatable
         , 'status'
         , 'profile_image_path'
         , 'employee_points'
+        , 'dashboard_permissions'
+        , 'employees_permissions'
+        , 'employers_permissions'
+        , 'payout_permissions'
+        , 'job_permissions'
+        , 'reports_permissions'
+        , 'push_permissions'
+        , 'recipient_permissions'
+        , 'settings_permissions'
+        , 'employer'
+    ];
+
+    protected $casts = [
+        'dashboard_permissions' => 'array',
+        'employees_permissions' => 'array',
+        'employers_permissions' => 'array',
+        'payout_permissions' => 'array',
+        'job_permissions' => 'array',
+        'reports_permissions' => 'array',
+        'push_permissions' => 'array',
+        'recipient_permissions' => 'array',
+        'settings_permissions' => 'array',
     ];
 
     /**
@@ -164,5 +186,31 @@ class User extends Authenticatable
         return $this->belongsToMany('\App\AssignJob')->withPivot('is_assigned', 'user_id');
     }
 
+    public function roles()
+    {
+        return $this->belongsToMany(Roles::class, 'role_users');
+    }
+
+    /**
+     * Checks if User has access to $permissions.
+     */
+    public function hasAccess(array $permissions) : bool
+    {
+        // check if the permission is available in any role
+        foreach ($this->roles as $role) {
+            if($role->hasAccess($permissions)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Checks if the user belongs to role.
+     */
+    public function inRole(string $roleSlug)
+    {
+        return $this->roles()->where('slug', $roleSlug)->count() == 1;
+    }
 
 }
