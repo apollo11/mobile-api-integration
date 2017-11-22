@@ -13,10 +13,19 @@ class UsersTableSeeder extends Seeder
     {
         DB::table('users')->insert([
             'name' => 'Super Admin',
-            'email' => 'apollomalapote@gmail.com',
-            'password' => bcrypt('123456'),
+            'email' => 'superadmin@yyjobs.com',
+            'password' => bcrypt('12345678'),
             'role_id' => 0,
-            'role'=> 'Administrator'
+            'role'=> 'Administrator',
+            'dashboard_permissions' => 'true',
+            'employees_permissions'=> 'true',
+            'employers_permissions' => 'true',
+            'payout_permissions' => 'true',
+            'job_permissions' => 'true',
+            'reports_permissions' => 'true',
+            'push_permissions' => 'true',
+            'recipient_permissions' => 'true',
+            'settings_permissions' => 'true'
         ]);
     }
 }

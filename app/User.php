@@ -213,4 +213,12 @@ class User extends Authenticatable
         return $this->roles()->where('slug', $roleSlug)->count() == 1;
     }
 
+    /**
+     * Has Many Employer
+     */
+    public function employer()
+    {
+        return $this->hasMany('App\Employer');
+    }
+
 }
