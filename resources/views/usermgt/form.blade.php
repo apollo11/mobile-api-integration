@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="page-content-wrapper">
+    <div class="page-content-wrapper users-mgt">
         <div class="page-content">
 
             <div class="page-bar">
@@ -84,29 +84,58 @@
                                             @endif
                                         </div>
                                     </div>
-
-                                    <div class="form-group{{ $errors->has('employer') ? ' has-error' : '' }}">
+                                    <div class="form-group {{ $errors->has('employer') ? ' has-error' : '' }}">
                                         <label class="col-md-3 control-label">Employer</label>
-                                        <div class="col-md-7">
-                                            <select class="form-control" name="employer">
-                                                <option value="">--select none-- </option>
-                                                <option value="all" {{ old('employer') == 'all' ? 'selected' : '' }}>All</option>
-                                                @foreach($employer as $key )
-                                                    @if(!empty($key))
-                                                        <option value="{{ $key }}" {{ old('employer') == $key ? 'selected' : '' }}>{{ $key }}</option>
-                                                    @else
-                                                        <option value="">None</option>
-                                                    @endif
-                                                @endforeach
-                                            </select>
+                                        <div class="col-md-7 employer-multiple">
+                                            <div class="mt-checkbox-inline">
+                                                <label class="mt-checkbox">
+                                                    <input type="checkbox" name="employer[]" value="all" {{ old('employer') == 'all' ? 'checked' : '' }} />
+                                                    <span></span>
+                                                    All
+                                                </label>
+                                            </div>
 
+                                            @foreach($employer as $key )
+                                                @if(!empty($key))
+                                                <div class="mt-checkbox-inline">
+                                                    <label class="mt-checkbox">
+                                                        <input type="checkbox" name="employer[]" value="{{ $key }}" {{ old('employer') == $key ? 'checked' : '' }} />
+                                                        <span></span>
+                                                        {{ $key }}
+                                                    </label>
+                                                </div>
+                                                @endif
+                                            @endforeach
                                             @if ($errors->has('employer'))
                                                 <span class="help-block">
-                                            {{ $errors->first('employer') }}
-                                           </span>
+                                                {{ $errors->first('employer') }}
+                                            </span>
                                             @endif
                                         </div>
                                     </div>
+
+                                    {{--<div class="form-group{{ $errors->has('employer') ? ' has-error' : '' }}">--}}
+                                        {{--<label class="col-md-3 control-label">Employer</label>--}}
+                                        {{--<div class="col-md-7">--}}
+                                            {{--<select class="form-control" name="employer">--}}
+                                                {{--<option value="">--select none-- </option>--}}
+                                                {{--<option value="all" {{ old('employer') == 'all' ? 'selected' : '' }}>All</option>--}}
+                                                {{--@foreach($employer as $key )--}}
+                                                    {{--@if(!empty($key))--}}
+                                                        {{--<option value="{{ $key }}" {{ old('employer') == $key ? 'selected' : '' }}>{{ $key }}</option>--}}
+                                                    {{--@else--}}
+                                                        {{--<option value="">None</option>--}}
+                                                    {{--@endif--}}
+                                                {{--@endforeach--}}
+                                            {{--</select>--}}
+
+                                            {{--@if ($errors->has('employer'))--}}
+                                                {{--<span class="help-block">--}}
+                                            {{--{{ $errors->first('employer') }}--}}
+                                           {{--</span>--}}
+                                            {{--@endif--}}
+                                        {{--</div>--}}
+                                    {{--</div>--}}
 
                                     <div class="form-group{{ $errors->has('mobile_no') ? ' has-error' : '' }}">
                                         <label class="col-md-3 control-label">Mobile No</label>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\UserMgt;
 
 use Validator;
+use App\Employer;
 use App\Permission;
 use App\UserManagement;
 use App\User;
@@ -52,12 +53,12 @@ class UserMgtController extends Controller
     {
         $data = $request->all();
 
-        User::create([
+        $lastId = User::create([
             'name' => $data['name'], //$request->input('name'),
             'email' => $data['email'] ,//$request->input('email'),
             'password' => bcrypt($data['password']),
             'role' => $data['role'], //$request->input('role'),
-            'employer' => $data['employer'],
+            'employer' => null,
             'mobile_no' => $data['mobile_no'], //$request->input('mobile_no'),
             'dashboard_permissions' =>  $data['dashboard'] ?? null,
             'employees_permissions' => $data['employees'] ?? null,
@@ -71,12 +72,11 @@ class UserMgtController extends Controller
             'role_id' => 0,
         ]);
 
+        $this->saveEmployer($lastId->id, $data);
         $this->sendEmailToUser($data);
 
         return redirect()->back()->with('message', 'Adding new user successfully saved.');
     }
-
-
     /**
      * Display the specified resource.
      *
@@ -263,6 +263,23 @@ class UserMgtController extends Controller
     public function sendEmailToUser(array $data)
     {
         Mail::to($data['email'])->send( new UserMgtMail($data));
+
+    }
+
+    public function saveEmployer($id, $data)
+    {
+        $user = \App\User::find($id);
+
+        for($i = 0; $i < count($data['employer']); $i++) {
+            $employer = $data['employer'];
+            $employer_id = $id;
+
+            $user->employer()->create([
+                'name' => $employer[$i],
+                'employer_id' => $employer_id
+            ]);
+
+        }
 
     }
 

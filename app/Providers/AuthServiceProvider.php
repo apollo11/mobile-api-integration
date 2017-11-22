@@ -50,7 +50,7 @@ class AuthServiceProvider extends ServiceProvider
 
         // Job Policies
         Gate::define('job-view', function ($user) {
-            return $user->job_permissions > 0 && ($user->role_id == 0 || $user->role_id == 1);
+            return $user->job_permissions > 0;
         });
 
         // Payout Policies

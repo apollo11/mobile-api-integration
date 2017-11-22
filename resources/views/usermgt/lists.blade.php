@@ -49,7 +49,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="portlet-body">
+                        <div class="portlet-body users-mgt">
                             <table class="table table-striped table-bordered table-hover table-checkable order-column"
                                    id="employee-table">
                                 <thead>

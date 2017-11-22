@@ -67,8 +67,8 @@ Route::group(['middleware' => ['auth']], function () {
     });
 
     Route::prefix('job')->group(function() {
-       Route::get('/create','Job\JobController@create')->name('job.create')->middleware('can:job-add')->middleware('can:job-view');
-       Route::get('/edit/{id?}','Job\JobController@edit')->name('job.edit')->middleware('can:job-edit')->middleware('can:job-view');
+       Route::get('/create','Job\JobController@create')->name('job.create')->middleware('can:job-view');
+       Route::get('/edit/{id?}','Job\JobController@edit')->name('job.edit')->middleware('can:job-view');
        Route::post('/update/{id}','Job\JobController@update')->name('job.update');
        Route::get('/lists','Job\JobController@index')->name('job.lists')->middleware('can:job-view');
        Route::post('/add','Job\JobController@store')->name('job.add');
