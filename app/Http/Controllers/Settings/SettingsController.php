@@ -46,8 +46,8 @@ class SettingsController extends Controller
             $settings->point_min = $data['point_min'];
             $settings->point_reject_job = $data['point_reject_job'];
             $settings->point_late_job = $data['point_late_job'];
-            $settings->point_cancel_job_w_reason = $data['point_cancel_job_w_reason'];
-            $settings->point_cancel_job_wt_reason = $data['point_cancel_job_wt_reason'];
+            $settings->point_cancel_job_before_72_hours = $data['point_cancel_job_before_72_hours'];
+            $settings->point_cancel_job_within_72_hours = $data['point_cancel_job_within_72_hours'];
             $settings->point_dont_turnup_job = $data['point_dont_turnup_job'];
         	$settings->save();
 
@@ -65,8 +65,8 @@ class SettingsController extends Controller
             'point_min'   => 'required|integer|min:0',
             'point_reject_job'   =>'required|integer',
             'point_late_job'   => 'required|integer',
-            'point_cancel_job_w_reason'   => 'required|integer',
-            'point_cancel_job_wt_reason'   => 'required|integer',
+            'point_cancel_job_before_72_hours'   => 'required|integer',
+            'point_cancel_job_within_72_hours'   => 'required|integer',
             'point_dont_turnup_job'   => 'required|integer'
         ]);
 
@@ -74,8 +74,8 @@ class SettingsController extends Controller
             'point_basic' => 'basic points setting',
             'point_reject_job'   =>'reject an assignment',
             'point_late_job'   => 'late to assigned job',
-            'point_cancel_job_w_reason'   => 'cancel accepted job with valid reason',
-            'point_cancel_job_wt_reason'   => 'cancel accepted job without valid reason',
+            'point_cancel_job_before_72_hours'   => 'cancel accepted job with valid reason',
+            'point_cancel_job_within_72_hours'   => 'cancel accepted job without valid reason',
             'point_dont_turnup_job' => 'did not turn up to assigned job',
             'point_min' => 'minimum points required '
         );
@@ -98,8 +98,8 @@ class SettingsController extends Controller
                 'point_min' => $settings->point_min,
                 'point_reject_job' => $settings->point_reject_job,
                 'point_late_job' => $settings->point_late_job,
-                'point_cancel_job_w_reason' => $settings->point_cancel_job_w_reason,
-                'point_cancel_job_wt_reason' => $settings->point_cancel_job_wt_reason,
+                'point_cancel_job_before_72_hours' => $settings->point_cancel_job_before_72_hours,
+                'point_cancel_job_within_72_hours' => $settings->point_cancel_job_within_72_hours,
                 'point_dont_turnup_job' => $settings->point_dont_turnup_job,
             );
             return response()->json(['success'=>true,'point_settings' => $data]);
