@@ -66,7 +66,7 @@
                                     <th>Role</th>
                                     <th>Email</th>
                                     <th>Contact number</th>
-                                    <th>Employer's Name</th>
+                                    {{--<th>Employer's Name</th>--}}
                                     <th>Action</th>
                                 </tr>
                                 </thead>
@@ -85,7 +85,7 @@
                                         <td> {{ $value->role }}</td>
                                         <td> {{ $value->email }}</td>
                                         <td>{{ $value->mobile_no }}</td>
-                                        <td> {{ $value->employer }}</td>
+                                        {{--<td> {{ $value->employer }}</td>--}}
                                         <td>
                                             <div class="btn-group">
                                                 <button class="btn btn-xs green dropdown-toggle" type="button"

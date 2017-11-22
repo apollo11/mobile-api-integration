@@ -85,12 +85,13 @@ class UserMgtController extends Controller
     public function show($id)
     {
         $mgt = new UserManagement();
+        $employer = new Employer();
         $details  = $mgt->user($id);
 
 
         return view('usermgt.details',
             [
-                'details' => $details
+              'details' => $details
             , 'dashboard' => $this->parseObject($details->dashboard_permissions)
             , 'employees' => $this->parseObject($details->employees_permissions)
             , 'employers' => $this->parseObject($details->payout_permissions)
@@ -100,6 +101,7 @@ class UserMgtController extends Controller
             , 'recipient' => $this->parseObject($details->recipient_permissions)
             , 'settings' => $this->parseObject($details->settings_permissions)
             , 'payout' => $this->parseObject($details->payout_permissions)
+            , 'getEmployer' => $employer->getEmployersList($id)
         ]);
 
     }

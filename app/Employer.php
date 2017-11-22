@@ -39,6 +39,7 @@ class Employer extends Model
     public function employerList()
     {
         $employer = DB::table('users as employer')
+            ->leftJoin('employers as role', 'employer.id', '=', 'role.user_id')
             ->select(
                 'employer.id'
                 , 'employer.company_description'
@@ -49,6 +50,7 @@ class Employer extends Model
                 , 'employer.email'
                 , 'employer.status as status'
                 , 'employer.business_manager'
+                , 'role.name'
             )
             ->where('employer.role_id', '=', 1)
             ->whereNull('employer.platform')

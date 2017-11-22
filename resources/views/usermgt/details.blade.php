@@ -55,7 +55,15 @@
                                                         </tr>
                                                         <tr>
                                                             <td> <strong>Employer</strong></td>
-                                                            <td> {{ $details->employer }}</td>
+                                                            <td>
+                                                                <ul>
+                                                                    @if(count($getEmployer) > 0)
+                                                                        @foreach($getEmployer as $key)
+                                                                           <li> {{ $key->name  }} </li>
+                                                                        @endforeach
+                                                                    @endif
+                                                                </ul>
+                                                            </td>
                                                         </tr>
                                                         <tr>
                                                             <td> <strong>Contact No.</strong></td>
