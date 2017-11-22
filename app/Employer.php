@@ -234,6 +234,16 @@ class Employer extends Model
         return $jobs;
     }
 
+    public function getEmployersList($id)
+    {
+        $employer = DB::table('employers')
+            ->select('name')
+            ->where('user_id', $id)
+            ->get();
+
+        return $employer;
+    }
+
 
 
 

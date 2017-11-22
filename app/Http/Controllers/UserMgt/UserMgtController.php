@@ -8,7 +8,6 @@ use App\Permission;
 use App\UserManagement;
 use App\User;
 use App\Mail\UserMgtMail;
-use App\Http\Requests\UpdateUserMgt;
 use App\Http\Requests\UserMgt;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
@@ -131,6 +130,7 @@ class UserMgtController extends Controller
             , 'recipient' => $this->parseObject($details->recipient_permissions)
             , 'settings' => $this->parseObject($details->settings_permissions)
             , 'payout' => $this->parseObject($details->payout_permissions)
+            , 'getEmployer' => $this->getEmployer($id)
         ], compact('permissionValue'));
     }
 
@@ -154,12 +154,14 @@ class UserMgtController extends Controller
     public function update(Request $request, $id)
     {
         $data = $request->all();
+        $employer = empty($data['employer']) ? false : true;
+
 
         $validator = Validator::make($data, [
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255',
             'role' => 'required',
-            'employer' => 'required',
+//             'employer' => 'required',
 //            'dashboard' => 'required',
 //            'employees' => 'required',
 //            'employers' => 'required',
@@ -178,27 +180,33 @@ class UserMgtController extends Controller
                 ->withInput();
         } else {
 
-            $user = \App\User::find( $id);
+            $user = \App\User::find($id);
             $user->update([
                 'name' => $data['name'],
                 'email' => $data['email'],
                 'role' => $data['role'],
-                'employer' => $data['employer'],
+                'employer' => null,
                 'mobile_no' => $data['mobile_no'],
-                'dashboard_permissions' =>  $data['dashboard'] ?? null,
+                'dashboard_permissions' => $data['dashboard'] ?? null,
                 'employees_permissions' => $data['employees'] ?? null,
                 'employers_permissions' => $data['employers'] ?? null,
-                'payout_permissions' => $data['payout'] ?? null ,
+                'payout_permissions' => $data['payout'] ?? null,
                 'job_permissions' => $data['job'] ?? null,
                 'reports_permissions' => $data['reports'] ?? null,
                 'push_permissions' => $data['push'] ?? null,
-                'recipient_permissions' =>  $data['recipient'] ?? null,
+                'recipient_permissions' => $data['recipient'] ?? null,
                 'settings_permissions' => $data['settings'] ?? null,
                 'role_id' => 0,
             ]);
 
-            return redirect()->back()->with('message', 'Updating details successful.');
+            if ($employer == true) {
+
+                $this->deleteEmployer($id);
+                $this->saveEmployer($id, $data);
+
+            }
         }
+        return redirect()->back()->with('message', 'Updating details successful.');
 
     }
 
@@ -266,6 +274,10 @@ class UserMgtController extends Controller
 
     }
 
+    /**
+     * @param $id
+     * @param $data
+     */
     public function saveEmployer($id, $data)
     {
         $user = \App\User::find($id);
@@ -280,8 +292,27 @@ class UserMgtController extends Controller
             ]);
 
         }
-
     }
 
+    /**
+     * Get employer
+     */
+    public function getEmployer($id)
+    {
+        $employer = new Employer();
+        $result = $employer->getEmployersList($id);
+
+        return $result;
+    }
+
+    /**
+     * Delete User
+     */
+    public function deleteEmployer($userId)
+    {
+        $deleteRows = \App\Employer::where('user_id', $userId)->delete();
+
+        return $deleteRows;
+    }
 
 }
