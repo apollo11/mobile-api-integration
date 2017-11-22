@@ -231,7 +231,7 @@
                                                             @endif
                                                         </tr>
                                                         <tr>
-                                                            <td><strong>Rate</strong></td>
+                                                            <td><strong>Hourly Rate</strong></td>
                                                             <td> {{ $userDetails->rate }}</td>
                                                         </tr>
                                                         <tr>
@@ -255,6 +255,17 @@
                                                                 <td> <span class="label label-sm label-danger">{{ ucfirst($userDetails->employee_status) }} </span></td>
                                                             @endif
                                                         </tr>
+                                                     
+                                                        <tr>
+                                                            <td><strong>Average Rating</strong></td>
+                                                            <td>
+                                                                <?php echo str_repeat('<i class="fa  fa-star"></i>',floor($userDetails->avg_rating) ); 
+                                                                if($userDetails->avg_rating > floor($userDetails->avg_rating)){
+                                                                    echo '<i class="fa  fa-star-half-o"></i>';
+                                                                }
+                                                                ?>
+                                                            </td>
+                                                        </tr>
                                                         </tbody>
                                                     </table>
                                                 </div>
@@ -277,9 +288,7 @@
                                         <div class="row">
                                             <div class="col-sm-offset-2 col-sm-4">
                                                 <div class="mt-overlay-1 mt-scroll-right">
-
                                                     @if(!empty($userDetails->profile_photo))
-                                                   
                                                         <img class="img-circle main-profile-img" src="{{ url($userDetails->profile_photo) }}" />
                                                     @else
                                                         <img class="img-circle main-profile-img" src="http://via.placeholder.com/300x300" />
@@ -401,10 +410,15 @@
                                                     <span></span>
                                                 </label>
                                             </th>
-                                            <td class="r-job-title">{{ $jobs->job_title }}</td>
-                                            <td class="r-job-date">{{ $jobs->start_date }}</td>
-                                            <td class="r-job-company">{{ $jobs->company_name }}</td>
-                                            <td>-</td>
+                                            <td>{{ $jobs->job_title }}</td>
+                                            <td>{{ $jobs->start_date }}</td>
+                                            <td>{{ $jobs->company_name }}</td>
+                                            <td>@if($jobs->rating_point!=null)
+                                                    <?php echo str_repeat('<i class="fa  fa-star"></i>',$jobs->rating_point); ?>
+                                                @else
+                                                    -
+                                                @endif
+                                            </td>
                                             <td>@if($jobs->schedule_status == 'cancelled') <a href="{{ route('cancel.details',['userId' => $jobs->user_id, 'jobId' => $jobs->id]) }}">{{ ucfirst($jobs->schedule_status) }}</a>  @else {{ ucfirst($jobs->schedule_status) }} @endif</td>
                                             <td>
                                                 <div class="btn-group">
@@ -428,11 +442,11 @@
                                                                 <i class="fa fa-eye"></i> View </a>
                                                         </li>
 
-                                                        <li>
-                                                            <a data-toggle="modal" href="#rate_user" class="rate-user-btn"  data-rate-id="{{ $jobs->schedule_id }}" data-user-id="{{ $jobs->user_id }}">
-                                                                <i class="fa fa-star"></i> Rate </a>
-                                                        </li>
                                                         @if($jobs->schedule_status == 'completed')
+                                                            <li>
+                                                                <a data-toggle="modal" href="#rate_user" class="rate-user-btn"  data-rate-id="{{ $jobs->schedule_id }}" data-user-id="{{ $jobs->user_id }}">
+                                                                    <i class="fa fa-star"></i> Rate </a>
+                                                            </li>
                                                             <li>
                                                                 <a href="{{ route('payout.approved',['id' => $jobs->schedule_id, 'userId' => $jobs->user_id])  }}"
                                                                    onclick="event.preventDefault();
@@ -480,70 +494,7 @@
     </div>
 
 
- <div id="rate_user" class="modal fade" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <!-- <div class="modal-header">
-              </div> -->
-            <div class="modal-body">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-                </button>
-                <div class="row rate-user-content" style="" data-always-visible="1" data-rail-visible1="1">
-                    <div class="row form-group">
-                        <div class="col-sm-4 col-sm-offset-4 rate-user-profileimg"></div>
-                    </div>
-                    <div class="col-sm-12 form-group">
-                        <div class="col-md-5 col-md-offset-2">Job Title</div>
-                        <div class="col-md-5 rate-jobname"></div>
-                    </div>
-                    <div class="col-sm-12 form-group">
-                        <div class="col-md-5 col-md-offset-2">Job Date</div>
-                        <div class="col-md-5 rate-jobdate"></div>
-                    </div>
-
-                    <div class="col-sm-12 form-group">
-                        <div class="col-md-5 col-md-offset-2">Employer's Name</div>
-                        <div class="col-md-5 rate-jobcompany"></div>
-                    </div>
-
-                    <div class="col-sm-12 form-group">
-                        <div class="col-md-5 col-md-offset-2">Job Location</div>
-                        <div class="col-md-5 rate-jobloc"></div>
-                    </div>
-                    <div class="col-sm-12 form-group">
-                        <div class="col-md-5 col-md-offset-2">Check In Date &amp; Time</div>
-                        <div class="col-md-5 rate-checkin"></div>
-                    </div>
-                    <div class="col-sm-12 form-group">
-                        <div class="col-md-5 col-md-offset-2">Check Out Date &amp; Time</div>
-                        <div class="col-md-5 rate-checkout"></div>
-                    </div>
-                    <div class="col-sm-12 form-group">
-                        <div class="col-md-5 col-md-offset-2">Total Working Hours</div>
-                        <div class="col-md-5 rate-totalhours"></div>
-                    </div>
-
-                    <div class="col-sm-12 form-group text-center star-rating">
-                        <input type="number" name="rating_point" id="rating_point" class="rating" value="" data-max="5" data-min="1" />
-                    </div>
-
-                    <div class="col-sm-12 form-group text-center">
-                        <textarea name="rating-comment" class="rating-comment form-control"></textarea>
-                    </div>
-
-                    <div class="col-sm-12 text-center rating-submit-info"></div>
-
-                    <div class="text-center">
-                        <button type="button" class="btn green submit-rating-btn hide">SUBMIT</button>
-                    </div>
-
-                    <div class="clear"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+@include('employee.rate_job')
 
 @include('employee.edit-profile')
 
@@ -559,23 +510,8 @@
 <script src="{{ asset('assets/global/plugins/datatables/datatables.min.js') }}" type="text/javascript"></script>
 <script src="{{ asset('assets/pages/scripts/table-datatables-buttons.min.js') }}" type="text/javascript"></script>
 <script src="{{ asset('assets/global/plugins/bootstrap-rating-input.min.js') }}" type="text/javascript"></script>
+<script src="{{ asset('assets/layouts/layout/scripts/rate_job.js') }}" type="text/javascript"></script>
 <script>
-    function resetValues(){
-        $('.rate-user-content .rate-jobname').html('');
-        $('.rate-user-content .rate-jobdate').html('');
-        $('.rate-user-content .rate-jobcompany').html('');
-        $('.rate-user-content .rate-jobloc').html('');
-        $('.rate-user-content .rate-checkin').html('');
-        $('.rate-user-content .rate-checkout').html('');
-        $('.rate-user-content .rate-totalhours').html('');
-        $('.rate-user-content .rating-comment').val('');
-        $('#rating_point').val('');
-        $('.rating-input i').removeClass('glyphicon-star').addClass('glyphicon-star-empty');
-
-        $('.submit-rating-btn').data('user_id',null);
-        $('.submit-rating-btn').data('rate_id',null);
-    }
-
     $(document).ready(function() {
         $('#employee-table').DataTable({
             dom: 'Bfrtip',
@@ -598,56 +534,19 @@
             resetValues();
             
             /*get info for pop up*/
-            $.ajax({
-                  url: '{{url("employee/job/detail")}}/'+user_id+'/'+rate_id,
-                  method: 'GET',
-                  dataType: 'json',
-                  
-                  success: function(data){
-                    if(data.success==true){
-                        var detail = data.data;
-                        $('.rate-user-content .rate-jobname').html(detail.job_title);
-                        $('.rate-user-content .rate-jobdate').html(detail.job_date);
-                        $('.rate-user-content .rate-jobcompany').html(detail.company_name);
-                        $('.rate-user-content .rate-jobloc').html(detail.location);
-                        $('.rate-user-content .rate-checkin').html(detail.checkin_datetime);
-                        $('.rate-user-content .rate-checkout').html(detail.checkout_datetime);
-                        $('.rate-user-content .rate-totalhours').html(detail.total_working_hours);
-
-                        $('.submit-rating-btn').removeClass('hide');
-                    /*    $('.submit-rating-btn').data('user_id',user_id);
-                        $('.submit-rating-btn').data('rate_id',rate_id);*/
-
-                    }
-                  }
-            });
+            var url = '{{url("employee/job/detail")}}/'+user_id+'/'+rate_id;
+            rate_getPopUpJobDetail(url, user_id,rate_id);
             /*get info for pop up*/
         });
 
-        $('.submit-rating-btn').click(function(){
-            var user_id = $(this).data('user_id');
-            var rate_id = $(this).data('rate_id');
+        $("#rating-form").submit(function(e) {
+            var user_id = $('.submit-rating-btn').data('user_id');
+            var rate_id = $('.submit-rating-btn').data('rate_id');
 
-            var rating_point = $('#rating_point').val(); 
-            var rating_comment = $('.rating-comment').val(); 
-
-            $.ajax({
-                  url: '{{url("employee/job/rate_job")}}/'+user_id+'/'+rate_id,
-                  method: 'GET',
-                  dataType: 'json',
-                  
-                  success: function(data){
-                    var detail = data.data;
-
-                    if(data.success==true){
-                       
-                    }else{
-                        // rating-submit-info
-                        console.log(detail);
-                        // $('.rating-submit-info').html(detail.error).addClass('error');
-                    }
-                  }
-            });
+            var url = '{{url("employee/job/rate_job")}}/'+user_id+'/'+rate_id;
+            rate_submitJobRating(url);
+            
+            e.preventDefault(); 
         });
     });
 </script>

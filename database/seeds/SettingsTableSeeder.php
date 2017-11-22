@@ -19,8 +19,8 @@ class SettingsTableSeeder extends Seeder
             'point_min'   => '70',
             'point_reject_job'   => '-5',
             'point_late_job'   => '-5',
-            'point_cancel_job_w_reason'   => '-10',
-            'point_cancel_job_wt_reason'   => '-15',
+            'point_cancel_job_before_72_hours'   => '-10',
+            'point_cancel_job_within_72_hours'   => '-15',
             'point_dont_turnup_job'   => '-20',
         ]);
     }

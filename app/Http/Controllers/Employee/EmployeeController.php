@@ -12,10 +12,14 @@ use App\User;
 use App\Mail\EmployeeRegistration;
 use App\AdditionalInfo;
 use App\JobSchedule;
+use App\JobRatings;
+
 use App\Http\Traits\OauthTrait;
 use App\Http\Traits\HttpResponse;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 
 class EmployeeController extends Controller
@@ -548,9 +552,16 @@ class EmployeeController extends Controller
         $userDetails = new AdditionalInfo();
 
         $details = $userDetails->userInfo($id);
+
         $jobInfo = $this->availableJobs($id);
-        $applied = $this->completedJobs($id);
-        $completed = $this->appliedJobs($id);
+        
+        $applied = $this->appliedJobs($id);
+        $completed = $this->completedJobs($id);
+
+        $ratings = new JobRatings();
+        $avg_rating = $ratings->getUserAvgRatings($id);
+
+        $details->avg_rating = $avg_rating;
 
         return view('employee.details', ['userDetails' => $details
             , 'jobInfo' => $jobInfo
@@ -766,26 +777,32 @@ class EmployeeController extends Controller
             if(empty($jobdetail)){
                 $response['data'] = array('error'=>'Invalid data');
             }else{
-                $total_working_hours = '-';
-                if(
-                    !empty($jobdetail->checkin_datetime) && $jobdetail->checkin_datetime !=null && 
-                    !empty($jobdetail->checkout_datetime) && $jobdetail->checkout_datetime !=null 
-                ){
-                    $d1 = new \DateTime($jobdetail->checkin_datetime); 
-                    $d2 = new \DateTime($jobdetail->checkout_datetime);
-                    $interval= $d1->diff($d2);
-                    $total_working_hours = $interval->format('%hhrs %imins');
+                if($jobdetail->rating_point!=null || !empty($jobdetail->rating_point) ){
+                    $response['data'] = array(
+                        // 'error'=>"You cannot rate the same job again.",
+                        'jobdetail'=>$jobdetail
+                    );
+                }else{
+                    $total_working_hours = '-';
+                    if(
+                        !empty($jobdetail->checkin_datetime) && $jobdetail->checkin_datetime !=null && 
+                        !empty($jobdetail->checkout_datetime) && $jobdetail->checkout_datetime !=null 
+                    ){
+                        $d1 = new \DateTime($jobdetail->checkin_datetime); 
+                        $d2 = new \DateTime($jobdetail->checkout_datetime);
+                        $interval= $d1->diff($d2);
+                        $total_working_hours = $interval->format('%hhrs %imins');
+                    }
+                    $jobdetail->total_working_hours = $total_working_hours;
+                    $response['success'] = true;
+                    $response['data'] = $jobdetail;
                 }
-                $jobdetail->total_working_hours = $total_working_hours;
-                $response['success'] = true;
-                $response['data'] = $jobdetail;
             }
         }
-        echo json_encode($response);
-        exit;
+        return response()->json($response);
     }
 
-    function rate_job($user_id,$job_schedule_id){
+    function rate_job($user_id,$job_schedule_id,Request $request){
          $response = array('success'=>false,'data'=>array());
         if(empty($user_id) || empty($job_schedule_id)){
            $response['data'] = array('error'=>'Invalid data');
@@ -794,11 +811,46 @@ class EmployeeController extends Controller
             $jobdetail = $JobSchedule->getJobByUser($user_id,$job_schedule_id);
             if(empty($jobdetail)){
                 $response['data'] = array('error'=>'Invalid data');
-            }else{
-                // echo 'XXXXXX';
+            }else{  
+                if($jobdetail->rating_point!=null || !empty($jobdetail->rating_point) ){
+                    // $response['data'] = array('error'=>"You cannot rate the same job again.");
+                }else{
+                    $data = $request->all();
+                    $validator = $this->ratejobRules($data);
+                    if ($validator->fails()) {
+                        $errors = $validator->errors()->all();
+                        $errormsg = '';
+                        $errormsg = implode('<br>',$errors);
+                       
+                        $response['data'] = array('error'=>$errormsg);
+                    } else {
+                        $job_ratings = new JobRatings();
+                        $job_ratings->employee_id = $user_id;
+                        $job_ratings->job_schedule_id = $job_schedule_id;
+                        $job_ratings->rating_point = $data['rating_point'];
+                        $job_ratings->rating_comment = $data['rating_comment'];
+                        $job_ratings->rate_by = Auth::user()->id;
+                        $job_ratings->created_at = Date('Y-m-d H:i:s');
+                        $job_ratings->updated_at = Date('Y-m-d H:i:s');
+                        $job_ratings->save();
+
+                        $response['success'] = true;
+                        $response['data'] = array('msg'=>'Updated successfully.');
+                    }
+                }
             }
         }
-        echo json_encode($response);
-        exit;
+        return response()->json($response);
+    }
+
+    function ratejobRules(array $data)
+    {
+        $validations = [
+            'rating_point' => 'required|integer|max:5|min:1'
+        ];
+        $messages = ['required' => 'Please select a rating '];
+
+        $validator = Validator::make($data, $validations,$messages);
+        return $validator;
     }
 }
