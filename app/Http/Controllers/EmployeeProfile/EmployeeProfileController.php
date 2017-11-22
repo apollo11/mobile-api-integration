@@ -191,9 +191,8 @@ class EmployeeProfileController extends Controller
             $errors = array('User not found');
             $return_data = $this->errorResponse($errors, 'Validation Error', $error_code, 400);
         }else{
-            $validator = $this->updateRules($data,$user_id);
-
-             if ($validator->fails()) {
+            $validator = $this->updateRules($data);
+            if ($validator->fails()) {
                 $errors = $validator->errors()->all();
                 $return_data = $this->errorResponse($errors, 'Validation Error', $error_code, 400);
             } else {
@@ -207,7 +206,7 @@ class EmployeeProfileController extends Controller
         return $return_data;
     }
 
-    public function updateRules(array $data, $id)
+    public function updateRules(array $data)
     {
         $validations = [
             'lat' => 'required|numeric|is_valid_lat',

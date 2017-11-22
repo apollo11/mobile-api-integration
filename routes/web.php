@@ -40,7 +40,7 @@ Route::group(['middleware' => ['auth']], function () {
 
 
         Route::get('/job/detail/{user_id}/{id}', 'Employee\EmployeeController@jobdetail')->name('employee.job.detail');
-        Route::get('/job/rate_job/{user_id}/{id}', 'Employee\EmployeeController@rate_job')->name('employee.job.rate_job');
+        Route::post('/job/rate_job/{user_id}/{id}', 'Employee\EmployeeController@rate_job')->name('employee.job.rate_job');
     });
 
     Route::prefix('employer')->group(function () {
