@@ -185,20 +185,29 @@ class EmployeeProfileController extends Controller
         $user_id = $request->get('user_id');
         $lat = $request->get('lat');
         $long = $request->get('long');
+
+        $schedule_id = $request->get('schedule_id');
+
         $data = $request->all();
-        $user = \App\User::find($user_id);
-        if(empty($user)  || !is_numeric($user_id) ){
-            $errors = array('User not found');
-            $return_data = $this->errorResponse($errors, 'Validation Error', $error_code, 400);
+        // $user = \App\User::find($user_id);
+        if(empty($user_id)  || !is_numeric($user_id) || empty($schedule_id)  || !is_numeric($schedule_id) ){
+            $errors = array('User id or schedule id is empty');
+            return $this->errorResponse($errors, 'Validation Error', $error_code, 400);
         }else{
+            $schedule = \App\JobSchedule::find($schedule_id);
+            if(empty($schedule) || $schedule->user_id!=$user_id){
+                $errors = array('Job schedule not found');
+                return $this->errorResponse($errors, 'Validation Error', $error_code, 400);
+            }
+
             $validator = $this->updateRules($data);
             if ($validator->fails()) {
                 $errors = $validator->errors()->all();
                 $return_data = $this->errorResponse($errors, 'Validation Error', $error_code, 400);
             } else {
-                $user->employee_current_lat = $lat;
-                $user->employee_current_long = $long;
-                $user->save();
+                $schedule->employee_current_lat = $lat;
+                $schedule->employee_current_long = $long;
+                $schedule->save();
 
                 $return_data = $this->ValidUseSuccessResp(200,true);
             }
