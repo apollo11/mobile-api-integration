@@ -33,43 +33,54 @@
                 <!-- END RESPONSIVE QUICK SEARCH FORM -->
             </li>
             @if (Auth::user()->role_id == 0)
-            <li class="start {{{ (Request::is('home') ? ' active' : '') }}}">
-                <a href="{{ route('home') }}">
-                    <i class="icon-home"></i>
-                    <span class="title">Dashboard</span>
-                    <span class="selected"></span>
-                </a>
-            </li>
+                @can('dashboard-view')
+                    <li class="start {{{ (Request::is('home') ? ' active' : '') }}}">
+                        <a href="{{ route('home') }}">
+                            <i class="icon-home"></i>
+                            <span class="title">Dashboard</span>
+                            <span class="selected"></span>
+                        </a>
+                    </li>
+                @endcan
             @endif
-            <li {{{ ($current_route == 'employee.lists' ? 'class=active' : '') }}}>
-                <a href="{{ route('employee.lists') }}">
-                    <i class="fa fa-user"></i>
-                    <span class="title">Employees</span>
-                </a>
-            </li>
+            @can('employee-view')
+                <li {{{ ($current_route == 'employee.lists' ? 'class=active' : '') }}}>
+                    <a href="{{ route('employee.lists') }}">
+                        <i class="fa fa-user"></i>
+                        <span class="title">Employees</span>
+                    </a>
+                </li>
+            @endcan
              @if (Auth::user()->role_id == 0)
-             <li {{{ ($current_route == 'employer.new.list' ? 'class=active' : '') }}}>
-                <a href="{{ route('employer.new.list') }}">
-                    <i class="fa fa-user"></i>
-                    Registered Employers</a>
-            </li>
-             <li {{{ ($current_route == 'employer.lists' ? 'class=active' : '') }}}>
-                <a href="{{ route('employer.lists') }}">
-                    <i class="icon-basket"></i>
-                    Employers</a>
-            </li>
-             <li {{{ ($current_route == 'payout.lists' ? 'class=active' : '') }}}>
-                <a href="{{ route('payout.lists') }}">
-                    <i class="icon-tag"></i>
-                    Payouts</a>
-            </li>
+                 @can('employer-view')
+                     <li {{{ ($current_route == 'employer.new.list' ? 'class=active' : '') }}}>
+                        <a href="{{ route('employer.new.list') }}">
+                            <i class="fa fa-user"></i>
+                            Registered Employers</a>
+                    </li>
+                @endcan
+                @can('employer-view')
+                 <li {{{ ($current_route == 'employer.lists' ? 'class=active' : '') }}}>
+                    <a href="{{ route('employer.lists') }}">
+                        <i class="icon-basket"></i>
+                        Employers</a>
+                </li>
+                 @endcan
+             @can('payout-view')
+                 <li {{{ ($current_route == 'payout.lists' ? 'class=active' : '') }}}>
+                    <a href="{{ route('payout.lists') }}">
+                        <i class="icon-tag"></i>
+                        Payouts</a>
+                </li>
+             @endcan
             @endif
-            
+            @can('job-view')
              <li {{{ ($current_route == 'job.lists' ? 'class=active' : '') }}}>
                 <a href="{{ route('job.lists') }}">
                     <i class="icon-handbag"></i>
                     Job Management</a>
             </li>
+            @endcan
 
              @if (Auth::user()->role_id == 0)
                 @can('admin-view')
@@ -86,50 +97,56 @@
                     Location</a>
             </li>
             @endcan
-
-                <li class="nav-item">
-                    <a href="javascript:;" class="nav-link nav-toggle">
-                        <i class="fa fa-line-chart"></i>
-                        <span class="title">Reports</span>
-                        <span class="arrow"></span>
-                    </a>
-                    <ul class="sub-menu" style="display: none;">
-                        <li class="nav-item  ">
-                            <a href="{{route('reports.weekly_report') }}" class="nav-link ">
-                                <span class="title">Weekly Report</span>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-                @can('admin-view')
-                     <li {{ ($current_route == 'mgt.list' ? 'class=active' : '') }}>
-                        <a href="{{ route('mgt.list') }}">
-                            <i class="fa fa-user"></i>
-                            <span class="title">Admin Users</span>
+            @can('reports-view')
+            <li class="nav-item">
+                <a href="javascript:;" class="nav-link nav-toggle">
+                    <i class="fa fa-line-chart"></i>
+                    <span class="title">Reports</span>
+                    <span class="arrow"></span>
+                </a>
+                <ul class="sub-menu" style="display: none;">
+                    <li class="nav-item  ">
+                        <a href="{{route('reports.weekly_report') }}" class="nav-link ">
+                            <span class="title">Weekly Report</span>
                         </a>
                     </li>
-                @endcan
+                </ul>
+            </li>
+            @endcan
+            @can('admin-view')
+                 <li {{ ($current_route == 'mgt.list' ? 'class=active' : '') }}>
+                    <a href="{{ route('mgt.list') }}">
+                        <i class="fa fa-user"></i>
+                        <span class="title">Admin Users</span>
+                    </a>
+                </li>
+            @endcan
+            @can('push-view')
             <li>
                 <a href="javascript:;">
                     <i class="icon-settings"></i>
                     <span class="title">Push Notification</span>
                 </a>
             </li>
-            <li {{{ ($current_route == 'recipient.lists' ? 'class=active' : '') }}}>
-                <a href="{{ route('recipient.lists') }}">
-                    <i class="icon-settings"></i>
-                    <span class="title">Recipient Group</span>
-                </a>
-            </li>
+            @endcan
+            @can('recipient-view')
+                <li {{{ ($current_route == 'recipient.lists' ? 'class=active' : '') }}}>
+                    <a href="{{ route('recipient.lists') }}">
+                        <i class="icon-settings"></i>
+                        <span class="title">Recipient Group</span>
+                    </a>
+                </li>
+            @endcan
             @endif
+            @can('settings-view')
+                <li {{{ (Request::is('settings') ? 'class=active' : '') }}}>
+                    <a href="{{route('settings') }}">
+                        <i class="icon-settings"></i>
+                        <span class="title">Settings</span>
 
-            <li {{{ (Request::is('settings') ? 'class=active' : '') }}}>
-                <a href="{{route('settings') }}">
-                    <i class="icon-settings"></i>
-                    <span class="title">Settings</span>
-                    
-                </a>
-            </li>
+                    </a>
+                </li>
+            @endcan
             <li>
                 <a href="{{ route('logout') }}"
                    onclick="event.preventDefault();
