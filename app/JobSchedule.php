@@ -448,4 +448,21 @@ class JobSchedule extends Model
         return $points;
     }
 
+
+    public function getCandidatesLocation($job_id){
+        $results = DB::table('job_schedules')
+        ->leftjoin('users','users.id','=','job_schedules.user_id')
+        ->select(
+                'job_schedules.id',
+                'job_schedules.user_id',
+                'job_schedules.employee_current_lat',
+                'job_schedules.employee_current_long',
+                'users.name'
+                )
+        ->where('job_schedules.job_id',$job_id)
+        ->whereIn('job_schedules.job_status', ['accepted','completed','approved'])
+        ->get();
+
+        return $results;
+    }
 }
