@@ -50,23 +50,25 @@
                                                                 <span></span>
                                                             </label>
                                                         </th>
-                                                        <th>Agent Name</th>
+                                                        <th>Business Manager</th>
                                                     </tr>
                                                     </thead>
                                                     <tbody>
-                                                    @foreach( $agent as $key )
-                                                        <tr class="odd gradeX">
-                                                            <td>
-                                                                <label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">
-                                                                    <input type="checkbox" id="agent" name="agent[]"
-                                                                           class="checkboxes"
-                                                                           value="{{ $key->business_manager }}"/>
-                                                                    <span></span>
-                                                                </label>
-                                                            </td>
-                                                            <td>{{ $key->business_manager }}</td>
-                                                        </tr>
-                                                    @endforeach
+                                                    @if(count($agent) > 0)
+                                                        @foreach( $agent as $key)
+                                                            <tr class="odd gradeX">
+                                                                <td>
+                                                                    <label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">
+                                                                        <input type="checkbox" id="agent" name="agent[]"
+                                                                               class="checkboxes"
+                                                                               value="{{ $key->name }}"/>
+                                                                        <span></span>
+                                                                    </label>
+                                                                </td>
+                                                                <td>{{ $key->name }}</td>
+                                                            </tr>
+                                                        @endforeach
+                                                    @endif
                                                     </tbody>
                                                 </table>
                                             </div>
@@ -88,19 +90,23 @@
                                                     </tr>
                                                     </thead>
                                                     <tbody>
-                                                    @foreach( $agent as $key )
-                                                        <tr class="odd gradeX">
-                                                            <td>
-                                                                <label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">
-                                                                    <input type="checkbox" id="agent" name="employer[]"
-                                                                           class="checkboxes"
-                                                                           value="{{ $key->company_name }}"/>
-                                                                    <span></span>
-                                                                </label>
-                                                            </td>
-                                                            <td>{{ $key->company_name }}</td>
-                                                        </tr>
-                                                    @endforeach
+                                                    @if(count($employer) > 0)
+                                                        @foreach( $employer as $key )
+                                                            @if(!empty($key->company_name))
+                                                            <tr class="odd gradeX">
+                                                                <td>
+                                                                    <label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">
+                                                                        <input type="checkbox" id="agent" name="employer[]"
+                                                                               class="checkboxes"
+                                                                               value="{{ $key->company_name }}"/>
+                                                                        <span></span>
+                                                                    </label>
+                                                                </td>
+                                                                <td>{{ $key->company_name }}</td>
+                                                            </tr>
+                                                            @endif
+                                                        @endforeach
+                                                    @endif
                                                     </tbody>
                                                 </table>
                                             </div>
@@ -156,7 +162,8 @@
                                                         <th>#</th>
                                                         <th>Name</th>
                                                         <th>Employer</th>
-                                                        <th>Agent</th>
+                                                        <th>Business Manager</th>
+                                                        <th>Job Title</th>
                                                         <th>DOB</th>
                                                         <th>Contact No.</th>
                                                         <th>NRIC</th>
@@ -179,6 +186,7 @@
                                                             <td>{{ $key->name }}</td>
                                                             <td>{{ $key->employer }}</td>
                                                             <td> {{ $key->business_manager }}</td>
+                                                            <td>{{ $key->job_title }}</td>
                                                             <td> {{ $key->birthdate }}</td>
                                                             <td>{{ $key->mobile_no }}</td>
                                                             <td>{{ $key->nric_no }}</td>
@@ -222,11 +230,14 @@
     $(document).ready(function() {
         $('#recipient-form-list').DataTable({
             autoFill: true,
-            "scrollY":"300",
             "searching": false,
             "bPaginate": true,
             "paging":   false,
-            "info":     false
+            "info":     false,
+            "sScrollXInner": "100%",
+            "scrollY":"500",
+            "scrollX" : true
+
         });
 
         $('#select-group, #select-employer ').DataTable({
@@ -235,7 +246,8 @@
             "searching": false,
             "bPaginate": false,
             "paging":   false,
-            "info":     false
+            "info":     false,
+            "sScrollXInner": "100%"
         });
     });
 </script>

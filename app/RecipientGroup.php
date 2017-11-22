@@ -46,7 +46,25 @@ class RecipientGroup extends Model
     {
         $agent = DB::table('users')
             ->select('id'
+                , 'name'
+                , 'company_name'
                 , 'business_manager'
+            )
+            ->where('role', 'business_manager')
+            ->get();
+
+        return $agent;
+    }
+
+    /**
+     * Employer List
+     */
+    public function employerList()
+    {
+        $agent = DB::table('users')
+            ->select(
+                'id'
+                , 'name'
                 , 'company_name'
             )
             ->where('role_id', 1)
@@ -54,6 +72,7 @@ class RecipientGroup extends Model
 
         return $agent;
     }
+
 
     /**
      * Employee List
@@ -75,6 +94,7 @@ class RecipientGroup extends Model
                 , 'info.gender'
                 , 'jobs.employer'
                 , 'jobs.business_manager'
+                , 'jobs.job_title'
             )
             ->when(!empty($param['agent']), function ($query) use ($param) {
 

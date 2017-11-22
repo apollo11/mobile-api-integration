@@ -35,7 +35,8 @@ class RecipientGroupController extends Controller
         return view('Recipient.form',
             [
                 'agent' => $recipientObj->agentList(),
-                'employee' => $recipientObj->employeeList($param)
+                'employee' => $recipientObj->employeeList($param),
+                'employer' => $recipientObj->employerList()
             ]);
     }
 
@@ -114,11 +115,11 @@ class RecipientGroupController extends Controller
         $data = $request->all();
         $recipientObj = new RecipientGroup();
 
-
         return view('Recipient.form',
             [
                 'agent' => $recipientObj->agentList(),
-                'employee' => $recipientObj->employeeList($data)
+                'employee' => $recipientObj->employeeList($data),
+                'employer' => $recipientObj->employerList()
             ]);
 
     }
