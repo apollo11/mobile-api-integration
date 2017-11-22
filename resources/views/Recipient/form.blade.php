@@ -31,7 +31,7 @@
                                 <input type="hidden" name="platform" value="web"/>
 
                                 <div class="form-group">
-                                    <form class="form-horizontal" method="POST" role="form"
+                                    <form class="form-horizontal" method="GET" role="form"
                                           action="{{ route('recipient.search') }}"
                                           enctype="multipart/form-data">
                                         {{ csrf_field() }}
@@ -45,7 +45,7 @@
                                                         <th>
                                                             <label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">
                                                                 <input id="group-checkable" type="checkbox"
-                                                                       class="group-checkable"
+                                                                       class="manager-checkable"
                                                                        data-set="#employee-table .checkboxes"/>
                                                                 <span></span>
                                                             </label>
@@ -60,7 +60,7 @@
                                                                 <td>
                                                                     <label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">
                                                                         <input type="checkbox" id="agent" name="agent[]"
-                                                                               class="checkboxes"
+                                                                               class="check-manager"
                                                                                value="{{ $key->name }}"/>
                                                                         <span></span>
                                                                     </label>
@@ -81,7 +81,7 @@
                                                         <th>
                                                             <label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">
                                                                 <input id="group-checkable" type="checkbox"
-                                                                       class="group-checkable"
+                                                                       class="employer-checkable"
                                                                        data-set="#employee-table .checkboxes"/>
                                                                 <span></span>
                                                             </label>
@@ -97,7 +97,7 @@
                                                                 <td>
                                                                     <label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">
                                                                         <input type="checkbox" id="agent" name="employer[]"
-                                                                               class="checkboxes"
+                                                                               class="check-employer"
                                                                                value="{{ $key->company_name }}"/>
                                                                         <span></span>
                                                                     </label>
@@ -154,7 +154,7 @@
                                                         <th>
                                                             <label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">
                                                                 <input id="" type="checkbox"
-                                                                       class=""
+                                                                       class="group-checkable"
                                                                        data-set="#employee-table .checkboxes"/>
                                                                 <span></span>
                                                             </label>
@@ -176,7 +176,7 @@
                                                         <tr class="odd gradeX">
                                                             <td>
                                                                 <label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">
-                                                                    <input type="radio" id="employee" name="employee"
+                                                                    <input type="checkbox" id="employee" name="employee[]"
                                                                            class="checkboxes"
                                                                            value="{{ $key->id }}"/>
                                                                     <span></span>

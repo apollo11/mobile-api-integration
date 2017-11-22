@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Validtor;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
 
@@ -117,7 +118,7 @@ class RecipientGroup extends Model
         $employee = DB::table('recipient_groups')
             ->select(
                 'id'
-                ,'group_name'
+                , 'group_name'
                 , 'created_at'
                 , 'email'
             )
@@ -126,7 +127,45 @@ class RecipientGroup extends Model
 
 
         return $employee;
-
     }
+
+
+    /**
+     * Multiple delete
+     * @param $multiId
+     * @return mixed
+     */
+    public function multiDelete($multiId)
+    {
+        $delete = DB::table('recipient_groups')->whereIn('id', $multiId)
+            ->delete();
+
+        return $delete;
+    }
+
+    /**
+     * @param $id
+     * @return mixed
+     */
+    public function deleteRecipientGroup($id)
+    {
+        $delete = DB::table('recipient_groups')->where('id', $id)
+            ->delete();
+
+        return $delete;
+    }
+
+    /**
+     * Details for recipient group
+     */
+    public function groupDetails($id)
+    {
+        $select = DB::table('recipient_groups')->where('id', $id)
+            ->first();
+
+        return $select;
+    }
+
+
 
 }

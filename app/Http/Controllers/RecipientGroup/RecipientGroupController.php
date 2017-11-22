@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\RecipientGroup;
 
-use GuzzleHttp\Exception\RequestException;
 use Validator;
 use App\RecipientGroup;
 use Illuminate\Support\Facades\Auth;
@@ -49,6 +48,7 @@ class RecipientGroupController extends Controller
     public function store(Request $request)
     {
         $data = $request->all();
+
         $validator = Validator::make($data, ['employee' => 'required', 'group_name' => 'required|unique:recipient_groups']);
 
         if ($validator->fails()) {
@@ -57,7 +57,6 @@ class RecipientGroupController extends Controller
                 ->withErrors($validator)
                 ->withInput();
         } else {
-
             $this->saveGroup($data);
             $result = redirect(route('recipient.lists'));
         }
@@ -73,7 +72,10 @@ class RecipientGroupController extends Controller
      */
     public function show($id)
     {
-        //
+        $recipient =  new RecipientGroup();
+        $output =  $recipient->groupDetails($id);
+
+       return view('Recipient.details', ['details' => $output]);
     }
 
     /**
@@ -107,7 +109,11 @@ class RecipientGroupController extends Controller
      */
     public function destroy($id, $param = null)
     {
-        //
+        $recipient = new RecipientGroup();
+        $recipient->deleteRecipientGroup($id);
+
+        return redirect()->back()->with('message', 'Record deleted successful.');
+
     }
 
     public function advanceSearch(Request $request)
@@ -144,9 +150,43 @@ class RecipientGroupController extends Controller
     public function saveUserRecipientGroup($id, $data)
     {
         $recipientUser = \App\RecipientGroup::find($id);
-        $recipientUser->userRecipientGroup()->create([
-            'user_id' => $data
-        ]);
+
+        for($i = 0; $i < count($data); $i++) {
+            $employee = $data;
+            $recipientUser->userRecipientGroup()->firstOrCreate([
+                'user_id' => $employee[$i]
+            ]);
+        }
+    }
+
+    /**
+     * @param Request $request
+     * @return $this|\Illuminate\Http\RedirectResponse
+     */
+    public function multiDestroy(Request $request)
+    {
+
+        //return $request->all();
+        $user = new RecipientGroup();
+
+        $multi['multicheck'] = (array)$request->input('multicheck');
+
+        $validator = Validator::make($multi, ['multicheck' => 'required']);
+        if ($validator->fails()) {
+
+            $result = redirect(route('recipient.lists'))
+                ->withErrors($validator)
+                ->withInput();
+
+        } else {
+
+            $user->multiDelete($multi['multicheck']);
+
+            $result = redirect()->back()->with('message', 'Record deleted successful.');
+        }
+
+        return $result;
+
     }
 
 }
