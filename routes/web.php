@@ -75,7 +75,7 @@ Route::group(['middleware' => ['auth']], function () {
        Route::post('multiple/{id?}/{param?}','Job\JobController@destroy')->name('job.multiple')->middleware('can:job-delete');
        Route::get('details/{id}','Job\JobController@details')->name('job.details')->middleware('can:job-view');
        Route::post('/assign', 'AssignJob\AssignJobsController@store')->name('assign.job');
-
+       Route::get('location_tracking/{id}','Job\JobController@location_tracking')->name('job.location_tracking')->middleware('can:job-view');
     });
 
     Route::prefix('assign')->group(function() {
