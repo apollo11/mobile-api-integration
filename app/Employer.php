@@ -7,6 +7,16 @@ use Illuminate\Database\Eloquent\Model;
 
 class Employer extends Model
 {
+
+    protected $table = 'employers';
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = ['name'];
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
@@ -29,6 +39,7 @@ class Employer extends Model
     public function employerList()
     {
         $employer = DB::table('users as employer')
+            ->leftJoin('employers as role', 'employer.id', '=', 'role.user_id')
             ->select(
                 'employer.id'
                 , 'employer.company_description'
@@ -39,6 +50,7 @@ class Employer extends Model
                 , 'employer.email'
                 , 'employer.status as status'
                 , 'employer.business_manager'
+                , 'role.name'
             )
             ->where('employer.role_id', '=', 1)
             ->whereNull('employer.platform')
@@ -223,6 +235,16 @@ class Employer extends Model
             ->count();
 
         return $jobs;
+    }
+
+    public function getEmployersList($id)
+    {
+        $employer = DB::table('employers')
+            ->select('name')
+            ->where('user_id', $id)
+            ->get();
+
+        return $employer;
     }
 
 

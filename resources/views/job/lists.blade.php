@@ -14,7 +14,7 @@
             {{ csrf_field() }}
             <input type="multiple" value="Delete">
         </form>
-        @endforeach
+    @endforeach
     <div class="page-content-wrapper employee-list">
         <div class="page-content">
             @if($errors->has('multicheck'))

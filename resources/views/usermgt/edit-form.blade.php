@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="page-content-wrapper">
+    <div class="page-content-wrapper users-mgt">
         <div class="page-content">
 
             <div class="page-bar">
@@ -82,29 +82,55 @@
                                             @endif
                                         </div>
                                     </div>
-
-                                    <div class="form-group{{ $errors->has('employer') ? ' has-error' : '' }}">
+                                    <div class="form-group {{ $errors->has('employer') ? ' has-error' : '' }}">
                                         <label class="col-md-3 control-label">Employer</label>
-                                        <div class="col-md-7">
-                                            <select class="form-control" name="employer">
-                                                <option value="">--select none-- </option>
-                                                <option value="all" {{ $details->employer == 'all' ? 'selected' : '' }}>All</option>
-                                                @foreach($employer as $key )
-                                                    @if(!empty($key))
-                                                        <option value="{{ $key }}" {{ $details->employer == $key ? 'selected' : '' }}>{{ $key }}</option>
-                                                    @else
-                                                        <option value="">None</option>
-                                                    @endif
-                                                @endforeach
-                                            </select>
-
+                                        <div class="col-md-7 employer-multiple">
+                                            <div class="mt-checkbox-inline">
+                                                <label class="mt-checkbox">
+                                                    <input type="checkbox" name="employer[]" value="all" {{ old('employer') == 'all' ? 'checked' : '' }} />
+                                                    <span></span>
+                                                    All
+                                                </label>
+                                            </div>
+                                            @foreach($employer as $key )
+                                                @if(!empty($key))
+                                                    <div class="mt-checkbox-inline">
+                                                        <label class="mt-checkbox">
+                                                            <input type="checkbox" name="employer[]" value="{{ $key }}" {{ old('empoyer') ? 'checked' : '' }} />
+                                                            <span></span>
+                                                            {{ $key }}
+                                                        </label>
+                                                    </div>
+                                                @endif
+                                            @endforeach
                                             @if ($errors->has('employer'))
                                                 <span class="help-block">
-                                            {{ $errors->first('employer') }}
-                                           </span>
+                                                {{ $errors->first('employer') }}
+                                            </span>
                                             @endif
                                         </div>
                                     </div>
+
+                                    {{--<div class="form-group{{ $errors->has('employer') ? ' has-error' : '' }}">--}}
+                                        {{--<label class="col-md-3 control-label">Employer</label>--}}
+                                        {{--<div class="col-md-7">--}}
+                                            {{--<select class="form-control" name="employer">--}}
+                                                {{--<option value="">--select none-- </option>--}}
+                                                {{--<option value="all" {{ $details->employer == 'all' ? 'selected' : '' }}>All</option>--}}
+                                                {{--@foreach($employer as $key )--}}
+                                                    {{--@if(!empty($key))--}}
+                                                        {{--<option value="{{ $key }}" {{ $details->employer == $key ? 'selected' : '' }}>{{ $key }}</option>--}}
+                                                    {{--@endif--}}
+                                                {{--@endforeach--}}
+                                            {{--</select>--}}
+
+                                            {{--@if ($errors->has('employer'))--}}
+                                                {{--<span class="help-block">--}}
+                                            {{--{{ $errors->first('employer') }}--}}
+                                           {{--</span>--}}
+                                            {{--@endif--}}
+                                        {{--</div>--}}
+                                    {{--</div>--}}
 
                                     <div class="form-group{{ $errors->has('mobile_no') ? ' has-error' : '' }}">
                                         <label class="col-md-3 control-label">Mobile No</label>
@@ -126,30 +152,13 @@
                                     <label class="col-md-3 control-label">Dashboard</label>
                                     <div class="col-md-7">
                                         <div class="mt-checkbox-inline">
-                                            <lgitabel class="mt-checkbox">
-                                                    <input type="checkbox" name="dashboard[]" value="add" {{ empty($dashboard[0])  ? '' : 'checked' }} />
-                                                    {{ 'Add' }}
+                                            <label class="mt-checkbox">
+                                                    <input type="checkbox" name="dashboard[]" value="add" {{ count($dashboard)  < 1 ? '' : 'checked' }} />
                                                     <span></span>
-                                                </lgit commiabel>
-                                            <label class="mt-checkbox">
-                                                <input type="checkbox" name="dashboard[]" value="edit" {{ empty($dashboard[1])  ? '' : 'checked' }}>
-                                                {{ 'Edit' }}
-                                                <span></span>
-                                            </label>
-                                            <label class="mt-checkbox">
-                                                <input type="checkbox" name="dashboard[]" value="delete" {{ empty($dashboard[2])  ? '' : 'checked' }}>
-                                                {{ 'Delete' }}
-                                                <span></span>
-                                            </label>
-                                            <label class="mt-checkbox">
-                                                <input type="checkbox" name="dashboard[]" value="view" {{ empty($dashboard[3])  ? '' : 'checked' }}>
-                                                {{ 'View' }}
-                                                <span></span>
-                                            </label>
-
-                                        @if ($errors->has('dashboard'))
+                                                </label>
+                                            @if ($errors->has('dashboard'))
                                                 <span class="help-block">
-                                            {{ $errors->first('dashboard') }}
+                                                {{ $errors->first('dashboard') }}
                                                 </span>
                                             @endif
                                         </div>
@@ -160,23 +169,7 @@
                                     <div class="col-md-7">
                                         <div class="mt-checkbox-inline">
                                                 <label class="mt-checkbox">
-                                                    <input type="checkbox" name="employees[]" value="add" {{ empty($employees[0])  ? '' : 'checked' }} />
-                                                    {{ 'Add' }}
-                                                    <span></span>
-                                                </label>
-                                                <label class="mt-checkbox">
-                                                    <input type="checkbox" name="employees[]" value="edit" {{ empty($employees[1])  ? '' : 'checked' }}>
-                                                    {{ 'Edit' }}
-                                                    <span></span>
-                                                </label>
-                                                <label class="mt-checkbox">
-                                                    <input type="checkbox" name="employees[]" value="delete" {{ empty($employees[2])  ? '' : 'checked' }}>
-                                                    {{ 'Delete' }}
-                                                    <span></span>
-                                                </label>
-                                                <label class="mt-checkbox">
-                                                    <input type="checkbox" name="employees[]" value="view" {{ empty($employees[3])  ? '' : 'checked' }}>
-                                                    {{ 'View' }}
+                                                    <input type="checkbox" name="employees[]" value="add" {{ count($employees) < 1  ? '' : 'checked' }} />
                                                     <span></span>
                                                 </label>
                                             @if ($errors->has('employees'))
@@ -192,23 +185,7 @@
                                     <div class="col-md-7">
                                         <div class="mt-checkbox-inline">
                                             <label class="mt-checkbox">
-                                                <input type="checkbox" name="employers[]" value="add" {{ empty($employers[0])  ? '' : 'checked' }} />
-                                                {{ 'Add' }}
-                                                <span></span>
-                                            </label>
-                                            <label class="mt-checkbox">
-                                                <input type="checkbox" name="employers[]" value="edit" {{ empty($employers[1])  ? '' : 'checked' }}>
-                                                {{ 'Edit' }}
-                                                <span></span>
-                                            </label>
-                                            <label class="mt-checkbox">
-                                                <input type="checkbox" name="employers[]" value="delete" {{ empty($employers[2])  ? '' : 'checked' }}>
-                                                {{ 'Delete' }}
-                                                <span></span>
-                                            </label>
-                                            <label class="mt-checkbox">
-                                                <input type="checkbox" name="employers[]" value="view" {{ empty($employers[3])  ? '' : 'checked' }}>
-                                                {{ 'View' }}
+                                                <input type="checkbox" name="employers[]" value="add" {{ count($employers) < 1  ? '' : 'checked' }} />
                                                 <span></span>
                                             </label>
                                             @if ($errors->has('employers'))
@@ -224,23 +201,7 @@
                                     <div class="col-md-7">
                                         <div class="mt-checkbox-inline">
                                             <label class="mt-checkbox">
-                                                <input type="checkbox" name="payout[]" value="add" {{ empty($payout[0])  ? '' : 'checked' }} />
-                                                {{ 'Add' }}
-                                                <span></span>
-                                            </label>
-                                            <label class="mt-checkbox">
-                                                <input type="checkbox" name="payout[]" value="edit" {{ empty($payout[1])  ? '' : 'checked' }}>
-                                                {{ 'Edit' }}
-                                                <span></span>
-                                            </label>
-                                            <label class="mt-checkbox">
-                                                <input type="checkbox" name="payout[]" value="delete" {{ empty($payout[2])  ? '' : 'checked' }}>
-                                                {{ 'Delete' }}
-                                                <span></span>
-                                            </label>
-                                            <label class="mt-checkbox">
-                                                <input type="checkbox" name="payout[]" value="view" {{ empty($payout[3])  ? '' : 'checked' }}>
-                                                {{ 'View' }}
+                                                <input type="checkbox" name="payout[]" value="add" {{ count($payout)  < 1 ? '' : 'checked' }} />
                                                 <span></span>
                                             </label>
                                             @if ($errors->has('payout'))
@@ -256,23 +217,7 @@
                                     <div class="col-md-7">
                                         <div class="mt-checkbox-inline">
                                             <label class="mt-checkbox">
-                                                <input type="checkbox" name="job[]" value="add" {{ empty($job[0])  ? '' : 'checked' }} />
-                                                {{ 'Add' }}
-                                                <span></span>
-                                            </label>
-                                            <label class="mt-checkbox">
-                                                <input type="checkbox" name="job[]" value="edit" {{ empty($job[1])  ? '' : 'checked' }}>
-                                                {{ 'Edit' }}
-                                                <span></span>
-                                            </label>
-                                            <label class="mt-checkbox">
-                                                <input type="checkbox" name="job[]" value="delete" {{ empty($job[2])  ? '' : 'checked' }}>
-                                                {{ 'Delete' }}
-                                                <span></span>
-                                            </label>
-                                            <label class="mt-checkbox">
-                                                <input type="checkbox" name="job[]" value="view" {{ empty($job[3])  ? '' : 'checked' }}>
-                                                {{ 'View' }}
+                                                <input type="checkbox" name="job[]" value="add" {{ count($job)  < 1 ? '' : 'checked' }} />
                                                 <span></span>
                                             </label>
                                             @if ($errors->has('job'))
@@ -288,23 +233,7 @@
                                     <div class="col-md-7">
                                         <div class="mt-checkbox-inline">
                                             <label class="mt-checkbox">
-                                                <input type="checkbox" name="reports[]" value="add" {{ empty($reports[0])  ? '' : 'checked' }} />
-                                                {{ 'Add' }}
-                                                <span></span>
-                                            </label>
-                                            <label class="mt-checkbox">
-                                                <input type="checkbox" name="reports[]" value="edit" {{ empty($reports[1])  ? '' : 'checked' }}>
-                                                {{ 'Edit' }}
-                                                <span></span>
-                                            </label>
-                                            <label class="mt-checkbox">
-                                                <input type="checkbox" name="reports[]" value="delete" {{ empty($reports[2])  ? '' : 'checked' }}>
-                                                {{ 'Delete' }}
-                                                <span></span>
-                                            </label>
-                                            <label class="mt-checkbox">
-                                                <input type="checkbox" name="reports[]" value="view" {{ empty($reports[3])  ? '' : 'checked' }}>
-                                                {{ 'View' }}
+                                                <input type="checkbox" name="reports[]" value="add" {{ count($reports) < 1  ? '' : 'checked' }} />
                                                 <span></span>
                                             </label>
                                             @if ($errors->has('reports'))
@@ -320,23 +249,7 @@
                                     <div class="col-md-7">
                                         <div class="mt-checkbox-inline">
                                             <label class="mt-checkbox">
-                                                <input type="checkbox" name="push[]" value="add" {{ empty($push[0])  ? '' : 'checked' }} />
-                                                {{ 'Add' }}
-                                                <span></span>
-                                            </label>
-                                            <label class="mt-checkbox">
-                                                <input type="checkbox" name="push[]" value="edit" {{ empty($push[1])  ? '' : 'checked' }}>
-                                                {{ 'Edit' }}
-                                                <span></span>
-                                            </label>
-                                            <label class="mt-checkbox">
-                                                <input type="checkbox" name="push[]" value="delete" {{ empty($push[2])  ? '' : 'checked' }}>
-                                                {{ 'Delete' }}
-                                                <span></span>
-                                            </label>
-                                            <label class="mt-checkbox">
-                                                <input type="checkbox" name="push[]" value="view" {{ empty($push[3])  ? '' : 'checked' }}>
-                                                {{ 'View' }}
+                                                <input type="checkbox" name="push[]" value="add" {{ count($push) < 1  ? '' : 'checked' }} />
                                                 <span></span>
                                             </label>
                                             @if ($errors->has('push'))
@@ -352,23 +265,7 @@
                                     <div class="col-md-7">
                                         <div class="mt-checkbox-inline">
                                             <label class="mt-checkbox">
-                                                <input type="checkbox" name="recipient[]" value="add" {{ empty($recipient[0])  ? '' : 'checked' }} />
-                                                {{ 'Add' }}
-                                                <span></span>
-                                            </label>
-                                            <label class="mt-checkbox">
-                                                <input type="checkbox" name="recipient[]" value="edit" {{ empty($recipient[1])  ? '' : 'checked' }}>
-                                                {{ 'Edit' }}
-                                                <span></span>
-                                            </label>
-                                            <label class="mt-checkbox">
-                                                <input type="checkbox" name="recipient[]" value="delete" {{ empty($recipient[2])  ? '' : 'checked' }}>
-                                                {{ 'Delete' }}
-                                                <span></span>
-                                            </label>
-                                            <label class="mt-checkbox">
-                                                <input type="checkbox" name="recipient[]" value="view" {{ empty($recipient[3])  ? '' : 'checked' }}>
-                                                {{ 'View' }}
+                                                <input type="checkbox" name="recipient[]" value="add" {{ count($recipient) < 1  ? '' : 'checked' }} />
                                                 <span></span>
                                             </label>
                                             @if ($errors->has('recipient'))
@@ -384,23 +281,7 @@
                                     <div class="col-md-7">
                                         <div class="mt-checkbox-inline">
                                             <label class="mt-checkbox">
-                                                <input type="checkbox" name="settings[]" value="add" {{ empty($settings[0])  ? '' : 'checked' }} />
-                                                {{ 'Add' }}
-                                                <span></span>
-                                            </label>
-                                            <label class="mt-checkbox">
-                                                <input type="checkbox" name="settings[]" value="edit" {{ empty($settings[1])  ? '' : 'checked' }}>
-                                                {{ 'Edit' }}
-                                                <span></span>
-                                            </label>
-                                            <label class="mt-checkbox">
-                                                <input type="checkbox" name="settings[]" value="delete" {{ empty($settings[2])  ? '' : 'checked' }}>
-                                                {{ 'Delete' }}
-                                                <span></span>
-                                            </label>
-                                            <label class="mt-checkbox">
-                                                <input type="checkbox" name="settings[]" value="view" {{ empty($settings[3])  ? '' : 'checked' }}>
-                                                {{ 'View' }}
+                                                <input type="checkbox" name="settings[]" value="add" {{ count($settings) < 1 ? '' : 'checked' }} />
                                                 <span></span>
                                             </label>
                                             @if ($errors->has('settings'))

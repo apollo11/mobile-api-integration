@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Validtor;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
 
@@ -46,7 +47,25 @@ class RecipientGroup extends Model
     {
         $agent = DB::table('users')
             ->select('id'
+                , 'name'
+                , 'company_name'
                 , 'business_manager'
+            )
+            ->where('role', 'business_manager')
+            ->get();
+
+        return $agent;
+    }
+
+    /**
+     * Employer List
+     */
+    public function employerList()
+    {
+        $agent = DB::table('users')
+            ->select(
+                'id'
+                , 'name'
                 , 'company_name'
             )
             ->where('role_id', 1)
@@ -54,6 +73,7 @@ class RecipientGroup extends Model
 
         return $agent;
     }
+
 
     /**
      * Employee List
@@ -75,6 +95,7 @@ class RecipientGroup extends Model
                 , 'info.gender'
                 , 'jobs.employer'
                 , 'jobs.business_manager'
+                , 'jobs.job_title'
             )
             ->when(!empty($param['agent']), function ($query) use ($param) {
 
@@ -97,7 +118,7 @@ class RecipientGroup extends Model
         $employee = DB::table('recipient_groups')
             ->select(
                 'id'
-                ,'group_name'
+                , 'group_name'
                 , 'created_at'
                 , 'email'
             )
@@ -106,7 +127,45 @@ class RecipientGroup extends Model
 
 
         return $employee;
-
     }
+
+
+    /**
+     * Multiple delete
+     * @param $multiId
+     * @return mixed
+     */
+    public function multiDelete($multiId)
+    {
+        $delete = DB::table('recipient_groups')->whereIn('id', $multiId)
+            ->delete();
+
+        return $delete;
+    }
+
+    /**
+     * @param $id
+     * @return mixed
+     */
+    public function deleteRecipientGroup($id)
+    {
+        $delete = DB::table('recipient_groups')->where('id', $id)
+            ->delete();
+
+        return $delete;
+    }
+
+    /**
+     * Details for recipient group
+     */
+    public function groupDetails($id)
+    {
+        $select = DB::table('recipient_groups')->where('id', $id)
+            ->first();
+
+        return $select;
+    }
+
+
 
 }

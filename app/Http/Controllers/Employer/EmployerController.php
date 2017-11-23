@@ -115,7 +115,15 @@ class EmployerController extends Controller
         $employer->rate = $data['hourly_rate'];
         $employer->profile_image_path = $data['company_logo'];
         $employer->industry = $data['industry'];
-
+        $employer->dashboard_permissions =  null;
+        $employer->employees_permissions = ['true'];
+        $employer->employers_permissions = null;
+        $employer->payout_permissions = null;
+        $employer->job_permissions = ['true'];
+        $employer->reports_permissions = null;
+        $employer->push_permissions = null;
+        $employer->recipient_permissions = null;
+        $employer->settings_permissions = ['true'];
         $employer->save();
     }
 

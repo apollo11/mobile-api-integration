@@ -290,6 +290,15 @@
         //select all checkboxes
         $(".group-checkable").change(function(){  //"select all" change
             $(".checkboxes").prop('checked', $(this).prop("checked")); //change all ".checkbox" checked status
+
+        });
+
+        $(".manager-checkable").change(function(){  //"select all" change
+            $(".check-manager").prop('checked', $(this).prop("checked")); //change all ".checkbox" checked status
+        });
+
+        $(".employer-checkable").change(function(){  //"select all" change
+            $(".check-employer").prop('checked', $(this).prop("checked")); //change all ".checkbox" checked status
         });
 
     </script>

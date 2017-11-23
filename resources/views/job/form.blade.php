@@ -233,6 +233,27 @@
                                             @endif
                                         </div>
                                     </div>
+                                    <div class="form-group{{ $errors->has('recipient_group') ? ' has-error' : '' }}">
+                                        <label class="col-md-3 control-label">Recipient</label>
+                                        <div class="col-md-7">
+                                            <select class="form-control" name="recipient_group">
+                                                <option value="0" {{ old('recipient_group') == 0 ? "selected" : "" }}>All</option>
+                                                @foreach($recipientGroup as $key => $value)
+                                                    @if($loop->count > 0)
+                                                        <option value="{{ $value->id }}" {{ old('recipient_group') == $value->id ? "selected" : "" }}>{{ $value->group_name }}</option>
+                                                    @else
+                                                        <option value=""> No Available Recipient group </option>
+                                                    @endif
+                                                @endforeach
+                                            </select>
+
+                                            @if ($errors->has('recipient_group'))
+                                                <span class="help-block">
+                                                {{ $errors->first('recipient_group') }}
+                                               </span>
+                                            @endif
+                                        </div>
+                                    </div>
 
                                     <div class="form-group{{ $errors->has('business_manager') ? ' has-error' : '' }}">
                                         <label class="col-md-3 control-label">Business Manager</label>
