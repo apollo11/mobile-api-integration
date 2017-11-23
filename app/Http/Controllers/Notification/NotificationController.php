@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Notification;
 
 use Validator;
-use App\User;
-use App\DeviceToken;
+use App\Settings;
+use App\CancelJob;
 use App\Notification;
 use Illuminate\Http\Request;
 use App\Http\Traits\PushNotiftrait;
@@ -44,7 +44,27 @@ class NotificationController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->all();
+        $userId = $data['user_id'];
+        $jobId = $data['job_id'];
+
+        $validate =  Validator::make($data, ['job_id' => 'required', 'user_id' => 'required']);
+        $error = $validate->errors()->all();
+
+        if ($validate->fails()) {
+
+            $result = $this->mapValidator($error, 110001);
+
+        } else {
+
+            $this->decductRejectNotif($jobId);
+            $this->addtoSchedRejectedJob($jobId, $userId);
+
+            $result = $this->ValidUseSuccessResp(200, true);
+        }
+
+        return $result;
+
     }
 
     /**
@@ -104,7 +124,7 @@ class NotificationController extends Controller
 
         if ($validate->fails()) {
 
-            $result = $this->mapValidator($error);
+            $result = $this->mapValidator($error, 110001);
 
         } else {
 
@@ -115,7 +135,6 @@ class NotificationController extends Controller
         }
 
         return $result;
-
     }
 
     /**
@@ -130,7 +149,7 @@ class NotificationController extends Controller
 
         if (is_null($find)) {
 
-            $result = $this->mapValidator(['Job is not available in schedule']);
+            $result = $this->mapValidator(['Job is not available in schedule'], 110001);
 
         } else {
 
@@ -223,8 +242,8 @@ class NotificationController extends Controller
     }
 
     /**
-     * @param array $data
-     * @return mixed|static
+     * @param Request $request
+     * @return mixed
      */
     public function saveDeviceToken(Request $request)
     {
@@ -394,6 +413,39 @@ class NotificationController extends Controller
         return $return;
     }
 
+    /**
+     * @param $userId
+     * @return mixed
+     */
+    public function decductRejectNotif($userId)
+    {
+        $cancel = new CancelJob();
+        $settingsObj = new Settings();
+        $set = $settingsObj->allSettings();
+        $points =  abs($set->point_reject_job);
+
+        $cancel->deductionsPoints($userId, (int) $points);
+
+        return 'Success';
+
+    }
+
+    /**
+     * @param $jobId
+     * @param $userId
+     */
+    public function addtoSchedRejectedJob($jobId, $userId)
+    {
+        $user = \App\User::find($userId);
+        $user->jobSchedule()->updateOrCreate(['name' => null, 'job_id' => $jobId, 'job_status' => 'rejected']);
+
+    }
+
+    /**
+     * @param $data
+     * @param $count
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function notifRespponse($data, $count)
     {
         foreach ($data as $output)
@@ -465,7 +517,6 @@ class NotificationController extends Controller
         $dataUndefined = !empty($details) ? $details : [];
 
         return response()->json(['notifications' => $dataUndefined, 'unread_count' => $count]);
-
     }
 
 }
