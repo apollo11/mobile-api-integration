@@ -250,7 +250,7 @@ class CancelJobController extends Controller
                 'gender' => $output->gender,
                 'job_requirements' => $output->job_requirements,
                 'status' => $output->schedule_status,
-                'is_assigned' => $output->is_assigned
+                'is_assigned' => is_null($output->is_assigned) ? 0 : $output->is_assigned
             ]
         ];
 
@@ -258,6 +258,11 @@ class CancelJobController extends Controller
 
     }
 
+    /**
+     * @param $userId
+     * @param $jobId
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function details($userId, $jobId)
     {
 

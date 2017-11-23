@@ -39,6 +39,12 @@ class Notification extends Model
                            ->where('job_schedules.user_id', '=', $userId);
                     })
 
+             ->leftJoin('assign_job_job', function ($join) use ($userId) {
+                    $join->on('assign_job_job.job_id as assign', '=', 'jobs.id')
+                        ->where('assign_job_job.user_id as assign', '=',$userId);
+                })
+
+            ->leftJoin('assign_job_job as assign', 'assign.job_id', '=', 'notif.job_id')
             ->join('users as employer', 'employer.id', '=', 'jobs.user_id')
             ->select(
                   'notif.id'
@@ -89,13 +95,15 @@ class Notification extends Model
                 , 'job_schedules.job_salary'
                 , 'job_schedules.process_date'
                 , 'job_schedules.payment_methods'
+                , 'jobs.contact_person'
                 , 'employer.company_description'
                 , 'employer.company_name'
                 , 'employer.profile_image_path'
                 , 'employer.employee_status as status'
                 , 'employer.id as employer_id'
                 , 'employer.rate as employer_rate'
-
+                , 'assign.is_assigned'
+                , 'assign.id as id_assigned'
 
             )
             ->when(!empty($param['last_notification_id']) , function ($query) use ($param) {

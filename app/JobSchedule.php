@@ -56,6 +56,12 @@ class JobSchedule extends Model
         $jobs = DB::table('users')
             ->join('job_schedules', 'job_schedules.user_id', '=', 'users.id')
             ->join('jobs', 'jobs.id', '=', 'job_schedules.job_id')
+            ->when(!empty($param['id']), function ($query) use ($param) {
+                return $query->leftJoin('assign_job_job as assign', function ($join) use ($param) {
+                    $join->on('assign.job_id', '=', 'jobs.id')
+                        ->where('assign.user_id', '=', $param['id']);
+                });
+            })
             ->join('users as employer', 'employer.id', '=', 'jobs.user_id')
             ->select(
                 'jobs.id'
@@ -103,7 +109,9 @@ class JobSchedule extends Model
                 ,'jobs.job_requirements'
                 , 'jobs.latitude'
                 , 'jobs.longitude'
+                , 'jobs.contact_person'
                 , 'jobs.geolocation_address'
+                , 'assign.is_assigned'
 
             )
             ->when(!empty($param['industries']), function ($query) use ($param) {
@@ -149,6 +157,7 @@ class JobSchedule extends Model
             ->join('job_schedules', 'job_schedules.user_id', '=', 'users.id')
             ->join('jobs', 'jobs.id', '=', 'job_schedules.job_id')
             ->join('users as employer', 'employer.id', '=', 'jobs.user_id')
+            ->leftJoin('assign_job_job as assign', 'assign.job_id', '=' ,'jobs.id')
             ->select(
                 'jobs.id'
                 , 'job_schedules.id as schedule_id'
@@ -196,6 +205,8 @@ class JobSchedule extends Model
                 , 'jobs.latitude'
                 , 'jobs.longitude'
                 , 'jobs.geolocation_address'
+                , 'jobs.geolocation_address'
+                , 'assign.is_assigned'
 
             )
             ->where($columName , '=', $id)
