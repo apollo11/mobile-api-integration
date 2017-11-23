@@ -88,6 +88,9 @@ return [
     'uploaded'             => 'The :attribute failed to upload.',
     'url'                  => 'The :attribute format is invalid.',
 
+    'is_valid_lat'         => 'The :attribute format is invalid.',
+    'is_valid_long'         => 'The :attribute format is invalid.',
+
     /*
     |--------------------------------------------------------------------------
     | Custom Validation Language Lines

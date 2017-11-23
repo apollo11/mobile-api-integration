@@ -411,7 +411,8 @@ class NotificationController extends Controller
                         'id' => $output->employer_id,
                         'image_url' => $output->profile_image_path,
                         'name' => $output->company_name,
-                        'description' => $output->company_description
+                        'description' => $output->company_description,
+                        'hourly_rate' => $output->employer_rate
                     ],
                     'industry' => [
                         'id' => $output->industry_id,
@@ -419,7 +420,7 @@ class NotificationController extends Controller
                     ],
                     'location' => [
                         'id' => $output->jobid,
-                        'name' => $output->geolocation_address,
+                        'name' => is_null($output->geolocation_address) ? '10 Bayfront Ave, Singapore 018956' : $output->geolocation_address,
                         'latitude' => 1.2836402,
                         'longitude' => 103.8603731,
                     ],

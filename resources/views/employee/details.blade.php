@@ -25,7 +25,6 @@
         </form>
 
     @endforeach
-
     <form id="approve-{{ $userDetails->id }}" action="{{ route('employee.approve',['id' => $userDetails->id]) }}"
           method="POST" style="display: none;">
         {{ csrf_field() }}
@@ -52,7 +51,7 @@
             </div>
 
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-sm-6">
                     <!-- BEGIN EXAMPLE TABLE PORTLET-->
                     <div class="portlet light bordered">
                         <div class="portlet-title">
@@ -61,10 +60,10 @@
                                 <span class="caption-subject bold uppercase">Employees</span>
                             </div>
                             <div class="actions">
+                                @can('employee-edit')
                                 <a class="btn sbold green"
                                    href="{{ route('employee.edit',['id' => $userDetails->id])  }}">
                                     Update</a>
-
                                 <a class="btn sbold green"
                                    href="{{ route('employee.approve',['id' => $userDetails->id])  }}"
                                    onclick="event.preventDefault();
@@ -76,6 +75,7 @@
                                            document.getElementById('{{'reject-'.$userDetails->id }}').submit();">
                                     Reject
                                 </a>
+                                @endcan
                                 <input class="btn sbold green" name="multiple" onclick="window.print()" value="Print"
                                        type="submit"/>
                             </div>
@@ -225,6 +225,16 @@
                                                             @endif
                                                         </tr>
                                                         <tr>
+                                                            @if($userDetails->points)
+                                                                <td><strong>Points</strong></td>
+                                                                <td> {{ $userDetails->points }}</td>
+                                                            @endif
+                                                        </tr>
+                                                        <tr>
+                                                            <td><strong>Hourly Rate</strong></td>
+                                                            <td> {{ $userDetails->rate }}</td>
+                                                        </tr>
+                                                        <tr>
                                                             @if($userDetails->signature_file_path !='none')
                                                                 <td><strong>Signature</strong></td>
                                                                 <td><img src="/{{ $userDetails->signature_file_path }}" width="200px"/></td>
@@ -239,9 +249,22 @@
                                                             @if($userDetails->employee_status == 'approved')
                                                                 <td> <span class="label label-sm label-success">{{ ucfirst($userDetails->employee_status) }} </span></td>
                                                             @endif
+
+
                                                             @if($userDetails->employee_status == 'reject')
                                                                 <td> <span class="label label-sm label-danger">{{ ucfirst($userDetails->employee_status) }} </span></td>
                                                             @endif
+                                                        </tr>
+                                                     
+                                                        <tr>
+                                                            <td><strong>Average Rating</strong></td>
+                                                            <td>
+                                                                <?php echo str_repeat('<i class="fa  fa-star"></i>',floor($userDetails->avg_rating) ); 
+                                                                if($userDetails->avg_rating > floor($userDetails->avg_rating)){
+                                                                    echo '<i class="fa  fa-star-half-o"></i>';
+                                                                }
+                                                                ?>
+                                                            </td>
                                                         </tr>
                                                         </tbody>
                                                     </table>
@@ -255,7 +278,7 @@
                     </div>
                     <!-- END EXAMPLE TABLE PORTLET-->
                 </div>
-                <div class="col-md-6">
+                <div class="col-sm-6">
                     <!-- BEGIN EXAMPLE TABLE PORTLET-->
                     <div class="portlet light bordered">
                         <div class="portlet-body">
@@ -263,29 +286,29 @@
                                 <div class="portlet-body">
                                     <div class="mt-element-overlay">
                                         <div class="row">
-                                            <div class="col-md-offset-2 col-md-4">
+                                            <div class="col-sm-offset-2 col-sm-4">
                                                 <div class="mt-overlay-1 mt-scroll-right">
-
                                                     @if(!empty($userDetails->profile_photo))
-                                                        <img class="img-circle" src="/{{ $userDetails->profile_photo}}" />
+                                                        <img class="img-circle main-profile-img" src="{{ url($userDetails->profile_photo) }}" />
                                                     @else
-                                                        <img class="img-circle" src="http://via.placeholder.com/300x300" />
+                                                        <img class="img-circle main-profile-img" src="http://via.placeholder.com/300x300" />
                                                     @endif
+
                                                     <div class="mt-overlay">
                                                         <ul class="mt-info">
                                                             <li>
-                                                                <div class="btn sbold red" data-toggle="modal" data-target="#profile-img">
+                                                                <button @cannot('employee-edit') disabled @endcannot class="btn sbold red" data-toggle="modal" data-target="#profile-img">
                                                                    Update Profile Image
-                                                                </div>
+                                                                </button>
                                                             </li>
                                                         </ul>
                                                     </div>
                                                 </div>
-                                                    <h3><a href="#" class="btn sbold green" data-toggle="modal" data-target="#profile-img">Update Profile Image</a></h3>
+                                                    <h3><button href="#" @cannot('employee-edit') disabled @endcannot class="btn sbold green" data-toggle="modal" data-target="#profile-img">Update Profile Image</button></h3>
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-md-offset-2 col-md-4">
+                                            <div class="col-sm-offset-2 col-sm-4">
                                                 <div class="mt-overlay-1 mt-scroll-right">
                                                     @if(!empty($userDetails->front_ic_path))
                                                         <img src="/{{ $userDetails->front_ic_path }}" />
@@ -295,18 +318,18 @@
                                                     <div class="mt-overlay">
                                                         <ul class="mt-info">
                                                             <li>
-                                                                <div class="btn sbold red" data-toggle="modal" data-target="#profile-front-ic">
+                                                                <button @cannot('employee-edit') disabled @endcannot class="btn sbold red" data-toggle="modal" data-target="#profile-front-ic">
                                                                     Update Front IC
-                                                                </div>
+                                                                </button>
                                                             </li>
                                                         </ul>
                                                     </div>
                                                 </div>
-                                                <h3><a href="#" class="btn sbold green" data-toggle="modal" data-target="#profile-front-ic">Update Front IC</a></h3>
+                                                <h3><button @cannot('employee-edit') disabled @endcannot href="#" class="btn sbold green" data-toggle="modal" data-target="#profile-front-ic">Update Front IC</button></h3>
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-md-offset-2 col-md-4">
+                                            <div class="col-sm-offset-2 col-sm-4">
                                                 <div class="mt-overlay-1 mt-scroll-right">
                                                     @if(!empty($userDetails->back_ic_path))
                                                         <img src="/{{ $userDetails->back_ic_path }}" />
@@ -316,14 +339,14 @@
                                                     <div class="mt-overlay">
                                                         <ul class="mt-info">
                                                             <li>
-                                                                <div class="btn sbold red" data-toggle="modal" data-target="#profile-back-ic">
+                                                                <button @cannot('employee-edit') disabled @endcannot class="btn sbold red" data-toggle="modal" data-target="#profile-back-ic">
                                                                     Update Back IC
-                                                                </div>
+                                                                </button>
                                                             </li>
                                                         </ul>
                                                     </div>
                                                 </div>
-                                                <h3><a href="#" class="btn sbold green" data-toggle="modal" data-target="#profile-back-ic">Update Back IC</a></h3>
+                                                <h3><button @cannot('employee-edit') disabled @endcannot href="#" class="btn sbold green" data-toggle="modal" data-target="#profile-back-ic">Update Back IC</button></h3>
                                             </div>
                                         </div>
                                     </div>
@@ -392,11 +415,11 @@
                                             <span></span>
                                         </label>
                                     </th>
-                                    <th> Job Title</th>
-                                    <th> Job Date</th>
-                                    <th>Clients Name</th>
-                                    <th>Hourly Rate</th>
-                                    <th>Status</th>
+                                    <th>Job Title</th>
+                                    <th>Job Date</th>
+                                    <th>Employer's Name</th>
+                                    <th>Job Ratings</th>
+                                    <th>Job Status</th>
                                     <th>Action</th>
                                 </tr>
                                 </thead>
@@ -404,7 +427,7 @@
                                 @if(count($jobInfo) > 0)
                                     @foreach($jobInfo as $jobs)
                                         @if(!empty($jobs->job_title))
-                                        <tr class="odd gradeX">
+                                        <tr class="odd gradeX" id="sche-{{ $jobs->schedule_id }}">
                                             <th>
                                                 <label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">
                                                     <input type="checkbox" class="group-checkable"
@@ -414,9 +437,14 @@
                                             </th>
                                             <td>{{ $jobs->job_title }}</td>
                                             <td>{{ $jobs->start_date }}</td>
-                                            <td> {{ $jobs->company_name }}</td>
-                                            <td> {{ $jobs->rate }}</td>
-                                            <td> @if($jobs->schedule_status == 'cancelled') <a href="{{ route('cancel.details',['userId' => $jobs->user_id, 'jobId' => $jobs->id]) }}">{{ ucfirst($jobs->schedule_status) }}</a>  @else {{ ucfirst($jobs->schedule_status) }} @endif</td>
+                                            <td>{{ $jobs->company_name }}</td>
+                                            <td>@if($jobs->rating_point!=null)
+                                                    <?php echo str_repeat('<i class="fa  fa-star"></i>',$jobs->rating_point); ?>
+                                                @else
+                                                    -
+                                                @endif
+                                            </td>
+                                            <td>@if($jobs->schedule_status == 'cancelled') <a href="{{ route('cancel.details',['userId' => $jobs->user_id, 'jobId' => $jobs->id]) }}">{{ ucfirst($jobs->schedule_status) }}</a>  @else {{ ucfirst($jobs->schedule_status) }} @endif</td>
                                             <td>
                                                 <div class="btn-group">
                                                     <button class="btn btn-xs green dropdown-toggle" type="button"
@@ -438,7 +466,12 @@
                                                             <a href="{{ route('job.details',['id' =>  $jobs->jobid ])  }}">
                                                                 <i class="fa fa-eye"></i> View </a>
                                                         </li>
+
                                                         @if($jobs->schedule_status == 'completed')
+                                                            <li>
+                                                                <a data-toggle="modal" href="#rate_user" class="rate-user-btn"  data-rate-id="{{ $jobs->schedule_id }}" data-user-id="{{ $jobs->user_id }}">
+                                                                    <i class="fa fa-star"></i> Rate </a>
+                                                            </li>
                                                             <li>
                                                                 <a href="{{ route('payout.approved',['id' => $jobs->schedule_id, 'userId' => $jobs->user_id])  }}"
                                                                    onclick="event.preventDefault();
@@ -485,8 +518,61 @@
         </div>
     </div>
 
+
+@include('employee.rate_job')
+
 @include('employee.edit-profile')
 
 @endsection
 
-@include('layouts.employee-datatables-include')
+
+@section('custom_page_css')
+    <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.16/css/jquery.dataTables.css">
+@stop
+
+@section('custom_page_js')
+<script src="{{ asset('assets/global/scripts/datatable.js') }}" type="text/javascript"></script>
+<script src="{{ asset('assets/global/plugins/datatables/datatables.min.js') }}" type="text/javascript"></script>
+<script src="{{ asset('assets/pages/scripts/table-datatables-buttons.min.js') }}" type="text/javascript"></script>
+<script src="{{ asset('assets/global/plugins/bootstrap-rating-input.min.js') }}" type="text/javascript"></script>
+<script src="{{ asset('assets/layouts/layout/scripts/rate_job.js') }}" type="text/javascript"></script>
+<script>
+    $(document).ready(function() {
+        $('#employee-table').DataTable({
+            dom: 'Bfrtip',
+            buttons: [
+                { "extend": 'excel', "text":'Export',"className": 'btn sbold red', "title" : "Employee - related jobs"}
+            ],
+            autoFill: true,
+            "scrollY":"500",
+            "scrollX" : true,
+            "sScrollXInner": "100%",
+        });
+
+        $('.rate-user-btn').click(function(){
+            var rate_id = $(this).data('rate-id');
+            var user_id = $(this).data('user-id');
+            if(rate_id==null || rate_id=='' || user_id==null || user_id==''){return false;}
+            
+            $('.rate-user-content .rate-user-profileimg').html('').prepend($('<img>',{ class:'img-circle', src: $('.main-profile-img').attr('src') , style : 'max-width:100%' }));
+
+            resetValues();
+            
+            /*get info for pop up*/
+            var url = '{{url("employee/job/detail")}}/'+user_id+'/'+rate_id;
+            rate_getPopUpJobDetail(url, user_id,rate_id);
+            /*get info for pop up*/
+        });
+
+        $("#rating-form").submit(function(e) {
+            var user_id = $('.submit-rating-btn').data('user_id');
+            var rate_id = $('.submit-rating-btn').data('rate_id');
+
+            var url = '{{url("employee/job/rate_job")}}/'+user_id+'/'+rate_id;
+            rate_submitJobRating(url);
+            
+            e.preventDefault(); 
+        });
+    });
+</script>
+@stop

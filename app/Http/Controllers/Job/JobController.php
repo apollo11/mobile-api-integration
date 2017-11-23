@@ -54,15 +54,16 @@ class JobController extends Controller
         echo $notification_status;
         $role = Auth::user()->role;
 
-        if($role=='employer'){
+
+        if ($role == 'employer') {
             $userid = Auth::user()->id;
-        }else{
+        } else {
             $userid = '';
         }
 
         $param = [
-            'status' => $request->get('status'),         
-            'userid'=>$userid
+            'status' => $request->get('status'),
+            'userid' => $userid
         ];
 
 
@@ -79,21 +80,22 @@ class JobController extends Controller
     public function create()
     {
         $user = new Employer();
-        $location = $this->location();
+        $location = new Location();
+        $nationality = new Nationality();
         $industry = $this->industry();
-        $nationality = $this->nationalityList();
         $employee = $user->employerList();
         $age = $this->age();
-
+        $businessMngr = \App\User::where('role', 'business_manager')->pluck('name', 'id');
 
 
         return view('job.form', ['user' => $user
             , 'industry' => $industry
-            , 'location' => $location
-            , 'nationality' => $nationality
-            , 'employee' => $employee
+            , 'location' => $location->locationLists()
+            , 'nationality' => $nationality->nationalityDropdown()
+            , 'employer' => $employee
             , 'age' => $age
-        ]);
+            , 'language' => $nationality->language()
+        ], compact('businessMngr'));
     }
 
     /**
@@ -105,9 +107,9 @@ class JobController extends Controller
     public function store(Request $request)
     {
         $data = $request->all();
-
         $location = explode('.', $request->input('job_location'));
         $zipCode = $this->getAddress($request->input('postal_code'));
+        $data['zip_code'] = $request->input('postal_code');
         $data['postal_code'] = $zipCode;
         $industry = explode('.', $request->input('industry'));
         $age = explode('-', $request->input('age'));
@@ -132,7 +134,7 @@ class JobController extends Controller
                 ->withErrors($validator)
                 ->withInput();
         } else {
-            $data['address'] = $this->getFormattedAddress($data['postal_code']['lat'],$data['postal_code']['lng']);
+            $data['address'] = $this->getFormattedAddress($data['postal_code']['lat'], $data['postal_code']['lng']);
             $profile['job_image'] = $request->file('job_image')->store('jobs');
 
             $mergeData = array_merge($data, $profile, $split);
@@ -158,29 +160,30 @@ class JobController extends Controller
             'location_id' => $data['location_id'],
             'location' => $data['location'],
             'description' => $data['job_description'],
-            'job_requirements' => $data['job_requirements'],
+            'job_requirements' => empty($data['job_requirements']) ? '' : $data['job_requirements'],
             'role' => $data['job_role'],
-            'gender' => $data['gender'],
-            'nationality' => $data['nationality'],
+            'gender' => empty($data['gender']) ? '' : $data['gender'],
+            'nationality' => empty($data['nationality']) ? '' : $data['nationality'],
             'job_image_path' => $data['job_image'],
             'no_of_person' => $data['no_of_person'],
-            'contact_person' => $data['contact_person'],
-            'contact_no' => $data['contact_no'],
-            'business_manager' => $data['business_manager'],
+            'contact_person' => empty($data['contact_person']) ? '' : $data['contact_person'],
+            'contact_no' => empty($data['contact_no']) ? '' : $data['contact_no'],
+            'business_manager' => empty($data['business_manager']) ? '' : $data['business_manager'],
             'employer' => $data['employer'],
-            'rate' => $data['hourly_rate'],
-            'language' => $data['preferred_language'],
+            'rate' => empty($data['hourly_rate']) ? 0 : $data['hourly_rate'],
+            'language' => empty($data['preferred_language']) ? '' : $data['preferred_language'],
             'job_date' => $this->convertToUtc($data['date']),
             'end_date' => $this->convertToUtc($data['end_date']),
             'industry_id' => $data['industry_id'],
             'industry' => $data['industry'],
-            'notes' => $data['notes'],
-            'status' => $data['status'],
+            'notes' => empty($data['notes']) ? '' : $data['notes'],
+            'status' => Auth::user()->role_id == 0 ? 'active' : 'inactive',
             'min_age' => $data['min_age'],
             'max_age' => $data['max_age'],
             'latitude' => $data['postal_code']['lat'],
-            'longitude' =>  $data['postal_code']['lng'],
-            'geolocation_address' => $data['address']
+            'longitude' => $data['postal_code']['lng'],
+            'geolocation_address' => $data['address'],
+            'zip_code' => $data['zip_code']
         ]);
 
         $this->lastInsertedId = $insertedId->id;
@@ -196,30 +199,34 @@ class JobController extends Controller
 
         $user->update([
             'job_title' => $data['job_title'],
-            'job_id' => Auth::user()->id,
+            'job_id' => $data['employer_id'],
             'location_id' => $data['location_id'],
             'location' => $data['location'],
             'description' => $data['job_description'],
-            'job_requirements' => $data['job_requirements'],
+            'job_requirements' => empty($data['job_requirements']) ? '' : $data['job_requirements'],
             'role' => $data['job_role'],
-            'choices' => $data['gender'],
-            'nationality' => $data['nationality'],
+            'gender' => empty($data['gender']) ? '' : $data['gender'],
+            'nationality' => empty($data['nationality']) ? '' : $data['nationality'],
             'job_image_path' => $data['job_image'],
             'no_of_person' => $data['no_of_person'],
-            'contact_person' => $data['contact_person'],
-            'contact_no' => $data['contact_no'],
-            'business_manager' => $data['business_manager'],
-            'employer' => $data['job_employer'],
-            'rate' => $data['hourly_rate'],
-            'language' => $data['preferred_language'],
+            'contact_person' => empty($data['contact_person']) ? '' : $data['contact_person'],
+            'contact_no' => empty($data['contact_no']) ? '' : $data['contact_no'],
+            'business_manager' => empty($data['business_manager']) ? '' : $data['business_manager'],
+            'employer' => $data['employer'],
+            'rate' => empty($data['hourly_rate']) ? 0 : $data['hourly_rate'],
+            'language' => empty($data['preferred_language']) ? '' : $data['preferred_language'],
             'job_date' => $this->convertToUtc($data['date']),
             'end_date' => $this->convertToUtc($data['end_date']),
             'industry_id' => $data['industry_id'],
             'industry' => $data['industry'],
-            'notes' => $data['notes'],
-            'status' => $data['status'],
+            'notes' => empty($data['notes']) ? '' : $data['notes'],
+            'status' => Auth::user()->role_id == 0 ? 'active' : 'inactive',
             'min_age' => $data['min_age'],
-            'max_age' => $data['max_age']
+            'max_age' => $data['max_age'],
+            'latitude' => $data['postal_code']['lat'],
+            'longitude' => $data['postal_code']['lng'],
+            'geolocation_address' => $data['address'],
+            'zip_code' => $data['zip_code']
         ]);
     }
 
@@ -247,7 +254,7 @@ class JobController extends Controller
      */
     public function edit($id)
     {
-        $user = Auth::user();
+        $user = new Employer();
         $job = new Job();
 
         $details = $job->jobAdminDetails($id);
@@ -255,14 +262,15 @@ class JobController extends Controller
         $industry = $this->industry();
         $nationality = $this->nationalityList();
         $age = $this->age();
+        $employer = $user->employerList();
 
         return view('job.edit-form', ['user' => $user
-            ,'industry' => $industry
+            , 'industry' => $industry
             , 'location' => $location
             , 'details' => $details
             , 'nationality' => $nationality
             , 'age' => $age
-
+            , 'employer' => $employer
         ]);
 
     }
@@ -328,21 +336,17 @@ class JobController extends Controller
     public function update(Request $request, $id)
     {
         $data = $request->all();
-
-        $location = explode('.', $request->input('job_location'));
-        $industry = explode('.', $request->input('industry'));
-        $age = explode('-', $request->input('age'));
         $zipCode = $this->getAddress($request->input('postal_code'));
         $data['postal_code'] = $zipCode;
 
-//        $split = [
-//            'location_id' => $location[0],
-//            'job_location' => $location[1],
-//            'industry_id' => $industry[0],
-//            'industry' => $industry[1],
-//            'min_age' => $age[0],
-//            'max_age' => $age[1]
-//        ];
+        $data = $request->all();
+        $location = explode('.', $request->input('job_location'));
+        $zipCode = $this->getAddress($request->input('postal_code'));
+        $data['zip_code'] = $request->input('postal_code');
+        $data['postal_code'] = $zipCode;
+        $industry = explode('.', $request->input('industry'));
+        $age = explode('-', $request->input('age'));
+        $employer = explode('.', $request->input('job_employer'));
         $split = [
             'location_id' => $location[0],
             'location' => $location[1],
@@ -350,18 +354,21 @@ class JobController extends Controller
             'industry' => $industry[1],
             'min_age' => $age[0],
             'max_age' => $age[1],
+            'employer_id' => $employer[0],
+            'employer' => $employer[1]
         ];
 
         $validator = $this->rules($data);
 
         if ($validator->fails()) {
-
             return redirect(route('job.edit', ['id' => $id]))
                 ->withErrors($validator)
                 ->withInput();
         } else {
 
+            $data['address'] = $this->getFormattedAddress($data['postal_code']['lat'], $data['postal_code']['lng']);
             $profile['job_image'] = $request->file('job_image')->store('jobs');
+
             $mergeData = array_merge($data, $profile, $split);
 
             $this->updateData($mergeData);
@@ -382,7 +389,7 @@ class JobController extends Controller
         $job = new Job();
 
         $submit = empty($request->input('multiple')) ? $param : $request->input('multiple');
-        $multi['multicheck'] = is_null($id) ? (array) $request->input('multicheck') : (array)$id;
+        $multi['multicheck'] = is_null($id) ? (array)$request->input('multicheck') : (array) $id;
 
         $validator = Validator::make($multi, ['multicheck' => 'required']);
 
@@ -408,7 +415,6 @@ class JobController extends Controller
         }
 
         return $result;
-
     }
 
     /**
@@ -419,25 +425,14 @@ class JobController extends Controller
         return Validator::make($data, [
             'job_title' => 'required',
             'job_description' => 'required|string',
-            'job_requirements' => 'required|string',
             'job_role' => 'required|string',
             'job_image' => 'required',
             'no_of_person' => 'required|numeric',
-            'contact_person' => 'required|string',
-            'business_manager' => 'required|string',
             'job_employer' => 'required|string',
-            'hourly_rate' => 'required|numeric',
-            'preferred_language' => 'required|string',
             'date' => 'required|date',
             'end_date' => 'required|date',
-            'notes' => 'required|string',
-            'status' => 'required|string',
-            'gender' => 'required|string',
             'job_location' => 'required|string',
-            'contact_no' => 'required|string',
             'industry' => 'required|string',
-            'age' => 'required',
-            'nationality' => 'required|string',
             'postal_code' => 'required'
         ]);
     }
@@ -509,11 +504,11 @@ class JobController extends Controller
         $job = new Job();
 
         $param = [
-            'industries' => (array) $this->request->get('industries'),
-            'locations' => (array) $this->request->get('locations'),
+            'industries' => (array)$this->request->get('industries'),
+            'locations' => (array)$this->request->get('locations'),
             'start' => $this->request->get('start'),
-            'created' =>$this->request->get('created'),
-            'limit' => (int) $this->request->get('limit'),
+            'created' => $this->request->get('created'),
+            'limit' => (int)$this->request->get('limit'),
             'date_from' => $this->request->get('date_from'),
             'date_to' => $this->request->get('date_to'),
             'user_id' => $this->request->get('user_id')
@@ -569,7 +564,7 @@ class JobController extends Controller
         $push['title'] = 'New Job Available';
         $push['type'] = constant('NEW_JOB');
         $push['badge'] = 1;
-        $push['body'] = $employer[1].' is hiring for '. $data['job_title']. ' at '. $data['address'].' on '.$date.'.';
+        $push['body'] = $employer[1] . ' is hiring for ' . $data['job_title'] . ' at ' . $data['address'] . ' on ' . $date . '.';
         $push['registration_ids'] = $this->returnToken();
 
         return $this->pushNotif($push);
@@ -580,10 +575,10 @@ class JobController extends Controller
      */
     public function returnToken()
     {
+        $device = array();
         $token = new DeviceToken();
         $tokenValue = $token->listDeviceToken();
-        foreach ($tokenValue as $value)
-        {
+        foreach ($tokenValue as $value) {
             $device[] = $value->device_token;
         }
 
@@ -598,7 +593,7 @@ class JobController extends Controller
     {
         $employeeId = $this->listOfEmployeeId();
 
-        foreach ($employeeId as $value ) {
+        foreach ($employeeId as $value) {
 
             $save = \App\User::find($value->id);
 
@@ -634,16 +629,16 @@ class JobController extends Controller
     {
         $http = new Client();
         try {
-            $response = $http->get($this->googleMap . '?components=postal_code:' .$postal. '&key=' . env('GOOGLE_API_KEY'));
+            $response = $http->get($this->googleMap . '?components=postal_code:' . $postal . '&key=' . env('GOOGLE_API_KEY'));
             $result = json_decode((string)$response->getBody(), true);
-            if(!empty($result['results'])) {
+            if (!empty($result['results'])) {
 
                 $param['location'] = [
                     'lng' => $result['results'][0]['geometry']['location']['lng'],
                     'lat' => $result['results'][0]['geometry']['location']['lat']
                 ];
 
-            }else {
+            } else {
 
                 $param['location'] = '';
             }
@@ -688,7 +683,25 @@ class JobController extends Controller
                 return 'Unknown Address';
             }
         }
-
     }
 
+    public function location_tracking($id)
+    {
+        $param[] = null;
+        $job = new Job();
+        $schedule = new JobSchedule();
+        $employee = new Employee();
+
+        $details = $job->jobAdminDetails($id);
+        if(empty($details)){abort(404);}
+      
+        $relatedCandidates = $schedule->getCandidatesLocation($id);
+        $markers = array();
+        foreach($relatedCandidates as $k=>$v){
+            if(!empty($v->employee_current_lat) && !empty($v->employee_current_long) && $v->employee_current_lat!=0 && $v->employee_current_long!=0){
+                $markers[] = $v;
+            }
+        }
+        return view('job.location_tracking', ['details' => $details, 'related' => $relatedCandidates,'markers'=>$markers]);
+    }
 }

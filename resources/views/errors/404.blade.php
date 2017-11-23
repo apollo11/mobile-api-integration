@@ -1,29 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<div class="page-content-wrapper\">
-    <div class="page-content">
-        <div class="page-bar">
-            <div class="row">
-                <div class="col-md-12 page-404">
-                    <div class="number font-green"> 404</div>
-                    <div class="details">
-                        <h3>Oops! You're lost.</h3>
-                        <p> We can not find the page you're looking for.
-                            <br/>
-                            <a href="{{ url()->previous()  }}"> Return home </a> or try the search bar below. </p>
-                        <form action="#">
-                            <div class="input-group input-medium">
-                                <input type="text" class="form-control" placeholder="keyword...">
-                                <span class="input-group-btn">
-                                            <button type="submit" class="btn green">
-                                                <i class="fa fa-search"></i>
-                                            </button>
-                                        </span>
-                            </div>
-                            <!-- /input-group -->
-                        </form>
-                    </div>
-                </div>
-            </div>
+    <title>Service Unavailable</title>
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
+
+    <!-- Styles -->
+    <style>
+        html, body {
+            background-color: #fff;
+            color: #636b6f;
+            font-family: 'Raleway', sans-serif;
+            font-weight: 100;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .full-height {
+            height: 100vh;
+        }
+
+        .flex-center {
+            align-items: center;
+            display: flex;
+            justify-content: center;
+        }
+
+        .position-ref {
+            position: relative;
+        }
+
+        .content {
+            text-align: center;
+        }
+
+        .title {
+            font-size: 84px;
+        }
+    </style>
+</head>
+<body>
+<div class="flex-center position-ref full-height">
+    <div class="content">
+        <div class="title">
+            Page not found.
         </div>
+        <p><a href="{{ url()->previous() }}"> Go back to previous page.</a></p>
     </div>
 </div>
+</body>
+</html>

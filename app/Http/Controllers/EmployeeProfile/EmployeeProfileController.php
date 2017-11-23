@@ -6,12 +6,16 @@ use App\EmployeeProfile;
 use App\AdditionalInfo;
 use App\History;
 use App\Http\Traits\ProfileTrait;
+use App\Http\Traits\HttpResponse;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+
+use Validator;
 
 class EmployeeProfileController extends Controller
 {
     use ProfileTrait;
+    use HttpResponse;
 
     public function __construct()
     {
@@ -175,13 +179,49 @@ class EmployeeProfileController extends Controller
     * Update employee location
     */
     public function update_location(Request $request){
-        // print_r($request);
-         $user_id = $request->get('user_id');
-         $lat = $request->get('lat');
-         $long = $request->get('long');
-         echo $user_id.', lat:'.$lat.',long:'.$long;
+        $return_data = '';
+        $error_code = 120001;
+        
+        $user_id = $request->get('user_id');
+        $lat = $request->get('lat');
+        $long = $request->get('long');
 
-         
-        exit;
+        $schedule_id = $request->get('schedule_id');
+
+        $data = $request->all();
+        // $user = \App\User::find($user_id);
+        if(empty($user_id)  || !is_numeric($user_id) || empty($schedule_id)  || !is_numeric($schedule_id) ){
+            $errors = array('User id or schedule id is empty');
+            return $this->errorResponse($errors, 'Validation Error', $error_code, 400);
+        }else{
+            $schedule = \App\JobSchedule::find($schedule_id);
+            if(empty($schedule) || $schedule->user_id!=$user_id){
+                $errors = array('Job schedule not found');
+                return $this->errorResponse($errors, 'Validation Error', $error_code, 400);
+            }
+
+            $validator = $this->updateRules($data);
+            if ($validator->fails()) {
+                $errors = $validator->errors()->all();
+                $return_data = $this->errorResponse($errors, 'Validation Error', $error_code, 400);
+            } else {
+                $schedule->employee_current_lat = $lat;
+                $schedule->employee_current_long = $long;
+                $schedule->save();
+
+                $return_data = $this->ValidUseSuccessResp(200,true);
+            }
+        }
+        return $return_data;
+    }
+
+    public function updateRules(array $data)
+    {
+        $validations = [
+            'lat' => 'required|numeric|is_valid_lat',
+            'long' => 'required|numeric|is_valid_long',
+        ];
+
+        return Validator::make($data, $validations);
     }
 }

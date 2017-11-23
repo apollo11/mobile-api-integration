@@ -33,6 +33,7 @@ class AdditionalInfo extends Model
         , 'bank_statement'
         , 'nationality'
         , 'points'
+        , 'rate'
     ];
 
     /**
@@ -49,6 +50,7 @@ class AdditionalInfo extends Model
     {
         $additionalInfo = DB::table('users')
             ->leftJoin('additional_infos as info', 'info.user_id', '=', 'users.id')
+            // ->leftJoin('job_ratings','job_ratings.employee_id','=','users.id')
             ->select(
                 'users.id'
                 , 'users.name as userName'
@@ -63,7 +65,7 @@ class AdditionalInfo extends Model
                 , 'users.employee_status'
                 , 'users.social_google_id'
                 , 'users.social_fb_id'
-                , 'users.rate'
+//                , 'users.rate as employee_rate'
                 , 'users.employee_points'
                 , 'users.profile_image_path as profile_photo'
                 , 'users.business_manager as agent_name'
@@ -90,10 +92,13 @@ class AdditionalInfo extends Model
                 , 'info.nationality'
                 , 'info.points'
                 , 'info.bank_statement as bank_account'
+                , 'info.rate'
+                , 'info.address'
+                // , DB::raw( 'COALESCE( AVG( job_ratings.rating_point ),0) as avg_rating') 
             )
             ->where('users.id', '=', $id)
+            // ->groupBy('users.id')
             ->first();
-
         return $additionalInfo;
 
     }

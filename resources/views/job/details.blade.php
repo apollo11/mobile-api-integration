@@ -99,7 +99,7 @@
                                                         </tr>
                                                         <tr>
                                                             <td><strong>Job Location: </strong></td>
-                                                            <td>{{ $details->location }}</td>
+                                                            <td>{{ $details->geolocation_address }}</td>
                                                         </tr>
                                                         <tr>
                                                             <td><strong>Job Industry: </strong></td>
@@ -233,7 +233,7 @@
                                     <th>Nationality</th>
                                     <th>Religion</th>
                                     <th>Contact No</th>
-                                    <th> Email </th>
+                                    <th>Email</th>
                                     <th>Hourly Rate</th>
                                     <th> Hourly Job Rate</th>
                                     <th>Schedule Status</th>
@@ -253,10 +253,10 @@
                                         </td>
                                         <td>{{ $value->name }}</td>
                                         <td>{{ $value->nric_no }}</td>
-                                        <td> {{ $value->gender }}</td>
-                                        <td> {{ $value->birthdate }}</td>
-                                        <td> {{ $value->nationality }}</td>
-                                        <td> {{ $value->religion }}</td>
+                                        <td>{{ $value->gender }}</td>
+                                        <td>{{ $value->birthdate }}</td>
+                                        <td>{{ $value->nationality }}</td>
+                                        <td>{{ $value->religion }}</td>
                                         <td>{{ $value->mobile_no }}</td>
                                         <td>{{ $value->email }}</td>
                                         <td>{{ $value->rate }}</td>
@@ -283,6 +283,12 @@
                                                         <a href="{{ route('employee.details',['id' => $value->userid ])  }}">
                                                             <i class="fa fa-eye"></i> View </a>
                                                     </li>
+                                                    @if($value->schedule_status == 'completed')
+                                                    <li>
+                                                        <a data-toggle="modal" href="#rate_user" class="rate-user-btn"  data-rate-id="{{ $value->schedule_id }}" data-user-id="{{ $value->user_id }}">
+                                                            <i class="fa fa-star"></i> Rate </a>
+                                                    </li>
+                                                    @endif
                                                 </ul>
                                             </div>
                                         </td>
@@ -298,6 +304,58 @@
         </div>
     </div>
     @include('job.assign-job')
+
+    @include('employee.rate_job')
 @endsection
 
-@include('layouts.employee-datatables-include')
+
+@section('custom_page_css')
+    <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.16/css/jquery.dataTables.css">
+@stop
+
+@section('custom_page_js')
+<script src="{{ asset('assets/global/scripts/datatable.js') }}" type="text/javascript"></script>
+<script src="{{ asset('assets/global/plugins/datatables/datatables.min.js') }}" type="text/javascript"></script>
+<script src="{{ asset('assets/pages/scripts/table-datatables-buttons.min.js') }}" type="text/javascript"></script>
+<script src="{{ asset('assets/global/plugins/bootstrap-rating-input.min.js') }}" type="text/javascript"></script>
+<script src="{{ asset('assets/layouts/layout/scripts/rate_job.js') }}" type="text/javascript"></script>
+<script>
+    $(document).ready(function() {
+        $('#employee-table').DataTable({
+            dom: 'Bfrtip',
+            buttons: [
+                { "extend": 'excel', "text":'Export',"className": 'btn sbold red' }
+            ],
+            autoFill: true,
+    //                "scrollCollapse": true,
+            "scrollY":"500",
+            "scrollX" : true,
+            "sScrollXInner": "100%",
+        });
+
+
+        $('.rate-user-btn').click(function(){
+            var rate_id = $(this).data('rate-id');
+            var user_id = $(this).data('user-id');
+            if(rate_id==null || rate_id=='' || user_id==null || user_id==''){return false;}
+            
+            resetValues();
+            
+            /*get info for pop up*/
+            var url = '{{url("employee/job/detail")}}/'+user_id+'/'+rate_id;
+            rate_getPopUpJobDetail(url, user_id,rate_id);
+            /*get info for pop up*/
+        });
+
+        $("#rating-form").submit(function(e) {
+            var user_id = $('.submit-rating-btn').data('user_id');
+            var rate_id = $('.submit-rating-btn').data('rate_id');
+
+            var url = '{{url("employee/job/rate_job")}}/'+user_id+'/'+rate_id;
+            rate_submitJobRating(url);
+            
+            e.preventDefault(); 
+        });
+    });
+</script>
+@stop

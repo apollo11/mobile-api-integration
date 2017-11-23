@@ -89,7 +89,7 @@
                                         <th>Employees Required</th>
                                         <th>Employees Applied</th>
                                         <th>Rate</th>
-                                        <th>Job Date & Time</th>
+                                        <th>Job Date &amp; Time</th>
                                         <th>Business Manager</th>
                                         <th>Job Location</th>
                                         <th>Status</th>
@@ -97,6 +97,7 @@
                                     </tr>
                                     </thead>
                                     <tbody>
+                                    <?php $currenttime = new DateTime('');?>
                                     @foreach($job as $value)
                                     <tr class="odd gradeX">
                                         <td>
@@ -112,10 +113,10 @@
                                         <td> <a href="{{ route('job.details',['id' =>  $value->id])  }}"> {{ $value->job_title }} </a></td>
                                         <td>{{ $value->no_of_person }}</td>
                                         <td><a href="#">0 </a></td>
-                                        <td> {{ '$'.$value->rate.'/hr' }}</td>
-                                        <td> {{ Carbon\Carbon::parse($value->start_date)->format('H:i:s d-m-Y') }}</td>
-                                        <td> {{ $value->business_manager }}</td>
-                                        <td>{{ $value->location }}</td>
+                                        <td>{{ '$'.$value->rate.'/hr' }}</td>
+                                        <td data-order="{{ Carbon\Carbon::parse($value->start_date)->format('d-m-Y H:i:s') }}">{{ Carbon\Carbon::parse($value->start_date)->format('d-m-Y H:i:s') }}</td>
+                                        <td>{{ $value->business_manager }}</td>
+                                        <td>{{ $value->geolocation_address  }}</td>
 
                                         @if($value->status == 'inactive')
 
@@ -170,6 +171,13 @@
                                                             <i class="fa fa-tasks"></i> Assign
                                                         </a>
                                                     </li>
+
+                                                     <?php $job_date = (new DateTime($value->start_date))->modify('-1 hour'); ?>
+                                                        @if ($currenttime > $job_date)
+                                                            <li><a href="{{ route('job.location_tracking',['id' => $value->id]) }}">
+                                                                    <i class="fa fa-edit"></i> Track Location </a>
+                                                            </li>
+                                                        @endif
                                                     @endif
                                                 </ul>
                                             </div>
@@ -203,4 +211,4 @@
     
 @endsection
 
-@include('layouts.employee-datatables-include')
+@include('layouts.employee-datatables-include',['title'=>'List of jobs'])

@@ -183,20 +183,20 @@
     <script src="{{ asset('assets/global/plugins/amcharts/amcharts/themes/light.js') }}" type="text/javascript"></script>
     <script src="{{ asset('assets/global/plugins/amcharts/amcharts/themes/patterns.js') }}" type="text/javascript"></script>
     <script src="{{ asset('assets/global/plugins/amcharts/amcharts/themes/chalk.js') }}" type="text/javascript"></script>
-    <script src="{{ asset('assets/global/plugins/amcharts/ammap/ammap.js') }}" type="text/javascript"></script>
-    <script src="{{ asset('assets/global/plugins/amcharts/ammap/maps/js/worldLow.js') }}" type="text/javascript"></script>
+    <!-- <script src="{{ asset('assets/global/plugins/amcharts/ammap/ammap.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('assets/global/plugins/amcharts/ammap/maps/js/worldLow.js') }}" type="text/javascript"></script> -->
     <script src="{{ asset('assets/global/plugins/amcharts/amstockcharts/amstock.js') }}" type="text/javascript"></script>
 
     <script src="{{ asset('assets/global/plugins/fullcalendar/fullcalendar.min.js') }}" type="text/javascript"></script>
     <script src="{{ asset('assets/global/plugins/horizontal-timeline/horizontal-timeline.js') }}" type="text/javascript"></script>
 
-    <script src="{{ asset('assets/global/plugins/jqvmap/jqvmap/jquery.vmap.js') }}" type="text/javascript"></script>
+   <!--  <script src="{{ asset('assets/global/plugins/jqvmap/jqvmap/jquery.vmap.js') }}" type="text/javascript"></script>
     <script src="{{ asset('assets/global/plugins/jqvmap/jqvmap/maps/jquery.vmap.russia.js') }}" type="text/javascript"></script>
     <script src="{{ asset('assets/global/plugins/jqvmap/jqvmap/maps/jquery.vmap.world.js') }}" type="text/javascript"></script>
     <script src="{{ asset('assets/global/plugins/jqvmap/jqvmap/maps/jquery.vmap.europe.js') }}" type="text/javascript"></script>
     <script src="{{ asset('assets/global/plugins/jqvmap/jqvmap/maps/jquery.vmap.germany.js') }}" type="text/javascript"></script>
     <script src="{{ asset('assets/global/plugins/jqvmap/jqvmap/maps/jquery.vmap.usa.js') }}" type="text/javascript"></script>
-    <script src="{{ asset('assets/global/plugins/jqvmap/jqvmap/data/jquery.vmap.sampledata.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('assets/global/plugins/jqvmap/jqvmap/data/jquery.vmap.sampledata.js') }}" type="text/javascript"></script> -->
     <script src="{{ asset('assets/global/plugins/flot/jquery.flot.min.js') }}" type="text/javascript"></script>
     <script src="{{ asset('assets/global/plugins/flot/jquery.flot.resize.min.js') }}" type="text/javascript"></script>
     <script src="{{ asset('assets/global/plugins/flot/jquery.flot.categories.min.js') }}" type="text/javascript"></script>
@@ -254,20 +254,20 @@
                 $('#birthdate').datetimepicker();
             });
 
-            $("#myModal").on("show", function() {    // wire up the OK button to dismiss the modal when shown
-                $("#myModal a.btn").on("click", function(e) {
-                    console.log("button pressed");   // just as an example...
-                    $("#myModal").modal('hide');     // dismiss the dialog
-                });
-            });
+            // $("#myModal").on("show", function() {    // wire up the OK button to dismiss the modal when shown
+            //     $("#myModal a.btn").on("click", function(e) {
+            //         console.log("button pressed");   // just as an example...
+            //         $("#myModal").modal('hide');     // dismiss the dialog
+            //     });
+            // });
             
-            $("#myModal").on("hide", function() {    // remove the event listeners when the dialog is dismissed
-                $("#myModal a.btn").off("click");
-            });
+            // $("#myModal").on("hide", function() {    // remove the event listeners when the dialog is dismissed
+            //     $("#myModal a.btn").off("click");
+            // });
 
-            $("#myModal").on("hidden", function() {  // remove the actual elements from the DOM when fully hidden
-                $("#myModal").remove();
-            });
+            // $("#myModal").on("hidden", function() {  // remove the actual elements from the DOM when fully hidden
+            //     $("#myModal").remove();
+            // });
 
             $("#profile-img").modal({                    // wire up the actual modal functionality and show the dialog
                 "backdrop"  : "static",

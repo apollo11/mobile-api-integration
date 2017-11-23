@@ -83,7 +83,14 @@ class JobScheduleController extends Controller
 
             } elseif (count($validateSched) > 0) {
 
-                $output = $this->errorResponse(['You have an schedule that overlaps with this job start date or end date.'], 'Apply Failure', 1100014, 400);
+                if($validateSched->job_status == "accepted") {
+
+                    $output = $this->errorResponse(['You have a schedule that overlaps with this job start date or end date.'], 'Apply Failure', 1100014, 400);
+
+                } else {
+                    $output = $this->errorResponse(['You have a pending schedule that overlaps with this job start date or end date.'], 'Apply Failure', 1100014, 400);
+                }
+
             } else {
 
                 $statusPoints = $this->comparePoints($userId);

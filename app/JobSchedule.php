@@ -78,6 +78,7 @@ class JobSchedule extends Model
                 , 'employer.profile_image_path'
                 , 'employer.employee_status as status'
                 , 'employer.id as employer_id'
+                , 'employer.rate as employer_rate'
                 , 'jobs.description as job_description'
                 , 'jobs.location'
                 , 'jobs.job_title'
@@ -169,6 +170,7 @@ class JobSchedule extends Model
                 , 'employer.company_name'
                 , 'employer.profile_image_path'
                 , 'employer.employee_status as status'
+                , 'employer.rate as employer_rate'
                 , 'jobs.description as job_description'
                 , 'jobs.location'
                 , 'jobs.job_title'
@@ -206,12 +208,18 @@ class JobSchedule extends Model
      * @param $id
      * @return mixed
      */
-    public function getAvailJobsByUser($id)
+    public function getAvailJobsByUser($id,$employer_id='')
     {
+        echo $employer_id;
         $jobs = DB::table('users')
             ->join('job_schedules', 'job_schedules.user_id', '=', 'users.id')
             ->leftJoin('jobs', 'jobs.id', '=', 'job_schedules.job_id')
             ->leftJoin('users as employee', 'employee.id', '=', 'jobs.user_id')
+            ->leftJoin('job_ratings', function($join)
+                 {
+                     $join->on('job_schedules.id', '=', 'job_ratings.job_schedule_id');
+                     $join->on('job_schedules.user_id','=','job_ratings.employee_id');
+                 })
             ->select(
                   'job_schedules.id as schedule_id'
                 , 'job_schedules.user_id'
@@ -230,8 +238,13 @@ class JobSchedule extends Model
                 , 'jobs.rate'
                 , 'jobs.id'
                 , 'jobs.geolocation_address'
+                , 'job_ratings.rating_point'
+                , 'job_ratings.rating_comment'
             )
             ->where('users.id' , '=', $id)
+            ->when(!empty($employer_id), function ($query) use ($employer_id) {
+                return $query->where('jobs.user_id', $employer_id);
+            })
             ->whereIn('job_schedules.job_status',[
                 'accepted'
                 , 'cancelled'
@@ -245,6 +258,51 @@ class JobSchedule extends Model
 
         return $jobs;
     }
+
+    /**
+     * @param $id
+     * @return mixed
+     */
+    public function getJobByUser($user_id,$job_id)
+    {
+        $jobs = DB::table('job_schedules')
+        ->join('users','job_schedules.user_id', '=', 'users.id')
+        ->leftJoin('jobs', 'jobs.id', '=', 'job_schedules.job_id')
+        ->leftJoin('users as employer', 'employer.id', '=', 'jobs.user_id')
+        ->leftJoin('job_ratings', function($join)
+                 {
+                     $join->on('job_schedules.id', '=', 'job_ratings.job_schedule_id');
+                     $join->on('job_schedules.user_id','=','job_ratings.employee_id');
+                 })
+        ->select(
+                'job_schedules.job_status as schedule_status'
+                , 'job_schedules.checkin_datetime'
+                , 'job_schedules.checkout_datetime'
+                , 'jobs.job_title'
+                , 'jobs.job_date'
+                , 'jobs.location'
+                , 'jobs.job_date as start_date'
+                , 'jobs.id as jobid'
+                , 'employer.company_name'
+                , 'job_ratings.rating_point'
+                , 'job_ratings.rating_comment'
+            )
+        ->where('job_schedules.user_id' , '=', $user_id)
+        ->where('job_schedules.id' , '=', $job_id)
+        ->whereIn('job_schedules.job_status',[
+                'accepted'
+                , 'cancelled'
+                , 'completed'
+                , 'rejected'
+                , 'auto_complete'
+                , 'auto_cancelled'
+                , 'pending'
+            ])
+            ->first();
+
+        return $jobs;
+    }
+
 
     /**
      * @param $id
@@ -281,6 +339,7 @@ class JobSchedule extends Model
                 , 'info.birthdate'
                 , 'info.religion'
                 , 'info.nationality'
+                , 'info.rate'
 
             )
             ->where('job_schedules.job_id' , '=', $id)
@@ -344,13 +403,7 @@ class JobSchedule extends Model
     public function schedConflict($userId, $startDate, $endDate)
     {
         $sched = DB::table('job_schedules')
-            ->select('job_schedules.job_id as schedId'
-                , 'job_schedules.user_id as schedUserId'
-                , 'users.id as userId'
-                , 'jobs.id as jobId'
-                , 'jobs.job_date as start_date'
-                , 'jobs.end_date'
-            )
+            ->select('job_schedules.job_id as schedId' ,'job_schedules.job_status')
             ->join('users', 'users.id', '=', 'job_schedules.user_id')
             ->join('jobs', 'jobs.id', '=', 'job_schedules.job_id')
             ->where(function ($query) use ($startDate, $endDate) {
@@ -363,9 +416,9 @@ class JobSchedule extends Model
                         $query->where('jobs.end_date', '>=', $endDate);
                 });
             })
-            ->where('job_schedules.job_status', 'accepted')
+            ->whereIn('job_schedules.job_status', ['accepted','pending'])
             ->where('job_schedules.user_id', $userId)
-            ->get();
+            ->first();
 
         return $sched;
     }
@@ -399,4 +452,21 @@ class JobSchedule extends Model
         return $points;
     }
 
+
+    public function getCandidatesLocation($job_id){
+        $results = DB::table('job_schedules')
+        ->leftjoin('users','users.id','=','job_schedules.user_id')
+        ->select(
+                'job_schedules.id',
+                'job_schedules.user_id',
+                'job_schedules.employee_current_lat',
+                'job_schedules.employee_current_long',
+                'users.name'
+                )
+        ->where('job_schedules.job_id',$job_id)
+        ->whereIn('job_schedules.job_status', ['accepted','completed','approved'])
+        ->get();
+
+        return $results;
+    }
 }
