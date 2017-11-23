@@ -25,13 +25,13 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('edit/{id}','Employee\EmployeeController@edit')->name('employee.edit')->middleware('can:employee-view');
         Route::post('/signup', 'Employee\EmployeeController@signup')->name('employee.signup')->middleware('can:employee-view');
 
-        Route::post('/pending/{id}', 'Employee\EmployeeController@pendingStatus')->name('employee.pending')->middleware('can:employee-edit');
-        Route::post('/approve/{id}', 'Employee\EmployeeController@approveStatus')->name('employee.approve')->middleware('can:employee-edit');
-        Route::post('/reject/{id}', 'Employee\EmployeeController@rejectUser')->name('employee.reject')->middleware('can:employee-edit');
-        Route::post('/upload/{id}', 'Employee\EmployeeController@uploadInfoUser')->name('employee.upload')->middleware('can:employee-edit');
+        Route::post('/pending/{id}', 'Employee\EmployeeController@pendingStatus')->name('employee.pending')->middleware('can:employee-view');
+        Route::post('/approve/{id}', 'Employee\EmployeeController@approveStatus')->name('employee.approve')->middleware('can:employee-view');
+        Route::post('/reject/{id}', 'Employee\EmployeeController@rejectUser')->name('employee.reject')->middleware('can:employee-view');
+        Route::post('/upload/{id}', 'Employee\EmployeeController@uploadInfoUser')->name('employee.upload')->middleware('can:employee-view');
         Route::post('delete','Employee\EmployeeController@destroy')->name('employee.destroy-all')->middleware('can:employee-delete');
-        Route::post('delete/{id}','Employee\EmployeeController@destroyOne')->name('employee.destroy-one')->middleware('can:employee-delete');
-        Route::post('update/{id?}', 'Employee\EmployeeController@update')->name('employee.update')->middleware('can:employee-edit');
+        Route::post('delete/{id}','Employee\EmployeeController@destroyOne')->name('employee.destroy-one')->middleware('can:employee-view');
+        Route::post('update/{id?}', 'Employee\EmployeeController@update')->name('employee.update')->middleware('can:employee-view');
 
         Route::post('update/profile/img/{id?}', 'Employee\EmployeeController@updateProfileImg')->name('employee.edit.img');
         Route::post('update/profile/frontic/{id?}', 'Employee\EmployeeController@updateFrontIc')->name('employee.edit.frontic');
