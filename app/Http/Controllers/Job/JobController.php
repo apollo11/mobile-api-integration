@@ -521,6 +521,7 @@ class JobController extends Controller
      */
     public function returnToken()
     {
+        $device = array();
         $token = new DeviceToken();
         $tokenValue = $token->listDeviceToken();
         foreach ($tokenValue as $value) {
@@ -638,9 +639,8 @@ class JobController extends Controller
         $employee = new Employee();
 
         $details = $job->jobAdminDetails($id);
-        // $relatedCandidates = $schedule->getRelatedCandidates($id);
-        // $employeeList = $employee->employeeLists($param);
-
+        if(empty($details)){abort(404);}
+      
         $relatedCandidates = $schedule->getCandidatesLocation($id);
         $markers = array();
         foreach($relatedCandidates as $k=>$v){
@@ -648,10 +648,6 @@ class JobController extends Controller
                 $markers[] = $v;
             }
         }
-        // print_r($relatedCandidates);
-        // print_r($markers);
-
         return view('job.location_tracking', ['details' => $details, 'related' => $relatedCandidates,'markers'=>$markers]);
     }
-
 }

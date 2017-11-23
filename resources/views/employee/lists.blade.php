@@ -185,4 +185,4 @@
     </div>
 @endsection
 
-@include('layouts.employee-datatables-include')
+@include('layouts.employee-datatables-include',['title'=>'Employees'])

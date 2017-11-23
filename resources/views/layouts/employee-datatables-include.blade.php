@@ -11,10 +11,10 @@
 	    $('#employee-table').DataTable({
 	        dom: 'Bfrtip',
 	        buttons: [
-	            { "extend": 'excel', "text":'Export',"className": 'btn sbold red' }
+	            { "extend": 'excel', "text":'Export',"className": 'btn sbold red' @if(!empty($title)) ,"title" : "{{ $title }}" @endif  }
 	        ],
 	        autoFill: true,
-	//                "scrollCollapse": true,
+	
 	        "scrollY":"500",
 	        "scrollX" : true,
 	        "sScrollXInner": "100%",

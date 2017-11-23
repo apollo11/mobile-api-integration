@@ -28,7 +28,7 @@
                             <div class="portlet-title">
                                 <div class="caption font-dark">
                                     <i class="icon-settings font-dark"></i>
-                                    <span class="caption-subject bold uppercase">Employers</span>
+                                    <span class="caption-subject bold uppercase">Registered Employers</span>
                                 </div>
                                 {{ csrf_field() }}
                                 <div class="actions">
@@ -113,4 +113,4 @@
     </div>
 @endsection
 
-@include('layouts.employee-datatables-include')
+@include('layouts.employee-datatables-include',['title'=>'Registered Employers'])

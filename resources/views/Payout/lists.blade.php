@@ -25,7 +25,7 @@
                             <div class="portlet-title">
                                 <div class="caption font-dark">
                                     <i class="icon-settings font-dark"></i>
-                                    <span class="caption-subject bold uppercase">list of Jobs</span>
+                                    <span class="caption-subject bold uppercase">Payouts</span>
                                 </div>
                                 <div class="actions">
                                     <a href="/payout/lists?payment-status=pending" class="btn sbold green"> Pending</a>
@@ -128,4 +128,4 @@
 
 @endsection
 
-@include('layouts.employee-datatables-include')
+@include('layouts.employee-datatables-include',['title'=>'Payouts'])
