@@ -12,9 +12,6 @@
 	$(document).ready(function() {
 	    table = $('#employee-table').DataTable({
 	        dom: 'Bfrtip',
-	        buttons: [
-	            { "extend": 'excel', "text":'Export',"className": 'btn sbold red' }
-	        ],
 	        autoFill: true,
 	//                "scrollCollapse": true,
 	        "scrollY":"500",

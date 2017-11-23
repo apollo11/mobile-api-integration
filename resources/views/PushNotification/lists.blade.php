@@ -10,13 +10,13 @@
                             <div class="portlet-title">
                                 <div class="caption font-dark">
                                     <i class="icon-settings font-dark"></i>
-                                    <span class="caption-subject bold uppercase">Recipient Group List</span>
+                                    <span class="caption-subject bold uppercase">Push Notification List</span>
                                 </div>
                                 {{ csrf_field() }}
                                 @if(Auth::user()->role_id == 0)
                                     <div class="actions">
-                                        <a href="{{ route('recipient.create') }}"
-                                           class="btn sbold green"> Add New
+                                        <a href="{{ route('pushnotification.create') }}"
+                                           class="btn sbold green"> Add New Notification
                                             <i class="fa fa-plus"></i>
                                         </a>
 
@@ -53,33 +53,43 @@
                                        id="employee-table">
                                     <thead>
                                     <tr>
-                                        <th>
-                                            <label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">
-                                                <input id ="group-checkable" type="checkbox" class="group-checkable"
-                                                       data-set="#employee-table .checkboxes"/>
-                                                <span></span>
-                                            </label>
-                                        </th>
-                                        <th>Recipient Group Name</th>
-                                        <th>Date Created</th>
-                                        <th>No. of Members</th>
-                                        <th>Email</th>
+                                        <th>Message</th>
+                                        <th>Recipient Group</th>
+                                        <th>Date Sent</th>
+                                        <th>Create Date</th>
+                                        <th>Action</th>
                                     </tr>
                                     </thead>
                                     <tbody>
                                     @foreach($list as $key)
                                     <tr>
-                                        <td>
-                                            <label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">
-                                                <input id ="group-checkable" type="checkbox" class="group-checkable"
-                                                       data-set="#employee-table .checkboxes"/>
-                                                <span></span>
-                                            </label>
-                                        </td>
-                                        <td>{{ $key->group_name }}</td>
+                                        <td>{{ $key->message }}</td>
+                                        <td>{{ $key->job_id }}</td>
                                         <td>{{ $key->created_at }}</td>
-                                        <td>0</td>
-                                        <td>{{ $key->email }}</td>
+                                        <td>{{ $key->updated_at }}</td>
+
+                                        <td>
+                                            <div class="btn-group">
+                                                <button class="btn btn-xs green dropdown-toggle" type="button"
+                                                        data-toggle="dropdown" aria-expanded="false"> Actions
+                                                    <i class="fa fa-angle-down"></i>
+                                                </button>
+                                                <ul class="dropdown-menu" role="menu">
+                                                    <li>
+                                                        <a href="{{ route('pushnotification.delete',['id' =>  $key->id]) }}">
+                                                        <i class="fa fa-trash"></i> Delete</a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="{{ route('pushnotification.edit',['id' =>  $key->id]) }}">
+                                                        <i class="fa fa-edit"></i> Edit </a>
+                                                    </li>
+                                                    <li>
+                                                        <i class="fa fa-eye"></i> View </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </td>
+
                                     </tr>
                                     @endforeach
                                     </tbody>
@@ -93,4 +103,4 @@
     </div>
 @endsection
 
-@include('layouts.employee-datatables-include')
+@include('layouts.pushnotification-datatables-include')

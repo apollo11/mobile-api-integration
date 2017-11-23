@@ -52,9 +52,11 @@ Route::group(['middleware' => ['auth']], function () {
     });
 
     Route::prefix('industry')->group(function () {
-        Route::get('/create', 'Industry\IndustryController@create')->name('industry.create');
         Route::get('/lists', 'Industry\IndustryController@index')->name('industry.lists');
+        Route::get('/create', 'Industry\IndustryController@create')->name('industry.create');
         Route::post('/add', 'Industry\IndustryController@store')->name('industry.add');
+        Route::get('edit/{id}', 'Industry\IndustryController@edit')->name('industry.edit');
+        Route::POST('update/{id}', 'Industry\IndustryController@update')->name('industry.update');
     });
 
     Route::prefix('location')->group(function () {
@@ -72,6 +74,12 @@ Route::group(['middleware' => ['auth']], function () {
        Route::post('multiple/{id?}/{param?}','Job\JobController@destroy')->name('job.multiple');
        Route::get('details/{id}','Job\JobController@details')->name('job.details');
        Route::post('/assign', 'AssignJob\AssignJobsController@store')->name('assign.job');
+
+       Route::get('/getJobsSeekers/{id?}','Job\JobController@getJobsSeekers')->name('job.getJobsSeekers');
+
+
+       Route::POST('/notification/{id?}','Job\JobController@sendNotification')->name('job.sendNotification');
+       Route::get('/lists/{notification_status?}','Job\JobController@index')->name('job.lists');
 
     });
 
@@ -92,6 +100,15 @@ Route::group(['middleware' => ['auth']], function () {
        Route::post('rejected/{id}/{userId}', 'Payout\PayoutController@rejectJob')->name('payout.rejected');
        Route::post('accepted/{id}/{userId}', 'Payout\PayoutController@acceptedJob')->name('payout.accepted');
        Route::post('multiprocessed', 'Payout\PayoutController@multiProcessed')->name('payout.multiple');
+    });
+
+    Route::prefix('pushnotification')->group(function() {
+        Route::get('lists', 'PushNotification\PushNotificationController@all')->name('pushnotification.lists');
+        Route::get('create', 'PushNotification\PushNotificationController@create')->name('pushnotification.create');
+        Route::post('add', 'PushNotification\PushNotificationController@add')->name('pushnotification.add');
+        Route::get('edit/{id}', 'PushNotification\PushNotificationController@edit')->name('pushnotification.edit');
+        Route::POST('update', 'PushNotification\PushNotificationController@update')->name('pushnotification.update');
+        Route::get('delete/{id}', 'PushNotification\PushNotificationController@delete')->name('pushnotification.delete');
     });
 
     Route::prefix('recipient')->group(function() {

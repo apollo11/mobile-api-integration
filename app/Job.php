@@ -317,7 +317,6 @@ class Job extends Model
                 , 'jobs.job_date as start_date'
                 , 'jobs.created_at'
                 , 'jobs.end_date'
-                , 'jobs.contact_no'
                 , 'jobs.rate'
                 , 'jobs.no_of_person'
                 , 'jobs.contact_person'
@@ -336,12 +335,21 @@ class Job extends Model
                 , 'jobs.latitude'
                 , 'jobs.longitude'
                 , 'jobs.geolocation_address'
-
             )
             ->where('jobs.id', '=', $id)
             ->first();
 
         return $jobDetails;
+    }
+
+
+    /**
+     *get Unemployed candidates
+     */
+    public function getUnemployed()
+    {
+        $emp = DB::table('users')->get();
+        return $emp;
     }
 
     /**

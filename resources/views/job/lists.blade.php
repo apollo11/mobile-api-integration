@@ -45,7 +45,32 @@
                                     </a>
                                 </div>
                             </div>
-                            <div class="portlet-body">
+                            <div class="portlet-body job-lists-table">
+
+                                <div>
+                                    <div style="width: 40%; display: inline-block;">
+                                        <div class="input-group date" data-provide="datepicker">
+                                            <input type="text" class="form-control" id="min" placeholder="FROM">
+                                            <div class="input-group-addon">
+                                                <span class="glyphicon glyphicon-th"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div style="width: 40%; display: inline-block;">
+                                        <div class="input-group date" data-provide="datepicker">
+                                            <input type="text" class="form-control" id="max" placeholder="TO">
+                                            <div class="input-group-addon">
+                                                <span class="glyphicon glyphicon-th"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div style="display: inline-block; vertical-align: top;">
+                                        <button type="button" class="btn btn-info" onclick="filter()">Apply</button>
+                                    </div>
+                                </div>
+
                                 <table class="table table-striped table-bordered table-hover table-checkable order-column" id="employee-table">
                                     <thead>
                                     <tr>
@@ -140,6 +165,11 @@
                                                             <i class="fa fa-close"></i> Reject
                                                         </a>
                                                     </li>
+                                                    <li>
+                                                        <a href="{{ route('job.getJobsSeekers',['id' => $value->id]) }}">
+                                                            <i class="fa fa-tasks"></i> Assign
+                                                        </a>
+                                                    </li>
                                                     @endif
                                                 </ul>
                                             </div>
@@ -155,7 +185,22 @@
             </form>
         </div>
     </div>
-@endsection
 
+    @if($notification_status == "success")
+        <div id="notification_status_container" style="top: 50%; left: 50%; transform: translate('-50%','-50%'); position: absolute;">
+            Notification has been send successfully!
+        </div>
+    @elseif($notification_status == "failed")
+        <div id="notification_status_container" style="top: 50%; left: 50%; transform: translate('-50%','-50%'); position: absolute;">
+            Notification failed!
+        </div>
+    @endif
+    <script type="text/javascript">
+        setTimeout(function(){
+            $("#notification_status_container").hide()
+        }, 3000)
+    </script>
+    
+@endsection
 
 @include('layouts.employee-datatables-include')

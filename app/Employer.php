@@ -190,6 +190,7 @@ class Employer extends Model
         return $jobs;
     }
 
+
     public function userByMobile()
     {
         $jobs = DB::table('users')

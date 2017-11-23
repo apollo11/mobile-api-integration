@@ -73,7 +73,7 @@
 
              @if (Auth::user()->role_id == 0)
              <li {{{ ($current_route == 'industry.create' ? 'class=active' : '') }}}>
-                <a href="{{ route('industry.create') }}">
+                <a href="{{ route('industry.lists') }}">
                     <i class="icon-handbag"></i>
                     Industry</a>
             </li>
@@ -104,8 +104,8 @@
                     <span class="title">Admin Users</span>
                 </a>
             </li>
-            <li>
-                <a href="javascript:;">
+            <li {{{ ($current_route == 'pushnotification.lists' ? 'class=active' : '') }}}>
+                <a href="{{ route('pushnotification.lists') }}">
                     <i class="icon-settings"></i>
                     <span class="title">Push Notification</span>
                 </a>

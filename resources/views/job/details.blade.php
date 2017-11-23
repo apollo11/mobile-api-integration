@@ -189,7 +189,32 @@
 
                             <input class="btn sbold green" name="multiple" value="Delete" type="submit"/>
                         </div>
-                        <div class="portlet-body">
+                        <div class="portlet-body employer-details-table">
+
+                            <div>
+                                <div style="width: 40%; display: inline-block;">
+                                    <div class="input-group date" data-provide="datepicker">
+                                        <input type="text" class="form-control" id="min" placeholder="FROM">
+                                        <div class="input-group-addon">
+                                            <span class="glyphicon glyphicon-th"></span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div style="width: 40%; display: inline-block;">
+                                    <div class="input-group date" data-provide="datepicker">
+                                        <input type="text" class="form-control" id="max" placeholder="TO">
+                                        <div class="input-group-addon">
+                                            <span class="glyphicon glyphicon-th"></span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div style="display: inline-block; vertical-align: top;">
+                                    <button type="button" class="btn btn-info" onclick="filter()">Apply</button>
+                                </div>
+                            </div>
+                            
                             <table class="table table-striped table-bordered table-hover table-checkable order-column"
                                    id="employee-table">
                                 <thead>

@@ -27,9 +27,17 @@ trait OauthTrait
         $account = \App\User::where('nric_no', $nric)
             ->first();
 
+        // $user_id = $this->getDeviceToken($account['id']);
         return $account;
 
     }
+
+    // public function getDeviceToken($user_id)
+    // {
+    //     $user_device_token = \App\User::where('nric_no', $user_id)
+    //         ->first();
+    //     return $user_device_token;
+    // }
 
     /**
      * @param $mobile

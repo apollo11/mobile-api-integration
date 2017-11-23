@@ -115,7 +115,6 @@ class NotificationController extends Controller
         }
 
         return $result;
-
     }
 
     /**

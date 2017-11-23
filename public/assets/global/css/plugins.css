@@ -2434,3 +2434,16 @@ pre[class*="language-"] {
 
 .socicon-persona:before {
   content: ")"; }
+
+.employer-details-table .dt-buttons {
+  margin-top: 0 !important;
+  position: relative;
+  top: -102px;
+}
+
+.job-lists-table .dt-buttons {
+  margin-top: 0 !important;
+  position: relative;
+  top: -48px;
+  left: 5px;
+}

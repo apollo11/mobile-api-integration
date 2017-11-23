@@ -35,13 +35,13 @@ trait PushNotiftrait
                         'badge' => $data['badge'],
                         'type' => $data['type']
                     ],
-                    'registration_ids' => $data['registration_ids'],
-                    'priority' => 'high'
+                    'registration_ids' => $data['registration_ids']
+                    // 'priority' => 'high'
                 ];
 
                 $response = $client->request('POST',constant('FCM_ENDPOINT'), [
                     'headers' => [
-                        'Authorization' => 'key=AAAARF0JD0Q:APA91bE4FYvPVP6Yio1o4XJf0mt92OcZu6LJ6Ped7Zq-JEIf2_vruKiPduekmjTZAhFvzEh1KfW-boaIfZFeMGJvFj7mtNcL7WHFvGWuYastxGZqu_6yzFFcz_RLOpevKGnrS9P2tL-S'
+                        'Authorization' => 'key=AIzaSyBvyxjYHkMdHvGocO821JrUwj3ap2eo3MA'
                     ],
                     'json' => $map,
                 ]);

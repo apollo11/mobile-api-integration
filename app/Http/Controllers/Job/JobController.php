@@ -21,11 +21,13 @@ use App\Http\Traits\JobDetailsOutputTrait;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use App\Http\Traits\HttpResponse;
 
 class JobController extends Controller
 {
     use DateFormatDate;
     use JobDetailsOutputTrait;
+    use HttpResponse;
     use PushNotiftrait;
 
     private $request;
@@ -47,8 +49,9 @@ class JobController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index(Request $request, $notification_status = null)
     {
+        echo $notification_status;
         $role = Auth::user()->role;
 
         if($role=='employer'){
@@ -58,14 +61,14 @@ class JobController extends Controller
         }
 
         $param = [
-            'status' => $request->get('status'),
+            'status' => $request->get('status'),         
             'userid'=>$userid
         ];
 
 
         $jobsLists = $this->jobLists($param);
 
-        return view('job.lists', ['job' => $jobsLists,'role'=>$role]);
+        return view('job.lists', ['job' => $jobsLists,'role'=>$role, 'notification_status' => $notification_status]);
     }
 
     /**
@@ -263,6 +266,57 @@ class JobController extends Controller
         ]);
 
     }
+
+
+    /**
+     * Show the form for listing the jobs seekers.
+     *
+     * @param  int $id
+     * @return \Illuminate\Http\Response
+     */
+    public function getJobsSeekers($id)
+    {
+        $user = Auth::user();
+        $job = new Job();
+
+        $emp = $job->getUnemployed();
+
+        $details = $job->jobAdminDetails($id);
+        $location = $this->location();
+        $industry = $this->industry();
+        $nationality = $this->nationalityList();
+        $age = $this->age();
+
+        return view('job.job-seeker-list', [
+            'details' => $details
+            , 'employees' => $emp
+        ]);
+    }
+
+    public function sendNotification($id)
+    {
+        $data['title'] = "New Jobs Assigned to You";
+        $data["body"] = "You have been assigned a job successfully! Click here for more details";
+        $reg_id = ["cOz3btJoiZ0:APA91bG1b9LgJRuQAmkGLoXOzgWeijYtiJX28MPml0t-7EyYdxRdfsWouxnA3XdbAmPjOxWR7VzbEeIxrs2DBdiNwRIFLup--Eh-n8E4IOvykp7khWf9LV12Fde5dFNCvy2ReKPxGP1j"];
+        $data["registration_ids"] = $reg_id;
+        $data["badge"] = 1;
+        $data["type"] = "job-assign";
+        $data["job_id"] = $id;
+
+        // $result = $this->ValidUseSuccessResp(200, true);
+        // echo $result;
+
+        if ($this->pushNotif($data) == "200") {
+            // return redirect(route('job.lists'));
+            return redirect(route("job.lists",["success"]));
+        } else {
+            return redirect(route("job.lists",["failed"]));
+        }
+        
+    }
+
+    
+
 
     /**
      * Update the specified resource in storage.
