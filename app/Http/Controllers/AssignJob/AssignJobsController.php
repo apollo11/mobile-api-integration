@@ -73,7 +73,7 @@ class AssignJobsController extends Controller
             }
 
             for ($i = 0; $i < count($assigned); $i++) {
-                $jobs->assignJobs()->attach($assigned[$i]);
+                $jobs->assignJobs()->sync($assigned[$i]);
             }
 
             $result = redirect(route('job.details',['id' => $jobId]));
