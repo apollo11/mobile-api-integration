@@ -4,6 +4,7 @@ namespace App\Http\Controllers\CancelJob;
 
 use Validator;
 use Carbon\Carbon;
+use App\Settings;
 use App\CancelJob;
 use App\JobSchedule;
 use Illuminate\Http\Request;
@@ -78,18 +79,20 @@ class CancelJobController extends Controller
     public function deductCancelledJob($schedId)
     {
         $cancel = new CancelJob();
+        $settingsObj = new Settings();
+        $set = $settingsObj->allSettings();
         $output = $cancel->jobValidateDate($schedId);
 
         $ifDateAndSchedIsEmpty = !is_null($output) && $output->start_date;
-        $isValidJob = !is_null($cancel->validSched($schedId,  $output->user_id));
+        $isValidJob = !is_null($cancel->validSched($schedId, $output->user_id));
 
-        if($isValidJob && $ifDateAndSchedIsEmpty) {
+        if ($isValidJob && $ifDateAndSchedIsEmpty) {
             $diffHours = $this->validateDeduction($output->start_date);
 
             if ($diffHours > 72) {
-                return $cancel->deductionsPoints($output->user_id, 10);
+                return $cancel->deductionsPoints($output->user_id, abs($set->point_cancel_job_within_72_hours));
             } else {
-                return $cancel->deductionsPoints($output->user_id, 15);
+                return $cancel->deductionsPoints($output->user_id, abs($set->point_cancel_job_before_72_hours));
 
             }
         }

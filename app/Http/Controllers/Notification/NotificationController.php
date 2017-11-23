@@ -57,7 +57,7 @@ class NotificationController extends Controller
 
         } else {
 
-            $this->decductRejectNotif($jobId);
+            $this->decductRejectNotif($userId);
             $this->addtoSchedRejectedJob($jobId, $userId);
 
             $result = $this->ValidUseSuccessResp(200, true);
@@ -424,9 +424,9 @@ class NotificationController extends Controller
         $set = $settingsObj->allSettings();
         $points =  abs($set->point_reject_job);
 
-        $cancel->deductionsPoints($userId, (int) $points);
+        $result =$cancel->deductionsPoints($userId, $points);
 
-        return 'Success';
+        return $result;
 
     }
 
