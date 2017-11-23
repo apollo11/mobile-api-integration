@@ -88,7 +88,6 @@ class UserMgtController extends Controller
         $employer = new Employer();
         $details  = $mgt->user($id);
 
-
         return view('usermgt.details',
             [
               'details' => $details
@@ -149,7 +148,7 @@ class UserMgtController extends Controller
     }
 
     /**
-     * @param Requqest $request
+     * @param Request $request
      * @param $id
      * @return $this|\Illuminate\Http\RedirectResponse
      */
@@ -226,10 +225,14 @@ class UserMgtController extends Controller
 
         $user->deleteUserMgt($id);
 
-        return redirect()->back()->with('message', 'Record deleted successful saved.');
+        return redirect()->back()->with('message', 'Record deleted successful.');
 
     }
 
+    /**
+     * @param Request $request
+     * @return $this|\Illuminate\Http\RedirectResponse
+     */
     public function multiDestroy(Request $request)
     {
 
@@ -249,7 +252,7 @@ class UserMgtController extends Controller
 
             $user->multiDelete($multi['multicheck']);
 
-            $result = redirect()->back()->with('message', 'Record deleted successful saved.');
+            $result = redirect()->back()->with('message', 'Record deleted successful.');
         }
 
         return $result;

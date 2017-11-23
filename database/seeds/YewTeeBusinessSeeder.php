@@ -29,7 +29,7 @@ class YewTeeBusinessSeeder extends Seeder
                 'location' => 'Telok Blangah, Harbourfront',
                 'role' => 'Manager',
                 'choices' => 'female',
-                'job_image_path' => 'jobs/UIkbZBIFNWoxNyuMaTT3kDuxuBkVqN2eGsLUnTVi.jpeg',
+                'job_image_path' => 'jobs/0QgQiGo2akQ6BEn1zYz6K3HxjIMf6Pfxc4QWBp7p.jpeg',
                 'no_of_person' => 11,
                 'contact_person' => $faker->name,
                 'contact_no' => $faker->phoneNumber,

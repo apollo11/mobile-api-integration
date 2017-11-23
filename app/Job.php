@@ -44,7 +44,8 @@ class Job extends Model
         'latitude',
         'longitude',
         'geolocation_address',
-        'zip_code'
+        'zip_code',
+        'recipient_group'
     ];
 
     /**
