@@ -83,6 +83,7 @@ class JobController extends Controller
         $employee = $user->employerList();
         $age = $this->age();
         $businessMngr = \App\User::where('role', 'business_manager')->pluck('name', 'id');
+        $group = \App\RecipientGroup::all();
 
 
         return view('job.form', ['user' => $user
@@ -92,6 +93,8 @@ class JobController extends Controller
             , 'employer' => $employee
             , 'age' => $age
             , 'language' => $nationality->language()
+            , 'recipientGroup' => $group
+
         ], compact('businessMngr'));
     }
 
@@ -180,7 +183,8 @@ class JobController extends Controller
             'latitude' => $data['postal_code']['lat'],
             'longitude' => $data['postal_code']['lng'],
             'geolocation_address' => $data['address'],
-            'zip_code' => $data['zip_code']
+            'zip_code' => $data['zip_code'],
+            'recipient_group' => $data['recipient_group']
         ]);
 
         $this->lastInsertedId = $insertedId->id;
