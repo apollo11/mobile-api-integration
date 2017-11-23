@@ -51,7 +51,6 @@ class JobController extends Controller
      */
     public function index(Request $request, $notification_status = null)
     {
-        echo $notification_status;
         $role = Auth::user()->role;
 
 
@@ -83,7 +82,7 @@ class JobController extends Controller
         $location = new Location();
         $nationality = new Nationality();
         $industry = $this->industry();
-        $employee = $user->employerList();
+        $employer = $user->employerList();
         $age = $this->age();
         $businessMngr = \App\User::where('role', 'business_manager')->pluck('name', 'id');
 
@@ -92,7 +91,7 @@ class JobController extends Controller
             , 'industry' => $industry
             , 'location' => $location->locationLists()
             , 'nationality' => $nationality->nationalityDropdown()
-            , 'employer' => $employee
+            , 'employer' => $employer
             , 'age' => $age
             , 'language' => $nationality->language()
         ], compact('businessMngr'));

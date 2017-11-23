@@ -86,8 +86,8 @@
                                     <div class="col-md-12">
                                         <div class="btn-group">
                                             <div class="portlet-body">
-                                                <div class="table-scrollable">
-                                                    <table class="table table-hover">
+                                                <div class="">
+                                                    <table class="table table-hover bordered">
                                                         <tbody>
                                                         <tr>
                                                             @if($userDetails->userName)
@@ -404,8 +404,7 @@
                                 </div>
                             </div>
                             
-                            <table class="table table-striped table-bordered table-hover table-checkable order-column"
-                                   id="employee-table">
+                            <table class="table table-striped table-bordered table-hover table-checkable order-column" id="employee-table">
                                 <thead>
                                 <tr>
                                     <th>
@@ -425,6 +424,7 @@
                                 </thead>
                                 <tbody>
                                 @if(count($jobInfo) > 0)
+                                    <?php $currenttime = new DateTime('');?>
                                     @foreach($jobInfo as $jobs)
                                         @if(!empty($jobs->job_title))
                                         <tr class="odd gradeX" id="sche-{{ $jobs->schedule_id }}">
@@ -486,6 +486,13 @@
                                                                     <i class="fa fa-close"></i> Reject
                                                                 </a>
                                                             </li>
+
+                                                              <?php $job_date = (new DateTime($jobs->start_date))->modify('-1 hour'); ?>
+                                                                @if ($currenttime > $job_date )
+                                                                    <li><a href="{{ route('job.location_tracking',['id' => $jobs->id]) }}">
+                                                                            <i class="fa fa-map-marker"></i> Track Location </a>
+                                                                    </li>
+                                                                @endif
                                                         @endif
                                                         @if($jobs->schedule_status == 'pending')
                                                             <li>
