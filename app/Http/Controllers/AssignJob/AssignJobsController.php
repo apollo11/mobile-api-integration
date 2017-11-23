@@ -11,6 +11,12 @@ use App\Http\Controllers\Controller;
 
 class AssignJobsController extends Controller
 {
+    protected $assignedJob;
+
+    public function __construct()
+    {
+        $this->assignedJob = constant('ASSIGNED_JOB');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -69,6 +75,8 @@ class AssignJobsController extends Controller
                             'user_id' => $value->id
                         ],
                     ];
+
+                    $this->saveNotif($value->id, $jobs->id);
                 } else {
                     $assigned[] = [];
 
@@ -87,6 +95,12 @@ class AssignJobsController extends Controller
 
     }
 
+    /**
+     * Find Existing Job
+     * @param $userId
+     * @param $jobId
+     * @return mixed
+     */
     public function findExistingJob($userId, $jobId)
     {
         $data = new AssignJob();
@@ -95,6 +109,21 @@ class AssignJobsController extends Controller
         return $output;
 
     }
+
+    /**
+     * Saving Notification when assigning the Job
+     * @return mixed|static
+     */
+    public function saveNotif($userId, $jobId)
+    {
+        $save = \App\User::find($userId);
+        $save->userNotification()->create([
+            'job_id' => $jobId,
+            'type' => $this->assignedJob
+        ]);
+
+    }
+
 
     /**
      * Display the specified resource.

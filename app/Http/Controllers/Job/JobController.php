@@ -535,7 +535,6 @@ class JobController extends Controller
     }
 
     /**
-     * @param array $data
      * @return mixed|static
      */
     public function saveNotif()
