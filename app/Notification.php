@@ -38,13 +38,10 @@ class Notification extends Model
                             $join->on('job_schedules.job_id', '=', 'jobs.id')
                            ->where('job_schedules.user_id', '=', $userId);
                     })
-
-             ->leftJoin('assign_job_job', function ($join) use ($userId) {
-                    $join->on('assign_job_job.job_id as assign', '=', 'jobs.id')
-                        ->where('assign_job_job.user_id as assign', '=',$userId);
-                })
-
-            ->leftJoin('assign_job_job as assign', 'assign.job_id', '=', 'notif.job_id')
+            ->leftJoin('assign_job_job as assign', function ($join) use ($userId) {
+                $join->on('assign.job_id', '=', 'jobs.id')
+                    ->where('assign.user_id', '=', $userId);
+            })
             ->join('users as employer', 'employer.id', '=', 'jobs.user_id')
             ->select(
                   'notif.id'

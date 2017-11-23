@@ -456,12 +456,11 @@ class NotificationController extends Controller
                     'job_requirements' => $output->job_requirements,
                     'status' => $assigned,
                     'payment_status' => $output->payment_status,
-                    'is_assigned' => 0,
+                    'is_assigned' => is_null($output->is_assigned) ? 0 :$output->is_assigned,
                     'cancellation_fee' => 25,
                     'cancellation_charge' => 0
                 ]
             ];
-
         }
         $dataUndefined = !empty($details) ? $details : [];
 
