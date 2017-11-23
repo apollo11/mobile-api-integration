@@ -46,7 +46,6 @@ class AssignJobsController extends Controller
         $data = $request->input('user_id');
         $jobId =  $request->input('job_id');
 
-
         $multi['user_assign'] = is_null($data) ? [] : $data;
 
         $validator = Validator::make($multi, ['user_assign' => 'required']);
@@ -61,19 +60,23 @@ class AssignJobsController extends Controller
             $user = User::find($data);
             $jobs = Job::find($jobId);
 
-
             foreach ($user as $key => $value) {
-                $assigned[] = [
-                    $value->id => [
-                        'is_assigned' => true,
-                        'assign_job_id' => $jobs->id,
-                        'user_id' => $value->id
-                    ],
-                ];
+                if(!$this->findExistingJob($value->id, $jobs->id)) {
+                    $assigned[] = [
+                        $value->id => [
+                            'is_assigned' => true,
+                            'assign_job_id' => $jobs->id,
+                            'user_id' => $value->id
+                        ],
+                    ];
+                } else {
+                    $assigned[] = [];
+
+                }
             }
 
             for ($i = 0; $i < count($assigned); $i++) {
-                $jobs->assignJobs()->sync($assigned[$i]);
+                $jobs->assignJobs()->syncWithoutDetaching($assigned[$i]);
             }
 
             $result = redirect(route('job.details',['id' => $jobId]));
@@ -81,6 +84,15 @@ class AssignJobsController extends Controller
         }
 
         return $result;
+
+    }
+
+    public function findExistingJob($userId, $jobId)
+    {
+        $data = new AssignJob();
+        $output = $data->ifDataExist($userId, $jobId);
+
+        return $output;
 
     }
 

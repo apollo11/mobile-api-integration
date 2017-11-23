@@ -78,6 +78,17 @@ class AssignJob extends Model
         return $job;
     }
 
+    public function ifDataExist($userId, $jobId)
+    {
+        $result = DB::table('assign_job_job')
+            ->where('user_id',$userId)
+            ->where('assign_job_id', $jobId)
+            ->first();
+
+        return $result;
+
+    }
+
 
 
 }
