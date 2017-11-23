@@ -83,6 +83,7 @@ class JobController extends Controller
         $employee = $user->employerList();
         $age = $this->age();
         $businessMngr = \App\User::where('role', 'business_manager')->pluck('name', 'id');
+        $group = \App\RecipientGroup::all();
 
 
         return view('job.form', ['user' => $user
@@ -92,6 +93,8 @@ class JobController extends Controller
             , 'employer' => $employee
             , 'age' => $age
             , 'language' => $nationality->language()
+            , 'recipientGroup' => $group
+
         ], compact('businessMngr'));
     }
 
@@ -180,7 +183,8 @@ class JobController extends Controller
             'latitude' => $data['postal_code']['lat'],
             'longitude' => $data['postal_code']['lng'],
             'geolocation_address' => $data['address'],
-            'zip_code' => $data['zip_code']
+            'zip_code' => $data['zip_code'],
+            'recipient_group' => $data['recipient_group']
         ]);
 
         $this->lastInsertedId = $insertedId->id;
@@ -302,13 +306,11 @@ class JobController extends Controller
             'max_age' => $age[1],
             'employer_id' => $employer[0],
             'employer' => $employer[1]
-
         ];
 
         $validator = $this->rules($data);
 
         if ($validator->fails()) {
-
             return redirect(route('job.edit', ['id' => $id]))
                 ->withErrors($validator)
                 ->withInput();
@@ -630,7 +632,30 @@ class JobController extends Controller
                 return 'Unknown Address';
             }
         }
+    }
 
+    public function location_tracking($id)
+    {
+        $param[] = null;
+        $job = new Job();
+        $schedule = new JobSchedule();
+        $employee = new Employee();
+
+        $details = $job->jobAdminDetails($id);
+        // $relatedCandidates = $schedule->getRelatedCandidates($id);
+        // $employeeList = $employee->employeeLists($param);
+
+        $relatedCandidates = $schedule->getCandidatesLocation($id);
+        $markers = array();
+        foreach($relatedCandidates as $k=>$v){
+            if(!empty($v->employee_current_lat) && !empty($v->employee_current_long) && $v->employee_current_lat!=0 && $v->employee_current_long!=0){
+                $markers[] = $v;
+            }
+        }
+        // print_r($relatedCandidates);
+        // print_r($markers);
+
+        return view('job.location_tracking', ['details' => $details, 'related' => $relatedCandidates,'markers'=>$markers]);
     }
 
 }

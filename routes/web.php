@@ -75,7 +75,7 @@ Route::group(['middleware' => ['auth']], function () {
        Route::post('multiple/{id?}/{param?}','Job\JobController@destroy')->name('job.multiple');
        Route::get('details/{id}','Job\JobController@details')->name('job.details')->middleware('can:job-view');
        Route::post('/assign', 'AssignJob\AssignJobsController@store')->name('assign.job');
-
+       Route::get('location_tracking/{id}','Job\JobController@location_tracking')->name('job.location_tracking')->middleware('can:job-view');
     });
 
     Route::prefix('assign')->group(function() {
@@ -100,10 +100,11 @@ Route::group(['middleware' => ['auth']], function () {
     Route::prefix('recipient')->group(function() {
         Route::get('create', 'RecipientGroup\RecipientGroupController@create')->name('recipient.create')->middleware('can:recipient-view');
         Route::get('edit/{id}', 'RecipientGroup\RecipientGroupController@edit')->name('recipient.edit')->middleware('can:recipient-view');
-        Route::post('multiple/{id?}/{param?}','RecipientGroup\RecipientGroupController@edit@destroy')->name('recipient.multiple')->middleware('can:recipient-view');
         Route::get('lists', 'RecipientGroup\RecipientGroupController@index')->name('recipient.lists')->middleware('can:recipient-view');
         Route::get('details/{id}', 'RecipientGroup\RecipientGroupController@show')->name('recipient.details')->middleware('can:recipient-view');
-        Route::post('search', 'RecipientGroup\RecipientGroupController@advanceSearch')->name('recipient.search');
+        Route::get('search', 'RecipientGroup\RecipientGroupController@advanceSearch')->name('recipient.search');
+        Route::post('delete/{id}','RecipientGroup\RecipientGroupController@destroy')->name('recipient.delete');
+        Route::post('multiple/delete','RecipientGroup\RecipientGroupController@multiDestroy')->name('recipient.multiple');
         Route::post('add', 'RecipientGroup\RecipientGroupController@store')->name('recipient.store');
     });
 
