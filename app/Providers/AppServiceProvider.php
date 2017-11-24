@@ -15,7 +15,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
         Validator::extend('is_valid_lat', function($attribute, $value, $parameters, $validator) {
             $pattern = '/^[+\-]?[0-9]{1,2}\.[0-9]{0,8}\z/';
 

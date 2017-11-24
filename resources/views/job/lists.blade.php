@@ -45,7 +45,32 @@
                                     </a>
                                 </div>
                             </div>
-                            <div class="portlet-body">
+                            <div class="portlet-body job-lists-table">
+
+                                <div>
+                                    <div style="width: 40%; display: inline-block;">
+                                        <div class="input-group date" data-provide="datepicker">
+                                            <input type="text" class="form-control" id="min" placeholder="FROM">
+                                            <div class="input-group-addon">
+                                                <span class="glyphicon glyphicon-th"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div style="width: 40%; display: inline-block;">
+                                        <div class="input-group date" data-provide="datepicker">
+                                            <input type="text" class="form-control" id="max" placeholder="TO">
+                                            <div class="input-group-addon">
+                                                <span class="glyphicon glyphicon-th"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div style="display: inline-block; vertical-align: top;">
+                                        <button type="button" class="btn btn-info" onclick="filter()">Apply</button>
+                                    </div>
+                                </div>
+
                                 <table class="table table-striped table-bordered table-hover table-checkable order-column" id="employee-table">
                                     <thead>
                                     <tr>
@@ -64,7 +89,7 @@
                                         <th>Employees Required</th>
                                         <th>Employees Applied</th>
                                         <th>Rate</th>
-                                        <th>Job Date & Time</th>
+                                        <th>Job Date &amp; Time</th>
                                         <th>Business Manager</th>
                                         <th>Job Location</th>
                                         <th>Status</th>
@@ -72,6 +97,7 @@
                                     </tr>
                                     </thead>
                                     <tbody>
+                                    <?php $currenttime = new DateTime('');?>
                                     @foreach($job as $value)
                                     <tr class="odd gradeX">
                                         <td>
@@ -87,9 +113,9 @@
                                         <td> <a href="{{ route('job.details',['id' =>  $value->id])  }}"> {{ $value->job_title }} </a></td>
                                         <td>{{ $value->no_of_person }}</td>
                                         <td><a href="#">0 </a></td>
-                                        <td> {{ '$'.$value->rate.'/hr' }}</td>
-                                        <td> {{ Carbon\Carbon::parse($value->start_date)->format('H:i:s d-m-Y') }}</td>
-                                        <td> {{ $value->business_manager }}</td>
+                                        <td>{{ '$'.$value->rate.'/hr' }}</td>
+                                        <td data-order="{{ Carbon\Carbon::parse($value->start_date)->format('d-m-Y H:i:s') }}">{{ Carbon\Carbon::parse($value->start_date)->format('d-m-Y H:i:s') }}</td>
+                                        <td>{{ $value->business_manager }}</td>
                                         <td>{{ $value->geolocation_address  }}</td>
 
                                         @if($value->status == 'inactive')
@@ -140,6 +166,18 @@
                                                             <i class="fa fa-close"></i> Reject
                                                         </a>
                                                     </li>
+                                                    <li>
+                                                        <a href="{{ route('job.getJobsSeekers',['id' => $value->id]) }}">
+                                                            <i class="fa fa-tasks"></i> Assign
+                                                        </a>
+                                                    </li>
+
+                                                     <?php $job_date = (new DateTime($value->start_date))->modify('-1 hour'); ?>
+                                                        @if ($currenttime > $job_date && $value->status == 'active' )
+                                                            <li><a href="{{ route('job.location_tracking',['id' => $value->id]) }}">
+                                                                    <i class="fa fa-map-marker"></i> Track Location </a>
+                                                            </li>
+                                                        @endif
                                                     @endif
                                                 </ul>
                                             </div>
@@ -155,7 +193,22 @@
             </form>
         </div>
     </div>
+
+    @if($notification_status == "success")
+        <div id="notification_status_container" style="top: 50%; left: 50%; transform: translate('-50%','-50%'); position: absolute;">
+            Notification has been send successfully!
+        </div>
+    @elseif($notification_status == "failed")
+        <div id="notification_status_container" style="top: 50%; left: 50%; transform: translate('-50%','-50%'); position: absolute;">
+            Notification failed!
+        </div>
+    @endif
+    <script type="text/javascript">
+        setTimeout(function(){
+            $("#notification_status_container").hide()
+        }, 3000)
+    </script>
+    
 @endsection
 
-
-@include('layouts.employee-datatables-include')
+@include('layouts.employee-datatables-include',['title'=>'List of jobs'])

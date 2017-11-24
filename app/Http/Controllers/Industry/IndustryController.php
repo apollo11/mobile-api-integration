@@ -86,7 +86,8 @@ class IndustryController extends Controller
      */
     public function edit($id)
     {
-        //
+        $industry = Industry::find($id);
+        return view('industry.edit-form', ['industry'=>$industry]);
     }
 
     /**
@@ -98,7 +99,22 @@ class IndustryController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $data = $request->all();
+
+        $validator = $this->rules($data);
+
+        if ($validator->fails()) {
+
+            return redirect('industry/lists')
+                ->withErrors($validator)
+                ->withInput();
+        } else {
+            $industry = Industry::find($id);
+            $industry->name = $request->input('name');
+            $industry -> save();
+
+            return redirect('industry/lists');
+        }
     }
 
     /**

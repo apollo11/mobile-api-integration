@@ -21,11 +21,13 @@ use App\Http\Traits\JobDetailsOutputTrait;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use App\Http\Traits\HttpResponse;
 
 class JobController extends Controller
 {
     use DateFormatDate;
     use JobDetailsOutputTrait;
+    use HttpResponse;
     use PushNotiftrait;
 
     private $request;
@@ -47,7 +49,7 @@ class JobController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index(Request $request, $notification_status = null)
     {
         $role = Auth::user()->role;
 
@@ -66,7 +68,7 @@ class JobController extends Controller
 
         $jobsLists = $this->jobLists($param);
 
-        return view('job.lists', ['job' => $jobsLists, 'role' => $role ]);
+        return view('job.lists', ['job' => $jobsLists,'role'=>$role, 'notification_status' => $notification_status]);
     }
 
     /**
@@ -80,7 +82,7 @@ class JobController extends Controller
         $location = new Location();
         $nationality = new Nationality();
         $industry = $this->industry();
-        $employee = $user->employerList();
+        $employer = $user->employerList();
         $age = $this->age();
         $businessMngr = \App\User::where('role', 'business_manager')->pluck('name', 'id');
         $group = \App\RecipientGroup::all();
@@ -90,7 +92,7 @@ class JobController extends Controller
             , 'industry' => $industry
             , 'location' => $location->locationLists()
             , 'nationality' => $nationality->nationalityDropdown()
-            , 'employer' => $employee
+            , 'employer' => $employer
             , 'age' => $age
             , 'language' => $nationality->language()
             , 'recipientGroup' => $group
@@ -275,6 +277,57 @@ class JobController extends Controller
         ]);
 
     }
+
+
+    /**
+     * Show the form for listing the jobs seekers.
+     *
+     * @param  int $id
+     * @return \Illuminate\Http\Response
+     */
+    public function getJobsSeekers($id)
+    {
+        $user = Auth::user();
+        $job = new Job();
+
+        $emp = $job->getUnemployed();
+
+        $details = $job->jobAdminDetails($id);
+        $location = $this->location();
+        $industry = $this->industry();
+        $nationality = $this->nationalityList();
+        $age = $this->age();
+
+        return view('job.job-seeker-list', [
+            'details' => $details
+            , 'employees' => $emp
+        ]);
+    }
+
+    public function sendNotification($id)
+    {
+        $data['title'] = "New Jobs Assigned to You";
+        $data["body"] = "You have been assigned a job successfully! Click here for more details";
+        $reg_id = ["cOz3btJoiZ0:APA91bG1b9LgJRuQAmkGLoXOzgWeijYtiJX28MPml0t-7EyYdxRdfsWouxnA3XdbAmPjOxWR7VzbEeIxrs2DBdiNwRIFLup--Eh-n8E4IOvykp7khWf9LV12Fde5dFNCvy2ReKPxGP1j"];
+        $data["registration_ids"] = $reg_id;
+        $data["badge"] = 1;
+        $data["type"] = "job-assign";
+        $data["job_id"] = $id;
+
+        // $result = $this->ValidUseSuccessResp(200, true);
+        // echo $result;
+
+        if ($this->pushNotif($data) == "200") {
+            // return redirect(route('job.lists'));
+            return redirect(route("job.lists",["success"]));
+        } else {
+            return redirect(route("job.lists",["failed"]));
+        }
+        
+    }
+
+    
+
 
     /**
      * Update the specified resource in storage.
@@ -525,6 +578,7 @@ class JobController extends Controller
      */
     public function returnToken()
     {
+        $device = array();
         $token = new DeviceToken();
         $tokenValue = $token->listDeviceToken();
         foreach ($tokenValue as $value) {
@@ -642,9 +696,8 @@ class JobController extends Controller
         $employee = new Employee();
 
         $details = $job->jobAdminDetails($id);
-        // $relatedCandidates = $schedule->getRelatedCandidates($id);
-        // $employeeList = $employee->employeeLists($param);
-
+        if(empty($details)){abort(404);}
+      
         $relatedCandidates = $schedule->getCandidatesLocation($id);
         $markers = array();
         foreach($relatedCandidates as $k=>$v){
@@ -652,10 +705,6 @@ class JobController extends Controller
                 $markers[] = $v;
             }
         }
-        // print_r($relatedCandidates);
-        // print_r($markers);
-
         return view('job.location_tracking', ['details' => $details, 'related' => $relatedCandidates,'markers'=>$markers]);
     }
-
 }

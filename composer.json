@@ -7,10 +7,12 @@
     "require": {
         "php": ">=5.6.4",
         "cornford/googlmapper": "^2.28",
+        "edujugon/push-notification": "^2.2",
         "firebase/php-jwt": "~4.0",
         "fzaninotto/faker": "^1.7",
         "guzzlehttp/guzzle": "~6.0",
         "kreait/firebase-php": "^3.1",
+        "laravel-notification-channels/onesignal": "^1.0",
         "laravel/framework": "5.4.*",
         "laravel/passport": "^3.0",
         "laravel/socialite": "^3.0",

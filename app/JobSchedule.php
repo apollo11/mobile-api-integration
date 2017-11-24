@@ -208,8 +208,9 @@ class JobSchedule extends Model
      * @param $id
      * @return mixed
      */
-    public function getAvailJobsByUser($id)
+    public function getAvailJobsByUser($id,$employer_id='')
     {
+        echo $employer_id;
         $jobs = DB::table('users')
             ->join('job_schedules', 'job_schedules.user_id', '=', 'users.id')
             ->leftJoin('jobs', 'jobs.id', '=', 'job_schedules.job_id')
@@ -241,6 +242,9 @@ class JobSchedule extends Model
                 , 'job_ratings.rating_comment'
             )
             ->where('users.id' , '=', $id)
+            ->when(!empty($employer_id), function ($query) use ($employer_id) {
+                return $query->where('jobs.user_id', $employer_id);
+            })
             ->whereIn('job_schedules.job_status',[
                 'accepted'
                 , 'cancelled'

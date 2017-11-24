@@ -84,11 +84,11 @@
 
              @if (Auth::user()->role_id == 0)
                 @can('admin-view')
-                     <li {{{ ($current_route == 'industry.create' ? 'class=active' : '') }}}>
-                        <a href="{{ route('industry.create') }}">
-                            <i class="icon-handbag"></i>
-                            Industry</a>
-                    </li>
+                <li {{{ ($current_route == 'industry.lists' ? 'class=active' : '') }}}>
+                    <a href="{{ route('industry.lists') }}">
+                        <i class="icon-handbag"></i>
+                        Industry</a>
+                </li>
                 @endcan
             @can('admin-view')
              <li {{{ ($current_route == 'location.create' ? 'class=active' : '') }}}>
@@ -97,6 +97,7 @@
                     Location</a>
             </li>
             @endcan
+
             @can('reports-view')
             <li class="nav-item">
                 <a href="javascript:;" class="nav-link nav-toggle">
@@ -122,8 +123,8 @@
                 </li>
             @endcan
             @can('push-view')
-            <li>
-                <a href="javascript:;">
+             <li {{{ ($current_route == 'pushnotification.lists' ? 'class=active' : '') }}}>
+                <a href="{{ route('pushnotification.lists') }}">
                     <i class="icon-settings"></i>
                     <span class="title">Push Notification</span>
                 </a>

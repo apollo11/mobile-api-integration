@@ -22,7 +22,6 @@ class AssignJobsController extends Controller
         $jobsLists = $job->assignedJobs();
 
         return view('job.lists', ['job' => $jobsLists]);
-
     }
 
     /**
