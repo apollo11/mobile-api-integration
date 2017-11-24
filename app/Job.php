@@ -228,6 +228,7 @@ class Job extends Model
                 , 'jobs.job_date as start_date'
                 , 'jobs.created_at'
                 , 'jobs.end_date'
+                , 'jobs.contact_person'
                 , 'jobs.contact_no'
                 , 'jobs.rate'
                 , 'jobs.job_image_path'
