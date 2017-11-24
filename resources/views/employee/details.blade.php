@@ -60,7 +60,7 @@
                                 <span class="caption-subject bold uppercase">Employees</span>
                             </div>
                             <div class="actions">
-                                @can('employee-edit')
+                                @can('employee-view')
                                 <a class="btn sbold green"
                                    href="{{ route('employee.edit',['id' => $userDetails->id])  }}">
                                     Update</a>
@@ -297,14 +297,14 @@
                                                     <div class="mt-overlay">
                                                         <ul class="mt-info">
                                                             <li>
-                                                                <button @cannot('employee-edit') disabled @endcannot class="btn sbold red" data-toggle="modal" data-target="#profile-img">
+                                                                <button @cannot('employee-view') disabled @endcannot class="btn sbold red" data-toggle="modal" data-target="#profile-img">
                                                                    Update Profile Image
                                                                 </button>
                                                             </li>
                                                         </ul>
                                                     </div>
                                                 </div>
-                                                    <h3><button href="#" @cannot('employee-edit') disabled @endcannot class="btn sbold green" data-toggle="modal" data-target="#profile-img">Update Profile Image</button></h3>
+                                                    <h3><button href="#" @cannot('employee-view') disabled @endcannot class="btn sbold green" data-toggle="modal" data-target="#profile-img">Update Profile Image</button></h3>
                                             </div>
                                         </div>
                                         <div class="row">
@@ -318,14 +318,14 @@
                                                     <div class="mt-overlay">
                                                         <ul class="mt-info">
                                                             <li>
-                                                                <button @cannot('employee-edit') disabled @endcannot class="btn sbold red" data-toggle="modal" data-target="#profile-front-ic">
+                                                                <button @cannot('employee-view') disabled @endcannot class="btn sbold red" data-toggle="modal" data-target="#profile-front-ic">
                                                                     Update Front IC
                                                                 </button>
                                                             </li>
                                                         </ul>
                                                     </div>
                                                 </div>
-                                                <h3><button @cannot('employee-edit') disabled @endcannot href="#" class="btn sbold green" data-toggle="modal" data-target="#profile-front-ic">Update Front IC</button></h3>
+                                                <h3><button @cannot('employee-view') disabled @endcannot href="#" class="btn sbold green" data-toggle="modal" data-target="#profile-front-ic">Update Front IC</button></h3>
                                             </div>
                                         </div>
                                         <div class="row">
@@ -339,14 +339,14 @@
                                                     <div class="mt-overlay">
                                                         <ul class="mt-info">
                                                             <li>
-                                                                <button @cannot('employee-edit') disabled @endcannot class="btn sbold red" data-toggle="modal" data-target="#profile-back-ic">
+                                                                <button @cannot('employee-view') disabled @endcannot class="btn sbold red" data-toggle="modal" data-target="#profile-back-ic">
                                                                     Update Back IC
                                                                 </button>
                                                             </li>
                                                         </ul>
                                                     </div>
                                                 </div>
-                                                <h3><button @cannot('employee-edit') disabled @endcannot href="#" class="btn sbold green" data-toggle="modal" data-target="#profile-back-ic">Update Back IC</button></h3>
+                                                <h3><button @cannot('employee-view') disabled @endcannot href="#" class="btn sbold green" data-toggle="modal" data-target="#profile-back-ic">Update Back IC</button></h3>
                                             </div>
                                         </div>
                                     </div>

@@ -29,6 +29,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/approve/{id}', 'Employee\EmployeeController@approveStatus')->name('employee.approve')->middleware('can:employee-view');
         Route::post('/reject/{id}', 'Employee\EmployeeController@rejectUser')->name('employee.reject')->middleware('can:employee-view');
         Route::post('/upload/{id}', 'Employee\EmployeeController@uploadInfoUser')->name('employee.upload')->middleware('can:employee-view');
+
         Route::post('delete','Employee\EmployeeController@destroy')->name('employee.destroy-all')->middleware('can:employee-view');
         Route::post('delete/{id}','Employee\EmployeeController@destroyOne')->name('employee.destroy-one')->middleware('can:employee-view');
         Route::post('update/{id?}', 'Employee\EmployeeController@update')->name('employee.update');
