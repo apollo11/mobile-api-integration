@@ -304,12 +304,20 @@ class JobController extends Controller
         ]);
     }
 
-    public function sendNotification($id)
+    public function sendNotification(Request $request, $id)
     {
+        $user_ids = $request->input("employees-list");
+        $deviceTokenResult = DeviceToken::whereIn('user_id', $user_ids)->get();
+
+        $deviceTokens = array();
+        for ($i=0; $i < count($deviceTokenResult); $i++) { 
+            array_push($deviceTokens, $deviceTokenResult[$i]->device_token);
+        }
+
         $data['title'] = "New Jobs Assigned to You";
         $data["body"] = "You have been assigned a job successfully! Click here for more details";
-        $reg_id = ["cOz3btJoiZ0:APA91bG1b9LgJRuQAmkGLoXOzgWeijYtiJX28MPml0t-7EyYdxRdfsWouxnA3XdbAmPjOxWR7VzbEeIxrs2DBdiNwRIFLup--Eh-n8E4IOvykp7khWf9LV12Fde5dFNCvy2ReKPxGP1j"];
-        $data["registration_ids"] = $reg_id;
+        // $reg_id = ["cOz3btJoiZ0:APA91bG1b9LgJRuQAmkGLoXOzgWeijYtiJX28MPml0t-7EyYdxRdfsWouxnA3XdbAmPjOxWR7VzbEeIxrs2DBdiNwRIFLup--Eh-n8E4IOvykp7khWf9LV12Fde5dFNCvy2ReKPxGP1j"];
+        $data["registration_ids"] = $deviceTokens;
         $data["badge"] = 1;
         $data["type"] = "job-assign";
         $data["job_id"] = $id;

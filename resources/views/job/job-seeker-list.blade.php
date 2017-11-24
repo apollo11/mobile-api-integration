@@ -104,7 +104,7 @@
                                 <div style="float: right !important; width: 35%;">
                                     <label>Employees List</label>
                                     <div>
-                                        <select class="js-example-basic-multiple" name="employees-list" multiple="multiple" style="width: 80%;">
+                                        <select class="js-example-basic-multiple" name="employees-list[]" multiple="multiple" style="width: 80%;">
                                             @foreach( $employees as $emp )
                                                 <option value="{{ $emp->id }}">{{ $emp->name }}</option>
                                             @endforeach
