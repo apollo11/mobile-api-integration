@@ -126,7 +126,7 @@ Route::group(['middleware' => ['auth:api']], function () {
         Route::get('list', 'Notification\NotificationController@notifList');
         Route::post('save', 'Notification\NotificationController@addNotification');
         Route::post('reject','Notification\NotificationController@rejectJob');
-        Route::post('cancel','Notification\NotificationController@store');
+        Route::post('assign/reject','Notification\NotificationController@store');
         Route::post('read/all','Notification\NotificationController@markAsAllRead');
         Route::post('read','Notification\NotificationController@markAsRead');
         Route::post('delete','Notification\NotificationController@deleteNotfif');
