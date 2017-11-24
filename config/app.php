@@ -38,7 +38,7 @@ return [
     |
     */
 
-    'debug' => env('APP_DEBUG', false),
+    'debug' => env('APP_DEBUG', true),
 
     /*
     |--------------------------------------------------------------------------
@@ -179,8 +179,9 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-        Cornford\Googlmapper\MapperServiceProvider::class
+        Cornford\Googlmapper\MapperServiceProvider::class,
 
+        Edujugon\PushNotification\Providers\PushNotificationServiceProvider::class,
     ],
 
     /*
@@ -231,6 +232,8 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         'Socialite' => Laravel\Socialite\Facades\Socialite::class,
         'Mapper' => Cornford\Googlmapper\Facades\MapperFacade::class,
+
+        'pushNotification' => Edujugon\PushNotification\Facades\PushNotification::class,
     ],
 
 ];

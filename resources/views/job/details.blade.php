@@ -34,8 +34,7 @@
             </div>
 
             <div class="row">
-                <div class="col-md-6">
-                    <!-- BEGIN EXAMPLE TABLE PORTLET-->
+                <div class="col-md-12">
                     <div class="portlet light bordered">
                         <div class="portlet-title">
                             <div class="caption font-dark">
@@ -60,14 +59,20 @@
                                 </a>
                                 <a class="btn sbold green" href="#" class="btn" data-toggle="modal" data-target="#job-assigned">Assign Job</a>
 
-                                <input class="btn sbold green" name="multiple" onclick="window.print()" value="Print"
-                                       type="submit"/>
+                                <input class="btn sbold green" name="multiple" onclick="window.print()" value="Print" type="submit"/>
+                                <?php 
+                                $currenttime = new DateTime('');
+                                $job_date = (new DateTime($details->start_date))->modify('-1 hour'); ?>
+                                @if ($currenttime > $job_date && $details->status == 'active' )
+                                    <a href="{{ route('job.location_tracking',['id' => $details->id]) }}" class="btn sbold green">
+                                            <i class="fa fa-map-marker"></i> Track Location </a>
+                                @endif
                             </div>
                         </div>
                         <div class="portlet-body">
                             <div class="table-toolbar">
                                 <div class="row">
-                                    <div class="col-md-12">
+                                    <div class="col-md-6">
                                         <div class="btn-group">
                                             <div class="portlet-body">
                                                 <div class="table-scrollable">
@@ -189,7 +194,32 @@
 
                             <input class="btn sbold green" name="multiple" value="Delete" type="submit"/>
                         </div>
-                        <div class="portlet-body">
+                        <div class="portlet-body employer-details-table">
+
+                            <div>
+                                <div style="width: 40%; display: inline-block;">
+                                    <div class="input-group date" data-provide="datepicker">
+                                        <input type="text" class="form-control" id="min" placeholder="FROM">
+                                        <div class="input-group-addon">
+                                            <span class="glyphicon glyphicon-th"></span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div style="width: 40%; display: inline-block;">
+                                    <div class="input-group date" data-provide="datepicker">
+                                        <input type="text" class="form-control" id="max" placeholder="TO">
+                                        <div class="input-group-addon">
+                                            <span class="glyphicon glyphicon-th"></span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div style="display: inline-block; vertical-align: top;">
+                                    <button type="button" class="btn btn-info" onclick="filter()">Apply</button>
+                                </div>
+                            </div>
+                            
                             <table class="table table-striped table-bordered table-hover table-checkable order-column"
                                    id="employee-table">
                                 <thead>

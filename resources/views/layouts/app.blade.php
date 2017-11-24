@@ -49,6 +49,14 @@
         <link href="{{ asset('assets/layouts/layout/css/themes/darkblue.css') }}" rel="stylesheet" type="text/css" id="style_color"/>
         <link href="{{ asset('assets/layouts/layout/css/custom.css') }}" rel="stylesheet" type="text/css"/>
 
+        <!-- <script src="{{ asset('assets/global/plugins/jquery.min.js') }}" type="text/javascript"></script> -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+
+        <!-- <link href="{{ asset('assets/bootstrap-multiselect.min.css') }}" rel="stylesheet" type="text/css"/>
+        <script src="{{ asset('assets/bootstrap-multiselect.min.js') }}" type="text/javascript"></script> -->
+
         <!-- page level javascripts -->
            @yield ('custom_page_css')
         <!-- end page level javascripts -->
@@ -143,7 +151,6 @@
     <script src="{{ asset('assets/global/plugins/ie8.fix.min.js') }}"></script>
     <![endif]-->
 
-    <script src="{{ asset('assets/global/plugins/jquery.min.js') }}" type="text/javascript"></script>
     <script src="{{ asset('assets/global/plugins/jquery-migrate.min.js') }}" type="text/javascript"></script>
 
     <!-- IMPORTANT! Load jquery-ui-1.10.3.custom.min.js before bootstrap.min.js to fix bootstrap tooltip conflict with jquery ui tooltip -->

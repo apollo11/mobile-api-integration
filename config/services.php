@@ -41,4 +41,9 @@ return [
         'redirect' => env('FACEBOOK_URL')
     ],
 
+    'onesignal' => [
+    'app_id' => '34efd769-64c3-427e-99ef-08b9644d7b57',
+    'rest_api_key' => 'MWUwN2UxMDctNTJkMS00MzcxLTk1NjctMzFlZWEyMzEzYTQ2'
+    ],
+
 ];

@@ -25,7 +25,7 @@
                             <div class="portlet-title">
                                 <div class="caption font-dark">
                                     <i class="icon-settings font-dark"></i>
-                                    <span class="caption-subject bold uppercase">list of Jobs</span>
+                                    <span class="caption-subject bold uppercase">Payouts</span>
                                 </div>
                                 <div class="actions">
                                     <a href="/payout/lists?payment-status=pending" class="btn sbold green"> Pending</a>
@@ -38,7 +38,32 @@
                                        {{--value="Processed">Pay</a>--}}
                                 </div>
                             </div>
-                            <div class="portlet-body">
+                            <div class="portlet-body employer-details-table">
+
+                                <div>
+                                    <div style="width: 40%; display: inline-block;">
+                                        <div class="input-group date" data-provide="datepicker">
+                                            <input type="text" class="form-control" id="min" placeholder="FROM">
+                                            <div class="input-group-addon">
+                                                <span class="glyphicon glyphicon-th"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div style="width: 40%; display: inline-block;">
+                                        <div class="input-group date" data-provide="datepicker">
+                                            <input type="text" class="form-control" id="max" placeholder="TO">
+                                            <div class="input-group-addon">
+                                                <span class="glyphicon glyphicon-th"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div style="display: inline-block; vertical-align: top;">
+                                        <button type="button" class="btn btn-info" onclick="filter()">Apply</button>
+                                    </div>
+                                </div>
+
                                 <table class="table table-striped table-bordered table-hover table-checkable order-column"
                                        id="employee-table">
                                     <thead>
@@ -128,4 +153,4 @@
 
 @endsection
 
-@include('layouts.employee-datatables-include')
+@include('layouts.employee-datatables-include',['title'=>'Payouts'])

@@ -552,6 +552,7 @@ class EmployeeController extends Controller
         $userDetails = new AdditionalInfo();
 
         $details = $userDetails->userInfo($id);
+        if(empty($details)){abort(404);}
 
         $jobInfo = $this->availableJobs($id);
         
@@ -573,8 +574,15 @@ class EmployeeController extends Controller
 
     public function availableJobs($id)
     {
+        $role = Auth::user()->role;
+        if ($role == 'employer') {
+            $employerid = Auth::user()->id;
+        } else {
+            $employerid = '';
+        }
+
         $job = new JobSchedule();
-        $jobInfo = $job->getAvailJobsByUser($id);
+        $jobInfo = $job->getAvailJobsByUser($id,$employerid);
 
         return $jobInfo;
 

@@ -32,7 +32,7 @@
                                     <div class="col-md-6">
                                         <div class="">
                                             <div class="portlet-body">
-                                                <div class="table-scrollable">
+                                                <div class="">
                                                     <table class="table table-hover table-bordered">
                                                         <tbody>
                                                         <tr>
@@ -69,6 +69,10 @@
                                                             <td> <strong>Business Manager </strong></td>
                                                             <td>{{ $details->business_manager }}</td>
                                                         </tr>
+                                                         <tr>
+                                                            <td> <strong>Total Candidates</strong></td>
+                                                            <td>{{ count($related) }}</td>
+                                                        </tr>
                                                    
                                                         </tbody>
                                                     </table>
@@ -95,7 +99,8 @@
             </div>
 
             <div class="actions">
-                <a class="btn sbold green" href="{{ route('job.lists')  }}">Back</a>
+                <!-- <a class="btn sbold green" href="{{ route('job.lists')  }}">Back</a> -->
+                <a class="btn sbold green" href="{{ URL::previous() }}">Back</a>
             </div>
         </div>
     </div>
