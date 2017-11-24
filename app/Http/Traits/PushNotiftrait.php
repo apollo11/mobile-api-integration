@@ -31,6 +31,8 @@ trait PushNotiftrait
                         'badge' => (string) $data['badge']
                     ],
                     'data'=>[
+                        'title' => $data['title'],
+                        'body' => $data['body'],
                         'job_id' => $data['job_id'],
                         'type' => $data['type']
                     ],

@@ -319,7 +319,7 @@ class JobController extends Controller
         // $reg_id = ["cOz3btJoiZ0:APA91bG1b9LgJRuQAmkGLoXOzgWeijYtiJX28MPml0t-7EyYdxRdfsWouxnA3XdbAmPjOxWR7VzbEeIxrs2DBdiNwRIFLup--Eh-n8E4IOvykp7khWf9LV12Fde5dFNCvy2ReKPxGP1j"];
         $data["registration_ids"] = $deviceTokens;
         $data["badge"] = 1;
-        $data["type"] = "job-assign";
+        $data["type"] = "job_assigned";
         $data["job_id"] = $id;
 
         // $result = $this->ValidUseSuccessResp(200, true);
