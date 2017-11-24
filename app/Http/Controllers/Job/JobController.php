@@ -330,9 +330,6 @@ class JobController extends Controller
         
     }
 
-    
-
-
     /**
      * Update the specified resource in storage.
      *
@@ -566,6 +563,10 @@ class JobController extends Controller
         ]);
     }
 
+    /**
+     * @param $data
+     * @return \Illuminate\Http\JsonResponse|int
+     */
     public function saveJobsNotif($data)
     {
         $employer = explode('.', $data['job_employer']);
@@ -695,6 +696,10 @@ class JobController extends Controller
         }
     }
 
+    /**
+     * @param $id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function location_tracking($id)
     {
         $param[] = null;
@@ -714,4 +719,6 @@ class JobController extends Controller
         }
         return view('job.location_tracking', ['details' => $details, 'related' => $relatedCandidates,'markers'=>$markers]);
     }
+
+
 }

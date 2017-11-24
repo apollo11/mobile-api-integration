@@ -120,7 +120,7 @@
 
                                         @if($value->status == 'inactive')
 
-                                            <td><span class="label label-sm label-danger"> Need to Approve </span></td>
+                                            <td><span class="label label-sm label-danger">{{ ($value->start_date < \Carbon\Carbon::now()) ? 'Expired' : ucfirst($value->status) }}</span></td>
 
                                         @elseif($value->status == 'active')
                                             <td>

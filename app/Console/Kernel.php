@@ -13,7 +13,8 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        //
+        \App\Console\Commands\AutoCancelled::class,
+        \App\Console\Commands\AutoCompleted::class,
     ];
 
     /**
@@ -24,8 +25,12 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')
-        //          ->hourly();
+         $schedule->command('job:auto_completed')
+                  ->hourly();
+
+        $schedule->command('job:auto_cancelled')
+            ->hourly();
+
     }
 
     /**
