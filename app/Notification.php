@@ -63,6 +63,7 @@ class Notification extends Model
                 , 'jobs.created_at'
                 , 'jobs.end_date'
                 , 'jobs.contact_no'
+                , 'jobs.contact_person'
                 , 'jobs.rate'
                 , 'jobs.job_image_path'
                 , 'jobs.nationality'

@@ -494,6 +494,7 @@ class NotificationController extends Controller
                     'created_date' => $this->dateFormat($output->created_at),
                     'start_date' => $this->dateFormat($output->start_date),
                     'end_date' => $this->dateFormat($output->end_date),
+                    'contact_person' => $output->contact_person,
                     'contact_no' => $output->contact_no,
                     'rate' => $output->rate,
                     'thumbnail_url' => $output->job_image_path,
