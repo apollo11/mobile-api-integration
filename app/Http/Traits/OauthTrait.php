@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Traits;
 
+use App\DeviceToken as Token;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
 
@@ -27,17 +28,9 @@ trait OauthTrait
         $account = \App\User::where('nric_no', $nric)
             ->first();
 
-        // $user_id = $this->getDeviceToken($account['id']);
         return $account;
 
     }
-
-    // public function getDeviceToken($user_id)
-    // {
-    //     $user_device_token = \App\User::where('nric_no', $user_id)
-    //         ->first();
-    //     return $user_device_token;
-    // }
 
     /**
      * @param $mobile
@@ -54,6 +47,7 @@ trait OauthTrait
     public function ouathResponse(array $data)
     {
         $details = $this->getUserNric($data['nric_no']);
+        $deviceToken = $this->getToken($details->id);
         $http = new Client();
 
         try {
@@ -70,6 +64,7 @@ trait OauthTrait
 
             return [
                 'user' => $details
+                , 'notification' => $deviceToken
                 , 'oauth' =>  json_decode((string) $response->getBody(), true)
             ];
 
@@ -83,10 +78,14 @@ trait OauthTrait
         }
    }
 
+    /**
+     * @param array $data
+     * @return array
+     */
     public function ouathSociaLoginlResponse(array $data)
     {
         $details = $this->show($data['email']);
-
+        $deviceToken = $this->getToken($details->id);
         $http = new Client();
 
         try {
@@ -103,6 +102,7 @@ trait OauthTrait
 
             return [
                 'user' => $details
+                , 'notification' => $deviceToken
                 , 'oauth' =>  json_decode((string) $response->getBody(), true)
             ];
 
@@ -117,10 +117,15 @@ trait OauthTrait
 
     }
 
+    /**
+     * @param array $data
+     * @return array
+     */
     public function ouathSocialFbResponse(array $data)
     {
         $details = $this->show($data['email']);
         $socialUniqueId = $data['social_fb_id'];
+        $deviceToken = $this->getToken($details->id);
 
         $http = new Client();
         try {
@@ -137,6 +142,7 @@ trait OauthTrait
             ]);
             return [
                 'user' => $details
+                , 'notification' => $deviceToken
                 , 'oauth' =>  json_decode((string) $response->getBody(), true)
             ];
 
@@ -150,11 +156,15 @@ trait OauthTrait
 
     }
 
-
+    /**
+     * @param array $data
+     * @return array
+     */
     public function ouathSocialGoogleResponse(array $data)
     {
         $details = $this->show($data['email']);
         $socialUniqueId = $data['social_google_id'];
+        $deviceToken = $this->getToken($details->id);
 
         $http = new Client();
         try {
@@ -171,6 +181,7 @@ trait OauthTrait
             ]);
             return [
                 'user' => $details
+                , 'notification' => $deviceToken
                 , 'oauth' =>  json_decode((string) $response->getBody(), true)
             ];
 
@@ -184,10 +195,16 @@ trait OauthTrait
 
     }
 
+    /**
+     * @param array $data
+     * @return array
+     */
     public function mobileOauthResponse(array $data)
     {
 
         $details = $this->getUserByMobile($data['mobile_no']);
+        $deviceToken = $this->getToken($details->id);
+
         $http = new Client();
 
         try {
@@ -203,6 +220,7 @@ trait OauthTrait
 
             return [
                 'user' => $details
+                , 'notification' => $deviceToken
                 , 'oauth' =>  json_decode((string) $response->getBody(), true)
             ];
 
@@ -214,6 +232,19 @@ trait OauthTrait
             }
         }
 
+    }
+
+    /**
+     * Getting Device Token
+     * @param $userId
+     * @return mixed
+     */
+    public function getToken($userId)
+    {
+        $deviceToken = new Token();
+        $result = $deviceToken->getDeviceTokenByUserId($userId);
+
+       return $result;
     }
 
 }
