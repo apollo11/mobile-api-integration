@@ -66,6 +66,8 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/create', 'Location\LocationController@create')->name('location.create')->middleware('can:admin-view');
         Route::get('/lists', 'Location\LocationController@index')->name('location.lists')->middleware('can:admin-view');
         Route::post('/add', 'Location\LocationController@store')->name('location.add');
+        Route::get('edit/{id}', 'Location\LocationController@edit')->name('location.edit');
+        Route::POST('update/{id}', 'Location\LocationController@update')->name('location.update');
     });
 
     Route::prefix('job')->group(function() {
