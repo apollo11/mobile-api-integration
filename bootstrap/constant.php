@@ -6,3 +6,4 @@ define('GOOGLE_MAP_ENDPOINT', 'https://maps.googleapis.com/maps/api/geocode/json
 define('FCM_ENDPOINT', 'https://fcm.googleapis.com/fcm/send');
 //define('OUATH_ENDPOINT', 'http://yyjobs.local/oauth/token');
 define('NEW_JOB', 'job_available');
+define('ASSIGNED_JOB', 'job_assigned');

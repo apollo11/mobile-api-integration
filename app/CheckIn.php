@@ -70,6 +70,9 @@ class CheckIn extends Model
                 , 'jobs.latitude'
                 , 'jobs.longitude'
                 , 'jobs.geolocation_address'
+                , 'jobs.contact_person'
+                , 'assign.is_assigned'
+                , 'assign.id as id_assigned'
             )
 
             ->where('job_schedules.user_id', '=', $param['id'])

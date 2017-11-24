@@ -11,6 +11,12 @@ use App\Http\Controllers\Controller;
 
 class AssignJobsController extends Controller
 {
+    protected $assignedJob;
+
+    public function __construct()
+    {
+        $this->assignedJob = constant('ASSIGNED_JOB');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -45,7 +51,6 @@ class AssignJobsController extends Controller
         $data = $request->input('user_id');
         $jobId =  $request->input('job_id');
 
-
         $multi['user_assign'] = is_null($data) ? [] : $data;
 
         $validator = Validator::make($multi, ['user_assign' => 'required']);
@@ -60,19 +65,25 @@ class AssignJobsController extends Controller
             $user = User::find($data);
             $jobs = Job::find($jobId);
 
-
             foreach ($user as $key => $value) {
-                $assigned[] = [
-                    $value->id => [
-                        'is_assigned' => true,
-                        'assign_job_id' => $jobs->id,
-                        'user_id' => $value->id
-                    ],
-                ];
+                if(!$this->findExistingJob($value->id, $jobs->id)) {
+                    $assigned[] = [
+                        $value->id => [
+                            'is_assigned' => true,
+                            'assign_job_id' => $jobs->id,
+                            'user_id' => $value->id
+                        ],
+                    ];
+
+                    $this->saveNotif($value->id, $jobs->id);
+                } else {
+                    $assigned[] = [];
+
+                }
             }
 
             for ($i = 0; $i < count($assigned); $i++) {
-                $jobs->assignJobs()->attach($assigned[$i]);
+                $jobs->assignJobs()->syncWithoutDetaching($assigned[$i]);
             }
 
             $result = redirect(route('job.details',['id' => $jobId]));
@@ -82,6 +93,36 @@ class AssignJobsController extends Controller
         return $result;
 
     }
+
+    /**
+     * Find Existing Job
+     * @param $userId
+     * @param $jobId
+     * @return mixed
+     */
+    public function findExistingJob($userId, $jobId)
+    {
+        $data = new AssignJob();
+        $output = $data->ifDataExist($userId, $jobId);
+
+        return $output;
+
+    }
+
+    /**
+     * Saving Notification when assigning the Job
+     * @return mixed|static
+     */
+    public function saveNotif($userId, $jobId)
+    {
+        $save = \App\User::find($userId);
+        $save->userNotification()->create([
+            'job_id' => $jobId,
+            'type' => $this->assignedJob
+        ]);
+
+    }
+
 
     /**
      * Display the specified resource.
