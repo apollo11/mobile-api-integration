@@ -71,11 +71,23 @@ class AssignJob extends Model
                 , 'jobs.choices'
                 , 'jobs.job_requirements'
                 , 'jobs.geolocation_address'
+                , 'jobs.contact_person'
             )
             ->whereNull('assign_job_job.id')
             ->get();
 
         return $job;
+    }
+
+    public function ifDataExist($userId, $jobId)
+    {
+        $result = DB::table('assign_job_job')
+            ->where('user_id',$userId)
+            ->where('assign_job_id', $jobId)
+            ->first();
+
+        return $result;
+
     }
 
 

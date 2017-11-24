@@ -62,8 +62,10 @@ class EmployerController extends Controller
     public function create()
     {
         $industry = $this->industryList();
+        $businessMngr = \App\User::where('role', 'business_manager')->pluck('name', 'id');
 
-        return view('employer.form', ['industry' => $industry]);
+
+        return view('employer.form', ['industry' => $industry], compact('businessMngr'));
     }
 
     /**
@@ -162,9 +164,9 @@ class EmployerController extends Controller
         $industry = $this->industryList();
         $user = new Employer();
         $employer = $user->employerDetails($id);
+        $businessMngr = \App\User::where('role', 'business_manager')->pluck('name', 'id');
 
-
-        return view('employer.edit-form', ['industry' => $industry, 'user' => $employer]);
+        return view('employer.edit-form', ['industry' => $industry, 'user' => $employer],  compact('businessMngr'));
     }
 
     /**
