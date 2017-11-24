@@ -14,7 +14,7 @@
             {{ csrf_field() }}
             <input type="multiple" value="Delete">
         </form>
-        @endforeach
+    @endforeach
     <div class="page-content-wrapper employee-list">
         <div class="page-content">
             @if($errors->has('multicheck'))
@@ -173,9 +173,9 @@
                                                     </li>
 
                                                      <?php $job_date = (new DateTime($value->start_date))->modify('-1 hour'); ?>
-                                                        @if ($currenttime > $job_date)
+                                                        @if ($currenttime > $job_date && $value->status == 'active' )
                                                             <li><a href="{{ route('job.location_tracking',['id' => $value->id]) }}">
-                                                                    <i class="fa fa-edit"></i> Track Location </a>
+                                                                    <i class="fa fa-map-marker"></i> Track Location </a>
                                                             </li>
                                                         @endif
                                                     @endif

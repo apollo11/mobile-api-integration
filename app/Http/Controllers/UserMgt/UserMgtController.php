@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\UserMgt;
 
 use Validator;
+use App\Employer;
 use App\Permission;
 use App\UserManagement;
 use App\User;
 use App\Mail\UserMgtMail;
-use App\Http\Requests\UpdateUserMgt;
 use App\Http\Requests\UserMgt;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
@@ -52,31 +52,30 @@ class UserMgtController extends Controller
     {
         $data = $request->all();
 
-        User::create([
+        $lastId = User::create([
             'name' => $data['name'], //$request->input('name'),
             'email' => $data['email'] ,//$request->input('email'),
             'password' => bcrypt($data['password']),
             'role' => $data['role'], //$request->input('role'),
-            'employer' => $data['employer'],
+            'employer' => null,
             'mobile_no' => $data['mobile_no'], //$request->input('mobile_no'),
-            'dashboard_permissions' =>  $data['dashboard'],
-            'employees_permissions' => $data['employees'],
-            'employers_permissions' => $data['employers'],
-            'payout_permissions' => $data['payout'],
-            'job_permissions' => $data['job'],
-            'reports_permissions' => $data['reports'],
-            'push_permissions' => $data['push'],
-            'recipient_permissions' =>  $data['recipient'],
-            'settings_permissions' => $data['settings'],
+            'dashboard_permissions' =>  $data['dashboard'] ?? null,
+            'employees_permissions' => $data['employees'] ?? null,
+            'employers_permissions' => $data['employers'] ?? null,
+            'payout_permissions' => $data['payout'] ?? null,
+            'job_permissions' => $data['job'] ?? null,
+            'reports_permissions' => $data['reports'] ?? null,
+            'push_permissions' => $data['push'] ?? null,
+            'recipient_permissions' =>  $data['recipient'] ?? null,
+            'settings_permissions' => $data['settings'] ?? null,
             'role_id' => 0,
         ]);
 
+        $this->saveEmployer($lastId->id, $data);
         $this->sendEmailToUser($data);
 
         return redirect()->back()->with('message', 'Adding new user successfully saved.');
     }
-
-
     /**
      * Display the specified resource.
      *
@@ -86,12 +85,12 @@ class UserMgtController extends Controller
     public function show($id)
     {
         $mgt = new UserManagement();
+        $employer = new Employer();
         $details  = $mgt->user($id);
-
 
         return view('usermgt.details',
             [
-                'details' => $details
+              'details' => $details
             , 'dashboard' => $this->parseObject($details->dashboard_permissions)
             , 'employees' => $this->parseObject($details->employees_permissions)
             , 'employers' => $this->parseObject($details->payout_permissions)
@@ -101,6 +100,7 @@ class UserMgtController extends Controller
             , 'recipient' => $this->parseObject($details->recipient_permissions)
             , 'settings' => $this->parseObject($details->settings_permissions)
             , 'payout' => $this->parseObject($details->payout_permissions)
+            , 'getEmployer' => $employer->getEmployersList($id)
         ]);
 
     }
@@ -124,13 +124,14 @@ class UserMgtController extends Controller
             , 'employer' =>  $employer
             , 'dashboard' => $this->parseObject($details->dashboard_permissions)
             , 'employees' => $this->parseObject($details->employees_permissions)
-            , 'employers' => $this->parseObject($details->payout_permissions)
+            , 'employers' => $this->parseObject($details->employers_permissions)
             , 'job' => $this->parseObject($details->job_permissions)
             , 'reports' => $this->parseObject($details->reports_permissions)
             , 'push'=> $this->parseObject($details->push_permissions)
             , 'recipient' => $this->parseObject($details->recipient_permissions)
             , 'settings' => $this->parseObject($details->settings_permissions)
             , 'payout' => $this->parseObject($details->payout_permissions)
+            , 'getEmployer' => $this->getEmployer($id)
         ], compact('permissionValue'));
     }
 
@@ -147,28 +148,30 @@ class UserMgtController extends Controller
     }
 
     /**
-     * @param Requqest $request
+     * @param Request $request
      * @param $id
      * @return $this|\Illuminate\Http\RedirectResponse
      */
     public function update(Request $request, $id)
     {
         $data = $request->all();
+        $employer = empty($data['employer']) ? false : true;
+
 
         $validator = Validator::make($data, [
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255',
             'role' => 'required',
-            'employer' => 'required',
-            'dashboard' => 'required',
-            'employees' => 'required',
-            'employers' => 'required',
-            'payout' => 'required',
-            'job' => 'required',
-            'reports' => 'required',
-            'push' => 'required',
-            'recipient' => 'required',
-            'settings' => 'required'
+//             'employer' => 'required',
+//            'dashboard' => 'required',
+//            'employees' => 'required',
+//            'employers' => 'required',
+//            'payout' => 'required',
+//            'job' => 'required',
+//            'reports' => 'required',
+//            'push' => 'required',
+//            'recipient' => 'required',
+//            'settings' => 'required'
         ]);
 
         if ($validator->fails()) {
@@ -178,27 +181,33 @@ class UserMgtController extends Controller
                 ->withInput();
         } else {
 
-            $user = \App\User::find( $id);
+            $user = \App\User::find($id);
             $user->update([
                 'name' => $data['name'],
                 'email' => $data['email'],
                 'role' => $data['role'],
-                'employer' => $data['employer'],
+                'employer' => null,
                 'mobile_no' => $data['mobile_no'],
-                'dashboard_permissions' =>  $data['dashboard'],
-                'employees_permissions' => $data['employees'],
-                'employers_permissions' => $data['employers'],
-                'payout_permissions' => $data['payout'],
-                'job_permissions' => $data['job'],
-                'reports_permissions' => $data['reports'],
-                'push_permissions' => $data['push'],
-                'recipient_permissions' =>  $data['recipient'],
-                'settings_permissions' => $data['settings'],
+                'dashboard_permissions' => $data['dashboard'] ?? null,
+                'employees_permissions' => $data['employees'] ?? null,
+                'employers_permissions' => $data['employers'] ?? null,
+                'payout_permissions' => $data['payout'] ?? null,
+                'job_permissions' => $data['job'] ?? null,
+                'reports_permissions' => $data['reports'] ?? null,
+                'push_permissions' => $data['push'] ?? null,
+                'recipient_permissions' => $data['recipient'] ?? null,
+                'settings_permissions' => $data['settings'] ?? null,
                 'role_id' => 0,
             ]);
 
-            return redirect()->back()->with('message', 'Updating details successful.');
+            if ($employer == true) {
+
+                $this->deleteEmployer($id);
+                $this->saveEmployer($id, $data);
+
+            }
         }
+        return redirect()->back()->with('message', 'Updating details successful.');
 
     }
 
@@ -216,10 +225,14 @@ class UserMgtController extends Controller
 
         $user->deleteUserMgt($id);
 
-        return redirect()->back()->with('message', 'Record deleted successful saved.');
+        return redirect()->back()->with('message', 'Record deleted successful.');
 
     }
 
+    /**
+     * @param Request $request
+     * @return $this|\Illuminate\Http\RedirectResponse
+     */
     public function multiDestroy(Request $request)
     {
 
@@ -239,7 +252,7 @@ class UserMgtController extends Controller
 
             $user->multiDelete($multi['multicheck']);
 
-            $result = redirect()->back()->with('message', 'Record deleted successful saved.');
+            $result = redirect()->back()->with('message', 'Record deleted successful.');
         }
 
         return $result;
@@ -266,5 +279,45 @@ class UserMgtController extends Controller
 
     }
 
+    /**
+     * @param $id
+     * @param $data
+     */
+    public function saveEmployer($id, $data)
+    {
+        $user = \App\User::find($id);
+
+        for($i = 0; $i < count($data['employer']); $i++) {
+            $employer = $data['employer'];
+            $employer_id = $id;
+
+            $user->employer()->create([
+                'name' => $employer[$i],
+                'employer_id' => $employer_id
+            ]);
+
+        }
+    }
+
+    /**
+     * Get employer
+     */
+    public function getEmployer($id)
+    {
+        $employer = new Employer();
+        $result = $employer->getEmployersList($id);
+
+        return $result;
+    }
+
+    /**
+     * Delete User
+     */
+    public function deleteEmployer($userId)
+    {
+        $deleteRows = \App\Employer::where('user_id', $userId)->delete();
+
+        return $deleteRows;
+    }
 
 }

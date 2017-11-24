@@ -51,7 +51,6 @@ class JobController extends Controller
      */
     public function index(Request $request, $notification_status = null)
     {
-        echo $notification_status;
         $role = Auth::user()->role;
 
 
@@ -83,18 +82,21 @@ class JobController extends Controller
         $location = new Location();
         $nationality = new Nationality();
         $industry = $this->industry();
-        $employee = $user->employerList();
+        $employer = $user->employerList();
         $age = $this->age();
         $businessMngr = \App\User::where('role', 'business_manager')->pluck('name', 'id');
+        $group = \App\RecipientGroup::all();
 
 
         return view('job.form', ['user' => $user
             , 'industry' => $industry
             , 'location' => $location->locationLists()
             , 'nationality' => $nationality->nationalityDropdown()
-            , 'employer' => $employee
+            , 'employer' => $employer
             , 'age' => $age
             , 'language' => $nationality->language()
+            , 'recipientGroup' => $group
+
         ], compact('businessMngr'));
     }
 
@@ -183,7 +185,8 @@ class JobController extends Controller
             'latitude' => $data['postal_code']['lat'],
             'longitude' => $data['postal_code']['lng'],
             'geolocation_address' => $data['address'],
-            'zip_code' => $data['zip_code']
+            'zip_code' => $data['zip_code'],
+            'recipient_group' => $data['recipient_group']
         ]);
 
         $this->lastInsertedId = $insertedId->id;
