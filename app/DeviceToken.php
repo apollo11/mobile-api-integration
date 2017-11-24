@@ -39,5 +39,19 @@ class DeviceToken extends Model
 
     }
 
+    /**
+     * @param $userId
+     * @return mixed
+     */
+    public function getDeviceTokenByUserId($userId)
+    {
+        $token = DB::table('user_push_notification_tokens')
+            ->select('id', 'device_token')
+            ->where('user_id', $userId)
+            ->first();
+
+        return $token;
+    }
+
 
 }
