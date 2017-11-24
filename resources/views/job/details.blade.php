@@ -34,7 +34,7 @@
             </div>
 
             <div class="row">
-                <div class="col-md-12">
+                <div class="col-md-6">
                     <div class="portlet light bordered">
                         <div class="portlet-title">
                             <div class="caption font-dark">
@@ -45,22 +45,22 @@
                                 <a class="btn sbold green"
                                    href="{{ route('job.edit',['id' => $details->id ])  }}">
                                     Update</a>
-
-                                <a class="btn sbold green"
-                                   href="{{ route('job.multiple',['id' => $details->id, 'param' => 'Approve'])  }}"
-                                   onclick="event.preventDefault();
-                                           document.getElementById('{{'approve-'.$details->id }}').submit();">
-                                    Approve</a>
-                                <a class="btn sbold green"
-                                   href="{{ route('job.multiple',['id' => $details->id, 'param' => 'Approve']) }}"
-                                   onclick="event.preventDefault();
-                                           document.getElementById('{{'reject-'.$details->id }}').submit();">
-                                    Reject
-                                </a>
-                                <a class="btn sbold green" href="#" class="btn" data-toggle="modal" data-target="#job-assigned">Assign Job</a>
-
+                                @if($role_id == 0)
+                                    <a class="btn sbold green"
+                                       href="{{ route('job.multiple',['id' => $details->id, 'param' => 'Approve'])  }}"
+                                       onclick="event.preventDefault();
+                                               document.getElementById('{{'approve-'.$details->id }}').submit();">
+                                        Approve</a>
+                                    <a class="btn sbold green"
+                                       href="{{ route('job.multiple',['id' => $details->id, 'param' => 'Reject']) }}"
+                                       onclick="event.preventDefault();
+                                               document.getElementById('{{'reject-'.$details->id }}').submit();">
+                                        Reject
+                                    </a>
+                                    <a class="btn sbold green" href="#" class="btn" data-toggle="modal" data-target="#job-assigned">Assign Job</a>
+                                @endif
                                 <input class="btn sbold green" name="multiple" onclick="window.print()" value="Print" type="submit"/>
-                                <?php 
+                                <?php
                                 $currenttime = new DateTime('');
                                 $job_date = (new DateTime($details->start_date))->modify('-1 hour'); ?>
                                 @if ($currenttime > $job_date && $details->status == 'active' )
@@ -72,7 +72,7 @@
                         <div class="portlet-body">
                             <div class="table-toolbar">
                                 <div class="row">
-                                    <div class="col-md-6">
+                                    <div class="col-md-12">
                                         <div class="btn-group">
                                             <div class="portlet-body">
                                                 <div class="table-scrollable">
