@@ -457,8 +457,8 @@ class NotificationController extends Controller
             $details[] = [
                 'id' => $output->id,
                 'type' => $output->type,
-                'created_at' => $this->dateFormat($output->created_at),
-                'updated_at' => $this->dateFormat($output->updated_at),
+                'created_at' => $this->dateFormat($output->notif_created),
+                'updated_at' => $this->dateFormat($output->notif_updated),
                'schedule_id' => $output->schedule_id,
                 'job' => [
                     'id' => $output->jobid,
