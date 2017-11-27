@@ -116,7 +116,7 @@ class AssignJobsController extends Controller
     public function saveNotif($userId, $jobId)
     {
         $save = \App\User::find($userId);
-        $save->userNotification()->create([
+        $save->userNotification()->updateOrCreate([
             'job_id' => $jobId,
             'type' => $this->assignedJob
         ]);
