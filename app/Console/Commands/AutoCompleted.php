@@ -43,6 +43,7 @@ class AutoCompleted extends Command
             ->join('job_schedules', 'job_schedules.job_id', '=', 'jobs.id')
             ->whereNotNull('job_schedules.checkin_datetime')
             ->where('jobs.job_date', '>', Carbon::parse('24 hours'))
+            ->where('job_schedules.job_status', 'accepted')
             ->update(['job_schedules.job_status'=>'auto_completed']);
 
     }

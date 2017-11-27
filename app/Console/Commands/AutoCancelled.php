@@ -44,6 +44,7 @@ class AutoCancelled extends Command
             ->whereNull('job_schedules.checkin_datetime')
             ->whereNull('job_schedules.checkout_datetime')
             ->where('jobs.job_date', '>', Carbon::parse('24 hours'))
+            ->where('job_schedules.job_status', 'accepted')
             ->update(['job_schedules.job_status'=>'auto_cancelled']);
 
     }
