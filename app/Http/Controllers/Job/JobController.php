@@ -116,6 +116,7 @@ class JobController extends Controller
     {
         $data = $request->all();
         $location = explode('.', $request->input('job_location'));
+        $businessMngr = explode('.', $request->input('business_manager'));
         $zipCode = $this->getAddress($request->input('postal_code'));
         $data['zip_code'] = $request->input('postal_code');
         $data['postal_code'] = $zipCode;
@@ -131,7 +132,9 @@ class JobController extends Controller
             'min_age' => $age[0],
             'max_age' => $age[1],
             'employer_id' => $employer[0],
-            'employer' => $employer[1]
+            'employer' => $employer[1],
+            'business_id' => $businessMngr[0],
+            'business' => $businessMngr[1]
         ];
 
         $validator = $this->rules($data);
@@ -176,7 +179,8 @@ class JobController extends Controller
             'no_of_person' => $data['no_of_person'],
             'contact_person' => empty($data['contact_person']) ? '' : $data['contact_person'],
             'contact_no' => empty($data['contact_no']) ? '' : $data['contact_no'],
-            'business_manager' => empty($data['business_manager']) ? '' : $data['business_manager'],
+            'business_manager' => empty($data['business']) ? '' : $data['business'],
+            'business_manager_id' => empty($data['business_id']) ? '' : $data['business_id'],
             'employer' => $data['employer'],
             'rate' => empty($data['hourly_rate']) ? 0 : $data['hourly_rate'],
             'language' => empty($data['preferred_language']) ? '' : $data['preferred_language'],
@@ -194,7 +198,6 @@ class JobController extends Controller
             'zip_code' => $data['zip_code'],
             'recipient_group' => $data['recipient_group']
         ]);
-
         $this->lastInsertedId = $insertedId->id;
     }
 
@@ -220,7 +223,8 @@ class JobController extends Controller
             'no_of_person' => $data['no_of_person'],
             'contact_person' => empty($data['contact_person']) ? '' : $data['contact_person'],
             'contact_no' => empty($data['contact_no']) ? '' : $data['contact_no'],
-            'business_manager' => empty($data['business_manager']) ? '' : $data['business_manager'],
+            'business_manager' => empty($data['business']) ? '' : $data['business'],
+            'business_manager_id' => empty($data['business_id']) ? '' : $data['business_id'],
             'employer' => $data['employer'],
             'rate' => empty($data['hourly_rate']) ? 0 : $data['hourly_rate'],
             'language' => empty($data['preferred_language']) ? '' : $data['preferred_language'],
@@ -272,6 +276,7 @@ class JobController extends Controller
         $nationality = $this->nationalityList();
         $age = $this->age();
         $employer = $user->employerList();
+        $businessMngr = \App\User::where('role', 'business_manager')->pluck('name', 'id');
 
         return view('job.edit-form', ['user' => $user
             , 'industry' => $industry
@@ -280,7 +285,7 @@ class JobController extends Controller
             , 'nationality' => $nationality
             , 'age' => $age
             , 'employer' => $employer
-        ]);
+        ], compact('businessMngr'));
 
     }
 
@@ -360,12 +365,14 @@ class JobController extends Controller
 
         $data = $request->all();
         $location = explode('.', $request->input('job_location'));
+        $businessMngr = explode('.', $request->input('business_manager'));
         $zipCode = $this->getAddress($request->input('postal_code'));
         $data['zip_code'] = $request->input('postal_code');
         $data['postal_code'] = $zipCode;
         $industry = explode('.', $request->input('industry'));
         $age = explode('-', $request->input('age'));
         $employer = explode('.', $request->input('job_employer'));
+
         $split = [
             'location_id' => $location[0],
             'location' => $location[1],
@@ -374,7 +381,9 @@ class JobController extends Controller
             'min_age' => $age[0],
             'max_age' => $age[1],
             'employer_id' => $employer[0],
-            'employer' => $employer[1]
+            'employer' => $employer[1],
+            'business_id' => $businessMngr[0],
+            'business' => $businessMngr[1]
         ];
 
         $validator = $this->rules($data);
