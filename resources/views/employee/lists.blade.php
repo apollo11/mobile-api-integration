@@ -109,11 +109,13 @@
 
                                         <tr class="odd gradeX">
                                             <td>
+                                             @if($employee[$i]['employee_status'] != 'reject' && $employee[$i]['employee_status'] != 'approved')
                                                 <label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">
                                                     <input type="checkbox" id="multicheck" name="multicheck[]" class="checkboxes"
                                                            value="{{ $employee[$i]['id'] }}"/>
                                                     <span></span>
                                                 </label>
+                                            @endif
                                             </td>
                                             <td><a href="{{ route('employee.details',['id' => $employee[$i]['id']])  }}"> {{ $employee[$i]['name'] }} </a></td>
                                             <td>
@@ -163,12 +165,16 @@
                                                                 <a href="{{ route('employee.details',['id' => $employee[$i]['id']])  }}">
                                                                     <i class="fa fa-eye"></i> View </a>
                                                             </li>
+
+                                                            @if($employee[$i]['employee_status'] != 'reject' && $employee[$i]['employee_status'] != 'approved')
                                                             <li>
                                                                 <a href="{{ route('employee.approve',['id' => $employee[$i]['id']])  }}"
                                                                    onclick="event.preventDefault();
                                                                            document.getElementById('{{'approve-'.$employee[$i]['id'] }}').submit();">
                                                                     <i class="fa fa-check-square-o"></i> Approve</a>
                                                             </li>
+                                                            @endif
+
                                                             <li>
                                                                 <a href="{{ route('employee.upload',['id' => $employee[$i]['id']]) }}"
                                                                    onclick="event.preventDefault();
@@ -177,6 +183,7 @@
                                                                 </a>
                                                             </li>
 
+                                                            @if($employee[$i]['employee_status'] != 'reject' && $employee[$i]['employee_status'] != 'approved')
                                                             <li>
                                                                 <a href="{{ route('employee.reject',['id' => $employee[$i]['id']]) }}"
                                                                    onclick="event.preventDefault();
@@ -184,6 +191,7 @@
                                                                     <i class="fa fa-close"></i> Reject
                                                                 </a>
                                                             </li>
+                                                            @endif
                                                         </ul>
                                                     @endif
                                                     @if(Auth::user()->role_id == 1)

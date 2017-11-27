@@ -89,7 +89,7 @@
                                         <label class="col-md-3 control-label">NRIC</label>
                                         <div class="col-md-7">
                                             <input type="text" class="form-control" placeholder="Enter NRIC"
-                                                   name="nric_no" value="{{ old('"nric_no') }}" />
+                                                   name="nric_no" value="{{ old('nric_no') }}" />
                                             @if ($errors->has('password'))
                                                 <span class="help-block">
                                                 <strong>{{ $errors->first('nric_no') }}</strong>
@@ -115,7 +115,7 @@
                                     <div class="row">
                                         <div class="col-md-offset-3 col-md-9">
                                             <button type="submit" class="btn green">Submit</button>
-                                            <button type="button" class="btn default">Cancel</button>
+                                            <a href="{{ route('employee.lists')  }}" class="btn default">Cancel</a>
                                         </div>
                                     </div>
                                 </div>
