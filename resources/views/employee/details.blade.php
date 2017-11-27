@@ -80,20 +80,20 @@
                             <div class="table-toolbar">
                                 <div class="row">
                                     <div class="col-md-12">
-                                        <div class="btn-group">
+                                        <div class="">
                                             <div class="portlet-body">
                                                 <div class="">
                                                     <table class="table table-hover bordered">
                                                         <tbody>
+                                                        @if($userDetails->userName)
                                                         <tr>
-                                                            @if($userDetails->userName)
-                                                                <td><strong>Name</strong></td>
-                                                                <td> {{ $userDetails->userName }}</td>
-                                                            @endif
+                                                            <td><strong>Name</strong></td>
+                                                            <td> {{ $userDetails->userName }}</td>
                                                         </tr>
+                                                        @endif
                                                         <tr>
                                                             @if($userDetails->birthdate)
-                                                                <td><strong>BirthDate</strong></td>
+                                                                <td><strong>D.O.B</strong></td>
                                                                 <td> {{ $userDetails->birthdate }}</td>
                                                             @endif
                                                         </tr>
@@ -154,18 +154,19 @@
                                                             <td><strong>Job Types</strong></td>
                                                             <td> {{ 'None' }}</td>
                                                         </tr>
+                                                        @if($userDetails->school)
                                                         <tr>
-                                                            @if($userDetails->school)
-                                                                <td><strong>School</strong></td>
-                                                                <td> {{ $userDetails->school }}</td>
-                                                            @endif
+                                                            <td><strong>School</strong></td>
+                                                            <td> {{ $userDetails->school }}</td>
                                                         </tr>
+                                                        @endif
+
+                                                        @if($userDetails->school_pass_expiry_date != '1970-01-01')
                                                         <tr>
-                                                            @if($userDetails->school_pass_expiry_date != '1970-01-01')
-                                                                <td><strong>School Expiry Date</strong></td>
-                                                                <td> {{ $userDetails->school_pass_expiry_date }}</td>
-                                                            @endif
+                                                            <td><strong>School Expiry Date</strong></td>
+                                                            <td> {{ $userDetails->school_pass_expiry_date }}</td>
                                                         </tr>
+                                                        @endif
                                                         <tr>
                                                             @if($applied)
                                                                 <td><strong>No. of jobs applied </strong></td>

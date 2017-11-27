@@ -118,7 +118,6 @@ class EmployeeController extends Controller
                 ->withInput();
 
         } else {
-
             $this->save($data);
             $this->sendEmailtoEmployee($data);
 
@@ -132,8 +131,11 @@ class EmployeeController extends Controller
      */
     public function sendEmailToEmployee(array $data)
     {
-        Mail::to($data['email'])->send( new EmployeeRegistration($data));
+        try{
+            Mail::to($data['email'])->send( new EmployeeRegistration($data));
+        } catch (Exception $e) {
 
+        } 
     }
 
     /**
@@ -206,6 +208,7 @@ class EmployeeController extends Controller
         ];
 
         $details = $userDetails->userInfo($id);
+        if(empty($details)){abort(404);}
 
         return view('employee.edit-form', [
             'details' => $details
@@ -239,7 +242,7 @@ class EmployeeController extends Controller
 
            $this->updateBasicAdditionalInfo($data, $id);
 
-            return redirect('employee/lists');
+            return redirect('employee/details/'.$id);
         }
     }
 
@@ -251,7 +254,7 @@ class EmployeeController extends Controller
         $criminal = !empty($data['criminal_record']) ? $data['criminal_record'] : '';
         $medical = !empty($data['medication']) ? $data['medication'] : '';
         $school = !empty($data['school']) ? $data['school'] : '';
-        $schoolExpiry = !empty($data['school_pass_expiry_date']) ? $data['school_pass_expiry_date'] : '1970-01-01';
+        $schoolExpiry = !empty($data['school_expiry_date']) ? $data['school_expiry_date'] : '1970-01-01';
 
         $additonalInfo = \App\AdditionalInfo::where('user_id', $id)->first();
 
