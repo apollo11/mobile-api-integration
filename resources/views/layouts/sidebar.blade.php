@@ -91,8 +91,8 @@
                 </li>
                 @endcan
             @can('admin-view')
-             <li {{{ ($current_route == 'location.create' ? 'class=active' : '') }}}>
-                <a href="{{ route('location.create') }}">
+             <li {{{ ($current_route == 'location.lists' ? 'class=active' : '') }}}>
+                <a href="{{ route('location.lists') }}">
                     <i class="icon-handbag"></i>
                     Location</a>
             </li>

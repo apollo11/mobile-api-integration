@@ -36,7 +36,6 @@ class DeviceToken extends Model
             ->get();
 
         return $deviceToken;
-
     }
 
     /**
@@ -52,6 +51,5 @@ class DeviceToken extends Model
 
         return $token;
     }
-
 
 }

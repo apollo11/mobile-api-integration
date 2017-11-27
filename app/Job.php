@@ -374,7 +374,9 @@ class Job extends Model
      */
     public function getUnemployed()
     {
-        $emp = DB::table('users')->get();
+        $emp = DB::table('users')
+            ->where("role_id","=","2")
+            ->get();
         return $emp;
     }
 
