@@ -38,17 +38,17 @@ class SettingsController extends Controller
                 ->withInput();
         } else {
         	$settings = Settings::find(1);
-        	$settings->terms_conditions = $data['terms_conditions'];
-            $settings->privacy_policy = $data['privacy_policy'];
-            $settings->faq = $data['faq'];
-            $settings->interview_instruction = $data['interview_instruction'];
-            $settings->point_basic = $data['point_basic'];
-            $settings->point_min = $data['point_min'];
-            $settings->point_reject_job = $data['point_reject_job'];
-            $settings->point_late_job = $data['point_late_job'];
-            $settings->point_cancel_job_before_72_hours = $data['point_cancel_job_before_72_hours'];
-            $settings->point_cancel_job_within_72_hours = $data['point_cancel_job_within_72_hours'];
-            $settings->point_dont_turnup_job = $data['point_dont_turnup_job'];
+        	$settings->terms_conditions = ($data['terms_conditions']==null) ? '' : $data['terms_conditions'];
+            $settings->privacy_policy = ($data['privacy_policy']==null) ? '' :$data['privacy_policy'];
+            $settings->faq = ($data['faq']==null) ? '' : $data['faq'];
+            $settings->interview_instruction =($data['interview_instruction']==null) ? '' : $data['interview_instruction'];
+            $settings->point_basic = ($data['point_basic']==null) ? '' :$data['point_basic'];
+            $settings->point_min = ($data['point_min']==null) ? '' : $data['point_min'];
+            $settings->point_reject_job = ($data['point_reject_job']==null) ? '' : $data['point_reject_job'];
+            $settings->point_late_job = ($data['point_late_job']==null) ? '' : $data['point_late_job'];
+            $settings->point_cancel_job_before_72_hours = ($data['point_cancel_job_before_72_hours']==null) ? '' : $data['point_cancel_job_before_72_hours'];
+            $settings->point_cancel_job_within_72_hours = ($data['point_cancel_job_within_72_hours']==null) ? '' :$data['point_cancel_job_within_72_hours'];
+            $settings->point_dont_turnup_job = ($data['point_dont_turnup_job']==null) ? '' : $data['point_dont_turnup_job'];
         	$settings->save();
 
         	return redirect()->back()->with('message', 'Updated successfully.');
