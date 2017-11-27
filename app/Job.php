@@ -23,6 +23,7 @@ class Job extends Model
         'contact_person',
         'contact_no',
         'business_manager',
+        'business_manager_id',
         'employer',
         'language',
         'job_date',
@@ -245,6 +246,8 @@ class Job extends Model
                 , 'jobs.latitude'
                 , 'jobs.longitude'
                 , 'jobs.geolocation_address'
+                , 'jobs.business_manager as job_manager'
+                , 'jobs.business_manager_id as job_manager_id'
                 , 'assign.is_assigned'
                 , 'assign.id as id_assigned'
             )
@@ -301,6 +304,8 @@ class Job extends Model
                 , 'jobs.geolocation_address'
                 , 'assign.is_assigned'
                 , 'assign.id as id_assigned'
+                , 'jobs.business_manager as job_manager'
+                , 'jobs.business_manager_id as job_manager_id'
 
             )
             ->when(!empty($param['status']), function ($query) use ($param) {
@@ -359,6 +364,8 @@ class Job extends Model
                 , 'jobs.longitude'
                 , 'jobs.geolocation_address'
                 , 'jobs.zip_code'
+                , 'jobs.business_manager as job_manager'
+                , 'jobs.business_manager_id as job_manager_id'
                 , 'assign.is_assigned'
                 , 'assign.id as id_assigned'
             )

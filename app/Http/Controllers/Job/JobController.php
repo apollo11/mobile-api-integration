@@ -35,6 +35,7 @@ class JobController extends Controller
     public $lastInsertedId;
     public $newJob;
     protected $googleMap;
+    protected $assignedJob;
 
 
     public function __construct(Request $request)
@@ -42,6 +43,7 @@ class JobController extends Controller
         $this->request = $request;
         $this->newJob = constant('NEW_JOB');
         $this->googleMap = constant('GOOGLE_MAP_ENDPOINT');
+        $this->assignedJob = constant('ASSIGNED_JOB');
     }
 
     /**
@@ -114,6 +116,7 @@ class JobController extends Controller
     {
         $data = $request->all();
         $location = explode('.', $request->input('job_location'));
+        $businessMngr = explode('.', $request->input('business_manager'));
         $zipCode = $this->getAddress($request->input('postal_code'));
         $data['zip_code'] = $request->input('postal_code');
         $data['postal_code'] = $zipCode;
@@ -129,7 +132,9 @@ class JobController extends Controller
             'min_age' => $age[0],
             'max_age' => $age[1],
             'employer_id' => $employer[0],
-            'employer' => $employer[1]
+            'employer' => $employer[1],
+            'business_id' => $businessMngr[0],
+            'business' => $businessMngr[1]
         ];
 
         $validator = $this->rules($data);
@@ -174,7 +179,8 @@ class JobController extends Controller
             'no_of_person' => $data['no_of_person'],
             'contact_person' => empty($data['contact_person']) ? '' : $data['contact_person'],
             'contact_no' => empty($data['contact_no']) ? '' : $data['contact_no'],
-            'business_manager' => empty($data['business_manager']) ? '' : $data['business_manager'],
+            'business_manager' => empty($data['business']) ? '' : $data['business'],
+            'business_manager_id' => empty($data['business_id']) ? '' : $data['business_id'],
             'employer' => $data['employer'],
             'rate' => empty($data['hourly_rate']) ? 0 : $data['hourly_rate'],
             'language' => empty($data['preferred_language']) ? '' : $data['preferred_language'],
@@ -192,7 +198,6 @@ class JobController extends Controller
             'zip_code' => $data['zip_code'],
             'recipient_group' => $data['recipient_group']
         ]);
-
         $this->lastInsertedId = $insertedId->id;
     }
 
@@ -218,7 +223,8 @@ class JobController extends Controller
             'no_of_person' => $data['no_of_person'],
             'contact_person' => empty($data['contact_person']) ? '' : $data['contact_person'],
             'contact_no' => empty($data['contact_no']) ? '' : $data['contact_no'],
-            'business_manager' => empty($data['business_manager']) ? '' : $data['business_manager'],
+            'business_manager' => empty($data['business']) ? '' : $data['business'],
+            'business_manager_id' => empty($data['business_id']) ? '' : $data['business_id'],
             'employer' => $data['employer'],
             'rate' => empty($data['hourly_rate']) ? 0 : $data['hourly_rate'],
             'language' => empty($data['preferred_language']) ? '' : $data['preferred_language'],
@@ -270,6 +276,7 @@ class JobController extends Controller
         $nationality = $this->nationalityList();
         $age = $this->age();
         $employer = $user->employerList();
+        $businessMngr = \App\User::where('role', 'business_manager')->pluck('name', 'id');
 
         return view('job.edit-form', ['user' => $user
             , 'industry' => $industry
@@ -278,7 +285,7 @@ class JobController extends Controller
             , 'nationality' => $nationality
             , 'age' => $age
             , 'employer' => $employer
-        ]);
+        ], compact('businessMngr'));
 
     }
 
@@ -311,8 +318,12 @@ class JobController extends Controller
     public function sendNotification(Request $request, $id)
     {
         $user_ids = $request->input("employees-list");
-        $deviceTokenResult = DeviceToken::whereIn('user_id', $user_ids)->get();
 
+        foreach ($user_ids as $key) {
+            $this->saveAssignedNotif($key, $id);
+        }
+
+        $deviceTokenResult = DeviceToken::whereIn('user_id', $user_ids)->get();
         $deviceTokens = array();
         for ($i=0; $i < count($deviceTokenResult); $i++) { 
             array_push($deviceTokens, $deviceTokenResult[$i]->device_token);
@@ -323,13 +334,14 @@ class JobController extends Controller
         // $reg_id = ["cOz3btJoiZ0:APA91bG1b9LgJRuQAmkGLoXOzgWeijYtiJX28MPml0t-7EyYdxRdfsWouxnA3XdbAmPjOxWR7VzbEeIxrs2DBdiNwRIFLup--Eh-n8E4IOvykp7khWf9LV12Fde5dFNCvy2ReKPxGP1j"];
         $data["registration_ids"] = $deviceTokens;
         $data["badge"] = 1;
-        $data["type"] = "job_assigned";
+        $data["type"] = $this->assignedJob;
         $data["job_id"] = $id;
 
         // $result = $this->ValidUseSuccessResp(200, true);
         // echo $result;
 
         if ($this->pushNotif($data) == "200") {
+
             // return redirect(route('job.lists'));
             return redirect(route("job.lists",["success"]));
         } else {
@@ -353,12 +365,14 @@ class JobController extends Controller
 
         $data = $request->all();
         $location = explode('.', $request->input('job_location'));
+        $businessMngr = explode('.', $request->input('business_manager'));
         $zipCode = $this->getAddress($request->input('postal_code'));
         $data['zip_code'] = $request->input('postal_code');
         $data['postal_code'] = $zipCode;
         $industry = explode('.', $request->input('industry'));
         $age = explode('-', $request->input('age'));
         $employer = explode('.', $request->input('job_employer'));
+
         $split = [
             'location_id' => $location[0],
             'location' => $location[1],
@@ -367,7 +381,9 @@ class JobController extends Controller
             'min_age' => $age[0],
             'max_age' => $age[1],
             'employer_id' => $employer[0],
-            'employer' => $employer[1]
+            'employer' => $employer[1],
+            'business_id' => $businessMngr[0],
+            'business' => $businessMngr[1]
         ];
 
         $validator = $this->rules($data);
@@ -726,6 +742,20 @@ class JobController extends Controller
             }
         }
         return view('job.location_tracking', ['details' => $details, 'related' => $relatedCandidates,'markers'=>$markers]);
+    }
+
+    /**
+     * Saving Notification when assigning the Job
+     * @return mixed|static
+     */
+    public function saveAssignedNotif($userId, $jobId)
+    {
+        $save = \App\User::find($userId);
+        $save->userNotification()->updateOrCreate([
+            'job_id' => $jobId,
+            'type' => $this->assignedJob
+        ]);
+
     }
 
 

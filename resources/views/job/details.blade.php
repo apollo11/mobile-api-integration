@@ -88,7 +88,7 @@
                                                         </tr>
                                                         <tr>
                                                             <td> <strong>Business Manager </strong></td>
-                                                            <td>{{ $details->business_manager }}</td>
+                                                            <td>{{ $details->job_manager }}</td>
                                                         </tr>
                                                         <tr>
                                                             <td><strong>Role</strong></td>
