@@ -45,4 +45,15 @@ class PushNotification extends Model
         return date("m/d/Y", $phpdate);
     }
 
+    public function getCurrentDateTime() {
+        $dateTime =  DB::table('user_notifications')
+            ->select(
+                 'NOW()'
+            )
+            ->get();
+
+        return $dateTime;
+
+    }
+
 }

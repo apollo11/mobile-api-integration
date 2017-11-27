@@ -26,6 +26,19 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')
         //          ->hourly();
+
+        $schedule->call(function () {
+            app('App\Http\Controllers\PushNotification\PushNotificationController')->notifyByPublishDateTime();
+        })->everyFiveMinutes();
+
+        $schedule->call(function () {
+            app('App\Http\Controllers\Notification\NotificationController')->jobReminderForDay();
+        })->hourly();
+
+        $schedule->call(function () {
+            app('App\Http\Controllers\Notification\NotificationController')->birthdayNotification();
+        })->daily();
+
     }
 
     /**

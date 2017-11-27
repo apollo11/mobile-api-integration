@@ -6,11 +6,15 @@ use Validator;
 use App\User as User;
 use App\Job as Job;
 use App\AssignJob;
+use App\DeviceToken;
+use App\Http\Traits\PushNotiftrait;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 class AssignJobsController extends Controller
 {
+    use PushNotiftrait;
+    
     /**
      * Display a listing of the resource.
      *
@@ -69,6 +73,32 @@ class AssignJobsController extends Controller
                         'user_id' => $value->id
                     ],
                 ];
+
+                $jobDetails = Job::where('id', $jobId)->get();
+                $user_ids = $value->id;
+
+                $message = "Dear Sir/Madam, You have been assigned a job successfully!  Below is the job information: " . "\n" . "Job Name: " . $jobDetails[0]->job_title . "\n" . " Job Date and Time: " . $jobDetails[0]->job_date . "\n" . " Job Location: " . $jobDetails[0]->location . "\n" . " Hourly Rate: " . $jobDetails[0]->rate . "\n" .  " Contact Person: " . $jobDetails[0]->contact_person . "\n" . " Contact No.: " . $jobDetails[0]->contact_no;
+
+                $deviceTokenResult = DeviceToken::whereIn('user_id', $user_ids)->get();
+                $deviceTokens = array();
+                    for ($i=0; $i < count($deviceTokenResult); $i++) { 
+                    array_push($deviceTokens, $deviceTokenResult[$i]->device_token);
+                }
+
+                $data['title'] = "New Jobs Assigned to You";
+                $data["body"] = $message;
+                $data["registration_ids"] = $deviceTokens;
+                $data["badge"] = 1;
+                $data["type"] = "job_assigned";
+                $data["job_id"] = $jobId;
+
+
+                if ($this->pushNotif($data) == "200") {
+                    //  Success Code
+                } else {
+                    //  Failed Code
+                }
+
             }
 
             for ($i = 0; $i < count($assigned); $i++) {

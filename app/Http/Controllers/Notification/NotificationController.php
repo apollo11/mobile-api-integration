@@ -6,6 +6,7 @@ use Validator;
 use App\User;
 use App\DeviceToken;
 use App\Notification;
+use App\JobSchedule;
 use Illuminate\Http\Request;
 use App\Http\Traits\PushNotiftrait;
 use App\Http\Traits\HttpResponse;
@@ -466,6 +467,76 @@ class NotificationController extends Controller
 
         return response()->json(['notifications' => $dataUndefined, 'unread_count' => $count]);
 
+    }
+
+
+    public function jobReminderForDay() {
+
+        $title = "Job Reminder";
+        $deviceTokenResult = array();
+        $deviceTokenResult = DeviceToken::join("job_schedules","job_schedules.user_id","=", "user_push_notification_tokens.user_id")
+        ->join("jobs","jobs.id","=","job_schedules.job_id")
+        ->where("jobs.job_date",">=","DATE_ADD(NOW(), INTERVAL 24 HOUR)")
+        ->where("jobs.job_date","<","DATE_ADD(NOW(), INTERVAL 25 HOUR)")
+        ->select("jobs.id", "jobs.job_title", "jobs.location", "jobs.job_date", "device_token") 
+        ->get();
+
+        $resultArray = array();
+        $deviceTokens = array();
+        for ($i=0; $i < count($deviceTokenResult); $i++) { 
+            // array_push($deviceTokens, $deviceTokenResult[$i]->device_token);
+            $resultArray[$deviceTokenResult[$i]->id]=$deviceTokenResult[$i];
+            $deviceTokens[$deviceTokenResult[$i]->id][]=$deviceTokenResult[$i]->device_token;
+        }
+
+        foreach ($resultArray as $key => $value) {
+
+            $message = "Your job " . $resultArray[$key]->job_title . " at " . $resultArray[$key]->location . " on " . $resultArray[$key]->job_date . " will start in 24 hours! Will you still go for the job on time? ";
+
+            $data['title'] = $title;
+            $data["body"] = $message;
+            $data["registration_ids"] = $deviceTokens[$key];
+            $data["badge"] = 1;
+            $data["type"] = "job_reminder";
+            $data["job_id"] = $key;
+
+            if ($this->pushNotif($data) == "200") {
+                //Success
+            } else {
+                //Failed
+            }    
+        }
+
+        
+    }
+
+
+    public function birthdayNotification() {
+
+        $title = "Happy Birthday!";
+        $message = "Dear user, Happy Birthday! Wish you all the best and many happy returns of the day!";
+        $deviceTokenResult = array();
+        $deviceTokenResult = DeviceToken::join('users', 'users.id', '=', 'user_push_notification_tokens.user_id')
+            ->where('users.role_id', '=', 2)
+            ->where('date_of_birth', '=', 'DATE(NOW())')
+            ->get();
+
+        $deviceTokens = array();
+        for ($i=0; $i < count($deviceTokenResult); $i++) { 
+            array_push($deviceTokens, $deviceTokenResult[$i]->device_token);
+        }
+
+        $data['title'] = $title;
+        $data["body"] = $message;
+        $data["registration_ids"] = $deviceTokens;
+        $data["badge"] = 1;
+        $data["type"] = "birthday";
+
+        if ($this->pushNotif($data) == "200") {
+            //Success
+        } else {
+            //Failed
+        }
     }
 
 }

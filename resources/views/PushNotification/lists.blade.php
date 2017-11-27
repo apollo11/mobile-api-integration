@@ -53,7 +53,8 @@
                                        id="employee-table">
                                     <thead>
                                     <tr>
-                                        <th>Message</th>
+                                        <th>#</th>
+                                        <th>Notification Subject</th>
                                         <th>Recipient Group</th>
                                         <th>Date Sent</th>
                                         <th>Create Date</th>
@@ -63,8 +64,9 @@
                                     <tbody>
                                     @foreach($list as $key)
                                     <tr>
+                                        <td>{{ $key->id }}</td>
                                         <td>{{ $key->message }}</td>
-                                        <td>{{ $key->job_id }}</td>
+                                        <td>{{ $key->recipient_group_id }}</td>
                                         <td>{{ $key->created_at }}</td>
                                         <td>{{ $key->updated_at }}</td>
 
@@ -82,9 +84,6 @@
                                                     <li>
                                                         <a href="{{ route('pushnotification.edit',['id' =>  $key->id]) }}">
                                                         <i class="fa fa-edit"></i> Edit </a>
-                                                    </li>
-                                                    <li>
-                                                        <i class="fa fa-eye"></i> View </a>
                                                     </li>
                                                 </ul>
                                             </div>

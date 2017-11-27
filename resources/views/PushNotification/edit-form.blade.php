@@ -34,9 +34,13 @@
                                         <label class="col-md-3 control-label">Receipient Group<span class="is-required">*</span></label>
                                         <div class="col-md-7">
                                             <select class="form-control" name="receipient-group">
-                                                <option value="draft mode">Draft mode</option>
-                                                <option value="active">Active</option>
-                                                <option value="inactive">Inactive</option>
+                                                @foreach( $groups as $group)
+                                                    @if($loop->count == 0)
+                                                         <option value="all"> - ALL - </option>
+                                                    @else
+                                                        <option value="{{ $group->id }}" {{ old('group') == $group->id ? "selected" : "" }}>{{ $group->group_name }}</option>
+                                                    @endif
+                                                @endforeach
                                             </select>
                                             @if ($errors->has('receipient-group'))
                                                 <span class="help-block">
@@ -93,7 +97,6 @@
                                     <div class="row">
                                         <div class="col-md-offset-3 col-md-9">
                                             <button type="submit" class="btn green">Submit</button>
-                                            <button type="button" class="btn default">Cancel</button>
                                         </div>
                                     </div>
                                 </div>

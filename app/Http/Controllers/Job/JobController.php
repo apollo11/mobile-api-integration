@@ -306,8 +306,13 @@ class JobController extends Controller
 
     public function sendNotification(Request $request, $id)
     {
+        $jobDetails = Job::where('id', $id)->get();
+        // echo $jobDetails[0];
+
         $user_ids = $request->input("employees-list");
         $deviceTokenResult = DeviceToken::whereIn('user_id', $user_ids)->get();
+
+        $message = "Dear Sir/Madam, You have been assigned a job successfully!  Below is the job information: " . "\n" . "Job Name: " . $jobDetails[0]->job_title . "\n" . " Job Date and Time: " . $jobDetails[0]->job_date . "\n" . " Job Location: " . $jobDetails[0]->location . "\n" . " Hourly Rate: " . $jobDetails[0]->rate . "\n" .  " Contact Person: " . $jobDetails[0]->contact_person . "\n" . " Contact No.: " . $jobDetails[0]->contact_no;
 
         $deviceTokens = array();
         for ($i=0; $i < count($deviceTokenResult); $i++) { 
@@ -315,7 +320,7 @@ class JobController extends Controller
         }
 
         $data['title'] = "New Jobs Assigned to You";
-        $data["body"] = "You have been assigned a job successfully! Click here for more details";
+        $data["body"] = $message;
         // $reg_id = ["cOz3btJoiZ0:APA91bG1b9LgJRuQAmkGLoXOzgWeijYtiJX28MPml0t-7EyYdxRdfsWouxnA3XdbAmPjOxWR7VzbEeIxrs2DBdiNwRIFLup--Eh-n8E4IOvykp7khWf9LV12Fde5dFNCvy2ReKPxGP1j"];
         $data["registration_ids"] = $deviceTokens;
         $data["badge"] = 1;
