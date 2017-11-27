@@ -67,5 +67,3 @@
         </div>
     </div>
 @endsection
-
-@include('layouts.pushnotification-datatables-include')

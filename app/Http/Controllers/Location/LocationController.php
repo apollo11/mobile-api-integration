@@ -90,7 +90,8 @@ class LocationController extends Controller
      */
     public function edit($id)
     {
-        //
+        $location = Location::find($id);
+        return view('location.edit-form', ['location'=>$location]);
     }
 
     /**
@@ -102,7 +103,23 @@ class LocationController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $data = $request->all();
+
+        $validator = $this->rules($data);
+
+        if ($validator->fails()) {
+
+            return redirect('location/lists')
+                ->withErrors($validator)
+                ->withInput();
+        } else {
+            $location = Location::find($id);
+            $location->name = $request->input('name');
+            $location->zip_code = $request->input('zip_code');
+            $location -> save();
+
+            return redirect('location/lists');
+        }
     }
 
     /**
