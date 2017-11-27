@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Job;
 
 use Storage;
 use Validator;
+use App\User;
+use App\AssignJob;
 use App\DeviceToken;
 use App\Employee;
 use App\Employer;
@@ -319,9 +321,7 @@ class JobController extends Controller
     {
         $user_ids = $request->input("employees-list");
 
-        foreach ($user_ids as $key) {
-            $this->saveAssignedNotif($key, $id);
-        }
+        $this->insertUpdateAssignJob($user_ids, $id);
 
         $deviceTokenResult = DeviceToken::whereIn('user_id', $user_ids)->get();
         $deviceTokens = array();
@@ -757,6 +757,56 @@ class JobController extends Controller
         ]);
 
     }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function insertUpdateAssignJob($userId, $jobId)
+    {
+            $user = User::find($userId);
+            $jobs = Job::find($jobId);
+
+            foreach ($user as $key => $value) {
+                if(!$this->findExistingJob($value->id, $jobs->id)) {
+                    $assigned[] = [
+                        $value->id => [
+                            'is_assigned' => true,
+                            'assign_job_id' => $jobs->id,
+                            'user_id' => $value->id
+                        ],
+                    ];
+
+                    $this->saveAssignedNotif($value->id, $jobs->id);
+                } else {
+                    $assigned[] = [];
+
+                }
+            }
+
+            for ($i = 0; $i < count($assigned); $i++) {
+                $jobs->assignJobs()->syncWithoutDetaching($assigned[$i]);
+            }
+
+    }
+
+    /**
+     * Find Existing Job
+     * @param $userId
+     * @param $jobId
+     * @return mixed
+     */
+    public function findExistingJob($userId, $jobId)
+    {
+        $data = new AssignJob();
+        $output = $data->ifDataExist($userId, $jobId);
+
+        return $output;
+
+    }
+
 
 
 }
