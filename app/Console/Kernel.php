@@ -15,6 +15,7 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         \App\Console\Commands\AutoCancelled::class,
         \App\Console\Commands\AutoCompleted::class,
+        \App\Console\Commands\ExpiredJobs::class,
     ];
 
     /**
@@ -29,6 +30,9 @@ class Kernel extends ConsoleKernel
                   ->hourly();
 
         $schedule->command('job:auto_cancelled')
+            ->hourly();
+
+        $schedule->command('expired:job')
             ->hourly();
 
     }

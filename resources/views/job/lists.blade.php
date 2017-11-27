@@ -126,6 +126,10 @@
                                             <td>
                                                 <span class="label label-sm label-success">{{ ucfirst($value->status) }} </span>
                                             </td>
+                                        @elseif($value->status == 'expired')
+                                            <td>
+                                                <span class="label label-sm label-danger">{{ ucfirst($value->status) }} </span>
+                                            </td>
                                         @else
                                             <td>
                                                 <span class="label label-sm label-warning">{{ ucfirst($value->status) }} </span>

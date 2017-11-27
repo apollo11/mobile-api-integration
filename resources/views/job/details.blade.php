@@ -165,6 +165,9 @@
                                                                 <td><span class="label label-sm label-danger">Need to Approve</span></td>
                                                             @elseif($details->status == 'active')
                                                                 <td><span class="label label-sm label-success">{{ ucfirst($details->status) }} </span></td>
+                                                            @elseif($details->status == 'expired')
+                                                                <td><span class="label label-sm label-danger">{{ ucfirst($details->status) }} </span></td>
+
                                                             @else
                                                                 <td><span class="label label-sm label-warning">{{ ucfirst($details->status) }} </span></td>
                                                             @endif
