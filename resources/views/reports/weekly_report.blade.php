@@ -3,7 +3,6 @@
 @section('content')
 <div class="page-content-wrapper table-datatable-wrapper">
 <div class="page-content reports-wrapper">
-    <form action="{{ route('reports.weekly_report')  }}" method="POST">
         <div class="row">
         <div class="col-md-12">
         <div class="portlet light">
@@ -16,53 +15,32 @@
             </div>
 
             <div class="portlet-body">
-                <table class="table table-striped table-bordered table-hover  no-footer collapsed table-datatable" >
-                    <thead>
-                    <tr>
-                        <th rowspan=2>#</th>
-                        <th rowspan=2>Business Manager</th>
-                        <th rowspan=2>Hotel</th>
-                        <th colspan=2 class="text-center">Day 1</th>
-                        <th colspan=2 class="text-center">Day 2</th>
-                        <th colspan=2 class="text-center">Day 3</th>
-                        <th colspan=2 class="text-center">Day 4</th>
-                        <th colspan=2 class="text-center">Day 5</th>
-                        <th colspan=2 class="text-center">Day 6</th>
-                        <th colspan=2 class="text-center">Day 7</th>
-                        <th rowspan=2>RQST</th>
-                        <th rowspan=2>Actual</th>
-                        <th rowspan=2>%</th>
-                    </tr>
+                <form action="{{url('reports/weekly_report_filter')}}" method="POST" id="filter-report">
+                 {{ csrf_field() }}
+                <div class="form-inline row">
+                    <div class="col-sm-12">
+                        <div class="input-group">
+                            <input type="text" class="form-control" value="{{$startdate}}" name="startdate" placehoder="Start Date" id="startdate" data-date-format="yyyy-mm-dd" placeholder="Start Date" /> 
+                            <span class="input-group-addon"> - </span>
+                            <input type="text" class="form-control" value="{{$stopdate}}" name="stopdate" placehoder="End Date" id="enddate" placeholder="End Date" readonly="readonly" />
+                        </div>
+                        <div class="input-group">
+                            <input name="keyword" class="form-control" value="" placeholder="Enter a keyword to search" size='40'>
+                        </div>
+                        <input type="hidden" name="type" value="filter" id="report-filter-type">
+                        <button type="button" id="submitform-btn" class="btn btn-info">Filter</button>
+                        <button type="button" id="exportform-btn" class="btn btn-info pull-right sbold red">Export</button>
+                    </div>
+                </form>
+                </div>
 
-                    <tr>
-                        <th>RQST</th>
-                        <th>Actual</th>
-                        <th>RQST</th>
-                        <th>Actual</th>
-                        <th>RQST</th>
-                        <th>Actual</th>
-                        <th>RQST</th>
-                        <th>Actual</th>
-                        <th>RQST</th>
-                        <th>Actual</th>
-                        <th>RQST</th>
-                        <th>Actual</th>
-                        <th>RQST</th>
-                        <th>Actual</th>
-                
-                    </tr>
-                    </thead>
-                    <tbody>
-
-                    <tbody>
-                       
-                    </tbody>
-                </table>
+                <div class="table-scrollable" id="report-content">
+                    @include('reports.weekly_report_content',['daterange_arr'=>$daterange_arr, 'weekly_report'=>$weekly_report])
+                </div>
             </div>
         </div>
         </div>
         </div>
-    </form>
 </div>
 </div>
 @endsection
@@ -75,35 +53,62 @@
 <script src="{{ asset('assets/global/scripts/datatable.js') }}" type="text/javascript"></script>
 <script src="{{ asset('assets/global/plugins/datatables/datatables.min.js') }}" type="text/javascript"></script>
 <script src="{{ asset('assets/pages/scripts/table-datatables-buttons.min.js') }}" type="text/javascript"></script>
+
+/*for export*/
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.11.10/xlsx.core.min.js" type="text/javascript"></script>
+<script src="https://fastcdn.org/FileSaver.js/1.1.20151003/FileSaver.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/TableExport/3.3.13/js/tableexport.min.js" type="text/javascript"></script> -->
+/*for export*/
 <script>
     function getExportFileName(){
         return 'Weekly Report Export';
     }
 
     $(document).ready(function() {
+        $("#startdate").datepicker({
+            todayBtn:  1,
+            autoclose: true,
+        }).on('changeDate', function (selected) {
+            var minDate = new Date(selected.date.valueOf());
+            minDate.setDate(minDate.getDate() + 6);
 
-        $('.table-datatable').DataTable({
-             dom: '<"toolbar col-md-8">Brtip',
-             buttons: [
-                        { "extend": 'excel', "text":'Export',"className": 'btn sbold red', filename: function () { return getExportFileName();} }
-                    ],
-            autoFill: true,
-            ordering: false,
-            scrollX : true
-
+            $('#enddate').val($.datepicker.formatDate('yy-mm-dd',  minDate ));
         });
 
-        $("div.toolbar").html('<div class="input-group input-large date-picker input-daterange" data-date="10/11/2012" data-date-format="mm/dd/yyyy">                                                            <input type="text" class="form-control" name="from">                      <span class="input-group-addon"> to </span><input type="text" class="form-control" name="to"> </div>');
-        /*
-        $('.table-datatable').DataTable({
-                    dom: 'Bfrtip',
-                    buttons: [
-                        { "extend": 'excel', "text":'Export',"className": 'btn sbold red' }
-                    ],
-                    autoFill: true,
-    //                "scrollCollapse": true,
-                    "scrollY":"500"
-                });*/
+       /* $("#filter-report").submit(function(e) {
+
+            $.ajax({
+                    url: $('#filter-report').attr("action"),
+                    method: 'POST',
+                    data : $('#filter-report').serialize(),
+                    success: function(data){
+                        $('#report-content').html(data);
+                    }
+            });
+            e.preventDefault(); 
+        });*/
+
+       /* $('#filter-report table').tableExport({
+            bootstrap: false
+        });*/
+
+        $( "#submitform-btn" ).click(function() {
+            var url = $('#filter-report').attr("action");
+            $('#report-filter-type').val('filter');
+            $.ajax({
+                    url: url,
+                    method: 'POST',
+                    data : $('#filter-report').serialize(),
+                    success: function(data){
+                        $('#report-content').html(data);
+                    }
+            });
+        });
+
+        $("#exportform-btn" ).click(function() {
+            $('#report-filter-type').val('export');
+            $('#filter-report').submit();
+        });
     });
 </script>
 @stop 
