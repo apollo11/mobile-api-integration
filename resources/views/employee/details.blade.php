@@ -61,20 +61,16 @@
                             </div>
                             <div class="actions">
                                 @if($role_id == 0)
-                                    <a class="btn sbold green"
-                                       href="{{ route('employee.edit',['id' => $userDetails->id])  }}">
-                                        Update</a>
-                                    <a class="btn sbold green"
-                                       href="{{ route('employee.approve',['id' => $userDetails->id])  }}"
-                                       onclick="event.preventDefault();
-                                               document.getElementById('{{'approve-'.$userDetails->id }}').submit();">
+                                    <a class="btn sbold green" href="{{ route('employee.edit',['id' => $userDetails->id])  }}">Update</a>
+                                     @if($userDetails->employee_status != 'reject' && $userDetails->employee_status != 'approved')
+                                    <a class="btn sbold green" href="{{ route('employee.approve',['id' => $userDetails->id])  }}"
+                                       onclick="event.preventDefault(); document.getElementById('{{'approve-'.$userDetails->id }}').submit();">
                                         Approve</a>
-                                    <a class="btn sbold green"
-                                       href="{{ route('employee.reject',['id' => $userDetails->id]) }}"
-                                       onclick="event.preventDefault();
-                                               document.getElementById('{{'reject-'.$userDetails->id }}').submit();">
+                                    <a class="btn sbold green"  href="{{ route('employee.reject',['id' => $userDetails->id]) }}"
+                                       onclick="event.preventDefault(); document.getElementById('{{'reject-'.$userDetails->id }}').submit();">
                                         Reject
                                     </a>
+                                    @endif
                                 @endif
                                 <input class="btn sbold green" name="multiple" onclick="window.print()" value="Print"
                                        type="submit"/>
