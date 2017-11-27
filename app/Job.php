@@ -558,7 +558,7 @@ class Job extends Model
     {
         $gender = [
             'male'
-            , 'femal'
+            , 'female'
             , 'both'
 
         ];

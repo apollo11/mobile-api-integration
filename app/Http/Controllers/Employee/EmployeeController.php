@@ -568,6 +568,7 @@ class EmployeeController extends Controller
             , 'jobInfo' => $jobInfo
             , 'applied' => $applied
             , 'completed' => $completed
+            , 'role_id' => Auth::user()->role_id
         ]);
 
     }

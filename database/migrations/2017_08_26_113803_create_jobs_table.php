@@ -31,7 +31,7 @@ class CreateJobsTable extends Migration
             $table->dateTimeTz('job_date');
             $table->decimal('rate', 5, 2);
             $table->longText('notes');
-            $table->enum('status', ['active', 'inactive', 'draft mode']);
+            $table->enum('status', ['active', 'inactive', 'draft mode', 'pending','cancelled','auto_cancelled', 'expired'])->default('pending');
             $table->timestamps();
             $table->foreign('job_id')->references('id')->on('users')->onDelete('cascade');
         });

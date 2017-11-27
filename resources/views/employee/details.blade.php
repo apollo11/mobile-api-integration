@@ -60,22 +60,22 @@
                                 <span class="caption-subject bold uppercase">Employees</span>
                             </div>
                             <div class="actions">
-                                @can('employee-view')
-                                <a class="btn sbold green"
-                                   href="{{ route('employee.edit',['id' => $userDetails->id])  }}">
-                                    Update</a>
-                                <a class="btn sbold green"
-                                   href="{{ route('employee.approve',['id' => $userDetails->id])  }}"
-                                   onclick="event.preventDefault();
-                                           document.getElementById('{{'approve-'.$userDetails->id }}').submit();">
-                                    Approve</a>
-                                <a class="btn sbold green"
-                                   href="{{ route('employee.reject',['id' => $userDetails->id]) }}"
-                                   onclick="event.preventDefault();
-                                           document.getElementById('{{'reject-'.$userDetails->id }}').submit();">
-                                    Reject
-                                </a>
-                                @endcan
+                                @if($role_id == 0)
+                                    <a class="btn sbold green"
+                                       href="{{ route('employee.edit',['id' => $userDetails->id])  }}">
+                                        Update</a>
+                                    <a class="btn sbold green"
+                                       href="{{ route('employee.approve',['id' => $userDetails->id])  }}"
+                                       onclick="event.preventDefault();
+                                               document.getElementById('{{'approve-'.$userDetails->id }}').submit();">
+                                        Approve</a>
+                                    <a class="btn sbold green"
+                                       href="{{ route('employee.reject',['id' => $userDetails->id]) }}"
+                                       onclick="event.preventDefault();
+                                               document.getElementById('{{'reject-'.$userDetails->id }}').submit();">
+                                        Reject
+                                    </a>
+                                @endif
                                 <input class="btn sbold green" name="multiple" onclick="window.print()" value="Print"
                                        type="submit"/>
                             </div>

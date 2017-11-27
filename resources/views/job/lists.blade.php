@@ -34,7 +34,7 @@
                                 </div>
                                 {{ csrf_field() }}
                                 <div class="actions">
-                                    @if ($role == 'Administrator')
+                                    @if ($role_id == 0)
                                     <input class="btn sbold green" name="multiple" value="Approve" type="submit"/>
                                     <input class="btn sbold green" name="multiple" value="Reject" type="submit"/>
                                     @endif
@@ -82,7 +82,7 @@
                                             </label>
                                         </th>
                                         <th>#</th>
-                                        @if ($role == 'Administrator')
+                                        @if ($role_id == 0)
                                         <th>Employer</th>
                                         @endif
                                         <th>Job Name</th>
@@ -107,7 +107,7 @@
                                             </label>
                                         </td>
                                         <td>{{ $loop->iteration }}</td>
-                                         @if ($role == 'Administrator')
+                                         @if ($role_id == 0)
                                         <td><a href="{{ route('employer.details',['id' => $value->user_id ]) }}">{{ $value->company_name }} </a></td>
                                         @endif
                                         <td> <a href="{{ route('job.details',['id' =>  $value->id])  }}"> {{ $value->job_title }} </a></td>
@@ -120,11 +120,15 @@
 
                                         @if($value->status == 'inactive')
 
-                                            <td><span class="label label-sm label-danger"> Need to Approve </span></td>
+                                            <td><span class="label label-sm label-danger">{{ ($value->start_date < \Carbon\Carbon::now()) ? 'Expired' : ucfirst($value->status) }}</span></td>
 
                                         @elseif($value->status == 'active')
                                             <td>
                                                 <span class="label label-sm label-success">{{ ucfirst($value->status) }} </span>
+                                            </td>
+                                        @elseif($value->status == 'expired')
+                                            <td>
+                                                <span class="label label-sm label-danger">{{ ucfirst($value->status) }} </span>
                                             </td>
                                         @else
                                             <td>
@@ -152,7 +156,7 @@
                                                         <a href="{{ route('job.details',['id' =>  $value->id])  }}">
                                                             <i class="fa fa-eye"></i> View </a>
                                                     </li>
-                                                     @if ($role == 'Administrator')
+                                                     @if ($role_id == 0)
                                                     <li>
                                                         <a href="{{ route('job.multiple',['id' =>  $value->id, 'param' => 'Approve'])  }}"
                                                            onclick="event.preventDefault();

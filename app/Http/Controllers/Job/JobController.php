@@ -52,6 +52,7 @@ class JobController extends Controller
     public function index(Request $request, $notification_status = null)
     {
         $role = Auth::user()->role;
+        $roleId = Auth::user()->role_id;
 
 
         if ($role == 'employer') {
@@ -65,10 +66,13 @@ class JobController extends Controller
             'userid' => $userid
         ];
 
-
         $jobsLists = $this->jobLists($param);
 
-        return view('job.lists', ['job' => $jobsLists,'role'=>$role, 'notification_status' => $notification_status]);
+        return view('job.lists', [
+            'job' => $jobsLists
+            ,'role'=>$role
+            , 'role_id' => $roleId
+            , 'notification_status' => $notification_status]);
     }
 
     /**
@@ -326,9 +330,6 @@ class JobController extends Controller
         
     }
 
-    
-
-
     /**
      * Update the specified resource in storage.
      *
@@ -555,9 +556,17 @@ class JobController extends Controller
         $relatedCandidates = $schedule->getRelatedCandidates($id);
         $employeeList = $employee->employeeLists($param);
 
-        return view('job.details', ['details' => $details, 'related' => $relatedCandidates, 'list' => $employeeList]);
+        return view('job.details', ['details' => $details
+            , 'related' => $relatedCandidates
+            , 'list' => $employeeList
+            , 'role_id' => Auth::user()->role_id
+        ]);
     }
 
+    /**
+     * @param $data
+     * @return \Illuminate\Http\JsonResponse|int
+     */
     public function saveJobsNotif($data)
     {
         $employer = explode('.', $data['job_employer']);
@@ -687,6 +696,10 @@ class JobController extends Controller
         }
     }
 
+    /**
+     * @param $id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function location_tracking($id)
     {
         $param[] = null;
@@ -706,4 +719,6 @@ class JobController extends Controller
         }
         return view('job.location_tracking', ['details' => $details, 'related' => $relatedCandidates,'markers'=>$markers]);
     }
+
+
 }
