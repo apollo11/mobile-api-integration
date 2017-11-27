@@ -591,7 +591,7 @@ class Job extends Model
             ->orderBy('jobs.business_manager', 'asc')
             ->orderBy('users.company_name', 'asc')
             ->orderBy('jobs.user_id', 'asc')
-            ->orderBy('jobs.job_date', 'asc')
+            // ->orderBy('jobs.job_date', 'asc')
             ->get();
 
         return $result;
