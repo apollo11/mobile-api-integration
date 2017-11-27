@@ -55,6 +55,7 @@ class CancelJob extends Model
     {
         $cancelledJob = DB::table('job_schedules')
             ->leftJoin('jobs', 'jobs.id', '=', 'job_schedules.job_id')
+            ->leftJoin('assign_job_job as assign', 'assign.job_id', '=', 'job_schedules.job_id')
             ->select(
                 'jobs.id'
                 , 'jobs.description as job_description'
@@ -90,6 +91,9 @@ class CancelJob extends Model
                 , 'job_schedules.cancel_status'
                 , 'job_schedules.cancel_file_path'
                 , 'job_schedules.cancel_reason'
+                , 'jobs.contact_person'
+                , 'assign.is_assigned'
+                , 'assign.id as id_assigned'
 
             )
             ->where('job_schedules.job_id' ,$jobId)

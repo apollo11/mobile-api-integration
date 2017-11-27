@@ -153,9 +153,9 @@ class Employer extends Model
      */
     public function relatedJobs($userId)
     {
-
         $jobs = DB::table('users')
             ->join('jobs', 'users.id', '=', 'jobs.user_id')
+            ->leftJoin('assign_job_job as assign', 'assign.job_id', '=', 'jobs.id')
             ->select(
                 'jobs.id'
                 , 'jobs.user_id'
@@ -192,7 +192,9 @@ class Employer extends Model
                 , 'jobs.latitude'
                 , 'jobs.longitude'
                 , 'jobs.geolocation_address'
-
+                , 'jobs.contact_person'
+                , 'assign.is_assigned'
+                , 'assign.id as id_assigned'
             )
             ->where('users.id', '=', $userId)
             ->where('users.role_id', '=', 1)
@@ -246,8 +248,5 @@ class Employer extends Model
 
         return $employer;
     }
-
-
-
 
 }

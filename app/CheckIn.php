@@ -17,6 +17,12 @@ class CheckIn extends Model
             ->join('job_schedules', 'job_schedules.user_id', '=', 'users.id')
             ->join('jobs', 'jobs.id', '=', 'job_schedules.job_id')
             ->join('users as employer', 'employer.id', '=', 'jobs.user_id')
+            ->when(!empty($param['id']), function ($query) use ($param) {
+                return $query->leftJoin('assign_job_job as assign', function ($join) use ($param) {
+                    $join->on('assign.job_id', '=', 'jobs.id')
+                        ->where('assign.user_id', '=', $param['id']);
+                });
+            })
             ->select(
                 'jobs.id'
                 , 'job_schedules.id as schedule_id'
@@ -64,6 +70,9 @@ class CheckIn extends Model
                 , 'jobs.latitude'
                 , 'jobs.longitude'
                 , 'jobs.geolocation_address'
+                , 'jobs.contact_person'
+                , 'assign.is_assigned'
+                , 'assign.id as id_assigned'
             )
 
             ->where('job_schedules.user_id', '=', $param['id'])

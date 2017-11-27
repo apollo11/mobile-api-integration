@@ -14,6 +14,12 @@ class History extends Model
             ->join('job_schedules', 'job_schedules.user_id', '=', 'users.id')
             ->join('jobs', 'jobs.id', '=', 'job_schedules.job_id')
             ->join('users as employer', 'employer.id', '=', 'jobs.user_id')
+            ->when(!empty($param['id']), function ($query) use ($param) {
+                return $query->leftJoin('assign_job_job as assign', function ($join) use ($param) {
+                    $join->on('assign.job_id', '=', 'jobs.id')
+                        ->where('assign.user_id', '=', $param['id']);
+                });
+            })
             ->select(
                 'jobs.id'
                 , 'job_schedules.id as schedule_id'
@@ -61,6 +67,9 @@ class History extends Model
                 , 'jobs.latitude'
                 , 'jobs.longitude'
                 , 'jobs.geolocation_address'
+                , 'jobs.contact_person'
+                , 'assign.is_assigned'
+                , 'assign.id as id_assigned'
 
             )
             ->when(!empty($param['industries']), function ($query) use ($param) {
@@ -112,6 +121,12 @@ class History extends Model
             ->join('job_schedules', 'job_schedules.user_id', '=', 'users.id')
             ->join('jobs', 'jobs.id', '=', 'job_schedules.job_id')
             ->join('users as employer', 'employer.id', '=', 'jobs.user_id')
+            ->when(!empty($param['id']), function ($query) use ($param) {
+                return $query->leftJoin('assign_job_job as assign', function ($join) use ($param) {
+                    $join->on('assign.job_id', '=', 'jobs.id')
+                        ->where('assign.user_id', '=', $param['id']);
+                });
+            })
             ->select(
                 'jobs.id'
                 , 'job_schedules.id as schedule_id'
@@ -159,6 +174,9 @@ class History extends Model
                 , 'jobs.geolocation_address'
                 , 'jobs.latitude'
                 , 'jobs.longitude'
+                , 'assign.is_assigned'
+                , 'assign.id as id_assigned'
+
             )
             ->when(!empty($param['industries']), function ($query) use ($param) {
 
@@ -212,6 +230,7 @@ class History extends Model
             ->join('job_schedules', 'job_schedules.user_id', '=', 'users.id')
             ->join('jobs', 'jobs.id', '=', 'job_schedules.job_id')
             ->join('users as employer', 'employer.id', '=', 'jobs.user_id')
+            ->join('assign_job_job as assign', 'assign.job_id', '=', 'job_schedules.job_id')
             ->select(
                 'jobs.id'
                 , 'job_schedules.id as schedule_id'
@@ -260,6 +279,8 @@ class History extends Model
                 , 'jobs.latitude'
                 , 'jobs.longitude'
                 , 'jobs.geolocation_address'
+                , 'assign.is_assigned'
+                , 'assign.id as id_assigned'
 
             )
             ->where($columName, '=', $id)

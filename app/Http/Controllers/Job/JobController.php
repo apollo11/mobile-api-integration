@@ -52,6 +52,7 @@ class JobController extends Controller
     public function index(Request $request, $notification_status = null)
     {
         $role = Auth::user()->role;
+        $roleId = Auth::user()->role_id;
 
 
         if ($role == 'employer') {
@@ -65,10 +66,13 @@ class JobController extends Controller
             'userid' => $userid
         ];
 
-
         $jobsLists = $this->jobLists($param);
 
-        return view('job.lists', ['job' => $jobsLists,'role'=>$role, 'notification_status' => $notification_status]);
+        return view('job.lists', [
+            'job' => $jobsLists
+            ,'role'=>$role
+            , 'role_id' => $roleId
+            , 'notification_status' => $notification_status]);
     }
 
     /**
@@ -304,14 +308,22 @@ class JobController extends Controller
         ]);
     }
 
-    public function sendNotification($id)
+    public function sendNotification(Request $request, $id)
     {
+        $user_ids = $request->input("employees-list");
+        $deviceTokenResult = DeviceToken::whereIn('user_id', $user_ids)->get();
+
+        $deviceTokens = array();
+        for ($i=0; $i < count($deviceTokenResult); $i++) { 
+            array_push($deviceTokens, $deviceTokenResult[$i]->device_token);
+        }
+
         $data['title'] = "New Jobs Assigned to You";
         $data["body"] = "You have been assigned a job successfully! Click here for more details";
-        $reg_id = ["cOz3btJoiZ0:APA91bG1b9LgJRuQAmkGLoXOzgWeijYtiJX28MPml0t-7EyYdxRdfsWouxnA3XdbAmPjOxWR7VzbEeIxrs2DBdiNwRIFLup--Eh-n8E4IOvykp7khWf9LV12Fde5dFNCvy2ReKPxGP1j"];
-        $data["registration_ids"] = $reg_id;
+        // $reg_id = ["cOz3btJoiZ0:APA91bG1b9LgJRuQAmkGLoXOzgWeijYtiJX28MPml0t-7EyYdxRdfsWouxnA3XdbAmPjOxWR7VzbEeIxrs2DBdiNwRIFLup--Eh-n8E4IOvykp7khWf9LV12Fde5dFNCvy2ReKPxGP1j"];
+        $data["registration_ids"] = $deviceTokens;
         $data["badge"] = 1;
-        $data["type"] = "job-assign";
+        $data["type"] = "job_assigned";
         $data["job_id"] = $id;
 
         // $result = $this->ValidUseSuccessResp(200, true);
@@ -325,9 +337,6 @@ class JobController extends Controller
         }
         
     }
-
-    
-
 
     /**
      * Update the specified resource in storage.
@@ -555,9 +564,17 @@ class JobController extends Controller
         $relatedCandidates = $schedule->getRelatedCandidates($id);
         $employeeList = $employee->employeeLists($param);
 
-        return view('job.details', ['details' => $details, 'related' => $relatedCandidates, 'list' => $employeeList]);
+        return view('job.details', ['details' => $details
+            , 'related' => $relatedCandidates
+            , 'list' => $employeeList
+            , 'role_id' => Auth::user()->role_id
+        ]);
     }
 
+    /**
+     * @param $data
+     * @return \Illuminate\Http\JsonResponse|int
+     */
     public function saveJobsNotif($data)
     {
         $employer = explode('.', $data['job_employer']);
@@ -589,7 +606,6 @@ class JobController extends Controller
     }
 
     /**
-     * @param array $data
      * @return mixed|static
      */
     public function saveNotif()
@@ -688,6 +704,10 @@ class JobController extends Controller
         }
     }
 
+    /**
+     * @param $id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function location_tracking($id)
     {
         $param[] = null;
@@ -707,4 +727,6 @@ class JobController extends Controller
         }
         return view('job.location_tracking', ['details' => $details, 'related' => $relatedCandidates,'markers'=>$markers]);
     }
+
+
 }
