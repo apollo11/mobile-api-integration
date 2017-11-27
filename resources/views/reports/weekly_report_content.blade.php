@@ -21,6 +21,7 @@
     </tr>
     </thead>
     <tbody>
+    @if (!empty($weekly_report)) 
         <?php $count = 0; $prev_bm = ''; ?>
         @foreach ($weekly_report as $k=>$v)
             <?php 
@@ -63,5 +64,8 @@
             </tr>
             <?php $prev_bm = $v['business_manager'];?>
         @endforeach
+    @else
+        <tr><td colspan=20 align="center">No data found</td></tr>
+    @endif
     </tbody>
 </table>
