@@ -260,8 +260,9 @@
                                         <div class="col-md-7">
                                             <select class="form-control" name="business_manager">
                                                 @foreach($businessMngr as $key => $value)
+                                                    {{ $input = $key.'.'.$value }}
                                                     @if($loop->count > 0)
-                                                        <option value="{{ $key }}" {{ old('business_manager') == $key ? "selected" : "" }}>{{ $value }}</option>
+                                                        <option value="{{ $input }}" {{ old('business_manager') == $input ? "selected" : "" }}>{{ $value }}</option>
                                                     @else
                                                         <option value=""> No Available Business </option>
                                                     @endif
