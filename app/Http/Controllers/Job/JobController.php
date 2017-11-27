@@ -35,6 +35,7 @@ class JobController extends Controller
     public $lastInsertedId;
     public $newJob;
     protected $googleMap;
+    protected $assignedJob;
 
 
     public function __construct(Request $request)
@@ -42,6 +43,7 @@ class JobController extends Controller
         $this->request = $request;
         $this->newJob = constant('NEW_JOB');
         $this->googleMap = constant('GOOGLE_MAP_ENDPOINT');
+        $this->assignedJob = constant('ASSIGNED_JOB');
     }
 
     /**
@@ -311,8 +313,12 @@ class JobController extends Controller
     public function sendNotification(Request $request, $id)
     {
         $user_ids = $request->input("employees-list");
-        $deviceTokenResult = DeviceToken::whereIn('user_id', $user_ids)->get();
 
+        foreach ($user_ids as $key) {
+            $this->saveAssignedNotif($key, $id);
+        }
+
+        $deviceTokenResult = DeviceToken::whereIn('user_id', $user_ids)->get();
         $deviceTokens = array();
         for ($i=0; $i < count($deviceTokenResult); $i++) { 
             array_push($deviceTokens, $deviceTokenResult[$i]->device_token);
@@ -323,13 +329,14 @@ class JobController extends Controller
         // $reg_id = ["cOz3btJoiZ0:APA91bG1b9LgJRuQAmkGLoXOzgWeijYtiJX28MPml0t-7EyYdxRdfsWouxnA3XdbAmPjOxWR7VzbEeIxrs2DBdiNwRIFLup--Eh-n8E4IOvykp7khWf9LV12Fde5dFNCvy2ReKPxGP1j"];
         $data["registration_ids"] = $deviceTokens;
         $data["badge"] = 1;
-        $data["type"] = "job_assigned";
+        $data["type"] = $this->assignedJob;
         $data["job_id"] = $id;
 
         // $result = $this->ValidUseSuccessResp(200, true);
         // echo $result;
 
         if ($this->pushNotif($data) == "200") {
+
             // return redirect(route('job.lists'));
             return redirect(route("job.lists",["success"]));
         } else {
@@ -726,6 +733,20 @@ class JobController extends Controller
             }
         }
         return view('job.location_tracking', ['details' => $details, 'related' => $relatedCandidates,'markers'=>$markers]);
+    }
+
+    /**
+     * Saving Notification when assigning the Job
+     * @return mixed|static
+     */
+    public function saveAssignedNotif($userId, $jobId)
+    {
+        $save = \App\User::find($userId);
+        $save->userNotification()->updateOrCreate([
+            'job_id' => $jobId,
+            'type' => $this->assignedJob
+        ]);
+
     }
 
 
