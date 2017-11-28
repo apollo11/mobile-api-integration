@@ -34,6 +34,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('delete/{id}','Employee\EmployeeController@destroyOne')->name('employee.destroy-one')->middleware('can:employee-view');
         Route::post('update/{id?}', 'Employee\EmployeeController@update')->name('employee.update');
 
+
         Route::post('update/profile/img/{id?}', 'Employee\EmployeeController@updateProfileImg')->name('employee.edit.img');
         Route::post('update/profile/frontic/{id?}', 'Employee\EmployeeController@updateFrontIc')->name('employee.edit.frontic');
         Route::post('update/profile/backic/{id?}', 'Employee\EmployeeController@updateBacktIc')->name('employee.edit.backic');
@@ -115,6 +116,8 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('edit/{id}', 'PushNotification\PushNotificationController@edit')->name('pushnotification.edit');
         Route::POST('update', 'PushNotification\PushNotificationController@update')->name('pushnotification.update');
         Route::get('delete/{id}', 'PushNotification\PushNotificationController@delete')->name('pushnotification.delete');
+
+        Route::get('scheduledNotification', 'PushNotification\PushNotificationController@notifyByPublishDateTime')->name('pushnotification.notifyByPublishDateTime');
     });
 
     Route::prefix('recipient')->group(function() {
@@ -152,6 +155,11 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('store', 'UserMgt\UserMgtController@store')->name('mgt.store');
         Route::post('delete/{id}', 'UserMgt\UserMgtController@destroy')->name('mgt.delete');
         Route::post('multi/delete', 'UserMgt\UserMgtController@multiDestroy')->name('mgt.multi.delete');
+    });
+
+    Route::prefix('notification')->group(function() {
+        Route::get('24hour', 'Notification\NotificationController@jobReminderForDay')->name('notification.24hour');
+        Route::get('birthdaynotification', 'Notification\NotificationController@birthdayNotification')->name('notification.birthdayNotification');
     });
 
 });

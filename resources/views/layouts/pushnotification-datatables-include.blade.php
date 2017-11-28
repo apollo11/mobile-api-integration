@@ -17,6 +17,7 @@
 	        "scrollY":"500",
 	        "scrollX" : true,
 	        "sScrollXInner": "100%",
+	        "searching": true
 	    });
 	    // console.log($('#employee-table').DataTable())
 	    // table = $('#employee-table').DataTable();

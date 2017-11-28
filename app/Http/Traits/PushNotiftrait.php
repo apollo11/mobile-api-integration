@@ -33,13 +33,15 @@ trait PushNotiftrait
                     'data'=>[
                         'title' => $data['title'],
                         'body' => $data['body'],
-                        'job_id' => $data['job_id'],
+                        // 'job_id' => $data['job_id'],
                         'type' => $data['type']
                     ],
                     'registration_ids' => $data['registration_ids']
                     // 'priority' => 'high'
                 ];
-
+                if(isset($data['job_id'])) {
+                    $map['data']['job_id'] = $data['job_id']; 
+                }
                 $response = $client->request('POST',constant('FCM_ENDPOINT'), [
                     'headers' => [
                         'Authorization' => 'key=AIzaSyBvyxjYHkMdHvGocO821JrUwj3ap2eo3MA'

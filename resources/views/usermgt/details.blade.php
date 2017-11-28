@@ -6,7 +6,7 @@
             <div class="page-bar">
                 <ul class="page-breadcrumb">
                     <li>
-                        <a href="{{ route('employer.lists')  }}">Employers</a>
+                        <a href="{{ route('mgt.lists')  }}">Employers</a>
                         <i class="fa fa-circle"></i>
                     </li>
                     <li>

@@ -317,32 +317,37 @@ class JobController extends Controller
         ]);
     }
 
+    /**
+     * @param Request $request
+     * @param $id
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
     public function sendNotification(Request $request, $id)
     {
-        $user_ids = $request->input("employees-list");
+        $jobDetails = Job::where('id', $id)->get();
 
+        $user_ids = $request->input("employees-list");
         $this->insertUpdateAssignJob($user_ids, $id);
 
         $deviceTokenResult = DeviceToken::whereIn('user_id', $user_ids)->get();
+
+        $message = "Dear Sir/Madam, You have been assigned a job successfully!  Below is the job information: " . "\n" . "Job Name: " . $jobDetails[0]->job_title . "\n" . " Job Date and Time: " . $jobDetails[0]->job_date . "\n" . " Job Location: " . $jobDetails[0]->location . "\n" . " Hourly Rate: " . $jobDetails[0]->rate . "\n" .  " Contact Person: " . $jobDetails[0]->contact_person . "\n" . " Contact No.: " . $jobDetails[0]->contact_no;
+
         $deviceTokens = array();
         for ($i=0; $i < count($deviceTokenResult); $i++) { 
             array_push($deviceTokens, $deviceTokenResult[$i]->device_token);
         }
 
         $data['title'] = "New Jobs Assigned to You";
-        $data["body"] = "You have been assigned a job successfully! Click here for more details";
-        // $reg_id = ["cOz3btJoiZ0:APA91bG1b9LgJRuQAmkGLoXOzgWeijYtiJX28MPml0t-7EyYdxRdfsWouxnA3XdbAmPjOxWR7VzbEeIxrs2DBdiNwRIFLup--Eh-n8E4IOvykp7khWf9LV12Fde5dFNCvy2ReKPxGP1j"];
+        $data["body"] = $message;
         $data["registration_ids"] = $deviceTokens;
         $data["badge"] = 1;
         $data["type"] = $this->assignedJob;
         $data["job_id"] = $id;
 
-        // $result = $this->ValidUseSuccessResp(200, true);
-        // echo $result;
 
         if ($this->pushNotif($data) == "200") {
 
-            // return redirect(route('job.lists'));
             return redirect(route("job.lists",["success"]));
         } else {
             return redirect(route("job.lists",["failed"]));
@@ -759,10 +764,9 @@ class JobController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * Insert Update NOtification assigned Job
+     * @param $userId
+     * @param $jobId
      */
     public function insertUpdateAssignJob($userId, $jobId)
     {
@@ -806,7 +810,5 @@ class JobController extends Controller
         return $output;
 
     }
-
-
 
 }
