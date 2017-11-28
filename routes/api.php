@@ -154,6 +154,7 @@ Route::group(['middleware' => ['auth_client']], function () {
         Route::get('lists', 'Job\JobController@jobApiLists');
         Route::get('lists/{id}', 'Job\JobController@show');
         Route::post('apply', 'JobSchedule\JobScheduleController@store');
+        Route::post('reject','Notification\NotificationController@store');
 
     });
 
@@ -198,8 +199,14 @@ Route::group(['middleware' => ['auth_client']], function () {
         Route::post('read','Notification\NotificationController@markAsRead');
         Route::post('delete','Notification\NotificationController@deleteNotfif');
         Route::post('delete/all','Notification\NotificationController@deleteMultipleNotfif');
+        Route::post('assign/reject','Notification\NotificationController@store');
 
     });
+
+    Route::prefix('v1/settings/')->group(function () {
+        Route::get('points', 'Settings\SettingsController@point_settings');
+    });
+
 
     Route::prefix('v1/token')->group(function() {
 
