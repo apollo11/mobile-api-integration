@@ -96,21 +96,22 @@ class PushNotificationController extends Controller
                 ->withInput();
         } else {
 
+            echo 
             $pushNotification = new PushNotification();
             $pushNotification->is_read = 0;
             $pushNotification->type = "normal";
+            $pushNotification->recipient_group_id = $request->input('receipient-group');
             $pushNotification->title = $request->input('subject');
             $pushNotification->message = $request->input('message-content');
             $dateTimeFormatter = explode(' ', $request->input('publish-date'));
             $dateFormatter = explode('-', $dateTimeFormatter[0]);
             $pushNotification->created_at = $dateFormatter[0] . '-' . $dateFormatter[2] . '-' . $dateFormatter[1] . " " . $dateTimeFormatter[1] . ":00";
 
-            $pushNotification->user_id = 3;     //  HARD CODED
-            // $pushNotification->job_id = 101;
+            
 
-            $pushNotification -> save();
+            // $pushNotification -> save();
 
-            return redirect('pushnotification/lists');
+            // return redirect('pushnotification/lists');
         }
     }
 
@@ -135,16 +136,16 @@ class PushNotificationController extends Controller
                 ->withInput();
         } else {
             $pushNotification = PushNotification::find($request->input('id'));
-            $pushNotification->job_id = 102;
             $pushNotification->is_read = 0;
             $pushNotification->type = "normal";
+            $pushNotification->recipient_group_id = $request->input('receipient-group');
             $pushNotification->title = $request->input('subject');
             $pushNotification->message = $request->input('message-content');
-            $dateFormatter = explode('/', $request->input('publish-date'));
-            $pushNotification->user_id = 3;
-            $pushNotification->created_at = $dateFormatter[2] . '-' . $dateFormatter[0] . '-' . $dateFormatter[1];
+            $dateTimeFormatter = explode(' ', $request->input('publish-date'));
+            $dateFormatter = explode('-', $dateTimeFormatter[0]);
+            $pushNotification->created_at = $dateFormatter[0] . '-' . $dateFormatter[2] . '-' . $dateFormatter[1] . " " . $dateTimeFormatter[1] . ":00";
+            
             $pushNotification -> save();
-
             return redirect('pushnotification/lists');
         }
     }
