@@ -35,7 +35,7 @@
                                             <label class="col-md-3 control-label">Name</label>
                                             <div class="col-md-7">
                                                 <input type="text" class="form-control" placeholder="Enter Name"
-                                                       value="{{ !old('name') ? $details->userName : old('name') }}" name="name">
+                                                       value="{{ old('name',$details->userName) }}" name="name">
                                                 @if ($errors->has('name'))
                                                     <span class="help-block">
                                                     {{ $errors->first('name') }}
@@ -48,7 +48,7 @@
                                             <label class="col-md-3 control-label">Email Address<span class="is-required">*</span></label>
                                             <div class="col-md-7">
                                                 <input type="email" class="form-control" placeholder="Enter Email Address"
-                                                       value="{{ !old('email') ? $details->userEmail : old('email') }}" name="email">
+                                                       value="{{ old('email',$details->userEmail) }}" name="email">
                                                 @if ($errors->has('email'))
                                                     <span class="help-block">
                                                     {{ $errors->first('email') }}
@@ -61,7 +61,7 @@
                                             <label class="col-md-3 control-label">Mobile No<span class="is-required">*</span></label>
                                             <div class="col-md-7">
                                                 <input type="text" class="form-control" placeholder="Enter Mobile No"
-                                                       value="{{ !old('mobile_no') ? $details->userMobile : old('mobile_no') }}" name="mobile_no">
+                                                       value="{{ old('mobile_no',$details->userMobile) }}" name="mobile_no">
                                                 @if ($errors->has('mobile_no'))
                                                     <span class="help-block">
                                                     {{ $errors->first('mobile_no') }}
@@ -85,7 +85,7 @@
                                         <div class="form-group{{ $errors->has('birthdate') ? ' has-error' : '' }}">
                                             <label class="control-label col-md-3">D.O.B<span class="is-required">*</span></label>
                                             <div class="col-md-7">
-                                                <input name="birthdate" value="{{ !old('birthdate') ? $details->birthdate : old('birthdate') }}" class="form-control  date-picker datepicker" type="text" data-provide="datepicker" data-date-format="yyyy-mm-dd">
+                                                <input name="birthdate" value="{{ old('birthdate',$details->birthdate) }}" class="form-control  date-picker datepicker" type="text" data-provide="datepicker" data-date-format="yyyy-mm-dd" data-date-end-date="+0d">
 
                                                 @if ($errors->has('birthdate'))
                                                     <span class="help-block">
@@ -97,7 +97,7 @@
                                         <div class="form-group{{ $errors->has('school') ? ' has-error' : '' }}">
                                             <label class="col-md-3 control-label">School</label>
                                             <div class="col-md-7">
-                                                <input type="text" value="{{ !old('school') ? $details->userSchool : old('school')}}"class="form-control" placeholder="Enter School"
+                                                <input type="text" value="{{ old('school',$details->userSchool) }}" class="form-control" placeholder="Enter School"
                                                        name="school"/>
                                                 @if ($errors->has('school'))
                                                     <span class="help-block">
@@ -110,7 +110,7 @@
                                         <div class="form-group{{ $errors->has('school_expiry_date') ? ' has-error' : '' }}">
                                             <label class="control-label col-md-3">School Expiry Date</label>
                                             <div class="col-md-7">
-                                                 <input  value="{{ !old('school_expiry_date') ? $details->school_pass_expiry_date : old('school_expiry_date') }}" name="school_expiry_date" class="form-control  date-picker datepicker" type="text" data-provide="datepicker" data-date-format="yyyy-mm-dd">
+                                                 <input  value="{{ old('school_expiry_date',$details->school_pass_expiry_date) }}" name="school_expiry_date" class="form-control  date-picker datepicker" type="text" data-provide="datepicker" data-date-format="yyyy-mm-dd">
                                                
                                                 @if ($errors->has('school_expiry_date'))
                                                     <span class="help-block">
@@ -125,7 +125,7 @@
                                                 <select class="form-control" name="nationality">
                                                     <option value="">-- select one --</option>
                                                     @foreach($nationality as $key => $value)
-                                                        <option value="{{$value}}" {{ $details->nationality == $value ? 'selected' : '' }}> {{ $value  }}</option>
+                                                        <option value="{{$value}}" {{old('nationality', $details->nationality) == $value ? 'selected' : '' }}> {{ $value  }}</option>
                                                     @endforeach
                                                 </select>
                                                 @if ($errors->has('nationality'))
@@ -142,7 +142,7 @@
                                             <div class="col-md-7">
                                                 <select class="form-control" name="language">
                                                     @foreach($language as $key => $value)
-                                                        <option value="{{$value}}" {{ $details->language == $value ? 'selected' : '' }}> {{ ucfirst($value)   }}</option>
+                                                        <option value="{{$value}}" {{ old('language',$details->language) == $value ? 'selected' : '' }}> {{ ucfirst($value)   }}</option>
                                                     @endforeach
                                                 </select>
 
@@ -158,7 +158,7 @@
                                             <label class="col-md-3 control-label">Religion<span class="is-required">*</span></label>
                                             <div class="col-md-7">
                                                 <input type="text" class="form-control" placeholder="Enter religion"
-                                                       name="religion" value="{{ !old('religion') ? $details->religion : old('religion') }}"/>
+                                                       name="religion" value="{{ old('religion',$details->religion) }}"/>
                                                 @if ($errors->has('religion'))
                                                     <span class="help-block">
                                                         {{ $errors->first('religion') }}
@@ -172,11 +172,11 @@
                                             <div class="col-md-7">
                                                 <div class="mt-checkbox-inline">
                                                     <label class="mt-checkbox">
-                                                        <input type="radio" name="gender" id="gender" value="male" {{ $details->gender == 'male' ? 'checked' : old('gender') }}> Male
+                                                        <input type="radio" name="gender" id="gender" value="male" {{ old('gender',$details->gender) == 'male' ? 'checked'  : '' }}> Male
                                                         <span></span>
                                                     </label>
                                                     <label class="mt-checkbox">
-                                                        <input type="radio" name="gender" id="gender" value="female" {{ $details->gender == 'female' ? 'checked' : old('gender') }}> Female
+                                                        <input type="radio" name="gender" id="gender" value="female" {{ old('gender',$details->gender) == 'female' ? 'checked' : '' }}> Female
                                                         <span></span>
                                                     </label>
                                                 </div>
@@ -189,13 +189,26 @@
                                         </div>
 
                                         <div class="form-group{{ $errors->has('rate') ? ' has-error' : '' }}">
-                                            <label class="col-md-3 control-label">Rate<span class="is-required">*</span></label>
+                                            <label class="col-md-3 control-label">Hourly Rate<span class="is-required">*</span></label>
                                             <div class="col-md-7">
                                                 <input type="text" class="form-control" placeholder="Enter rate"
-                                                       name="rate" value="{{ !old('rate') ? $details->rate : old('rate') }}"/>
+                                                       name="rate" value="{{ old('rate',$details->rate) }}"/>
                                                 @if ($errors->has('rate'))
                                                     <span class="help-block">
                                                         {{ $errors->first('rate') }}
+                                                  </span>
+                                                @endif
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group{{ $errors->has('points') ? ' has-error' : '' }}">
+                                            <label class="col-md-3 control-label">Points<span class="is-required">*</span></label>
+                                            <div class="col-md-7">
+                                                <input type="text" class="form-control" placeholder="Enter points"
+                                                       name="points" value="{{ old('points',$details->points) }}"/>
+                                                @if ($errors->has('points'))
+                                                    <span class="help-block">
+                                                        {{ $errors->first('points') }}
                                                   </span>
                                                 @endif
                                             </div>
@@ -205,7 +218,7 @@
                                             <label class="col-md-3 control-label">Emergency contact person<span class="is-required">*</span></label>
                                             <div class="col-md-7">
                                                 <input type="text" class="form-control" placeholder="Enter contact person"
-                                                       name="emergency_contact_person" value="{{ !old('emergency_contact_person') ? $details->emergency_name : old('emergency_contact_person') }}"/>
+                                                       name="emergency_contact_person" value="{{ old('emergency_contact_person',$details->emergency_name) }}"/>
                                                 @if ($errors->has('emergency_contact_person'))
                                                     <span class="help-block">
                                                         {{ $errors->first('emergency_contact_person') }}
@@ -216,9 +229,8 @@
                                         <div class="form-group{{ $errors->has('emergency_contact_person_no') ? ' has-error' : '' }}">
                                             <label class="col-md-3 control-label">Emergency person contact no.<span class="is-required">*</span></label>
                                             <div class="col-md-7">
-                                                <input type="text" class="form-control"
-                                                       placeholder="Enter emergency contact no."
-                                                       name="emergency_contact_person_no" value="{{ !old('emergency_contact_person_no') ? $details->emergency_contact_no : old('emergency_contact_person_no') }}"/>
+                                                <input type="text" class="form-control" placeholder="Enter emergency contact no."
+                                                       name="emergency_contact_person_no" value="{{ old('emergency_contact_person_no',$details->emergency_contact_no) }}"/>
                                                 @if ($errors->has('emergency_contact_person_no'))
                                                     <span class="help-block">
                                                         {{ $errors->first('emergency_contact_person_no') }}
@@ -232,7 +244,7 @@
                                             <div class="col-md-7">
                                                 <input type="text" class="form-control"
                                                        placeholder="Enter emergency person relationship"
-                                                       name="emergency_person_relationship" value="{{ !old('emergency_person_relationship') ? $details->emergency_relationship : old('emergency_person_relationship') }}"/>
+                                                       name="emergency_person_relationship" value="{{ old('emergency_person_relationship',$details->emergency_relationship ) }}"/>
                                                 @if ($errors->has('emergency_person_relationship'))
                                                     <span class="help-block">
                                                         {{ $errors->first('emergency_person_relationship') }}
@@ -246,7 +258,7 @@
                                             <div class="col-md-7">
                                                 <input type="text" class="form-control"
                                                        placeholder="Enter emergency person address"
-                                                       name="emergency_person_address" value="{{ !old('emergency_person_address') ? $details->emergency_address : old('emergency_person_address') }}"/>
+                                                       name="emergency_person_address" value="{{ old('emergency_person_address',$details->emergency_address)  }}"/>
                                                 @if ($errors->has('emergency_person_address'))
                                                     <span class="help-block">
                                                         {{ $errors->first('emergency_person_address') }}
@@ -261,27 +273,27 @@
                                                     <label class="mt-checkbox">
 
                                                         <input type="radio" name="contact_method" id="contact_method"
-                                                               value="sms" {{ $details->contact_method == 'sms' ? 'checked' : old('contact_method') }}
+                                                               value="sms" {{ old('contact_method',$details->contact_method) == 'sms' ? 'checked' : '' }}
                                                         > Sms
                                                         <span></span>
                                                     </label>
                                                     <label class="mt-checkbox">
                                                         <input type="radio" name="contact_method" id="contact_method"
-                                                               value="phone" {{ $details->contact_method == 'phone' ? 'checked' : old('contact_method') }}
+                                                               value="phone" {{ old('contact_method',$details->contact_method) == 'phone' ? 'checked' : '' }}
 
                                                         > Phone
                                                         <span></span>
                                                     </label>
                                                     <label class="mt-checkbox">
                                                         <input type="radio" name="contact_method" id="contact_method"
-                                                               value="email" {{ $details->contact_method == 'email' ? 'checked' : old('contact_method') }}
+                                                               value="email" {{ old('contact_method',$details->contact_method) == 'email' ? 'checked' : '' }}
 
                                                         > Email
                                                         <span></span>
                                                     </label>
                                                     <label class="mt-checkbox">
                                                         <input type="radio" name="contact_method" id="contact_method"
-                                                               value="other" {{ $details->contact_method == 'other' ? 'checked' : old('contact_method') }}
+                                                               value="other" {{ old('contact_method',$details->contact_method) == 'other' ? 'checked' : '' }}
                                                         > Other
                                                         <span></span>
                                                     </label>
@@ -296,7 +308,7 @@
                                         <div class="form-group{{ $errors->has('criminal_record') ? ' has-error' : '' }}">
                                             <label class="col-md-3 control-label">Criminal Record</label>
                                             <div class="col-md-7">
-                                                <textarea class="form-control" name="criminal_record" rows="3"> {{ !old('criminal_record') ? $details->criminal_record : old('criminal_record') }}</textarea>
+                                                <textarea class="form-control" name="criminal_record" rows="3"> {{ old('criminal_record',$details->criminal_record) }}</textarea>
                                                 @if ($errors->has('criminal_record'))
                                                     <span class="help-block">
                                                     {{ $errors->first('criminal_record') }}
@@ -307,7 +319,7 @@
                                         <div class="form-group{{ $errors->has('medication') ? ' has-error' : '' }}">
                                             <label class="col-md-3 control-label">Medication</label>
                                             <div class="col-md-7">
-                                                <textarea class="form-control" name="medication" rows="3">{{ !old('medication') ? $details->medication : old('medication') }}</textarea>
+                                                <textarea class="form-control" name="medication" rows="3">{{ old('medication', $details->medication) }}</textarea>
                                                 @if ($errors->has('medication'))
                                                     <span class="help-block">
                                                     {{ $errors->first('medication') }}
@@ -319,7 +331,7 @@
                                         <div class="form-group{{ $errors->has('address') ? ' has-error' : '' }}">
                                             <label class="col-md-3 control-label">Address<span class="is-required">*</span></label>
                                             <div class="col-md-7">
-                                                <textarea class="form-control" name="address" rows="3"> {{ !old('address') ? $details->address : old('address') }}</textarea>
+                                                <textarea class="form-control" name="address" rows="3"> {{ old('address',$details->address ) }}</textarea>
                                                 @if ($errors->has('address'))
                                                     <span class="help-block">
                                                     {{ $errors->first('address') }}

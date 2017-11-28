@@ -1,35 +1,23 @@
 @extends('layouts.app')
 
 @section('content')
-
-    <!-- <script type="text/javascript" src="https://cdn.datatables.net/plug-ins/1.10.16/filtering/row-based/range_dates.js"></script> -->
-
-    @foreach($job as $value)
-        <form id="approve-{{ $value->id }}" action="{{ route('job.multiple',['id' => $value->id, 'param' => 'Approve' ]) }}" method="POST" style="display: none;">
-            {{ csrf_field() }}
-            <input type="multiple" value="Approve">
-        </form>
-        <form id="reject-{{ $value->id }}" action="{{ route('job.multiple',['id' => $value->id, 'param' => 'Reject' ]) }}" method="POST" style="display: none;">
-            {{ csrf_field() }}
-            <input type="multiple" value="Reject">
-        </form>
-        <form id="destroy-{{ $value->id }}" action="{{ route('job.multiple',['id' => $value->id,'param' => 'Delete']) }}" method="POST" style="display: none;">
-            {{ csrf_field() }}
-            <input type="multiple" value="Delete">
-        </form>
-    @endforeach
+    @if($employer->status == 0 || $employer->status == 3)
     <form id="approve-{{ $employer->id }}"
           action="{{ route('employer.multiple',['id' => $employer->id, 'param' => 'Approve' ]) }}" method="POST"
           style="display: none;">
         {{ csrf_field() }}
         <input type="submit" name="multiple" value="Approve">
     </form>
+    @endif
+
+    @if($employer->status == 0 || $employer->status == 1 )
     <form id="reject-{{ $employer->id }}"
           action="{{ route('employer.multiple',['id' => $employer->id, 'param' => 'Reject' ]) }}" method="POST"
           style="display: none;">
         {{ csrf_field() }}
         <input type="submit" name="multiple" value="Reject">
     </form>
+    @endif
     <div class="page-content-wrapper employee-details">
         <div class="page-content">
             <div class="page-bar">
@@ -45,7 +33,7 @@
             </div>
 
             <div class="row">
-                <div class="col-md-8">
+                <div class="col-md-12">
                     <!-- BEGIN EXAMPLE TABLE PORTLET-->
                     <div class="portlet light bordered">
                         <div class="portlet-title">
@@ -58,18 +46,22 @@
                                    href="{{ route('employer.edit',['id' => $employer->id])  }}">
                                     Update</a>
 
+                                 @if($employer->status == 0 || $employer->status == 3)
                                 <a class="btn sbold green"
                                    href="{{ route('employer.multiple',['id' => $employer->id, 'param' => 'Approve' ])  }}"
                                    onclick="event.preventDefault();
                                            document.getElementById('{{'approve-'.$employer->id }}').submit();">
                                     Approve</a>
+                                @endif
 
+                                @if($employer->status == 0 || $employer->status == 1)
                                 <a class="btn sbold green"
                                    href="{{ route('employer.multiple',['id' => $employer->id, 'param' => 'Reject' ]) }}"
                                    onclick="event.preventDefault();
                                            document.getElementById('{{'reject-'.$employer->id }}').submit();">
                                     Reject
                                 </a>
+                                @endif
 
                                 <input class="btn sbold green" name="multiple" onclick="window.print()" value="Print"
                                        type="submit"/>
@@ -79,36 +71,59 @@
                             <div class="table-toolbar">
                                 <div class="row">
                                     <div class="col-md-12">
-                                        <div class="btn-group">
-                                            <div class="portlet-body">
+                                        <div class="portlet-body">
+                                            <div class=" col-md-6">
                                                 <div class="table-scrollable">
                                                     <table class="table table-hover">
                                                         <tbody>
                                                         <tr>
-                                                            <td colspan="2" align="center"><img src="/{{ $employer->profile_image_path }}" style="max-width:30%;"/></td>
+                                                            <td colspan="2" align="center">
+                                                 <?php $profileurl = $employer->profile_image_path; 
+                                            if ($profileurl==null || $profileurl == ''){ $profileurl = asset('assets/images/default_user_profile_big.png');}else{ $profileurl = url( $profileurl ); } ?>
+                                                            <img alt="" class="img-circle" src= "{{ $profileurl }}"" style="max-width:30%;" />
                                                         </tr>
                                                         <tr>
-                                                            <td><strong>Company Name</strong></td>
+                                                            <td width="40%"><strong>Company Name</strong></td>
                                                             <td>{{ $employer->company_name }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><strong>Email Address</strong></td>
+                                                            <td>{{ $employer->email }}</td>
                                                         </tr>
                                                         <tr>
                                                             <td><strong>Company Description </strong></td>
                                                             <td>{{ $employer->company_description }}</td>
                                                         </tr>
                                                         <tr>
-                                                            <td><strong>Email</strong></td>
-                                                            <td>{{ $employer->email }}</td>
-                                                        </tr>
-                                                        <tr>
                                                             <td><strong>Business Manager </strong></td>
-                                                            <td>{{ $employer->business_manager }}</td>
+                                                            <td>{{ $employer->business_manager_name }}</td>
                                                         </tr>
                                                         <tr>
                                                             <td><strong>Contact Person </strong></td>
                                                             <td>{{ $employer->contact_person }}</td>
                                                         </tr>
+
                                                         <tr>
-                                                            <td><strong>Posted Jobs</strong></td>
+                                                            <td><strong>Contact Number </strong></td>
+                                                            <td>{{ $employer->contact_no }}</td>
+                                                        </tr>
+
+                                                        <tr>
+                                                            <td><strong>Hourly Rate</strong></td>
+                                                            <td>{{ $employer->rate }}</td>
+                                                        </tr>
+
+                                                        <tr>
+                                                            <td><strong>Industry</strong></td>
+                                                            <td>{{ $employer->industry_name }}</td>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table><br><br>
+
+                                                    <table class="table table-hover">
+                                                        <tbody>
+                                                        <tr>
+                                                            <td width="40%"><strong>Posted Jobs</strong></td>
                                                             <td> {{ $posting }}</td>
                                                         </tr>
                                                         <tr>
@@ -125,12 +140,10 @@
                                                         @else
                                                             <td><span class="label label-sm label-danger"> Reject </span></td>
                                                         @endif
-
                                                         </tbody>
                                                     </table>
                                                 </div>
                                             </div>
-
                                         </div>
                                     </div>
                                     {{--<div class="col-md-6">--}}
@@ -201,14 +214,14 @@
                                     <th>#</th>
                                     <th>Employer</th>
                                     <th>Job Name</th>
-                                    <th> Employees Required</th>
+                                    <th>Employees Required</th>
                                     <th>Employees Applied</th>
                                     <th>Rate</th>
-                                    <th> Job Date & Time</th>
+                                    <th>Job Date & Time</th>
                                     <th>Business Manager</th>
-                                    <th> Job Location</th>
-                                    <th> Status</th>
-                                    <th> Action</th>
+                                    <th>Job Location</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
                                 </tr>
                                 </thead>
                                 <tbody>

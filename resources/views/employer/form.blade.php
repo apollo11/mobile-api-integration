@@ -177,7 +177,7 @@
                                     <div class="row">
                                         <div class="col-md-offset-3 col-md-9">
                                             <button type="submit" class="btn green">Submit</button>
-                                            <a href="{{ route('employer.lists')  }}" class="btn default">Cancel</a>
+                                            <a href="{{ URL::previous() }}" class="btn default">Cancel</a>
                                         </div>
                                     </div>
                                 </div>
