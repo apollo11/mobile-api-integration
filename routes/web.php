@@ -143,6 +143,7 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::prefix('reports')->group(function() {
        Route::get('/weekly_report', 'Reports\ReportsController@weekly_report')->name('reports.weekly_report');
+       Route::post('weekly_report_filter', 'Reports\ReportsController@weekly_report_filter')->name('reports.weekly_report_filter');
     });
 
     Route::prefix('user/mgt')->group(function() {

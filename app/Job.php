@@ -23,6 +23,7 @@ class Job extends Model
         'contact_person',
         'contact_no',
         'business_manager',
+        'business_manager_id',
         'employer',
         'language',
         'job_date',
@@ -245,6 +246,8 @@ class Job extends Model
                 , 'jobs.latitude'
                 , 'jobs.longitude'
                 , 'jobs.geolocation_address'
+                , 'jobs.business_manager as job_manager'
+                , 'jobs.business_manager_id as job_manager_id'
                 , 'assign.is_assigned'
                 , 'assign.id as id_assigned'
             )
@@ -301,6 +304,8 @@ class Job extends Model
                 , 'jobs.geolocation_address'
                 , 'assign.is_assigned'
                 , 'assign.id as id_assigned'
+                , 'jobs.business_manager as job_manager'
+                , 'jobs.business_manager_id as job_manager_id'
 
             )
             ->when(!empty($param['status']), function ($query) use ($param) {
@@ -359,6 +364,8 @@ class Job extends Model
                 , 'jobs.longitude'
                 , 'jobs.geolocation_address'
                 , 'jobs.zip_code'
+                , 'jobs.business_manager as job_manager'
+                , 'jobs.business_manager_id as job_manager_id'
                 , 'assign.is_assigned'
                 , 'assign.id as id_assigned'
             )
@@ -568,4 +575,31 @@ class Job extends Model
         return $gender;
     }
 
+    public function getReportData($startdate,$stopdate,$keyword=''){
+        $result = DB::table('jobs')
+            ->leftjoin('users','users.id','=','jobs.user_id')
+            ->leftJoin('job_schedules', function($join)
+             {
+                $join->on('job_schedules.job_id', '=', 'jobs.id')
+                     ->wherein('job_schedules.job_status', ['completed','approved']);
+             })
+            ->select(DB::raw("jobs.business_manager,jobs.user_id, sum(jobs.no_of_person) as request,count(jobs.id), date(jobs.job_date) as jobdate, users.company_name as employer_name, count(job_schedules.id) as actual"))
+            ->whereBetween(DB::raw("date(jobs.job_date)"),[$startdate->format('Y-m-d'),$stopdate->format('Y-m-d')])
+            ->when(!empty($keyword), function ($query) use ($keyword) {
+                return $query->where(function($q) use($keyword) {
+                          $q->where(DB::raw('lower(jobs.business_manager)'),'LIKE', '%'.strtolower($keyword).'%' )
+                            ->orWhere(DB::raw('lower(users.company_name)'),'LIKE', '%'.strtolower($keyword).'%' );
+                      });
+
+            })
+            ->groupBy('jobs.business_manager')
+            ->groupBy('jobs.user_id')
+            ->groupBy('jobdate')
+            ->orderBy('jobs.business_manager', 'asc')
+            ->orderBy('users.company_name', 'asc')
+            ->orderBy('jobs.user_id', 'asc')
+            ->get();
+
+        return $result;
+    }
 }

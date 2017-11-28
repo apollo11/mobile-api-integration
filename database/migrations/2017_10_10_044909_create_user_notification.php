@@ -15,7 +15,7 @@ class CreateUserNotification extends Migration
     {
         Schema::create('user_notifications', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('job_id');
+            $table->integer('job_id')->nullable();
             $table->boolean('is_read')->default(false);
             $table->string('type');
             $table->string('title')->nullable();

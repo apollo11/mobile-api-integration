@@ -182,6 +182,9 @@ return [
         Cornford\Googlmapper\MapperServiceProvider::class,
 
         Edujugon\PushNotification\Providers\PushNotificationServiceProvider::class,
+
+        /*Export to excel*/
+        Maatwebsite\Excel\ExcelServiceProvider::class,
     ],
 
     /*
@@ -234,6 +237,9 @@ return [
         'Mapper' => Cornford\Googlmapper\Facades\MapperFacade::class,
 
         'pushNotification' => Edujugon\PushNotification\Facades\PushNotification::class,
+
+        'Excel' => Maatwebsite\Excel\Facades\Excel::class,
+        
     ],
 
 ];

@@ -234,11 +234,33 @@
                                         </div>
                                     </div>
 
+                                    {{--<div class="form-group{{ $errors->has('business_manager') ? ' has-error' : '' }}">--}}
+                                        {{--<label class="col-md-3 control-label">Business Manager</label>--}}
+                                        {{--<div class="col-md-7">--}}
+                                            {{--<input type="text" class="form-control" placeholder="Enter Business Manager"--}}
+                                                   {{--value="{{ $details->business_manager }}" name="business_manager">--}}
+                                            {{--@if ($errors->has('business_manager'))--}}
+                                                {{--<span class="help-block">--}}
+                                                {{--{{ $errors->first('business_manager') }}--}}
+                                               {{--</span>--}}
+                                            {{--@endif--}}
+                                        {{--</div>--}}
+                                    {{--</div>--}}
+
                                     <div class="form-group{{ $errors->has('business_manager') ? ' has-error' : '' }}">
                                         <label class="col-md-3 control-label">Business Manager</label>
                                         <div class="col-md-7">
-                                            <input type="text" class="form-control" placeholder="Enter Business Manager"
-                                                   value="{{ $details->business_manager }}" name="business_manager">
+                                            <select class="form-control" name="business_manager">
+                                                @foreach($businessMngr as $key => $value)
+                                                    {{ $input = $key.'.'.$value }}
+                                                    @if($loop->count > 0)
+                                                        <option value="{{ $input }}" {{ $key == $details->job_manager_id ? "selected" : "" }}>{{ $value }}</option>
+                                                    @else
+                                                        <option value=""> No Available Business </option>
+                                                    @endif
+                                                @endforeach
+                                            </select>
+
                                             @if ($errors->has('business_manager'))
                                                 <span class="help-block">
                                                 {{ $errors->first('business_manager') }}

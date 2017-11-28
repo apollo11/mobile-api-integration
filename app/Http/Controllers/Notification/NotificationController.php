@@ -3,11 +3,12 @@
 namespace App\Http\Controllers\Notification;
 
 use Validator;
+use App\JobSchedule;
 use App\Settings;
 use App\CancelJob;
 use App\Notification;
-use App\JobSchedule;
 use Illuminate\Http\Request;
+use App\Http\Traits\JobDetailsOutputTrait;
 use App\Http\Traits\PushNotiftrait;
 use App\Http\Traits\HttpResponse;
 use App\Http\Controllers\Controller;
@@ -16,6 +17,7 @@ class NotificationController extends Controller
 {
     use HttpResponse;
     use PushNotiftrait;
+    use JobDetailsOutputTrait;
 
     /**
      * Display a listing of the resource.
@@ -61,7 +63,7 @@ class NotificationController extends Controller
             $this->decductRejectNotif($userId);
             $this->addtoSchedRejectedJob($jobId, $userId);
 
-            $result = $this->ValidUseSuccessResp(200, true);
+            $result = $this->successResponseNotif($jobId); //$this->ValidUseSuccessResp(200, true);
         }
 
         return $result;
@@ -455,8 +457,8 @@ class NotificationController extends Controller
             $details[] = [
                 'id' => $output->id,
                 'type' => $output->type,
-                'created_at' => $this->dateFormat($output->created_at),
-                'updated_at' => $this->dateFormat($output->updated_at),
+                'created_at' => $this->dateFormat($output->notif_created),
+                'updated_at' => $this->dateFormat($output->notif_updated),
                'schedule_id' => $output->schedule_id,
                 'job' => [
                     'id' => $output->jobid,
@@ -475,8 +477,8 @@ class NotificationController extends Controller
                     'location' => [
                         'id' => $output->jobid,
                         'name' => is_null($output->geolocation_address) ? '10 Bayfront Ave, Singapore 018956' : $output->geolocation_address,
-                        'latitude' => 1.2836402,
-                        'longitude' => 103.8603731,
+                        'latitude' => $output->latitude,
+                        'longitude' => $output->longitude,
                     ],
                     'working_details' => [
                         'check_in' =>[
@@ -590,5 +592,18 @@ class NotificationController extends Controller
             //Failed
         }
     }
+
+    public function successResponseNotif($jobId)
+    {
+        $job = new JobSchedule();
+
+        $output = $job->getJobScheduleDetails($jobId, 'jobs.id');
+
+        $jobDetails = $this->jobDetailsoutput($output);
+
+        return response()->json(['job_details' => $jobDetails,'status' => ['status_code' => 200, 'success' => true]]);
+
+    }
+
 
 }
