@@ -77,7 +77,7 @@
                             </div>
                         </div>
                         <div class="portlet-body">
-                            <div class="table-toolbar">
+                            <div class="">
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div class="">
@@ -91,69 +91,31 @@
                                                             <td> {{ $userDetails->userName }}</td>
                                                         </tr>
                                                         @endif
+                                                        @if($userDetails->userEmail)
                                                         <tr>
-                                                            @if($userDetails->birthdate)
+                                                            <td width="40%"><strong>Email Address</strong></td>
+                                                            <td> {{ $userDetails->userEmail }}</td>
+                                                        </tr>
+                                                        @endif
+                                                        @if($userDetails->userMobile)
+                                                        <tr>
+                                                            <td><strong>Phone Number</strong></td>
+                                                            <td> {{ $userDetails->userMobile }}</td>
+                                                        </tr>
+                                                        @endif
+                                                        @if($userDetails->nric_no)
+                                                        <tr>
+                                                            <td><strong>NRIC</strong></td>
+                                                            <td> {{ $userDetails->nric_no }}</td>
+                                                        </tr>
+                                                        @endif
+                                                        @if($userDetails->birthdate)
+                                                        <tr>
                                                                 <td><strong>D.O.B</strong></td>
                                                                 <td> {{ $userDetails->birthdate }}</td>
-                                                            @endif
                                                         </tr>
-                                                        <tr>
+                                                        @endif
 
-                                                            @if($userDetails->religion)
-                                                                <td><strong>Religion</strong></td>
-                                                                <td> {{ $userDetails->religion }}</td>
-                                                            @endif
-                                                        </tr>
-                                                        <tr>
-                                                            @if($userDetails->nationality)
-                                                                <td><strong>Nationality</strong></td>
-                                                                <td> {{ ucfirst($userDetails->nationality) }}</td>
-                                                            @endif
-                                                        </tr>
-                                                        <tr>
-                                                            @if($userDetails->nric_no)
-                                                                <td><strong>NRIC</strong></td>
-                                                                <td> {{ $userDetails->nric_no }}</td>
-                                                            @endif
-                                                        </tr>
-                                                        <tr>
-                                                            @if($userDetails->gender)
-                                                                <td><strong>Gender</strong></td>
-                                                                <td> {{ ucfirst($userDetails->gender) }}</td>
-                                                            @endif
-                                                        </tr>
-                                                        <tr>
-                                                            @if($userDetails->address)
-                                                                <td><strong>Address</strong></td>
-                                                                <td> {{ $userDetails->address }}</td>
-                                                            @endif
-                                                        </tr>
-                                                        <tr>
-                                                            @if($userDetails->userEmail)
-                                                                <td><strong>Email Address</strong></td>
-                                                                <td> {{ $userDetails->userEmail }}</td>
-                                                            @endif
-                                                        </tr>
-                                                        <tr>
-                                                            @if($userDetails->userMobile)
-                                                                <td><strong>Phone Number</strong></td>
-                                                                <td> {{ $userDetails->userMobile }}</td>
-                                                            @endif
-                                                        </tr>
-                                                        <tr>
-                                                            @if($userDetails->bank_account)
-                                                                <td><strong>Bank Account </strong></td>
-                                                                <td> {{ $userDetails->bank_account }}</td>
-                                                            @endif
-                                                        </tr>
-                                                        <tr>
-                                                            <td><strong>Availability</strong></td>
-                                                            <td> {{ 'Not yet applicable' }}</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td><strong>Job Types</strong></td>
-                                                            <td> {{ 'None' }}</td>
-                                                        </tr>
                                                         @if($userDetails->school)
                                                         <tr>
                                                             <td><strong>School</strong></td>
@@ -167,23 +129,52 @@
                                                             <td> {{ $userDetails->school_pass_expiry_date }}</td>
                                                         </tr>
                                                         @endif
+
+                                                        @if($userDetails->nationality)
                                                         <tr>
-                                                            @if($applied)
-                                                                <td><strong>No. of jobs applied </strong></td>
-                                                                <td> {{ $applied  }}</td>
+                                                            <td><strong>Nationality</strong></td>
+                                                            <td> {{ ucfirst($userDetails->nationality) }}</td>
+                                                        </tr>
+                                                        @endif
+                                                        @if($userDetails->language)
+                                                        <tr>
+                                                            <td><strong>Language</strong></td>
+                                                            <td> {{ $userDetails->language }}</td>
+                                                        </tr>
+                                                        @endif
+
+                                                        @if($userDetails->religion)
+                                                        <tr>
+                                                            <td><strong>Religion</strong></td>
+                                                            <td> {{ $userDetails->religion }}</td>
+                                                        </tr>
+                                                        @endif
+                                                        <tr>
+                                                            @if($userDetails->gender)
+                                                                <td><strong>Gender</strong></td>
+                                                                <td> {{ ucfirst($userDetails->gender) }}</td>
+                                                            @endif
+                                                        </tr>
+                                                        
+                                                        <tr>
+                                                            @if($userDetails->bank_account)
+                                                                <td><strong>Bank Account </strong></td>
+                                                                <td> {{ $userDetails->bank_account }}</td>
                                                             @endif
                                                         </tr>
                                                         <tr>
-                                                            @if($completed)
-                                                                <td><strong>No. of jobs completed </strong></td>
-                                                                <td> {{ $completed }}</td>
-                                                            @endif
+                                                            <td><strong>Availability</strong></td>
+                                                            <td> {{ 'Not yet applicable' }}</td>
                                                         </tr>
                                                         <tr>
                                                             @if($userDetails->agent_name)
                                                                 <td><strong>Assigned Agent Name </strong></td>
                                                                 <td> {{ $userDetails->agent_name }}</td>
                                                             @endif
+                                                        </tr>
+                                                        <tr>
+                                                            <td><strong>Hourly Rate</strong></td>
+                                                            <td> {{ $userDetails->rate }}</td>
                                                         </tr>
                                                         <tr>
                                                             @if($userDetails->emergency_name)
@@ -209,60 +200,83 @@
                                                                 <td> {{ strtoupper($userDetails->contact_method) }}</td>
                                                             @endif
                                                         </tr>
+                                                        @if($userDetails->criminal_record)
                                                         <tr>
-                                                            @if($userDetails->criminal_record)
-                                                                <td><strong>Criminal Record</strong></td>
-                                                                <td> {{ $userDetails->criminal_record }}</td>
-                                                            @endif
+                                                            <td><strong>Criminal Record</strong></td>
+                                                            <td> {{ $userDetails->criminal_record }}</td>
                                                         </tr>
+                                                        @endif
+                                                        @if($userDetails->medication)
                                                         <tr>
-                                                            @if($userDetails->medication)
-                                                                <td><strong>Medication</strong></td>
-                                                                <td> {{ $userDetails->medication }}</td>
-                                                            @endif
+                                                            <td><strong>Medication</strong></td>
+                                                            <td> {{ $userDetails->medication }}</td>
                                                         </tr>
+                                                        @endif
+                                                        @if($userDetails->address)
                                                         <tr>
-                                                            @if($userDetails->points)
-                                                                <td><strong>Points</strong></td>
-                                                                <td> {{ $userDetails->points }}</td>
-                                                            @endif
+                                                                <td><strong>Address</strong></td>
+                                                                <td> {{ $userDetails->address }}</td>
                                                         </tr>
-                                                        <tr>
-                                                            <td><strong>Hourly Rate</strong></td>
-                                                            <td> {{ $userDetails->rate }}</td>
-                                                        </tr>
-                                                        <tr>
-                                                            @if($userDetails->signature_file_path !='none')
-                                                                <td><strong>Signature</strong></td>
-                                                                <td><img src="/{{ $userDetails->signature_file_path }}" width="200px"/></td>
-                                                            @endif
-                                                        </tr>
-                                                        <tr>
-                                                        <td><strong>Status</strong></td>
-                                                        @if($userDetails->employee_status == 'pending')
-                                                                <td> <span class="label label-sm label-warning">{{ ucfirst($userDetails->employee_status) }} </span></td>
+                                                        @endif
+                                                    </tbody>
+                                                    </table><br>
+
+                                                    <table class="table table-hover bordered">
+                                                        <tbody>
+                                                        <tr><td width="40%"><strong>Status</strong></td>
+                                                            <td> 
+                                                            @if($userDetails->employee_status == 'pending')
+                                                                <span class="label label-sm label-warning">{{ ucfirst($userDetails->employee_status) }} </span>
                                                             @endif
 
                                                             @if($userDetails->employee_status == 'approved')
-                                                                <td> <span class="label label-sm label-success">{{ ucfirst($userDetails->employee_status) }} </span></td>
+                                                                <span class="label label-sm label-success">{{ ucfirst($userDetails->employee_status) }} </span>
                                                             @endif
-
 
                                                             @if($userDetails->employee_status == 'reject')
-                                                                <td> <span class="label label-sm label-danger">{{ ucfirst($userDetails->employee_status) }} </span></td>
+                                                                <span class="label label-sm label-danger">{{ ucfirst($userDetails->employee_status) }} </span>
                                                             @endif
+                                                            </td>
                                                         </tr>
-                                                     
+                                                       <!--  <tr>
+                                                            <td><strong>Job Types</strong></td>
+                                                            <td> {{ 'None' }}</td>
+                                                        </tr> -->
+                                                      
+                                                        @if($applied)
+                                                        <tr>
+                                                            <td><strong>No. of jobs applied </strong></td>
+                                                            <td> {{ $applied  }}</td>
+                                                        </tr>
+                                                        @endif
+                                                        @if($completed)
+                                                        <tr>
+                                                            <td><strong>No. of jobs completed </strong></td>
+                                                            <td> {{ $completed }}</td>
+                                                        </tr>
+                                                        @endif
+                                                        @if($userDetails->points)
+                                                        <tr>
+                                                            <td><strong>Points</strong></td>
+                                                            <td> {{ $userDetails->points }}</td>
+                                                        </tr>
+                                                        @endif
+
                                                         <tr>
                                                             <td><strong>Average Rating</strong></td>
-                                                            <td>
-                                                                <?php echo str_repeat('<i class="fa  fa-star"></i>',floor($userDetails->avg_rating) ); 
+                                                            <td><?php echo str_repeat('<i class="fa  fa-star"></i>',floor($userDetails->avg_rating) ); 
                                                                 if($userDetails->avg_rating > floor($userDetails->avg_rating)){
                                                                     echo '<i class="fa  fa-star-half-o"></i>';
                                                                 }
-                                                                ?>
-                                                            </td>
+                                                                ?></td>
                                                         </tr>
+
+                                                        @if($userDetails->signature_file_path !='none')
+                                                        <tr>
+                                                            <td><strong>Signature</strong></td>
+                                                            <td><img src="/{{ $userDetails->signature_file_path }}" width="200px"/></td>
+                                                        </tr>
+                                                        @endif
                                                         </tbody>
                                                     </table>
                                                 </div>
