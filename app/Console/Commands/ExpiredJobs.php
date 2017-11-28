@@ -40,6 +40,8 @@ class ExpiredJobs extends Command
     public function handle()
     {
         DB::table('jobs')
+            ->leftJoin('job_schedules', 'jobs.id', '=', 'job_schedules.job_id')
+            ->whereNull('job_schedules.job_status')
             ->where('jobs.job_date', '<', Carbon::now())
             ->update(['jobs.status' => 'expired']);
     }

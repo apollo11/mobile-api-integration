@@ -442,11 +442,15 @@ class JobSchedule extends Model
      * @param $id
      * @return mixed
      */
-    public function listofDatebyId($id)
+    public function listofDatebyId($id, $userId)
     {
         $job = DB::table('jobs')
-            ->select('id', 'job_date', 'end_date')
-            ->where('id', $id)
+            ->leftJoin('assign_job_job as assign', function ($join) use ($id, $userId) {
+                    $join->on('assign.job_id', '=', 'jobs.id')
+                        ->where('assign.user_id', '=', $userId);
+                })
+            ->select('jobs.id', 'jobs.job_date', 'jobs.end_date', 'assign.is_assigned')
+            ->where('jobs.id', $id)
             ->first();
 
         return $job;

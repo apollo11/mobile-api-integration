@@ -34,9 +34,13 @@
                                         <label class="col-md-3 control-label">Receipient Group<span class="is-required">*</span></label>
                                         <div class="col-md-7">
                                             <select class="form-control" name="receipient-group">
-                                                <option value="draft mode">Draft mode</option>
-                                                <option value="active">Active</option>
-                                                <option value="inactive">Inactive</option>
+                                                @foreach( $groups as $group)
+                                                    @if($loop->count == 0)
+                                                         <option value="all"> - ALL - </option>
+                                                    @else
+                                                        <option value="{{ $group->id }}" {{ old('group') == $group->id ? "selected" : "" }}>{{ $group->group_name }}</option>
+                                                    @endif
+                                                @endforeach
                                             </select>
                                             @if ($errors->has('receipient-group'))
                                                 <span class="help-block">
@@ -59,19 +63,22 @@
                                     </div>
 
                                     <div class="form-group{{ $errors->has('publish-date') ? ' has-error' : '' }}">
-                                        <label class="col-md-3 control-label">Publish Date<span class="is-required">*</span></label>
+                                        <label class="control-label col-md-3">Publish Date<span class="is-required">*</span></label>
                                         <div class="col-md-7">
-                                            <div class="input-group date" data-provide="datepicker">
-                                                <input type="text" class="form-control" value="{{ $pushNotification->created_at }}" name="publish-date">
-                                                <div class="input-group-addon">
-                                                    <span class="glyphicon glyphicon-th"></span>
-                                                </div>
-                                            </div>
-                                            @if ($errors->has('publish-date'))
-                                                <span class="help-block">
+                                            <div class="input-group date form_datetime form_datetime bs-datetime"
+                                                 id="birthdate">
+                                                <input type="text" name="publish-date" size="16" class="form-control" value="{{ $pushNotification->created_at }}">
+                                                <span class="input-group-addon">
+                                                    <button class="btn default date-set" type="button">
+                                                        <i class="fa fa-calendar"></i>
+                                                    </button>
+                                                </span>
+                                                @if ($errors->has('publish-date'))
+                                                    <span class="help-block">
                                                 {{ $errors->first('publish-date') }}
                                                </span>
-                                            @endif
+                                                @endif
+                                            </div>
                                         </div>
                                     </div>
 
@@ -93,7 +100,6 @@
                                     <div class="row">
                                         <div class="col-md-offset-3 col-md-9">
                                             <button type="submit" class="btn green">Submit</button>
-                                            <button type="button" class="btn default">Cancel</button>
                                         </div>
                                     </div>
                                 </div>
