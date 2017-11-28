@@ -560,8 +560,6 @@ class NotificationController extends Controller
                 //Failed
             }    
         }
-
-        
     }
 
 
