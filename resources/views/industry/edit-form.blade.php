@@ -34,8 +34,7 @@
                                         <label class="col-md-3 control-label">Industry</label>
 
                                         <div class="col-md-7">
-                                            <input type="text" class="form-control" placeholder="Enter Industry" value="{{ !old('name') ? $industry->name : old('name') }}"
-                                                   value="{{ $industry->name }}" name="name">
+                                            <input type="text" class="form-control" placeholder="Enter Industry" value="{{ !old('name') ? $industry->name : old('name') }}" name="name">
                                             @if ($errors->has('name'))
                                                 <span class="help-block">
                                                 {{ $errors->first('name') }}
