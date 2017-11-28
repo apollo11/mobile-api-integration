@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\JobSchedule;
 
-use Illuminate\Console\Scheduling\Schedule;
 use Validator;
+use App\Settings;
 use App\History;
 use Carbon\Carbon;
 use App\JobSchedule;
@@ -67,7 +67,7 @@ class JobScheduleController extends Controller
             $output = $this->errorResponse(['Your account status is pending or blocked'], 'User Verification', 110008, 400);
 
         } else {
-            $jobSched = $sched->listofDatebyId($jobId);
+            $jobSched = $sched->listofDatebyId($jobId, $userId);
 
             $validateSched = $sched->schedConflict($userId, $jobSched->job_date, $jobSched->end_date);
 
@@ -92,8 +92,7 @@ class JobScheduleController extends Controller
                 }
 
             } else {
-
-                $statusPoints = $this->comparePoints($userId);
+                $statusPoints = $this->comparePoints($userId, $jobId);
 
                 $user->jobSchedule()->create(['name' => null, 'job_id' => $request->input('job_id'), 'job_status' => $statusPoints]);
 
@@ -294,12 +293,22 @@ class JobScheduleController extends Controller
      * @param $userId
      * @return string
      */
-    public function comparePoints($userId)
+    public function comparePoints($userId, $jobId)
     {
+        $settingsObj = new Settings();
+        $settings = $settingsObj->allSettings();
+
         $sched = new JobSchedule();
+        $ifAssigned = $sched->listofDatebyId($jobId, $userId);
         $result = $sched->userPoints($userId);
-        if ($result->employee_points < 70) {
+
+        $lessThanPoints = ($result->employee_points < $settings->point_min);
+        $assignedEmpty = empty($ifAssigned->is_assigned);
+
+        if ($assignedEmpty && $lessThanPoints) {
+
             $output = 'pending';
+
         } else {
 
             $output = 'accepted';
