@@ -27,13 +27,14 @@
             <?php 
             $bm = $v['business_manager'];
             $rowspan = '';
-            if(isset($total_employer_arr[$bm]) && $total_employer_arr[$bm] > 1){
+            if(isset($total_employer_arr[$bm]) && $total_employer_arr[$bm] >= 1){
                 $rowspan = "rowspan=".$total_employer_arr[$bm];
             }
             $row_req = 0; $row_actual = 0; ?>
             <tr>
                 @if($prev_bm!=$bm)
-                <?php $count++; ?>
+                <?php $count++; 
+                ?>
                 <td {{$rowspan}}>{{$count}}</td>
                 <td {{$rowspan}}>{{ $v['business_manager'] }}</td>
                 @endif

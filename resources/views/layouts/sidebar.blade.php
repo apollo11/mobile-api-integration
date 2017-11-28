@@ -17,7 +17,7 @@
             <!-- DOC: To remove the search box from the sidebar you just need to completely remove the below "sidebar-search-wrapper" LI element -->
             @if (Auth::user()->role_id == 0)
                 @can('dashboard-view')
-                    <li class="start {{{ (Request::is('home') ? ' active' : '') }}}">
+                    <li class="start {{{ ((Request::is('home') || Request::is('/')) ? ' active' : '') }}}">
                         <a href="{{ route('home') }}">
                             <i class="icon-home"></i>
                             <span class="title">Dashboard</span>
@@ -36,31 +36,36 @@
             @endcan
              @if (Auth::user()->role_id == 0)
                  @can('employer-view')
-                     <li {{{ ($current_route == 'employer.new.list' ? 'class=active' : '') }}}>
-                        <a href="{{ route('employer.new.list') }}">
-                            <i class="fa fa-user"></i>
-                            Registered Employers</a>
+                    <li class="nav-item {{{ (  ($current_route == 'employer.new.list' || $current_route == 'employer.lists') ? ' active' : '') }}}">
+                        <a href="javascript:;" class="nav-link nav-toggle ">
+                             <i class="fa fa-user"></i>
+                            <span class="title">Employers</span>
+                            <span class="arrow"></span>
+                        </a>
+                        <ul class="sub-menu" style="display: none;">
+                            <li class="nav-link {{{ ($current_route == 'employer.lists' ? ' active' : '') }}} ">
+                                <a href="{{ route('employer.lists') }}">Employers</a>
+                            </li>
+                            <li class="nav-link {{{ ($current_route == 'employer.new.list' ? ' active' : '') }}}">
+                                <a href="{{ route('employer.new.list') }}">Registered Employers</a>
+                            </li>
+                        </ul>
                     </li>
-                @endcan
-                @can('employer-view')
-                 <li {{{ ($current_route == 'employer.lists' ? 'class=active' : '') }}}>
-                    <a href="{{ route('employer.lists') }}">
-                        <i class="icon-basket"></i>
-                        Employers</a>
-                </li>
+                    
                  @endcan
-             @can('payout-view')
-                 <li {{{ ($current_route == 'payout.lists' ? 'class=active' : '') }}}>
-                    <a href="{{ route('payout.lists') }}">
-                        <i class="icon-tag"></i>
-                        Payouts</a>
-                </li>
-             @endcan
+
+                 @can('payout-view')
+                     <li {{{ ($current_route == 'payout.lists' ? 'class=active' : '') }}}>
+                        <a href="{{ route('payout.lists') }}">
+                            <i class="fa fa-usd"></i>
+                            Payouts</a>
+                    </li>
+                 @endcan
             @endif
             @can('job-view')
              <li {{{ ($current_route == 'job.lists' ? 'class=active' : '') }}}>
                 <a href="{{ route('job.lists') }}">
-                    <i class="icon-handbag"></i>
+                    <i class="fa fa-tasks"></i>
                     Job Management</a>
             </li>
             @endcan
@@ -69,27 +74,27 @@
                 @can('admin-view')
                 <li {{{ ($current_route == 'industry.lists' ? 'class=active' : '') }}}>
                     <a href="{{ route('industry.lists') }}">
-                        <i class="icon-handbag"></i>
+                        <i class="fa fa-industry"></i>
                         Industry</a>
                 </li>
                 @endcan
             @can('admin-view')
              <li {{{ ($current_route == 'location.lists' ? 'class=active' : '') }}}>
                 <a href="{{ route('location.lists') }}">
-                    <i class="icon-handbag"></i>
+                    <i class="fa fa-globe"></i>
                     Location</a>
             </li>
             @endcan
 
             @can('reports-view')
-            <li class="nav-item">
+            <li class="nav-item {{{ ($current_route == 'reports.weekly_report' ? ' active' : '') }}}">
                 <a href="javascript:;" class="nav-link nav-toggle">
                     <i class="fa fa-line-chart"></i>
                     <span class="title">Reports</span>
                     <span class="arrow"></span>
                 </a>
                 <ul class="sub-menu" style="display: none;">
-                    <li class="nav-item  ">
+                    <li class="nav-item  {{{ ($current_route == 'reports.weekly_report' ? ' active' : '') }}}">
                         <a href="{{route('reports.weekly_report') }}" class="nav-link ">
                             <span class="title">Weekly Report</span>
                         </a>
@@ -108,7 +113,7 @@
             @can('push-view')
              <li {{{ ($current_route == 'pushnotification.lists' ? 'class=active' : '') }}}>
                 <a href="{{ route('pushnotification.lists') }}">
-                    <i class="icon-settings"></i>
+                    <i class="fa fa-comment"></i>
                     <span class="title">Push Notification</span>
                 </a>
             </li>
@@ -116,12 +121,14 @@
             @can('recipient-view')
                 <li {{{ ($current_route == 'recipient.lists' ? 'class=active' : '') }}}>
                     <a href="{{ route('recipient.lists') }}">
-                        <i class="icon-settings"></i>
+                        <i class="fa fa-users"></i>
                         <span class="title">Recipient Group</span>
                     </a>
                 </li>
             @endcan
             @endif
+
+            @if (Auth::user()->role_id == 0)
             @can('settings-view')
                 <li {{{ (Request::is('settings') ? 'class=active' : '') }}}>
                     <a href="{{route('settings') }}">
@@ -131,6 +138,7 @@
                     </a>
                 </li>
             @endcan
+            @endif
             <li>
                 <a href="{{ route('logout') }}"
                    onclick="event.preventDefault();

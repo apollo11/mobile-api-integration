@@ -10,10 +10,10 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-
+/*
 Route::get('/', function () {
     return view('auth.login');
-});
+});*/
 
 Auth::routes();
 Route::group(['middleware' => ['auth']], function () {
@@ -143,7 +143,6 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::prefix('reports')->group(function() {
        Route::get('/weekly_report', 'Reports\ReportsController@weekly_report')->name('reports.weekly_report');
-       Route::post('weekly_report_filter', 'Reports\ReportsController@weekly_report_filter')->name('reports.weekly_report_filter');
     });
 
     Route::prefix('user/mgt')->group(function() {
@@ -164,6 +163,7 @@ Route::group(['middleware' => ['auth']], function () {
 
 });
 
+Route::get('/', 'HomeController@index')->middleware('can:dashboard-view');
 Route::get('/home', 'HomeController@index')->name('home')->middleware('can:dashboard-view');
 
 /*content page for mobile app*/

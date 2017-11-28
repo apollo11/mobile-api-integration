@@ -599,7 +599,12 @@ class Job extends Model
                 $join->on('job_schedules.job_id', '=', 'jobs.id')
                      ->wherein('job_schedules.job_status', ['completed','approved']);
              })
-            ->select(DB::raw("jobs.business_manager,jobs.user_id, sum(jobs.no_of_person) as request,count(jobs.id), date(jobs.job_date) as jobdate, users.company_name as employer_name, count(job_schedules.id) as actual"))
+            ->leftJoin('users as bm', function($join)
+             {
+                $join->on('bm.id', '=', 'jobs.business_manager_id')
+                     ->where('bm.role','=','business_manager');
+             })
+            ->select(DB::raw("bm.name as business_manager, jobs.business_manager_id,jobs.user_id, sum(jobs.no_of_person) as request,count(jobs.id), date(jobs.job_date) as jobdate, users.company_name as employer_name, count(job_schedules.id) as actual"))
             ->whereBetween(DB::raw("date(jobs.job_date)"),[$startdate->format('Y-m-d'),$stopdate->format('Y-m-d')])
             ->when(!empty($keyword), function ($query) use ($keyword) {
                 return $query->where(function($q) use($keyword) {
@@ -608,12 +613,11 @@ class Job extends Model
                       });
 
             })
-            ->groupBy('jobs.business_manager')
+            ->groupBy('jobs.business_manager_id')
             ->groupBy('jobs.user_id')
             ->groupBy('jobdate')
-            ->orderBy('jobs.business_manager', 'asc')
+            ->orderBy('bm.name', 'asc')
             ->orderBy('users.company_name', 'asc')
-            ->orderBy('jobs.user_id', 'asc')
             ->get();
 
         return $result;

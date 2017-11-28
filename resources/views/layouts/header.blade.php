@@ -134,7 +134,7 @@
                     <?php $profileurl = Auth::user()->profile_image_path; 
 
                     if ($profileurl==null || $profileurl == ''){ $profileurl = asset('assets/images/default_user_profile.png');}else{ $profileurl = url( $profileurl ); } ?>
-                        <img alt="" class="img-circle" src={{ $profileurl  }} />
+                        <img alt="" class="img-circle" src="{{ $profileurl  }}" />
 
                         @if(!Auth::guest())
                         <span class="username username-hide-on-mobile"> {{  Auth::user()->role_id == 0 ? Auth::user()->name : Auth::user()->company_name }}</span>

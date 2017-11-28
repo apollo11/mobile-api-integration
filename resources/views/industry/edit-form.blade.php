@@ -32,8 +32,9 @@
                                 <div class="form-body">
                                     <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
                                         <label class="col-md-3 control-label">Industry</label>
+
                                         <div class="col-md-7">
-                                            <input type="text" class="form-control" placeholder="Enter Industry"
+                                            <input type="text" class="form-control" placeholder="Enter Industry" value="{{ !old('name') ? $industry->name : old('name') }}"
                                                    value="{{ $industry->name }}" name="name">
                                             @if ($errors->has('name'))
                                                 <span class="help-block">
@@ -41,6 +42,7 @@
                                                </span>
                                             @endif
                                         </div>
+
                                     </div>
                                 </div>
                                 <div class="form-actions">

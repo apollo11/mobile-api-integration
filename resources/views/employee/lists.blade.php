@@ -53,7 +53,6 @@
                                 @endif
                             </div>
                             <div class="portlet-body job-lists-table">
-
                                 <div>
                                     <div style="width: 40%; display: inline-block;">
                                         <div class="input-group date" data-provide="datepicker">
@@ -89,18 +88,21 @@
                                                 <span></span>
                                             </label>
                                         </th>
-                                        <th> Name</th>
-                                        <th> NRIC</th>
+                                        <th>Name</th>
+                                        <th>NRIC</th>
+                                        @if($logged_in_role=='Administrator')
                                         <th>Contact No.</th>
-                                        <th> Gender</th>
-                                        <th> DOB</th>
+                                        @endif
+
+                                        <th>Gender</th>
+                                        <th>DOB</th>
                                         <th>Ratings</th>
-                                        <th> Agent Name</th>
+                                        <th>Agent Name</th>
                                         <th>Jobs applied</th>
                                         <th>Jobs completed</th>
-                                        <th> Status</th>
-                                        <th> Joined</th>
-                                        <th> Actions</th>
+                                        <th>Status</th>
+                                        <th>Joined</th>
+                                        <th>Actions</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -121,7 +123,9 @@
                                             <td>
                                                 {{ $employee[$i]['nric_no'] }}
                                             </td>
+                                            @if($logged_in_role=='Administrator')
                                             <td>{{ $employee[$i]['mobile_no'] }}</td>
+                                            @endif
                                             <td> {{ $employee[$i]['gender'] }}</td>
                                             <td> {{ $employee[$i]['birthdate']  }}</td>
                                             <td>{{ 'Not yet available' }}</td>
@@ -175,6 +179,7 @@
                                                             </li>
                                                             @endif
 
+                                                            @if($employee[$i]['employee_status'] != 'upload')
                                                             <li>
                                                                 <a href="{{ route('employee.upload',['id' => $employee[$i]['id']]) }}"
                                                                    onclick="event.preventDefault();
@@ -182,6 +187,7 @@
                                                                     <i class="fa fa-folder-open"></i> Upload
                                                                 </a>
                                                             </li>
+                                                            @endif
 
                                                             @if($employee[$i]['employee_status'] != 'reject' && $employee[$i]['employee_status'] != 'approved')
                                                             <li>
