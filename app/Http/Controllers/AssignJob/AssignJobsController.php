@@ -149,7 +149,6 @@ class AssignJobsController extends Controller
             'job_id' => $jobId,
             'type' => $this->assignedJob
         ]);
-
     }
 
 
