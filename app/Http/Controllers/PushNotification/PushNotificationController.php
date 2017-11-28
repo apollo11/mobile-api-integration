@@ -54,7 +54,7 @@ class PushNotificationController extends Controller
                 $data["body"] = $message;
                 $data["registration_ids"] = $deviceTokens;
                 $data["badge"] = 1;
-                $data["type"] = "normal";
+                $data["type"] = "custom";
 
                 if ($this->pushNotif($data) == "200") {
                     // echo "SUCESS in scheduled push notification";
@@ -99,7 +99,7 @@ class PushNotificationController extends Controller
             echo 
             $pushNotification = new PushNotification();
             $pushNotification->is_read = 0;
-            $pushNotification->type = "normal";
+            $pushNotification->type = "custom";
             $pushNotification->recipient_group_id = $request->input('receipient-group');
             $pushNotification->title = $request->input('subject');
             $pushNotification->message = $request->input('message-content');
@@ -137,7 +137,7 @@ class PushNotificationController extends Controller
         } else {
             $pushNotification = PushNotification::find($request->input('id'));
             $pushNotification->is_read = 0;
-            $pushNotification->type = "normal";
+            $pushNotification->type = "custom";
             $pushNotification->recipient_group_id = $request->input('receipient-group');
             $pushNotification->title = $request->input('subject');
             $pushNotification->message = $request->input('message-content');

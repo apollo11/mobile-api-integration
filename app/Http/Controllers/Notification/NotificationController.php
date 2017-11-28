@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Notification;
 
 use Validator;
+use App\User as User;
 use App\JobSchedule;
 use App\Settings;
 use App\CancelJob;
 use App\Notification;
+use App\DeviceToken;
 use Illuminate\Http\Request;
 use App\Http\Traits\JobDetailsOutputTrait;
 use App\Http\Traits\PushNotiftrait;
@@ -460,6 +462,8 @@ class NotificationController extends Controller
                 'created_at' => $this->dateFormat($output->notif_created),
                 'updated_at' => $this->dateFormat($output->notif_updated),
                'schedule_id' => $output->schedule_id,
+                'message' => $output->message,
+                'title' => $output->title,
                 'job' => [
                     'id' => $output->jobid,
                     'job_title' => $output->job_title,
@@ -556,41 +560,42 @@ class NotificationController extends Controller
 
             if ($this->pushNotif($data) == "200") {
                 //Success
+                $this->save24HrNotif($resultArray[$key]->user_id, $key);
             } else {
                 //Failed
             }    
         }
-
-        
     }
 
 
     public function birthdayNotification() {
 
         $title = "Happy Birthday!";
-        $message = "Dear user, Happy Birthday! Wish you all the best and many happy returns of the day!";
         $deviceTokenResult = array();
         $deviceTokenResult = DeviceToken::join('users', 'users.id', '=', 'user_push_notification_tokens.user_id')
             ->where('users.role_id', '=', 2)
             ->where('date_of_birth', '=', 'DATE(NOW())')
             ->get();
 
-        $deviceTokens = array();
         for ($i=0; $i < count($deviceTokenResult); $i++) { 
+            $deviceTokens = array();
             array_push($deviceTokens, $deviceTokenResult[$i]->device_token);
+            $message = "Dear " . $deviceTokenResult[$i]->name . ", Happy Birthday! Wish you all the best and many happy returns of the day!";
+            $data['title'] = $title;
+            $data["body"] = $message;
+            $data["registration_ids"] = $deviceTokens;
+            $data["badge"] = 1;
+            $data["type"] = "birthday";
+
+            if ($this->pushNotif($data) == "200") {
+                //Success
+                $this->saveBirthdayNotif($deviceTokenResult[$i]->user_id);
+            } else {
+                //Failed
+            }
         }
 
-        $data['title'] = $title;
-        $data["body"] = $message;
-        $data["registration_ids"] = $deviceTokens;
-        $data["badge"] = 1;
-        $data["type"] = "birthday";
-
-        if ($this->pushNotif($data) == "200") {
-            //Success
-        } else {
-            //Failed
-        }
+        
     }
 
     public function successResponseNotif($jobId)
@@ -603,6 +608,40 @@ class NotificationController extends Controller
 
         return response()->json(['job_details' => $jobDetails,'status' => ['status_code' => 200, 'success' => true]]);
 
+    }
+
+
+
+    /**
+     * Update the specified resource in storage for Job Reminder.
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @param  int $id
+     * @return \Illuminate\Http\Response
+     */
+    public function save24HrNotif($userId, $jobId)
+    {
+        $save = \App\User::find($userId);
+        $save->userNotification()->updateOrCreate([
+            'job_id' => $jobId,
+            'type' => "job_reminder"
+        ]);
+    }
+
+
+    /**
+     * Update the specified resource in storage for Birthday Notification.
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @param  int $id
+     * @return \Illuminate\Http\Response
+     */
+    public function saveBirthdayNotif($userId)
+    {
+        $save = \App\User::find($userId);
+        $save->userNotification()->updateOrCreate([
+            'type' => "birthday"
+        ]);
     }
 
 
