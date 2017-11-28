@@ -12,12 +12,14 @@
 	$(document).ready(function() {
 	    table = $('#employee-table').DataTable({
 	        dom: 'Bfrtip',
+	        buttons: [
+	            { "extend": 'excel', "text":'Export',"className": 'btn sbold red' @if(!empty($title)) ,"title" : "{{ $title }}" @endif  }
+	        ],
 	        autoFill: true,
-	//                "scrollCollapse": true,
+	        
 	        "scrollY":"500",
 	        "scrollX" : true,
 	        "sScrollXInner": "100%",
-	        "searching": true
 	    });
 	    // console.log($('#employee-table').DataTable())
 	    // table = $('#employee-table').DataTable();
