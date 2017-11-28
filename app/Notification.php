@@ -12,6 +12,8 @@ class Notification extends Model
         , 'title'
         , 'message'
         , 'job_id'
+        , 'recipient_group_id'
+        , 'group_name'
     ];
 
     /**

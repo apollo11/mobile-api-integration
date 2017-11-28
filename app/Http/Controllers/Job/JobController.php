@@ -74,7 +74,7 @@ class JobController extends Controller
 
         return view('job.lists', [
             'job' => $jobsLists
-            ,'role'=>$role
+            , 'role' => $role
             , 'role_id' => $roleId
             , 'notification_status' => $notification_status]);
     }
@@ -123,7 +123,7 @@ class JobController extends Controller
         $data['zip_code'] = $request->input('postal_code');
         $data['postal_code'] = $zipCode;
         $industry = explode('.', $request->input('industry'));
-        $age = explode('-', $request->input('age'));
+        // $age = explode('-', $request->input('age'));
         $employer = explode('.', $request->input('job_employer'));
 
         $split = [
@@ -131,12 +131,13 @@ class JobController extends Controller
             'location' => $location[1],
             'industry_id' => $industry[0],
             'industry' => $industry[1],
-            'min_age' => $age[0],
-            'max_age' => $age[1],
             'employer_id' => $employer[0],
             'employer' => $employer[1],
             'business_id' => $businessMngr[0],
-            'business' => $businessMngr[1]
+            'business' => $businessMngr[1],
+//            'min_age' => $age[0],
+//            'max_age' => $age[1],
+
         ];
 
         $validator = $this->rules($data);
@@ -174,7 +175,7 @@ class JobController extends Controller
             'location' => $data['location'],
             'description' => $data['job_description'],
             'job_requirements' => empty($data['job_requirements']) ? '' : $data['job_requirements'],
-            'role' => $data['job_role'],
+            'role' => $data['job_role'] ?? '',
             'gender' => empty($data['gender']) ? '' : $data['gender'],
             'nationality' => empty($data['nationality']) ? '' : $data['nationality'],
             'job_image_path' => $data['job_image'],
@@ -185,22 +186,26 @@ class JobController extends Controller
             'business_manager_id' => empty($data['business_id']) ? '' : $data['business_id'],
             'employer' => $data['employer'],
             'rate' => empty($data['hourly_rate']) ? 0 : $data['hourly_rate'],
-            'language' => empty($data['preferred_language']) ? '' : $data['preferred_language'],
+            'language' => '',// empty($data['preferred_language']) ? '' : $data['preferred_language'],
             'job_date' => $this->convertToUtc($data['date']),
             'end_date' => $this->convertToUtc($data['end_date']),
             'industry_id' => $data['industry_id'],
             'industry' => $data['industry'],
             'notes' => empty($data['notes']) ? '' : $data['notes'],
             'status' => Auth::user()->role_id == 0 ? 'active' : 'inactive',
-            'min_age' => $data['min_age'],
-            'max_age' => $data['max_age'],
+            'min_age' => $data['min_age'] ?? 0,
+            'max_age' => $data['max_age'] ?? 0,
             'latitude' => $data['postal_code']['lat'],
             'longitude' => $data['postal_code']['lng'],
             'geolocation_address' => $data['address'],
             'zip_code' => $data['zip_code'],
             'recipient_group' => $data['recipient_group']
         ]);
+
         $this->lastInsertedId = $insertedId->id;
+
+        $this->saveAge($this->lastInsertedId, $data);
+        $this->saveLanguage($this->lastInsertedId, $data);
     }
 
     /**
@@ -218,7 +223,7 @@ class JobController extends Controller
             'location' => $data['location'],
             'description' => $data['job_description'],
             'job_requirements' => empty($data['job_requirements']) ? '' : $data['job_requirements'],
-            'role' => $data['job_role'],
+            'role' => $data['job_role'] ?? '',
             'gender' => empty($data['gender']) ? '' : $data['gender'],
             'nationality' => empty($data['nationality']) ? '' : $data['nationality'],
             'job_image_path' => $data['job_image'],
@@ -229,15 +234,15 @@ class JobController extends Controller
             'business_manager_id' => empty($data['business_id']) ? '' : $data['business_id'],
             'employer' => $data['employer'],
             'rate' => empty($data['hourly_rate']) ? 0 : $data['hourly_rate'],
-            'language' => empty($data['preferred_language']) ? '' : $data['preferred_language'],
+            'language' => '',//empty($data['preferred_language']) ? '' : $data['preferred_language'],
             'job_date' => $this->convertToUtc($data['date']),
             'end_date' => $this->convertToUtc($data['end_date']),
             'industry_id' => $data['industry_id'],
             'industry' => $data['industry'],
             'notes' => empty($data['notes']) ? '' : $data['notes'],
             'status' => Auth::user()->role_id == 0 ? 'active' : 'inactive',
-            'min_age' => $data['min_age'],
-            'max_age' => $data['max_age'],
+            'min_age' => $data['min_age'] ?? 0,
+            'max_age' => $data['max_age'] ?? 0,
             'latitude' => $data['postal_code']['lat'],
             'longitude' => $data['postal_code']['lng'],
             'geolocation_address' => $data['address'],
@@ -271,6 +276,7 @@ class JobController extends Controller
     {
         $user = new Employer();
         $job = new Job();
+        $nationObj = new Nationality();
 
         $details = $job->jobAdminDetails($id);
         $location = $this->location();
@@ -286,6 +292,7 @@ class JobController extends Controller
             , 'details' => $details
             , 'nationality' => $nationality
             , 'age' => $age
+            , 'language' => $nationObj->language()
             , 'employer' => $employer
         ], compact('businessMngr'));
 
@@ -326,20 +333,21 @@ class JobController extends Controller
     {
         $data['title'] = "New Jobs Assigned to You";
         $jobDetails = Job::where('id', $id)->get();
-        
 
-        if(count($request->input("employees-list")) > 0) {    
+
+        if (count($request->input("employees-list")) > 0) {
 
             $user_ids = $request->input("employees-list");
             $this->insertUpdateAssignJob($user_ids, $id);
 
+
             $deviceTokenResult = DeviceToken::whereIn('user_id', $user_ids)->get();
-        
-            for ($i=0; $i < count($deviceTokenResult); $i++) { 
+
+            for ($i = 0; $i < count($deviceTokenResult); $i++) {
                 $deviceTokens = array();
                 array_push($deviceTokens, $deviceTokenResult[$i]->device_token);
-                
-                $message = "Dear Sir/Madam, You have been assigned a job successfully!  Below is the job information: " . "\n" . "Job Name: " . $jobDetails[0]->job_title . "\n" . " Job Date and Time: " . $jobDetails[0]->job_date . "\n" . " Job Location: " . $jobDetails[0]->location . "\n" . " Hourly Rate: " . $jobDetails[0]->rate . "\n" .  " Contact Person: " . $jobDetails[0]->contact_person . "\n" . " Contact No.: " . $jobDetails[0]->contact_no;
+
+                $message = "Dear Sir/Madam, You have been assigned a job successfully!  Below is the job information: " . "\n" . "Job Name: " . $jobDetails[0]->job_title . "\n" . " Job Date and Time: " . $jobDetails[0]->job_date . "\n" . " Job Location: " . $jobDetails[0]->location . "\n" . " Hourly Rate: " . $jobDetails[0]->rate . "\n" . " Contact Person: " . $jobDetails[0]->contact_person . "\n" . " Contact No.: " . $jobDetails[0]->contact_no;
 
                 $data["body"] = $message;
                 $data["registration_ids"] = $deviceTokens;
@@ -349,17 +357,15 @@ class JobController extends Controller
 
                 if ($this->pushNotif($data) == "200") {
                     $this->saveAssignedNotif($deviceTokenResult[$i]->user_id, $id);
-                    return redirect(route("job.lists",["success"]));
+                    return redirect(route("job.lists", ["success"]));
                 } else {
-                    return redirect(route("job.lists",["failed"]));
+                    return redirect(route("job.lists", ["failed"]));
                 }
-            }    
-        }
-        else
-        {
+            }
+        } else {
             return back();
         }
-        
+
     }
 
     /**
@@ -382,7 +388,7 @@ class JobController extends Controller
         $data['zip_code'] = $request->input('postal_code');
         $data['postal_code'] = $zipCode;
         $industry = explode('.', $request->input('industry'));
-        $age = explode('-', $request->input('age'));
+        //$age = explode('-', $request->input('age'));
         $employer = explode('.', $request->input('job_employer'));
 
         $split = [
@@ -390,8 +396,6 @@ class JobController extends Controller
             'location' => $location[1],
             'industry_id' => $industry[0],
             'industry' => $industry[1],
-            'min_age' => $age[0],
-            'max_age' => $age[1],
             'employer_id' => $employer[0],
             'employer' => $employer[1],
             'business_id' => $businessMngr[0],
@@ -411,6 +415,10 @@ class JobController extends Controller
 
             $mergeData = array_merge($data, $profile, $split);
 
+            $this->deleteAge($mergeData, $id);
+            $this->saveAge($id, $data);
+            $this->deleteLanguage($mergeData, $id);
+            $this->saveLanguage($id, $data);
             $this->updateData($mergeData);
 
             return redirect(route('job.details', ['id' => $id]));
@@ -429,7 +437,7 @@ class JobController extends Controller
         $job = new Job();
 
         $submit = empty($request->input('multiple')) ? $param : $request->input('multiple');
-        $multi['multicheck'] = is_null($id) ? (array)$request->input('multicheck') : (array) $id;
+        $multi['multicheck'] = is_null($id) ? (array)$request->input('multicheck') : (array)$id;
 
         $validator = Validator::make($multi, ['multicheck' => 'required']);
 
@@ -465,7 +473,7 @@ class JobController extends Controller
         return Validator::make($data, [
             'job_title' => 'required',
             'job_description' => 'required|string',
-            'job_role' => 'required|string',
+            'job_role' => 'nullable',
             'job_image' => 'required',
             'no_of_person' => 'required|numeric',
             'job_employer' => 'required|string',
@@ -592,11 +600,15 @@ class JobController extends Controller
         $details = $job->jobAdminDetails($id);
         $relatedCandidates = $schedule->getRelatedCandidates($id);
         $employeeList = $employee->employeeLists($param);
+        $age = $this->getAgeViaId($id);
+        $language = $this->getLanguageViaId($id);
 
         return view('job.details', ['details' => $details
             , 'related' => $relatedCandidates
             , 'list' => $employeeList
             , 'role_id' => Auth::user()->role_id
+            , 'age' => $age
+            , 'language' => $language
         ]);
     }
 
@@ -745,16 +757,18 @@ class JobController extends Controller
         $employee = new Employee();
 
         $details = $job->jobAdminDetails($id);
-        if(empty($details)){abort(404);}
-      
+        if (empty($details)) {
+            abort(404);
+        }
+
         $relatedCandidates = $schedule->getCandidatesLocation($id);
         $markers = array();
-        foreach($relatedCandidates as $k=>$v){
-            if(!empty($v->employee_current_lat) && !empty($v->employee_current_long) && $v->employee_current_lat!=0 && $v->employee_current_long!=0){
+        foreach ($relatedCandidates as $k => $v) {
+            if (!empty($v->employee_current_lat) && !empty($v->employee_current_long) && $v->employee_current_lat != 0 && $v->employee_current_long != 0) {
                 $markers[] = $v;
             }
         }
-        return view('job.location_tracking', ['details' => $details, 'related' => $relatedCandidates,'markers'=>$markers]);
+        return view('job.location_tracking', ['details' => $details, 'related' => $relatedCandidates, 'markers' => $markers]);
     }
 
     /**
@@ -777,29 +791,29 @@ class JobController extends Controller
      */
     public function insertUpdateAssignJob($userId, $jobId)
     {
-            $user = User::find($userId);
-            $jobs = Job::find($jobId);
+        $user = User::find($userId);
+        $jobs = Job::find($jobId);
 
-            foreach ($user as $key => $value) {
-                if(!$this->findExistingJob($value->id, $jobs->id)) {
-                    $assigned[] = [
-                        $value->id => [
-                            'is_assigned' => true,
-                            'assign_job_id' => $jobs->id,
-                            'user_id' => $value->id
-                        ],
-                    ];
+        foreach ($user as $key => $value) {
+            if (!$this->findExistingJob($value->id, $jobs->id)) {
+                $assigned[] = [
+                    $value->id => [
+                        'is_assigned' => true,
+                        'assign_job_id' => $jobs->id,
+                        'user_id' => $value->id
+                    ],
+                ];
 
-                    $this->saveAssignedNotif($value->id, $jobs->id);
-                } else {
-                    $assigned[] = [];
+                $this->saveAssignedNotif($value->id, $jobs->id);
+            } else {
+                $assigned[] = [];
 
-                }
             }
+        }
 
-            for ($i = 0; $i < count($assigned); $i++) {
-                $jobs->assignJobs()->syncWithoutDetaching($assigned[$i]);
-            }
+        for ($i = 0; $i < count($assigned); $i++) {
+            $jobs->assignJobs()->syncWithoutDetaching($assigned[$i]);
+        }
 
     }
 
@@ -817,5 +831,89 @@ class JobController extends Controller
         return $output;
 
     }
+
+    /**
+     * @param $data
+     */
+    public function saveAge($id, $data)
+    {
+        if (!empty($data['age'])) {
+            $job = \App\Job::find($id);
+
+            for ($i = 0; $i < count($data['age']); $i++) {
+                $age = $data['age'];
+                $job->age()->create([
+                    'name' => $age[$i]
+                ]);
+            }
+        }
+    }
+
+    /**
+     * @param $data
+     */
+    public function saveLanguage($id, $data)
+    {
+        if (!empty($data['preferred_language'])) {
+            $user = \App\Job::find($id);
+
+            for ($i = 0; $i < count($data['preferred_language']); $i++) {
+                $saveLang = $data['preferred_language'];
+                $user->language()->create([
+                    'name' => $saveLang[$i]
+                ]);
+
+            }
+        }
+    }
+
+    /**
+     * Get language via id
+     */
+    public function getLanguageViaId($id)
+    {
+        $obj = \App\Language::where('job_id', $id)->get();
+
+        return $obj;
+    }
+
+    /**
+     * Get Age via id
+     */
+    public function getAgeViaId($id)
+    {
+        $obj = \App\Age::where('job_id', $id)->get();
+
+        return $obj;
+    }
+
+
+    /**
+     * Delete User
+     */
+    public function deleteAge($data, $id)
+    {
+        if(!empty($data['age'])) {
+
+            $deleteRows = \App\Age::where('job_id', $id)->delete();
+            return $deleteRows;
+
+        }
+    }
+
+    /**
+     * Delete User
+     */
+    public function deleteLanguage($data, $id)
+    {
+        if(!empty($data['preferred_language'])) {
+
+            $deleteRows = \App\Language::where('job_id', $id)->delete();
+
+            return $deleteRows;
+
+        }
+    }
+
 
 }
