@@ -31,13 +31,6 @@
                                     <span class="caption-subject bold uppercase">Registered Employers</span>
                                 </div>
                                 {{ csrf_field() }}
-                                <div class="actions">
-                                    {{--<input class="btn sbold green" name="multiple" value="Delete" type="submit"/>--}}
-                                    <a href="{{ route('employer.create') }}" id="sample_editable_1_new"
-                                       class="btn sbold green"> Add New
-                                        <i class="fa fa-plus"></i>
-                                    </a>
-                                </div>
                             </div>
                             <div class="portlet-body">
                                 <table class="table table-striped table-bordered table-hover table-checkable order-column"
@@ -53,10 +46,10 @@
                                         </th>
                                         <th>#</th>
                                         <th>Name</th>
-                                        <th> Business Name</th>
+                                        <th>Business Name</th>
                                         <th>Email</th>
                                         <th>Mobile No.</th>
-                                        <th> Action</th>
+                                        <th>Action</th>
                                     </tr>
                                     </thead>
                                     <tbody>

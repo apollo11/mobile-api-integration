@@ -200,6 +200,10 @@ class EmployeeController extends Controller
         $location = new Location();
         $nationality = new Nationality();
 
+
+        $details = $userDetails->userInfo($id);
+        if(empty($details)){abort(404);}
+
         $contactMethod = [
             'sms'
             , 'phone'
@@ -207,12 +211,17 @@ class EmployeeController extends Controller
             , 'other'
         ];
 
-        $details = $userDetails->userInfo($id);
-        if(empty($details)){abort(404);}
+        $employee_status = [
+            'pending',
+            'upload',
+            'reject',
+            'approved',
+        ];
 
         return view('employee.edit-form', [
             'details' => $details
             , 'contact_method' => $contactMethod
+            , 'employee_status' => $employee_status
             , 'location' => $location->locationLists()
             , 'nationality' => $nationality->nationalityDropdown()
             , 'language' => $nationality->language()
@@ -309,6 +318,9 @@ class EmployeeController extends Controller
                 'points' => $data['points']
             ]);
 
+
+            $user->employee_status = isset($data['employee_status']) ? $data['employee_status'] : 'pending';
+            $user->save();
         }
 
         \App\User::where('id', $id)
@@ -324,7 +336,6 @@ class EmployeeController extends Controller
      */
     public function updateRules(array $data)
     {
-
         return Validator::make($data, [
                 'name' => 'required|string|max:255',
                 'email' => 'required|string|email|max:255',
@@ -341,7 +352,8 @@ class EmployeeController extends Controller
                 'emergency_person_address' => 'required|string',
                 'address' => 'required',
                 'rate' => 'required|numeric',
-                'points' => 'required|numeric|max:100'
+                'points' => 'required|numeric|max:100',
+                'employee_status' => 'required'
             ]
         );
 
