@@ -283,7 +283,7 @@ class EmployeeController extends Controller
                 'back_ic_path' => 'none',
                 'signature_file_path' => 'none',
                 'rate' => $data['rate'],
-                'point' => $data['point']
+                'points' => $data['points']
             ]);
 
         } else {
@@ -305,7 +305,8 @@ class EmployeeController extends Controller
                 'medication' => $medical,
                 'language' => $data['language'],
                 'nationality' => $data['nationality'],
-                'rate' => $data['rate']
+                'rate' => $data['rate'],
+                'points' => $data['points']
             ]);
 
         }
