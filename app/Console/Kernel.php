@@ -27,6 +27,18 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
+        $schedule->call(function () {
+            app('App\Http\Controllers\PushNotification\PushNotificationController')->notifyByPublishDateTime();
+        })->everyFiveMinutes();
+
+        $schedule->call(function () {
+            app('App\Http\Controllers\Notification\NotificationController')->jobReminderForDay();
+        })->hourly();
+
+        $schedule->call(function () {
+            app('App\Http\Controllers\Notification\NotificationController')->birthdayNotification();
+        })->daily();
+        
          $schedule->command('job:auto_completed')
                   ->hourly();
 
