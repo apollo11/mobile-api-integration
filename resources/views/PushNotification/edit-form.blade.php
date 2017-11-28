@@ -63,19 +63,22 @@
                                     </div>
 
                                     <div class="form-group{{ $errors->has('publish-date') ? ' has-error' : '' }}">
-                                        <label class="col-md-3 control-label">Publish Date<span class="is-required">*</span></label>
+                                        <label class="control-label col-md-3">Publish Date<span class="is-required">*</span></label>
                                         <div class="col-md-7">
-                                            <div class="input-group date" data-provide="datepicker">
-                                                <input type="text" class="form-control" value="{{ $pushNotification->created_at }}" name="publish-date">
-                                                <div class="input-group-addon">
-                                                    <span class="glyphicon glyphicon-th"></span>
-                                                </div>
-                                            </div>
-                                            @if ($errors->has('publish-date'))
-                                                <span class="help-block">
+                                            <div class="input-group date form_datetime form_datetime bs-datetime"
+                                                 id="birthdate">
+                                                <input type="text" name="publish-date" size="16" class="form-control" value="{{ $pushNotification->created_at }}">
+                                                <span class="input-group-addon">
+                                                    <button class="btn default date-set" type="button">
+                                                        <i class="fa fa-calendar"></i>
+                                                    </button>
+                                                </span>
+                                                @if ($errors->has('publish-date'))
+                                                    <span class="help-block">
                                                 {{ $errors->first('publish-date') }}
                                                </span>
-                                            @endif
+                                                @endif
+                                            </div>
                                         </div>
                                     </div>
 
