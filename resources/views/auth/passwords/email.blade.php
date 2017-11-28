@@ -31,10 +31,11 @@
                         </div>
 
                         <div class="form-group">
-                            <div class="col-md-6 col-md-offset-4">
+                            <div class="col-md-12 text-center">
                                 <button type="submit" class="btn btn-primary">
                                     Send Password Reset Link
                                 </button>
+                                <a href="{{route('home')}}" class="btn btn-default">Back to login</a>
                             </div>
                         </div>
                     </form>
