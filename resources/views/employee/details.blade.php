@@ -240,7 +240,7 @@
                                                                 <span class="label label-sm label-warning">{{ ucfirst($userDetails->employee_status) }} </span>
                                                             @endif
 
-                                                            @if($userDetails->employee_status == 'approved')
+                                                            @if($userDetails->employee_status == 'approved' || $userDetails->employee_status == 'upload')
                                                                 <span class="label label-sm label-success">{{ ucfirst($userDetails->employee_status) }} </span>
                                                             @endif
 
@@ -309,9 +309,13 @@
                                                     @else
                                                         <img class="img-circle main-profile-img" src="http://via.placeholder.com/300x300" />
                                                     @endif
+
+                                                     @if($role_id == 0)
                                                     <h3><button href="#" @cannot('employee-view') disabled @endcannot class="btn sbold green" data-toggle="modal" data-target="#profile-img">Update Profile Image</button></h3>
+                                                    @endif
                                             </div>
                                         </div>
+                                        @if($role_id == 0)
                                         <div class="row">
                                             <div class="col-sm-offset-2 col-sm-4">
                                                     @if(!empty($userDetails->front_ic_path))
@@ -332,6 +336,7 @@
                                                 <h3><button @cannot('employee-view') disabled @endcannot href="#" class="btn sbold green" data-toggle="modal" data-target="#profile-back-ic">Update Back IC</button></h3>
                                             </div>
                                         </div>
+                                        @endif
                                     </div>
                                 </div>
                                 {{--<div class="row">--}}
