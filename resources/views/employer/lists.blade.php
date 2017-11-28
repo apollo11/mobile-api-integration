@@ -122,12 +122,16 @@
                                                             <a href="{{ route('employer.details',['id' => $user['id'] ])  }}">
                                                                 <i class="fa fa-eye"></i> View </a>
                                                         </li>
+                                                        @if($user['status'] == 0 || $user['status'] == 3)
                                                         <li>
                                                             <a href="{{ route('employer.multiple',['id' => $user['id'], 'param' => 'Approve' ])  }}"
                                                                onclick="event.preventDefault();
                                                                        document.getElementById('{{'approve-'.$user['id'] }}').submit();">
                                                                 <i class="fa fa-check-square-o"></i> Approve</a>
                                                         </li>
+                                                        @endif
+
+                                                        @if($user['status'] == 0 || $user['status'] == 1)
                                                         <li>
                                                             <a href="{{ route('employer.multiple',['id' => $user['id'], 'param' => 'Reject' ]) }}"
                                                                onclick="event.preventDefault();
@@ -135,6 +139,7 @@
                                                                 <i class="fa fa-close"></i> Reject
                                                             </a>
                                                         </li>
+                                                        @endif
                                                     </ul>
                                                 </div>
                                             </td>

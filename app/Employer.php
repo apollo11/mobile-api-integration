@@ -66,6 +66,11 @@ class Employer extends Model
     public function employerDetails($id)
     {
         $details = DB::table('users as employer')
+            ->leftJoin('users as bm', function ($join) {
+                $join->on('employer.business_manager', '=', 'bm.id')
+                      ->where('bm.role', '=', 'business_manager');
+            })
+            ->leftJoin('industries','industries.id','employer.industry')
             ->select(
                 'employer.id'
                 ,'employer.email'
@@ -74,9 +79,12 @@ class Employer extends Model
                 , 'employer.profile_image_path'
                 , 'employer.status'
                 , 'employer.business_manager'
+                , 'bm.name as business_manager_name'
                 , 'employer.contact_person'
                 , 'employer.contact_no'
                 , 'employer.rate'
+                , 'employer.industry'
+                , 'industries.name as industry_name'
             )
             ->where('employer.id', '=', $id)
             ->first();

@@ -1,4 +1,6 @@
 /* here you can put your own css to customize and override the theme */
+img{max-width:100%;}
+
 .marker{background-color:#F4D03F;}
 .employee-list .portlet.light .dataTables_wrapper .dt-buttons
 {
@@ -70,4 +72,9 @@
 .users-mgt .form-group .mt-checkbox-inline {
     padding:0;
 
+}
+
+/*sidebar link*/
+.page-sidebar-closed.page-sidebar-fixed .page-sidebar:hover .page-sidebar-menu > li > a.active, .page-sidebar .page-sidebar-menu > li > a.active{
+    
 }
