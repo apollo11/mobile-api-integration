@@ -122,6 +122,8 @@
                 </li>
             @endcan
             @endif
+
+            @if (Auth::user()->role_id == 0)
             @can('settings-view')
                 <li {{{ (Request::is('settings') ? 'class=active' : '') }}}>
                     <a href="{{route('settings') }}">
@@ -131,6 +133,7 @@
                     </a>
                 </li>
             @endcan
+            @endif
             <li>
                 <a href="{{ route('logout') }}"
                    onclick="event.preventDefault();
