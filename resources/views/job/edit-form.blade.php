@@ -106,7 +106,7 @@
                                             <div class="mt-checkbox-inline">
                                                 @foreach($age as $key => $value)
                                                     <label class="mt-checkbox">
-                                                        <input type="checkbox" name="age[]" value="{{ $value }}" {{ old('age') == $value ? "checked" : "" }}>
+                                                        <input type="checkbox" name="age[]" value="{{ $value }}" {{ old('age') ? 'checked' : '' }}>
                                                         {{ $value }}
                                                         <span></span>
                                                     </label>
@@ -168,7 +168,7 @@
                                         <label class="col-md-3 control-label">Filter by location<span class="is-required">*</span></label>
                                         <div class="col-md-7">
                                             <select class="form-control" name="job_location">
-                                                @foreach( $location as $value)
+                                          Update      @foreach( $location as $value)
                                                     {{ $input = $value->id.'.'.$value->name }}
                                                     @if($loop->count == 0)
                                                         <option value="none">None</option>
@@ -368,7 +368,7 @@
                                             <div class="mt-checkbox-inline">
                                                 @foreach($language as $key => $value)
                                                     <label class="mt-checkbox">
-                                                        <input type="checkbox" name="preferred_language[]" value="{{ $value }}" {{ old('preferred_language') == $value ? "checked" : "" }}>
+                                                        <input type="checkbox" name="preferred_language[]" value="{{ $value }}" {{ old('preferred_language') ? 'checked' : '' }}>
                                                         {{ ucfirst($value) }}
                                                         <span></span>
                                                     </label>
@@ -383,19 +383,19 @@
                                         </div>
                                     </div>
 
-                                    <div class="form-group{{ $errors->has('preferred_language') ? ' has-error' : '' }}">
-                                        <label class="col-md-3 control-label">Preferred Language</label>
-                                        <div class="col-md-7">
-                                            <select class="form-control" name="preferred_language">
-                                                <option value="english">English</option>
-                                            </select>
-                                            @if ($errors->has('preferred_language'))
-                                                <span class="help-block">
-                                                {{ $errors->first('preferred_language') }}
-                                               </span>
-                                            @endif
-                                        </div>
-                                    </div>
+                                    {{--<div class="form-group{{ $errors->has('preferred_language') ? ' has-error' : '' }}">--}}
+                                        {{--<label class="col-md-3 control-label">Preferred Language</label>--}}
+                                        {{--<div class="col-md-7">--}}
+                                            {{--<select class="form-control" name="preferred_language">--}}
+                                                {{--<option value="english">English</option>--}}
+                                            {{--</select>--}}
+                                            {{--@if ($errors->has('preferred_language'))--}}
+                                                {{--<span class="help-block">--}}
+                                                {{--{{ $errors->first('preferred_language') }}--}}
+                                               {{--</span>--}}
+                                            {{--@endif--}}
+                                        {{--</div>--}}
+                                    {{--</div>--}}
 
                                     <div class="form-group{{ $errors->has('date') ? ' has-error' : '' }}">
                                         <label class="control-label col-md-3">Start Job Date and Time<span class="is-required">*</span></label>

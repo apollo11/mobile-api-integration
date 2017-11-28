@@ -234,7 +234,7 @@ class JobController extends Controller
             'business_manager_id' => empty($data['business_id']) ? '' : $data['business_id'],
             'employer' => $data['employer'],
             'rate' => empty($data['hourly_rate']) ? 0 : $data['hourly_rate'],
-            'language' => empty($data['preferred_language']) ? '' : $data['preferred_language'],
+            'language' => '',//empty($data['preferred_language']) ? '' : $data['preferred_language'],
             'job_date' => $this->convertToUtc($data['date']),
             'end_date' => $this->convertToUtc($data['end_date']),
             'industry_id' => $data['industry_id'],
@@ -409,6 +409,10 @@ class JobController extends Controller
 
             $mergeData = array_merge($data, $profile, $split);
 
+            $this->deleteAge($mergeData, $id);
+            $this->saveAge($id, $data);
+            $this->deleteLanguage($mergeData, $id);
+            $this->saveLanguage($id, $data);
             $this->updateData($mergeData);
 
             return redirect(route('job.details', ['id' => $id]));
@@ -832,7 +836,7 @@ class JobController extends Controller
 
             for ($i = 0; $i < count($data['age']); $i++) {
                 $age = $data['age'];
-                $job->age()->updateOrCreate([
+                $job->age()->create([
                     'name' => $age[$i]
                 ]);
             }
@@ -849,7 +853,7 @@ class JobController extends Controller
 
             for ($i = 0; $i < count($data['preferred_language']); $i++) {
                 $saveLang = $data['preferred_language'];
-                $user->language()->updateOrCreate([
+                $user->language()->create([
                     'name' => $saveLang[$i]
                 ]);
 
@@ -878,6 +882,32 @@ class JobController extends Controller
     }
 
 
+    /**
+     * Delete User
+     */
+    public function deleteAge($data, $id)
+    {
+        if(!empty($data['age'])) {
+
+            $deleteRows = \App\Age::where('job_id', $id)->delete();
+            return $deleteRows;
+
+        }
+    }
+
+    /**
+     * Delete User
+     */
+    public function deleteLanguage($data, $id)
+    {
+        if(!empty($data['preferred_language'])) {
+
+            $deleteRows = \App\Language::where('job_id', $id)->delete();
+
+            return $deleteRows;
+
+        }
+    }
 
 
 }

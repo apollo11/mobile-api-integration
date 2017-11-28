@@ -104,7 +104,7 @@
                                             <div class="mt-checkbox-inline">
                                                 @foreach($age as $key => $value)
                                                 <label class="mt-checkbox">
-                                                    <input type="checkbox" name="age[]" value="{{ $value }}" {{ old('age') == $value ? "checked" : "" }}>
+                                                    <input type="checkbox" name="age[]" value="{{ $value }}" {{ old('age') ? 'checked' : '' }}>
                                                     {{ $value }}
                                                     <span></span>
                                                 </label>
@@ -353,7 +353,7 @@
                                             <div class="mt-checkbox-inline">
                                                 @foreach($language as $key => $value)
                                                     <label class="mt-checkbox">
-                                                        <input type="checkbox" name="preferred_language[]" value="{{ $value }}" {{ old('preferred_language') == $value ? "checked" : "" }}>
+                                                        <input type="checkbox" name="preferred_language[]" value="{{ $value }}">
                                                         {{ ucfirst($value) }}
                                                         <span></span>
                                                     </label>
