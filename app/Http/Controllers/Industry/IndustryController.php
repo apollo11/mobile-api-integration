@@ -105,7 +105,7 @@ class IndustryController extends Controller
 
         if ($validator->fails()) {
 
-            return redirect('industry/lists')
+            return back()
                 ->withErrors($validator)
                 ->withInput();
         } else {
@@ -165,5 +165,13 @@ class IndustryController extends Controller
         $output = $industry->industryLists();
 
         return response()->json(['industries' => $output ]);
+    }
+
+    public function validator($data)
+    {
+        $validator = Validator::make($data, $this->rules());
+
+        return $validator;
+
     }
 }
