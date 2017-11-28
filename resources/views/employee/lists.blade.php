@@ -89,9 +89,12 @@
                                                 <span></span>
                                             </label>
                                         </th>
-                                        <th> Name</th>
-                                        <th> NRIC</th>
+                                        <th>Name</th>
+                                        <th>NRIC</th>
+                                        @if($logged_in_role=='Administrator')
                                         <th>Contact No.</th>
+                                        @endif
+
                                         <th> Gender</th>
                                         <th> DOB</th>
                                         <th>Ratings</th>
@@ -121,7 +124,9 @@
                                             <td>
                                                 {{ $employee[$i]['nric_no'] }}
                                             </td>
+                                            @if($logged_in_role=='Administrator')
                                             <td>{{ $employee[$i]['mobile_no'] }}</td>
+                                            @endif
                                             <td> {{ $employee[$i]['gender'] }}</td>
                                             <td> {{ $employee[$i]['birthdate']  }}</td>
                                             <td>{{ 'Not yet available' }}</td>

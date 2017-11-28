@@ -223,7 +223,6 @@ class JobSchedule extends Model
      */
     public function getAvailJobsByUser($id,$employer_id='')
     {
-        echo $employer_id;
         $jobs = DB::table('users')
             ->join('job_schedules', 'job_schedules.user_id', '=', 'users.id')
             ->leftJoin('jobs', 'jobs.id', '=', 'job_schedules.job_id')

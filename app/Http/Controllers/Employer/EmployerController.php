@@ -9,6 +9,7 @@ use App\Industry;
 use Illuminate\Routing\UrlGenerator;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class EmployerController extends Controller
 {
@@ -139,10 +140,11 @@ class EmployerController extends Controller
     {
         $user = new Employer();
         $employer = $user->employerDetails($id);
+        if(empty($employer)){abort(404);}
+
         $countPosted = $user->postedJobCounts($employer->id);
         $applied = $user->candidates($employer->id);
         $related = $user->relatedJobs($employer->id);
-
 
         return view('employer.details',
             [
@@ -164,6 +166,8 @@ class EmployerController extends Controller
         $industry = $this->industryList();
         $user = new Employer();
         $employer = $user->employerDetails($id);
+        if(empty($employer)){abort(404);}
+
         $businessMngr = \App\User::where('role', 'business_manager')->pluck('name', 'id');
 
         return view('employer.edit-form', ['industry' => $industry, 'user' => $employer],  compact('businessMngr'));
@@ -178,24 +182,26 @@ class EmployerController extends Controller
      */
     public function update(Request $request, $id=null)
     {
-        $data = $request->all();
+        // $user = new Employer();
+        // $employer = $user->employerDetails($id);
+        $employer = \App\User::find($id);
+        if(empty($employer)){abort(404);}
 
-        $validator = $this->updateRules($data);
+        $data = $request->all();
+        $validator = $this->updateRules($data,$id, $employer->profile_image_path );
 
         if ($validator->fails()) {
-
             return redirect(route('employer.edit',['id' => $id]))
                 ->withErrors($validator)
                 ->withInput();
-
         } else {
-
-            $companyLogo['company_logo'] = $request->file('company_logo')->store('avatars');
-            $merge = array_merge($data, $companyLogo);
-
-            $employer = \App\User::find($id);
-            $employer->role_id = 1;
-            $employer->role = 'employer';
+            if ($request->hasFile('company_logo')) {
+                $companyLogo['company_logo'] = $request->file('company_logo')->store('avatars');
+                $merge = array_merge($data, $companyLogo);
+                $employer->profile_image_path = $merge['company_logo'];
+            }else{
+                $merge = $data;
+            }
             $employer->company_name = $merge['company_name'];
             $employer->email = $merge['email'];
             $employer->company_description = $merge['company_description'];
@@ -203,12 +209,10 @@ class EmployerController extends Controller
             $employer->contact_person = $merge['contact_person'];
             $employer->contact_no = $data['contact_no'];
             $employer->rate = $merge['hourly_rate'];
-            $employer->profile_image_path = $merge['company_logo'];
             $employer->industry = $merge['industry'];
-
             $employer->save();
 
-            return redirect('employer/lists');
+            return redirect('employer/details/'.$id);
         }
 
     }
@@ -240,16 +244,15 @@ class EmployerController extends Controller
 
             switch ($submit) {
                 case 'Approve':
-                    $employer->multiUpdateApprove($multi);
+                    $employer->multiUpdateApprove($multi['multicheck'] );
                     break;
                 case 'Delete':
-                    $employer->multiDelete($multi);
+                    $employer->multiDelete($multi['multicheck'] );
                     break;
                 case 'Reject':
-                    $employer->multiUpdateReject($multi);
+                    $employer->multiUpdateReject($multi['multicheck'] );
                     break;
             }
-
             $result = back();
         }
 
@@ -290,18 +293,24 @@ class EmployerController extends Controller
     /**
      * Update validation Rules
      */
-    public function updateRules(array $data)
+    public function updateRules(array $data,$id, $profile_image_path)
     {
-        return Validator::make($data, [
-            'company_logo' => 'required',
+        $rules = [
+            // 'company_logo' => 'required',
             'company_name' => 'required|string',
-            'email' => 'email|required|string|email|max:255|unique:users',
+            'email' => 'email|required|string|email|max:255|unique:users,email,'.$id,
             'business_manager' => 'required|string',
             'contact_person' => 'required|string',
             'contact_no' => 'required|string',
             'hourly_rate' => 'required|numeric',
             'industry' => 'required|string'
-        ]);
+        ];
+
+        if(empty($profile_image_path)){
+            $rules['company_logo'] = 'required';
+        }
+
+        return Validator::make($data,$rules);
 
     }
 

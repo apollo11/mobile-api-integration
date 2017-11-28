@@ -189,13 +189,26 @@
                                         </div>
 
                                         <div class="form-group{{ $errors->has('rate') ? ' has-error' : '' }}">
-                                            <label class="col-md-3 control-label">Rate<span class="is-required">*</span></label>
+                                            <label class="col-md-3 control-label">Hourly Rate<span class="is-required">*</span></label>
                                             <div class="col-md-7">
                                                 <input type="text" class="form-control" placeholder="Enter rate"
                                                        name="rate" value="{{ old('rate',$details->rate) }}"/>
                                                 @if ($errors->has('rate'))
                                                     <span class="help-block">
                                                         {{ $errors->first('rate') }}
+                                                  </span>
+                                                @endif
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group{{ $errors->has('points') ? ' has-error' : '' }}">
+                                            <label class="col-md-3 control-label">Points<span class="is-required">*</span></label>
+                                            <div class="col-md-7">
+                                                <input type="text" class="form-control" placeholder="Enter points"
+                                                       name="points" value="{{ old('points',$details->points) }}"/>
+                                                @if ($errors->has('points'))
+                                                    <span class="help-block">
+                                                        {{ $errors->first('points') }}
                                                   </span>
                                                 @endif
                                             </div>

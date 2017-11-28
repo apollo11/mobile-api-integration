@@ -64,7 +64,7 @@ class EmployeeController extends Controller
         }
         $dataUndefined = !empty($data) ? $data : [];
 
-        return view('employee.lists', ['employee' => $dataUndefined, 'count' => count($dataUndefined)]);
+        return view('employee.lists', ['employee' => $dataUndefined, 'count' => count($dataUndefined), 'logged_in_role'=>Auth::user()->role ]);
     }
 
     /**
@@ -282,7 +282,8 @@ class EmployeeController extends Controller
                 'front_ic_path' => 'none',
                 'back_ic_path' => 'none',
                 'signature_file_path' => 'none',
-                'rate' => $data['rate']
+                'rate' => $data['rate'],
+                'point' => $data['point']
             ]);
 
         } else {
@@ -338,7 +339,8 @@ class EmployeeController extends Controller
                 'religion' => 'required|string',
                 'emergency_person_address' => 'required|string',
                 'address' => 'required',
-                'rate' => 'required|numeric'
+                'rate' => 'required|numeric',
+                'points' => 'required|numeric|max:100'
             ]
         );
 

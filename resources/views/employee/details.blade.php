@@ -87,21 +87,23 @@
                                                         <tbody>
                                                         @if($userDetails->userName)
                                                         <tr>
-                                                            <td><strong>Name</strong></td>
+                                                            <td width="40%"><strong>Name</strong></td>
                                                             <td> {{ $userDetails->userName }}</td>
                                                         </tr>
                                                         @endif
-                                                        @if($userDetails->userEmail)
-                                                        <tr>
-                                                            <td width="40%"><strong>Email Address</strong></td>
-                                                            <td> {{ $userDetails->userEmail }}</td>
-                                                        </tr>
-                                                        @endif
-                                                        @if($userDetails->userMobile)
-                                                        <tr>
-                                                            <td><strong>Phone Number</strong></td>
-                                                            <td> {{ $userDetails->userMobile }}</td>
-                                                        </tr>
+                                                        @if($role_id == 0)
+                                                            @if($userDetails->userEmail)
+                                                            <tr>
+                                                                <td width="40%"><strong>Email Address</strong></td>
+                                                                <td> {{ $userDetails->userEmail }}</td>
+                                                            </tr>
+                                                            @endif
+                                                            @if($userDetails->userMobile)
+                                                            <tr>
+                                                                <td><strong>Phone Number</strong></td>
+                                                                <td> {{ $userDetails->userMobile }}</td>
+                                                            </tr>
+                                                            @endif
                                                         @endif
                                                         @if($userDetails->nric_no)
                                                         <tr>
@@ -172,10 +174,19 @@
                                                                 <td> {{ $userDetails->agent_name }}</td>
                                                             @endif
                                                         </tr>
+                                                         @if($role_id == 0)
                                                         <tr>
                                                             <td><strong>Hourly Rate</strong></td>
                                                             <td> {{ $userDetails->rate }}</td>
                                                         </tr>
+                                                        @endif
+                                                        @if($userDetails->points)
+                                                        <tr>
+                                                            <td><strong>Points</strong></td>
+                                                            <td> {{ $userDetails->points }}</td>
+                                                        </tr>
+                                                        @endif
+
                                                         <tr>
                                                             @if($userDetails->emergency_name)
                                                                 <td><strong>Emergency Contact Person</strong></td>
@@ -255,12 +266,7 @@
                                                             <td> {{ $completed }}</td>
                                                         </tr>
                                                         @endif
-                                                        @if($userDetails->points)
-                                                        <tr>
-                                                            <td><strong>Points</strong></td>
-                                                            <td> {{ $userDetails->points }}</td>
-                                                        </tr>
-                                                        @endif
+                                                       
 
                                                         <tr>
                                                             <td><strong>Average Rating</strong></td>
@@ -298,65 +304,31 @@
                                     <div class="mt-element-overlay">
                                         <div class="row">
                                             <div class="col-sm-offset-2 col-sm-4">
-                                                <div class="mt-overlay-1 mt-scroll-right">
                                                     @if(!empty($userDetails->profile_photo))
                                                         <img class="img-circle main-profile-img" src="{{ url($userDetails->profile_photo) }}" />
                                                     @else
                                                         <img class="img-circle main-profile-img" src="http://via.placeholder.com/300x300" />
                                                     @endif
-
-                                                    <div class="mt-overlay">
-                                                        <ul class="mt-info">
-                                                            <li>
-                                                                <button @cannot('employee-view') disabled @endcannot class="btn sbold red" data-toggle="modal" data-target="#profile-img">
-                                                                   Update Profile Image
-                                                                </button>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
                                                     <h3><button href="#" @cannot('employee-view') disabled @endcannot class="btn sbold green" data-toggle="modal" data-target="#profile-img">Update Profile Image</button></h3>
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="col-sm-offset-2 col-sm-4">
-                                                <div class="mt-overlay-1 mt-scroll-right">
                                                     @if(!empty($userDetails->front_ic_path))
                                                         <img src="/{{ $userDetails->front_ic_path }}" />
                                                     @else
                                                         <img src="http://via.placeholder.com/500x300" />
                                                     @endif
-                                                    <div class="mt-overlay">
-                                                        <ul class="mt-info">
-                                                            <li>
-                                                                <button @cannot('employee-view') disabled @endcannot class="btn sbold red" data-toggle="modal" data-target="#profile-front-ic">
-                                                                    Update Front IC
-                                                                </button>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
                                                 <h3><button @cannot('employee-view') disabled @endcannot href="#" class="btn sbold green" data-toggle="modal" data-target="#profile-front-ic">Update Front IC</button></h3>
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="col-sm-offset-2 col-sm-4">
-                                                <div class="mt-overlay-1 mt-scroll-right">
                                                     @if(!empty($userDetails->back_ic_path))
                                                         <img src="/{{ $userDetails->back_ic_path }}" />
                                                     @else
                                                         <img src="http://via.placeholder.com/500x300" />
                                                     @endif
-                                                    <div class="mt-overlay">
-                                                        <ul class="mt-info">
-                                                            <li>
-                                                                <button @cannot('employee-view') disabled @endcannot class="btn sbold red" data-toggle="modal" data-target="#profile-back-ic">
-                                                                    Update Back IC
-                                                                </button>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
                                                 <h3><button @cannot('employee-view') disabled @endcannot href="#" class="btn sbold green" data-toggle="modal" data-target="#profile-back-ic">Update Back IC</button></h3>
                                             </div>
                                         </div>
