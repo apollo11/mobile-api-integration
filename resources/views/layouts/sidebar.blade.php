@@ -17,7 +17,7 @@
             <!-- DOC: To remove the search box from the sidebar you just need to completely remove the below "sidebar-search-wrapper" LI element -->
             @if (Auth::user()->role_id == 0)
                 @can('dashboard-view')
-                    <li class="start {{{ (Request::is('home') ? ' active' : '') }}}">
+                    <li class="start {{{ ((Request::is('home') || Request::is('/')) ? ' active' : '') }}}">
                         <a href="{{ route('home') }}">
                             <i class="icon-home"></i>
                             <span class="title">Dashboard</span>
