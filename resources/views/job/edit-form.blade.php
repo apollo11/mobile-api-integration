@@ -83,22 +83,44 @@
                                         </div>
                                     </div>
 
-                                    <div class="form-group{{ $errors->has('age') ? ' has-error' : '' }}">
+                                    {{--<div class="form-group{{ $errors->has('age') ? ' has-error' : '' }}">--}}
+                                        {{--<label class="col-md-3 control-label">Age</label>--}}
+                                        {{--<div class="col-md-7">--}}
+                                            {{--<select class="form-control" name="age">--}}
+                                                {{--@foreach($age as $key => $value)--}}
+                                                    {{--<option value="{{ $value }}" {{ old('age') == $value ? "selected" : "" }}>{{ $value }}</option>--}}
+                                                {{--@endforeach--}}
+                                            {{--</select>--}}
+
+                                            {{--@if ($errors->has('age'))--}}
+                                                {{--<span class="help-block">--}}
+                                                {{--{{ $errors->first('age') }}--}}
+                                               {{--</span>--}}
+                                            {{--@endif--}}
+                                        {{--</div>--}}
+                                    {{--</div>--}}
+
+                                    <div class="form-group {{ $errors->has('age') ? ' has-error' : '' }}">
                                         <label class="col-md-3 control-label">Age</label>
                                         <div class="col-md-7">
-                                            <select class="form-control" name="age">
+                                            <div class="mt-checkbox-inline">
                                                 @foreach($age as $key => $value)
-                                                    <option value="{{ $value }}" {{ old('age') == $value ? "selected" : "" }}>{{ $value }}</option>
+                                                    <label class="mt-checkbox">
+                                                        <input type="checkbox" name="age[]" value="{{ $value }}" {{ old('age') == $value ? "checked" : "" }}>
+                                                        {{ $value }}
+                                                        <span></span>
+                                                    </label>
                                                 @endforeach
-                                            </select>
-
-                                            @if ($errors->has('age'))
-                                                <span class="help-block">
+                                                @if ($errors->has('age'))
+                                                    <span class="help-block">
                                                 {{ $errors->first('age') }}
                                                </span>
-                                            @endif
+                                                @endif
+
+                                            </div>
                                         </div>
                                     </div>
+
 
                                     <div class="form-group {{ $errors->has('gender') ? ' has-error' : '' }}">
                                         <label class="col-md-3 control-label">Gender</label>
@@ -339,6 +361,27 @@
                                             {{--@endif--}}
                                         {{--</div>--}}
                                     {{--</div>--}}
+
+                                    <div class="form-group {{ $errors->has('preferred_language') ? ' has-error' : '' }}">
+                                        <label class="col-md-3 control-label">Preferred Language</label>
+                                        <div class="col-md-7">
+                                            <div class="mt-checkbox-inline">
+                                                @foreach($language as $key => $value)
+                                                    <label class="mt-checkbox">
+                                                        <input type="checkbox" name="preferred_language[]" value="{{ $value }}" {{ old('preferred_language') == $value ? "checked" : "" }}>
+                                                        {{ ucfirst($value) }}
+                                                        <span></span>
+                                                    </label>
+                                                @endforeach
+                                                @if ($errors->has('preferred_language'))
+                                                    <span class="help-block">
+                                                {{ $errors->first('preferred_language') }}
+                                               </span>
+                                                @endif
+
+                                            </div>
+                                        </div>
+                                    </div>
 
                                     <div class="form-group{{ $errors->has('preferred_language') ? ' has-error' : '' }}">
                                         <label class="col-md-3 control-label">Preferred Language</label>

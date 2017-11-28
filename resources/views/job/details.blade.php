@@ -113,7 +113,16 @@
                                                         </tr>
                                                         <tr>
                                                             <td><strong>Age Required</strong></td>
-                                                            <td>{{ $details->min_age }} - {{ $details->max_age }}</td>
+                                                            <td>
+                                                                @if(count($age) > 0)
+                                                                <ul>
+                                                                    @foreach($age as $key)
+                                                                      <li>{{ $key->name }}</li>
+                                                                    @endforeach
+
+                                                                </ul>
+                                                                @endif
+                                                            </td>
                                                         </tr>
                                                         <tr>
                                                             <td><strong>No. of person requested</strong></td>
@@ -157,7 +166,15 @@
                                                         </tr>
                                                         <tr>
                                                             <td><strong>Language</strong></td>
-                                                            <td>{{ ucfirst($details->language) }}</td>
+                                                            <td>
+                                                                @if(count($language) > 0)
+                                                                <ul>
+                                                                    @foreach($language as $key)
+                                                                        <li>{{ ucfirst($key->name) }}</li>
+                                                                    @endforeach
+                                                                @endif
+                                                                </ul>
+                                                            </td>
                                                         </tr>
                                                         <tr>
                                                             <td><strong>Status</strong></td>

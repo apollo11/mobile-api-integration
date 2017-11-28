@@ -82,6 +82,22 @@ class Job extends Model
     }
 
     /**
+     * Age
+     */
+    public function age()
+    {
+        return $this->hasMany('\App\Age');
+    }
+
+    /**
+     * Language
+     */
+    public function language()
+    {
+        return $this->hasMany('\App\Language');
+    }
+
+    /**
      * Filter by limit, start date, end date
      */
     public function filterByLimitStartEnd($limit = 20, array $param)
