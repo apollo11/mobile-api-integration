@@ -87,14 +87,14 @@
             @endcan
 
             @can('reports-view')
-            <li class="nav-item">
+            <li class="nav-item {{{ ($current_route == 'reports.weekly_report' ? ' active' : '') }}}">
                 <a href="javascript:;" class="nav-link nav-toggle">
                     <i class="fa fa-line-chart"></i>
                     <span class="title">Reports</span>
                     <span class="arrow"></span>
                 </a>
                 <ul class="sub-menu" style="display: none;">
-                    <li class="nav-item  ">
+                    <li class="nav-item  {{{ ($current_route == 'reports.weekly_report' ? ' active' : '') }}}">
                         <a href="{{route('reports.weekly_report') }}" class="nav-link ">
                             <span class="title">Weekly Report</span>
                         </a>
