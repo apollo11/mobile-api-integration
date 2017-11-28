@@ -95,16 +95,17 @@ class ReportsController extends Controller
         $jobs = new Job();
         $result = $jobs->getReportData($startdate,$stopdate,$keyword);
         if(!empty($result)){
-            $daterange_arr = $this->getDatesByRange($startdate,$stopdate);
+            $daterange_arr = getDatesByRange($startdate,$stopdate);
              foreach($result as $k=>$v){
                 $bm = $v->business_manager;
+                $bm_id = $v->business_manager_id;
                 if(empty($bm)){
                     $bm = 'Not specified';
                 }
                 $user_id = $v->user_id;
                 $jobdate = $v->jobdate;
 
-                if($bm!=$prev_bm){
+                if($bm_id!=$prev_bm){
                     $count = 1;
                 }else{
                     if($prev_employer!=$user_id){
@@ -120,6 +121,7 @@ class ReportsController extends Controller
                 if(!isset($weekly_report[$bm.'_'.$user_id])){
                     $weekly_report[$bm.'_'.$user_id] = array(
                         'business_manager'=>$bm,
+                        'business_manager_id'=>$v->business_manager_id,
                         'employer_name'=>$v->employer_name
                     );
                     $total_employer_arr[$bm] = 1;
@@ -128,7 +130,7 @@ class ReportsController extends Controller
                 $total_employer_arr[$bm] = $count;
                 $weekly_report[$bm.'_'.$user_id][$jobdate] = array('request'=>$v->request,'actual'=>$v->actual);
 
-                $prev_bm = $bm;
+                $prev_bm = $bm_id;
                 $prev_employer = $user_id;
             }
         }
@@ -140,16 +142,5 @@ class ReportsController extends Controller
             'startdate'=>$startdate->format('Y-m-d'),
             'stopdate'=>$stopdate->format('Y-m-d')
         ];
-    }
-
-    private function getDatesByRange($startdate,$stopdate){
-        $interval = new \DateInterval('P1D');
-        $daterange = new \DatePeriod($startdate, $interval ,$stopdate,false);
-        $daterange_arr = array();
-        foreach($daterange as $date){
-            $daterange_arr[] = $date->format("Y-m-d");
-        }
-        $daterange_arr[] = $stopdate->format('Y-m-d');
-        return $daterange_arr;
     }
 }
