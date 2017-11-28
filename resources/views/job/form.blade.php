@@ -104,7 +104,7 @@
                                             <div class="mt-checkbox-inline">
                                                 @foreach($age as $key => $value)
                                                 <label class="mt-checkbox">
-                                                    <input type="checkbox" name="age[]" value="{{ $value }}" {{ old('age') ? 'checked' : '' }}>
+                                                    <input type="checkbox" name="age[]" value="{{ $value }}" />
                                                     {{ $value }}
                                                     <span></span>
                                                 </label>
@@ -114,7 +114,6 @@
                                                 {{ $errors->first('age') }}
                                                </span>
                                                 @endif
-
                                             </div>
                                         </div>
                                     </div>
