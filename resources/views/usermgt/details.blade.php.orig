@@ -6,7 +6,11 @@
             <div class="page-bar">
                 <ul class="page-breadcrumb">
                     <li>
+<<<<<<< .merge_file_z2j5ZT
+                        <a href="{{ route('mgt.list')  }}">User Management</a>
+=======
                         <a href="{{ route('employer.lists')  }}">Employers</a>
+>>>>>>> .merge_file_BcOtbg
                         <i class="fa fa-circle"></i>
                     </li>
                     <li>

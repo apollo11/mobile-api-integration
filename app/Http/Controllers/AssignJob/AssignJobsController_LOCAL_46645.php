@@ -13,12 +13,8 @@ use App\Http\Controllers\Controller;
 
 class AssignJobsController extends Controller
 {
-    protected $assignedJob;
-
-    public function __construct()
-    {
-        $this->assignedJob = constant('ASSIGNED_JOB');
-    }
+    use PushNotiftrait;
+    
     /**
      * Display a listing of the resource.
      *
@@ -53,6 +49,7 @@ class AssignJobsController extends Controller
         $data = $request->input('user_id');
         $jobId =  $request->input('job_id');
 
+
         $multi['user_assign'] = is_null($data) ? [] : $data;
 
         $validator = Validator::make($multi, ['user_assign' => 'required']);
@@ -67,25 +64,45 @@ class AssignJobsController extends Controller
             $user = User::find($data);
             $jobs = Job::find($jobId);
 
+
             foreach ($user as $key => $value) {
-                if(!$this->findExistingJob($value->id, $jobs->id)) {
-                    $assigned[] = [
-                        $value->id => [
-                            'is_assigned' => true,
-                            'assign_job_id' => $jobs->id,
-                            'user_id' => $value->id
-                        ],
-                    ];
+                $assigned[] = [
+                    $value->id => [
+                        'is_assigned' => true,
+                        'assign_job_id' => $jobs->id,
+                        'user_id' => $value->id
+                    ],
+                ];
 
-                    $this->saveNotif($value->id, $jobs->id);
-                } else {
-                    $assigned[] = [];
+                $jobDetails = Job::where('id', $jobId)->get();
+                $user_ids = $value->id;
 
+                $message = "Dear Sir/Madam, You have been assigned a job successfully!  Below is the job information: " . "\n" . "Job Name: " . $jobDetails[0]->job_title . "\n" . " Job Date and Time: " . $jobDetails[0]->job_date . "\n" . " Job Location: " . $jobDetails[0]->location . "\n" . " Hourly Rate: " . $jobDetails[0]->rate . "\n" .  " Contact Person: " . $jobDetails[0]->contact_person . "\n" . " Contact No.: " . $jobDetails[0]->contact_no;
+
+                $deviceTokenResult = DeviceToken::whereIn('user_id', $user_ids)->get();
+                $deviceTokens = array();
+                    for ($i=0; $i < count($deviceTokenResult); $i++) { 
+                    array_push($deviceTokens, $deviceTokenResult[$i]->device_token);
                 }
+
+                $data['title'] = "New Jobs Assigned to You";
+                $data["body"] = $message;
+                $data["registration_ids"] = $deviceTokens;
+                $data["badge"] = 1;
+                $data["type"] = "job_assigned";
+                $data["job_id"] = $jobId;
+
+
+                if ($this->pushNotif($data) == "200") {
+                    //  Success Code
+                } else {
+                    //  Failed Code
+                }
+
             }
 
             for ($i = 0; $i < count($assigned); $i++) {
-                $jobs->assignJobs()->syncWithoutDetaching($assigned[$i]);
+                $jobs->assignJobs()->attach($assigned[$i]);
             }
 
             $result = redirect(route('job.details',['id' => $jobId]));
@@ -95,36 +112,6 @@ class AssignJobsController extends Controller
         return $result;
 
     }
-
-    /**
-     * Find Existing Job
-     * @param $userId
-     * @param $jobId
-     * @return mixed
-     */
-    public function findExistingJob($userId, $jobId)
-    {
-        $data = new AssignJob();
-        $output = $data->ifDataExist($userId, $jobId);
-
-        return $output;
-
-    }
-
-    /**
-     * Saving Notification when assigning the Job
-     * @return mixed|static
-     */
-    public function saveNotif($userId, $jobId)
-    {
-        $save = \App\User::find($userId);
-        $save->userNotification()->create([
-            'job_id' => $jobId,
-            'type' => $this->assignedJob
-        ]);
-
-    }
-
 
     /**
      * Display the specified resource.

@@ -6,8 +6,6 @@ use Validator;
 use App\User as User;
 use App\Job as Job;
 use App\AssignJob;
-use App\DeviceToken;
-use App\Http\Traits\PushNotiftrait;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
