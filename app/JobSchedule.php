@@ -273,7 +273,8 @@ class JobSchedule extends Model
     }
 
     /**
-     * @param $id
+     * @param $user_id
+     * @param $job_id
      * @return mixed
      */
     public function getJobByUser($user_id,$job_id)
