@@ -315,7 +315,7 @@
                                                     <i class="fa fa-angle-down"></i>
                                                 </button>
                                                 <ul class="dropdown-menu" role="menu">
-                                                    <li>
+                                                    <!-- <li>
                                                         <a href="{{ route('employee.destroy-one',['id' => $value->userid]) }}"
                                                            onclick="event.preventDefault();
                                                                    document.getElementById('{{'destroy-'.$value->userid }}').submit();">
@@ -324,7 +324,29 @@
                                                     <li>
                                                         <a href="{{ route('employee.edit',['id' => $value->userid ])  }}">
                                                             <i class="fa fa-edit"></i> Edit </a>
-                                                    </li>
+                                                    </li> -->
+
+                                                    @if($value->schedule_status=='pending' || $value->schedule_status=='reject_request')
+                                                        <li>
+                                                            <a href="{{ route('job.update_schedule') }}" data-id="{{$value->id}}" data-status="accept">
+                                                            <i class="fa fa-check"></i> Accept Request</a>
+                                                        </li>
+                                                    @endif
+
+                                                    @if($value->schedule_status=='pending' || $value->schedule_status=='accepted')
+                                                        <li>
+                                                            <a href="{{ route('job.update_schedule') }}" data-id="{{$value->id}}" data-status="reject_request">
+                                                            <i class="fa fa-times"></i> Reject Request</a>
+                                                        </li>
+                                                    @endif
+
+                                                    @if($value->schedule_status=='pending' || $value->schedule_status=='rejected_request' || $value->schedule_status=='accepted')
+                                                        <li>
+                                                            <a href="{{ route('job.update_schedule') }}" data-id="{{$value->id}}" data-status="reject_request">
+                                                            <i class="fa fa-times"></i> Cancel Request</a>
+                                                        </li>
+                                                    @endif
+
                                                     <li>
                                                         <a href="{{ route('employee.details',['id' => $value->userid ])  }}">
                                                             <i class="fa fa-eye"></i> View </a>
