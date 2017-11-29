@@ -73,18 +73,6 @@
                                         </div>
                                     </div>
 
-                                    {{--<div class="form-group{{ $errors->has('business_manager') ? ' has-error' : '' }}">--}}
-                                        {{--<label class="col-md-3 control-label">Business Manager<span class="is-required">*</span></label>--}}
-                                        {{--<div class="col-md-7">--}}
-                                            {{--<input type="text" class="form-control" placeholder="Enter Business Manager" value="{{ old('business_manager') }}" name="business_manager">--}}
-                                            {{--@if ($errors->has('business_manager'))--}}
-                                                {{--<span class="help-block">--}}
-                                                {{--{{ $errors->first('business_manager') }}--}}
-                                               {{--</span>--}}
-                                            {{--@endif--}}
-                                        {{--</div>--}}
-                                    {{--</div>--}}
-
                                     <div class="form-group{{ $errors->has('business_manager') ? ' has-error' : '' }}">
                                         <label class="col-md-3 control-label">Business Manager<span class="is-required">*</span></label>
                                         <div class="col-md-7">
@@ -177,7 +165,7 @@
                                     <div class="row">
                                         <div class="col-md-offset-3 col-md-9">
                                             <button type="submit" class="btn green">Submit</button>
-                                            <a href="{{ URL::previous() }}" class="btn default">Cancel</a>
+                                            <a href="{{ route('employer.lists')  }}" class="btn default">Cancel</a>
                                         </div>
                                     </div>
                                 </div>

@@ -18,7 +18,8 @@ class DatabaseSeeder extends Seeder
         $this->call(BugisAdministrativeSeeder::class);
         $this->call(IndustrySeederTable::class);
         $this->call(LocationTableSeeder::class);
-        
+        $this->call(DeviceTokenSeeder::class);
+
         $this->call(SettingsTableSeeder::class);
     }
 }
