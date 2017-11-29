@@ -314,7 +314,6 @@
                                         <td>{{ $value->mobile_no }}</td>
                                         <td>{{ $value->email }}</td>
                                         <td>{{ $value->rate }}</td>
-                                        <!-- <td>{{ $value->job_rate }}</td> -->
                                         <td>{{ jobschedule_status_display($value->schedule_status) }}</td>
                                         <td>
                                             <div class="btn-group">
