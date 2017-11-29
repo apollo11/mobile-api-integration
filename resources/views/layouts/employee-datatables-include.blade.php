@@ -68,9 +68,12 @@
         startDate = new Date(startdate.toString());
         endDate = new Date(enddate.toString());
 
+        console.log(startDate);
+        console.log(endDate);
+
 		if (startDate > endDate) {
         	console.log('invalid selection');
-        	alert('Start date cannot be earlier than end date');
+        	$('#myModal').modal('show');
         	return true;
         }
         else {
@@ -95,7 +98,7 @@
 
         	var columnDate = new Date(data[columnDateIndex]);	
  
-        	if (columnDate > min && columnDate <= max)
+        	if (columnDate >= min && columnDate <= max)
         	{
         		console.log('Filtered Date ==> ', columnDate);
             	return true;
@@ -106,4 +109,6 @@
 
 
 </script>
+
+@include('layouts.invalid-date')
 @stop

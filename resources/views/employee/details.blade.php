@@ -424,7 +424,7 @@
                                                 </label>
                                             </th>
                                             <td>{{ $jobs->job_title }}</td>
-                                            <td>{{ $jobs->start_date }}</td>
+                                            <td data-order="{{ Carbon\Carbon::parse($jobs->start_date)->format('m-d-Y H:i:s') }}">{{ Carbon\Carbon::parse($jobs->start_date)->format('m-d-Y H:i:s') }}</td>
                                             <td>{{ $jobs->company_name }}</td>
                                             <td>@if($jobs->rating_point!=null)
                                                     <?php echo str_repeat('<i class="fa  fa-star"></i>',$jobs->rating_point); ?>

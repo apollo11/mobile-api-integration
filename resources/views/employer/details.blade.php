@@ -240,7 +240,7 @@
                                             <td>{{ $value->no_of_person }}</td>
                                             <td><a href="#">0 </a></td>
                                             <td> {{ '$'.$value->rate.'/hr' }}</td>
-                                            <td> {{ Carbon\Carbon::parse($value->start_date)->format('H:i:s d-m-Y') }}</td>
+                                            <td> {{ Carbon\Carbon::parse($value->start_date)->format('m-d-Y H:i:s') }}</td>
                                             <td> {{ $value->business_manager }}</td>
                                             <td>{{ $value->location }}</td>
 

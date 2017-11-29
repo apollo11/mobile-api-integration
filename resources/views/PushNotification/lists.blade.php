@@ -67,9 +67,8 @@
                                         <td>{{ $key->id }}</td>
                                         <td>{{ $key->message }}</td>
                                         <td>{{ $key->recipient_group_id }}</td>
-                                        <td>{{ $key->created_at }}</td>
-                                        <td>{{ $key->updated_at }}</td>
-
+                                        <td data-order="{{ Carbon\Carbon::parse($key->created_at)->format('m-d-Y H:i:s') }}">{{ Carbon\Carbon::parse($key->created_at)->format('m-d-Y H:i:s') }}</td>
+                                        <td data-order="{{ Carbon\Carbon::parse($key->updated_at)->format('m-d-Y H:i:s') }}">{{ Carbon\Carbon::parse($key->updated_at)->format('m-d-Y H:i:s') }}</td>
                                         <td>
                                             <div class="btn-group">
                                                 <button class="btn btn-xs green dropdown-toggle" type="button"
