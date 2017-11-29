@@ -84,7 +84,7 @@ Route::group(['middleware' => ['auth']], function () {
 
        Route::get('/getJobsSeekers/{id?}','Job\JobController@getJobsSeekers')->name('job.getJobsSeekers');
 
-       Route::POST('/notification/{id?}','Job\JobController@sendNotification')->name('job.sendNotification');
+       Route::post('/notification/{id?}','Job\JobController@sendNotification')->name('job.sendNotification');
        Route::get('/lists/{notification_status?}','Job\JobController@index')->name('job.lists');
 
        Route::post('/update_schedule', 'Job\JobController@update_schedule')->name('job.update_schedule');

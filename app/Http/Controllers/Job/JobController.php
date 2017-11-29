@@ -17,6 +17,7 @@ use App\Industry;
 use Carbon\Carbon;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
+use App\Http\Traits\NotificationTrait;
 use App\Http\Traits\DateFormatDate;
 use App\Http\Traits\PushNotiftrait;
 use App\Http\Traits\JobDetailsOutputTrait;
@@ -30,7 +31,8 @@ class JobController extends Controller
     use DateFormatDate;
     use JobDetailsOutputTrait;
     use HttpResponse;
-    use PushNotiftrait;
+    //use PushNotiftrait;
+    use NotificationTrait;
 
     private $request;
     protected $data;
@@ -338,41 +340,34 @@ class JobController extends Controller
      */
     public function sendNotification(Request $request, $id)
     {
-        $data['title'] = "New Jobs Assigned to You";
-        $jobDetails = Job::where('id', $id)->get();
+        $deviceTokenObj = new DeviceToken();
+        $user_ids = $request->input("employees-list");
+        $jobDetails = \App\Job::where('id', $id)->first();
 
+        $tokenOutput = $deviceTokenObj->getDeviceTokenByUserId($user_ids);
+
+        foreach ($tokenOutput as $value) {
+            $sms[] = $this->assignJobNotification($jobDetails, $value->device_token);
+        }
 
         if (count($request->input("employees-list")) > 0) {
-
-            $user_ids = $request->input("employees-list");
             $this->insertUpdateAssignJob($user_ids, $id);
+            $this->parsingToken($sms);
 
+            return back();
 
-            $deviceTokenResult = DeviceToken::whereIn('user_id', $user_ids)->get();
-
-            for ($i = 0; $i < count($deviceTokenResult); $i++) {
-                $deviceTokens = array();
-                array_push($deviceTokens, $deviceTokenResult[$i]->device_token);
-
-                $message = "Dear Sir/Madam, You have been assigned a job successfully!  Below is the job information: " . "\n" . "Job Name: " . $jobDetails[0]->job_title . "\n" . " Job Date and Time: " . $jobDetails[0]->job_date . "\n" . " Job Location: " . $jobDetails[0]->location . "\n" . " Hourly Rate: " . $jobDetails[0]->rate . "\n" . " Contact Person: " . $jobDetails[0]->contact_person . "\n" . " Contact No.: " . $jobDetails[0]->contact_no;
-
-                $data["body"] = $message;
-                $data["registration_ids"] = $deviceTokens;
-                $data["badge"] = 1;
-                $data["type"] = $this->assignedJob;
-                $data["job_id"] = $id;
-
-                if ($this->pushNotif($data) == "200") {
-                    $this->saveAssignedNotif($deviceTokenResult[$i]->user_id, $id);
-                    return redirect(route("job.lists", ["success"]));
-                } else {
-                    return redirect(route("job.lists", ["failed"]));
-                }
-            }
         } else {
             return back();
         }
+    }
 
+    /**
+     * @param $data
+     * @return mixed
+     */
+    public function parsingToken($data)
+    {
+        return $data;
     }
 
     /**
