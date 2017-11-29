@@ -111,13 +111,11 @@
 
                                         <tr class="odd gradeX">
                                             <td>
-                                             @if($employee[$i]['employee_status'] != 'reject' && $employee[$i]['employee_status'] != 'approved')
                                                 <label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">
                                                     <input type="checkbox" id="multicheck" name="multicheck[]" class="checkboxes"
                                                            value="{{ $employee[$i]['id'] }}"/>
                                                     <span></span>
                                                 </label>
-                                            @endif
                                             </td>
                                             <td><a href="{{ route('employee.details',['id' => $employee[$i]['id']])  }}"> {{ $employee[$i]['name'] }} </a></td>
                                             <td>

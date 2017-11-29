@@ -125,7 +125,16 @@
 
                                                         <tr>
                                                             <td width="40%"><strong>Age Required</strong></td>
-                                                            <td>{{ $details->min_age }} - {{ $details->max_age }}</td>
+                                                            <td>
+                                                                @if(count($age) > 0)
+                                                                <ul class="ul-in-table">
+                                                                    @foreach($age as $key)
+                                                                      <li>{{ $key->name }}</li>
+                                                                    @endforeach
+
+                                                                </ul>
+                                                                @endif
+                                                            </td>
                                                         </tr>
                                                         <tr>
                                                             <td><strong>Gender Needed</strong></td>
@@ -138,7 +147,15 @@
 
                                                         <tr>
                                                             <td><strong>Preferred Language</strong></td>
-                                                            <td>{{ ucfirst($details->language) }}</td>
+                                                            <td>
+                                                                @if(count($language) > 0)
+                                                                <ul class="ul-in-table">
+                                                                    @foreach($language as $key)
+                                                                        <li>{{ ucfirst($key->name) }}</li>
+                                                                    @endforeach
+                                                                @endif
+                                                                </ul>
+                                                            </td>
                                                         </tr>
 
                                                         <tr>

@@ -21,7 +21,7 @@ class Checkout extends Model
                 , 'job_schedules.id as schedule_id'
                 , 'job_schedules.user_id'
                 , 'job_schedules.job_id'
-                , 'job_schedules.is_assigned'
+                //, 'job_schedules.is_assigned'
                 , 'job_schedules.job_status as schedule_status'
                 , 'job_schedules.payment_status'
                 , 'job_schedules.checkin_datetime'

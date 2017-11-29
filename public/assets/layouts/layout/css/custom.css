@@ -74,7 +74,6 @@ img{max-width:100%;}
 
 }
 
-/*sidebar link*/
-.page-sidebar-closed.page-sidebar-fixed .page-sidebar:hover .page-sidebar-menu > li > a.active, .page-sidebar .page-sidebar-menu > li > a.active{
-    
-}
+
+/*ui in table*/
+.ul-in-table{padding-left:20px;}

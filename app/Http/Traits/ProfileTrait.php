@@ -22,7 +22,7 @@ trait ProfileTrait
             'social_fb_id' => $output->social_fb_id,
             'additional_info' => [
                 'birthdate' => $output->birthdate,
-                'nationality' => null,
+                'nationality' => $output->nationality,
                 'language' => $output->language,
                 'religion' => $output->religion,
                 'address' => $output->address,

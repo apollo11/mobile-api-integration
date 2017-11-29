@@ -106,12 +106,8 @@ class PushNotificationController extends Controller
             $dateTimeFormatter = explode(' ', $request->input('publish-date'));
             $dateFormatter = explode('-', $dateTimeFormatter[0]);
             $pushNotification->created_at = $dateFormatter[0] . '-' . $dateFormatter[2] . '-' . $dateFormatter[1] . " " . $dateTimeFormatter[1] . ":00";
-
-            
-
-            // $pushNotification -> save();
-
-            // return redirect('pushnotification/lists');
+            $pushNotification -> save();
+            return redirect('pushnotification/lists');
         }
     }
 
