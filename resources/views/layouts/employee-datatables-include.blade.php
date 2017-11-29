@@ -73,7 +73,7 @@
 
 		if (startDate > endDate) {
         	console.log('invalid selection');
-        	alert('Start date cannot be earlier than end date');
+        	$('#myModal').modal('show');
         	return true;
         }
         else {
@@ -109,4 +109,6 @@
 
 
 </script>
+
+@include('layouts.invalid-date')
 @stop
