@@ -13,7 +13,7 @@ define('INTERVIEW', 'user_interview_approved');
 define('USER_REJECT', 'user_interview_rejected');
 define('JOB_APPROVED', 'job_application_approved');
 define('JOB_REJECTED', 'job_application_rejected');
-define('JOB_CNCELLED', 'job_cancelled_by_admin ');
+define('JOB_CANCELLED', 'job_cancelled_by_admin ');
 define('JOB_AVAILABLE', 'job_available');
 define('JOB_CANCELLED_BY_USER', 'job_cancelled_by_user');
 define('JOB_COMPLETED_APPROVED', 'job_completed_approved');

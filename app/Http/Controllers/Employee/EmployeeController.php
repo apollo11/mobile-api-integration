@@ -958,7 +958,7 @@ class EmployeeController extends Controller
 
 
     /**
-     * @return mixed|static
+     * @return mixed|static$mut
      */
     public function saveNotif()
     {
