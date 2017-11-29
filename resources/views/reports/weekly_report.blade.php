@@ -75,22 +75,6 @@
             $('#enddate').val($.datepicker.formatDate('yy-mm-dd',  minDate ));
         });
 
-       /* $("#filter-report").submit(function(e) {
-
-            $.ajax({
-                    url: $('#filter-report').attr("action"),
-                    method: 'POST',
-                    data : $('#filter-report').serialize(),
-                    success: function(data){
-                        $('#report-content').html(data);
-                    }
-            });
-            e.preventDefault(); 
-        });*/
-
-       /* $('#filter-report table').tableExport({
-            bootstrap: false
-        });*/
 
         $( "#submitform-btn" ).click(function() {
             var url = $('#filter-report').attr("action");

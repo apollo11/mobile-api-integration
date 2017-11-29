@@ -347,8 +347,8 @@ class JobSchedule extends Model
                 , 'users.mobile_no'
                 , 'users.id as userid'
                 , 'users.email'
-                , 'employee.rate'
-                , 'jobs.rate as job_rate'
+                // , 'additional_infos.rate'
+                // , 'jobs.rate as job_rate'
                 , 'jobs.id'
                 , 'info.gender'
                 , 'info.birthdate'
@@ -358,14 +358,6 @@ class JobSchedule extends Model
 
             )
             ->where('job_schedules.job_id' , '=', $id)
-           /* ->whereIn('job_schedules.job_status',[
-                'accepted'
-                , 'cancelled'
-                , 'completed'
-                , 'rejected'
-                , 'auto_complete'
-                , 'auto_cancelled'
-            ])*/
             ->get();
 
         return $jobs;

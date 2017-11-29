@@ -1,9 +1,9 @@
 <?php
 
 namespace App;
-
+use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
-
 class Age extends Model
 {
     /**
@@ -18,4 +18,10 @@ class Age extends Model
      * @var string
      */
     protected $table = 'ages';
+
+    public function getAgeByJob($jobid){
+        return DB::table('ages')
+        ->select('name')
+        ->where('job_id','=',$jobid)->get();
+    }
 }

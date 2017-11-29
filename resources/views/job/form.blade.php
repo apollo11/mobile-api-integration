@@ -68,6 +68,7 @@
                                         </div>
                                     </div>
 
+
                                     <div class="form-group{{ $errors->has('job_role') ? ' has-error' : '' }}">
                                         <label class="col-md-3 control-label">Job Function / Role</label>
                                         <div class="col-md-7">
@@ -81,29 +82,125 @@
                                         </div>
                                     </div>
 
-                                    {{--<div class="form-group{{ $errors->has('age') ? ' has-error' : '' }}">--}}
-                                        {{--<label class="col-md-3 control-label">Age</label>--}}
-                                        {{--<div class="col-md-7">--}}
-                                            {{--<select class="form-control" name="age">--}}
-                                                {{--@foreach($age as $key => $value)--}}
-                                                {{--<option value="{{ $value }}" {{ old('age') == $value ? "selected" : "" }}>{{ $value }}</option>--}}
-                                                {{--@endforeach--}}
-                                            {{--</select>--}}
+                                    <div class="form-group{{ $errors->has('postal_code') ? ' has-error' : '' }}">
+                                        <label class="col-md-3 control-label">Zip Code<span class="is-required">*</span></label>
+                                        <div class="col-md-7">
+                                            <input type="text" class="form-control" placeholder="Enter Postal Code"
+                                                   value="{{ old('postal_code') }}" name="postal_code">
+                                            <p class="help-block"> Zip Code must be 6 digits ie.(018956)</p>
+                                            @if ($errors->has('postal_code'))
+                                                <span class="help-block">
+                                                {{ $errors->first('postal_code') }}
+                                               </span>
+                                            @endif
+                                        </div>
+                                    </div>
 
-                                            {{--@if ($errors->has('age'))--}}
-                                                {{--<span class="help-block">--}}
-                                                {{--{{ $errors->first('age') }}--}}
-                                               {{--</span>--}}
-                                            {{--@endif--}}
-                                        {{--</div>--}}
-                                    {{--</div>--}}
+
+                                    <div class="form-group{{ $errors->has('job_location') ? ' has-error' : '' }}" style="display:none;">
+                                        <label class="col-md-3 control-label">Filter by location<span class="is-required">*</span></label>
+                                        <div class="col-md-7">
+                                            <select class="form-control" name="job_location">
+                                                @foreach( $location as $value)
+                                                    {{ $input = $value->id.'.'.$value->name }}
+                                                    @if($loop->count == 0)
+                                                        <option value="none">None</option>
+                                                    @else
+                                                        <option value="{{ $input  }}" {{ old('job_location') == $input ? "selected" : "" }}>{{ $value->name }}</option>
+                                                    @endif
+                                                @endforeach
+                                            </select>
+
+                                            @if ($errors->has('job_location'))
+                                                <span class="help-block">
+                                                {{ $errors->first('job_location') }}
+                                               </span>
+                                            @endif
+                                        </div>
+                                    </div>
+
+                                     <div class="form-group{{ $errors->has('date') ? ' has-error' : '' }}">
+                                        <label class="control-label col-md-3">Start Date and Time<span class="is-required">*</span></label>
+                                        <div class="col-md-7">
+                                            <div class="input-group date form_datetime form_datetime bs-datetime" id="start-date">
+                                                <input type="text" name="date"  value="{{ old('date') }}" size="16" class="form-control">
+                                                <span class="input-group-addon">
+                                                    <button class="btn default date-set" type="button">
+                                                        <i class="fa fa-calendar"></i>
+                                                    </button>
+                                                </span>
+                                                @if ($errors->has('date'))
+                                                    <span class="help-block">
+                                                {{ $errors->first('date') }}
+                                               </span>
+                                                @endif
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group{{ $errors->has('end_date') ? ' has-error' : '' }}">
+                                        <label class="control-label col-md-3">End Date and Time<span class="is-required">*</span></label>
+                                        <div class="col-md-7">
+                                            <div class="input-group date form_datetime form_datetime bs-datetime" id="end-date">
+                                                <input type="text" name="end_date" value="{{ old('end_date') }}"size="16" class="form-control">
+                                                <span class="input-group-addon">
+                                                    <button class="btn default date-set" type="button">
+                                                        <i class="fa fa-calendar"></i>
+                                                    </button>
+                                                                        </span>
+                                                @if ($errors->has('end_date'))
+                                                    <span class="help-block">
+                                                {{ $errors->first('end_date') }}
+                                               </span>
+                                                @endif
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                     <div class="form-group{{ $errors->has('industry') ? ' has-error' : '' }}">
+                                        <label class="col-md-3 control-label">Industry<span class="is-required">*</span></label>
+                                        <div class="col-md-7">
+                                            <select class="form-control" name="industry">
+
+                                                @foreach( $industry as $value)
+                                                    {{ $input = $value->id.'.'.$value->name }}
+                                                    @if($loop->count == 0)
+                                                        <option value="none">None</option>
+                                                    @else
+                                                        <option value="{{ $value->id.'.'.$value->name}}" {{ old('industry') == $input ? "selected" : "" }}>{{ $value->name }}</option>
+                                                    @endif
+                                                @endforeach
+                                            </select>
+                                            @if ($errors->has('industry'))
+                                                <span class="help-block">
+                                                {{ $errors->first('industry') }}
+                                               </span>
+                                            @endif
+                                        </div>
+                                    </div><br><br>
+
+                                    <div class="form-group{{ $errors->has('no_of_person') ? ' has-error' : '' }}">
+                                        <label class="col-md-3 control-label">No. of person requested<span class="is-required">*</span></label>
+                                        <div class="col-md-7">
+                                            <input type="text" class="form-control"
+                                                   placeholder="Enter no. of person requested"
+                                                   value="{{ old('no_of_person') }}" name="no_of_person">
+                                            @if ($errors->has('no_of_person'))
+                                                <span class="help-block">
+                                                {{ $errors->first('no_of_person') }}
+                                               </span>
+                                            @endif
+                                        </div>
+                                    </div>
+
+                                    
                                     <div class="form-group {{ $errors->has('age') ? ' has-error' : '' }}">
                                         <label class="col-md-3 control-label">Age</label>
                                         <div class="col-md-7">
                                             <div class="mt-checkbox-inline">
                                                 @foreach($age as $key => $value)
                                                 <label class="mt-checkbox">
-                                                    <input type="checkbox" name="age[]" value="{{ $value }}" />
+                                                    <input type="checkbox" name="age[]" value="{{ $value }}" <?php if( in_array($value,old('age',array()))){ echo 'checked = "checked"'; } ?> />
                                                     {{ $value }}
                                                     <span></span>
                                                 </label>
@@ -146,42 +243,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="form-group{{ $errors->has('postal_code') ? ' has-error' : '' }}">
-                                        <label class="col-md-3 control-label">Zip Code<span class="is-required">*</span></label>
-                                        <div class="col-md-7">
-                                            <input type="text" class="form-control" placeholder="Enter Postal Code"
-                                                   value="{{ old('postal_code') }}" name="postal_code">
-                                            <p class="help-block"> Zip Code must be 6 digits ie.(018956)</p>
-                                            @if ($errors->has('postal_code'))
-                                                <span class="help-block">
-                                                {{ $errors->first('postal_code') }}
-                                               </span>
-                                            @endif
-                                        </div>
-                                    </div>
-
-
-                                    <div class="form-group{{ $errors->has('job_location') ? ' has-error' : '' }}" style="display:none;">
-                                        <label class="col-md-3 control-label">Filter by location<span class="is-required">*</span></label>
-                                        <div class="col-md-7">
-                                            <select class="form-control" name="job_location">
-                                                @foreach( $location as $value)
-                                                    {{ $input = $value->id.'.'.$value->name }}
-                                                    @if($loop->count == 0)
-                                                        <option value="none">None</option>
-                                                    @else
-                                                        <option value="{{ $input  }}" {{ old('job_location') == $input ? "selected" : "" }}>{{ $value->name }}</option>
-                                                    @endif
-                                                @endforeach
-                                            </select>
-
-                                            @if ($errors->has('job_location'))
-                                                <span class="help-block">
-                                                {{ $errors->first('job_location') }}
-                                               </span>
-                                            @endif
-                                        </div>
-                                    </div>
+                                    
 
                                     <div class="form-group{{ $errors->has('nationality') ? ' has-error' : '' }}">
                                         <label class="col-md-3 control-label">Nationality</label>
@@ -200,6 +262,29 @@
                                         </div>
                                     </div>
 
+
+                                    <div class="form-group {{ $errors->has('preferred_language') ? ' has-error' : '' }}">
+                                        <label class="col-md-3 control-label">Preferred Language</label>
+                                        <div class="col-md-7">
+                                            <div class="mt-checkbox-inline">
+
+                                                @foreach($language as $key => $value)
+                                                    <label class="mt-checkbox">
+                                                        <input type="checkbox" name="preferred_language[]" value="{{ $value }}" <?php if( in_array($value,old('preferred_language',array()))){ echo 'checked = "checked"'; } ?>>
+                                                        {{ ucfirst($value) }}
+                                                        <span></span>
+                                                    </label>
+                                                @endforeach
+                                                @if ($errors->has('preferred_language'))
+                                                    <span class="help-block">
+                                                {{ $errors->first('preferred_language') }}
+                                               </span>
+                                                @endif
+
+                                            </div>
+                                        </div>
+                                    </div><br><br>
+
                                     <div class="form-group{{ $errors->has('job_image') ? ' has-error' : '' }}">
                                         <label for="Image Upload" class="col-md-3 control-label">Job Image<span class="is-required">*</span></label>
                                         <div class="col-md-9">
@@ -212,19 +297,51 @@
                                         </div>
                                     </div>
 
-                                    <div class="form-group{{ $errors->has('no_of_person') ? ' has-error' : '' }}">
-                                        <label class="col-md-3 control-label">No. of person requested<span class="is-required">*</span></label>
+                                    <div class="form-group{{ $errors->has('job_employer') ? ' has-error' : '' }}">
+                                        <label class="col-md-3 control-label">Employer<span class="is-required">*</span></label>
+
                                         <div class="col-md-7">
-                                            <input type="text" class="form-control"
-                                                   placeholder="Enter no. of person requested"
-                                                   value="{{ old('no_of_person') }}" name="no_of_person">
-                                            @if ($errors->has('no_of_person'))
+                                                <select class="form-control" name="job_employer">
+                                                     @if(Auth::user()->role_id == 0)
+                                                    <option value="">None</option>
+                                                    @endif
+                                                    @foreach( $employer as $value)
+                                                        <?php $input = $value->id.'.'.$value->company_name; ?>
+                                                        <option value="{{ $value->id.'.'.$value->company_name}}" {{ old('job_employer') == $input ? "selected" : "" }}>{{ $value->company_name }}</option>
+                                                    @endforeach
+                                                </select>
+
+                                            @if ($errors->has('job_employer'))
                                                 <span class="help-block">
-                                                {{ $errors->first('no_of_person') }}
+                                                {{ $errors->first('job_employer') }}
                                                </span>
                                             @endif
                                         </div>
                                     </div>
+
+                                    <div class="form-group{{ $errors->has('business_manager') ? ' has-error' : '' }}">
+                                        <label class="col-md-3 control-label">Business Manager</label>
+                                        <div class="col-md-7">
+                                            <select class="form-control" name="business_manager">
+                                                @foreach($businessMngr as $key => $value)
+                                                    {{ $input = $key.'.'.$value }}
+                                                    @if($loop->count > 0)
+                                                        <option value="{{ $input }}" {{ old('business_manager') == $input ? "selected" : "" }}>{{ $value }}</option>
+                                                    @else
+                                                        <option value=""> No Available Business </option>
+                                                    @endif
+                                                @endforeach
+                                            </select>
+
+                                            @if ($errors->has('business_manager'))
+                                                <span class="help-block">
+                                                {{ $errors->first('business_manager') }}
+                                               </span>
+                                            @endif
+                                        </div>
+                                    </div>
+
+
 
                                     <div class="form-group{{ $errors->has('contact_person') ? ' has-error' : '' }}">
                                         <label class="col-md-3 control-label">Contact Person</label>
@@ -272,126 +389,7 @@
                                             @endif
                                         </div>
                                     </div>
-
-                                    <div class="form-group{{ $errors->has('business_manager') ? ' has-error' : '' }}">
-                                        <label class="col-md-3 control-label">Business Manager</label>
-                                        <div class="col-md-7">
-                                            <select class="form-control" name="business_manager">
-                                                @foreach($businessMngr as $key => $value)
-                                                    {{ $input = $key.'.'.$value }}
-                                                    @if($loop->count > 0)
-                                                        <option value="{{ $input }}" {{ old('business_manager') == $input ? "selected" : "" }}>{{ $value }}</option>
-                                                    @else
-                                                        <option value=""> No Available Business </option>
-                                                    @endif
-                                                @endforeach
-                                            </select>
-
-                                            @if ($errors->has('business_manager'))
-                                                <span class="help-block">
-                                                {{ $errors->first('business_manager') }}
-                                               </span>
-                                            @endif
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group{{ $errors->has('job_employer') ? ' has-error' : '' }}">
-                                        <label class="col-md-3 control-label">Employer<span class="is-required">*</span></label>
-
-                                        <div class="col-md-7">
-                                                <select class="form-control" name="job_employer">
-                                                     @if(Auth::user()->role_id == 0)
-                                                    <option value="">None</option>
-                                                    @endif
-
-                                                    @foreach( $employer as $value)
-                                                        <option value="{{ $value->id.'.'.$value->company_name}}" {{ old('job_employer') == $input ? "selected" : "" }}>{{ $value->company_name }}</option>
-                                                    @endforeach
-                                                </select>
-
-                                            @if ($errors->has('job_employer'))
-                                                <span class="help-block">
-                                                {{ $errors->first('job_employer') }}
-                                               </span>
-                                            @endif
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group {{ $errors->has('preferred_language') ? ' has-error' : '' }}">
-                                        <label class="col-md-3 control-label">Preferred Language</label>
-                                        <div class="col-md-7">
-                                            <div class="mt-checkbox-inline">
-                                                @foreach($language as $key => $value)
-                                                    <label class="mt-checkbox">
-                                                        <input type="checkbox" name="preferred_language[]" value="{{ $value }}">
-                                                        {{ ucfirst($value) }}
-                                                        <span></span>
-                                                    </label>
-                                                @endforeach
-                                                @if ($errors->has('preferred_language'))
-                                                    <span class="help-block">
-                                                {{ $errors->first('preferred_language') }}
-                                               </span>
-                                                @endif
-
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    {{--<div class="form-group{{ $errors->has('preferred_language') ? ' has-error' : '' }}">--}}
-                                        {{--<label class="col-md-3 control-label">Preferred Language</label>--}}
-                                        {{--<div class="col-md-7">--}}
-                                            {{--<select class="form-control" name="preferred_language">--}}
-                                                {{--<option value="">-- select one --</option>--}}
-                                                {{--@foreach($language as $key => $value)--}}
-                                                    {{--<option value="{{$value}}" {{ old('preferred_language') == $value ? "selected" : "" }}> {{ ucfirst($value)   }}</option>--}}
-                                                {{--@endforeach--}}
-                                            {{--</select>--}}
-                                            {{--@if ($errors->has('preferred_language'))--}}
-                                                {{--<span class="help-block">--}}
-                                                {{--{{ $errors->first('preferred_language') }}--}}
-                                               {{--</span>--}}
-                                            {{--@endif--}}
-                                        {{--</div>--}}
-                                    {{--</div>--}}
-
-                                    <div class="form-group{{ $errors->has('date') ? ' has-error' : '' }}">
-                                        <label class="control-label col-md-3">Start Job Date and Time<span class="is-required">*</span></label>
-                                        <div class="col-md-7">
-                                            <div class="input-group date form_datetime form_datetime bs-datetime" id="start-date">
-                                                <input type="text" name="date"  value="{{ old('date') }}" size="16" class="form-control">
-                                                <span class="input-group-addon">
-                                                    <button class="btn default date-set" type="button">
-                                                        <i class="fa fa-calendar"></i>
-                                                    </button>
-                                                </span>
-                                                @if ($errors->has('date'))
-                                                    <span class="help-block">
-                                                {{ $errors->first('date') }}
-                                               </span>
-                                                @endif
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group{{ $errors->has('end_date') ? ' has-error' : '' }}">
-                                        <label class="control-label col-md-3">Job End Date and Time<span class="is-required">*</span></label>
-                                        <div class="col-md-7">
-                                            <div class="input-group date form_datetime form_datetime bs-datetime" id="end-date">
-                                                <input type="text" name="end_date" value="{{ old('end_date') }}"size="16" class="form-control">
-                                                <span class="input-group-addon">
-                                                    <button class="btn default date-set" type="button">
-                                                        <i class="fa fa-calendar"></i>
-                                                    </button>
-                                                                        </span>
-                                                @if ($errors->has('end_date'))
-                                                    <span class="help-block">
-                                                {{ $errors->first('end_date') }}
-                                               </span>
-                                                @endif
-                                            </div>
-                                        </div>
-                                    </div>
+                                   
 
                                     <div class="form-group{{ $errors->has('notes') ? ' has-error' : '' }}">
                                         <label class="col-md-3 control-label">Important Notes</label>
@@ -405,28 +403,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="form-group{{ $errors->has('industry') ? ' has-error' : '' }}">
-                                        <label class="col-md-3 control-label">Industry<span class="is-required">*</span></label>
-                                        <div class="col-md-7">
-                                            <select class="form-control" name="industry">
-
-                                                @foreach( $industry as $value)
-                                                    {{ $input = $value->id.'.'.$value->name }}
-                                                    @if($loop->count == 0)
-                                                        <option value="none">None</option>
-                                                    @else
-                                                        <option value="{{ $value->id.'.'.$value->name}}" {{ old('industry') == $input ? "selected" : "" }}>{{ $value->name }}</option>
-                                                    @endif
-                                                @endforeach
-                                            </select>
-                                            @if ($errors->has('industry'))
-                                                <span class="help-block">
-                                                {{ $errors->first('industry') }}
-                                               </span>
-                                            @endif
-                                        </div>
-                                    </div>
-
+                                   
 
                                     {{--<div class="form-group{{ $errors->has('status') ? ' has-error' : '' }}">--}}
                                         {{--<label class="col-md-3 control-label">Job Status</label>--}}

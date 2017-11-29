@@ -88,7 +88,6 @@
                                         <th>Job Name</th>
                                         <th>Employees Required</th>
                                         <th>Employees Applied</th>
-                                        <th>Rate</th>
                                         <th>Job Date &amp; Time</th>
                                         <th>Business Manager</th>
                                         <th>Job Location</th>
@@ -112,8 +111,7 @@
                                         @endif
                                         <td> <a href="{{ route('job.details',['id' =>  $value->id])  }}"> {{ $value->job_title }} </a></td>
                                         <td>{{ $value->no_of_person }}</td>
-                                        <td><a href="#">0 </a></td>
-                                        <td>{{ '$'.$value->rate.'/hr' }}</td>
+                                        <td>{{ $value->total_applied }}</td>
                                         <td data-order="{{ Carbon\Carbon::parse($value->start_date)->format('m-d-Y H:i:s') }}">{{ Carbon\Carbon::parse($value->start_date)->format('m-d-Y H:i:s') }}</td>
                                         <td>{{ $value->business_manager }}</td>
                                         <td>{{ $value->geolocation_address  }}</td>

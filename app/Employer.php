@@ -40,6 +40,7 @@ class Employer extends Model
     {
         $employer = DB::table('users as employer')
             ->leftJoin('employers as role', 'employer.id', '=', 'role.user_id')
+            ->leftJoin('users as bm', 'bm.id', '=', 'employer.business_manager')
             ->select(
                 'employer.id'
                 , 'employer.company_description'
@@ -50,6 +51,7 @@ class Employer extends Model
                 , 'employer.email'
                 , 'employer.status as status'
                 , 'employer.business_manager'
+                , 'bm.name as business_manager_name'
                 , 'role.name'
             )
             ->where('employer.role_id', '=', 1)

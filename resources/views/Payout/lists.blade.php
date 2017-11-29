@@ -82,7 +82,7 @@
                                         <th>Total Job Hours</th>
                                         <th>Hourly Rate</th>
                                         <th>Job Date</th>
-                                        <th>Business Manager</th>
+                                        <!-- <th>Business Manager</th> -->
                                         <th>NRIC No.</th>
                                         <th>Job Name</th>
                                         <th>Status</th>
@@ -102,11 +102,11 @@
                                             <td>{{ $loop->iteration }}</td>
                                             <td>{{ $value->company_name }}</td>
                                             <td>{{ $value->name }}</td>
-                                            <td>{{ $value->job_salary }}</td>
-                                            <td>{{ $value->working_hours }}</td>
-                                            <td>{{ $value->rate }}</td>
+                                            <td><?php echo round($value->job_salary,2); ?></td>
+                                            <td><?php echo round($value->working_hours,2); ?></td>
+                                            <td>{{ $value->user_hourly_rate }}</td>
                                             <td data-order="{{ Carbon\Carbon::parse($value->start_date)->format('m-d-Y H:i:s') }}">{{ Carbon\Carbon::parse($value->start_date)->format('m-d-Y H:i:s') }}</td>
-                                            <td>{{ $value->business_manager }}</td>
+                                            <!-- <td>{{ $value->business_manager }}</td> -->
                                             <td>{{ $value->nric_no }}</td>
                                             <td>{{ $value->job_title }}</td>
                                             @if($value->payment_status == 'pending')
@@ -126,10 +126,10 @@
                                                         <i class="fa fa-angle-down"></i>
                                                     </button>
                                                     <ul class="dropdown-menu" role="menu">
-                                                        <li>
+                                                        <!-- <li>
                                                             <a href="{{ route('payout.edit',['id' => $value->schedule_id]) }}">
                                                                 <i class="fa fa-edit"></i> Edit </a>
-                                                        </li>
+                                                        </li> -->
                                                         <li>
                                                             <a href="{{ route('payout.processed',['id' => $value->schedule_id, 'userId' => $value->user_id]) }}"
                                                                onclick="event.preventDefault();
