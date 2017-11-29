@@ -128,7 +128,7 @@
                                             <td>{{ $employee[$i]['mobile_no'] }}</td>
                                             @endif
                                             <td> {{ $employee[$i]['gender'] }}</td>
-                                            <td> {{ $employee[$i]['birthdate']  }}</td>
+                                            <td data-order="{{ Carbon\Carbon::parse($employee[$i]['birthdate'])->format('m-d-Y H:i:s') }}">{{ Carbon\Carbon::parse($employee[$i]['birthdate'])->format('m-d-Y H:i:s') }}</td>
                                             <td>{{ 'Not yet available' }}</td>
                                             <td>{{ $employee[$i]['business_manager'] }}</td>
                                             <td> <a href="{{ route('employee.details',['id' => $employee[$i]['id']])  }}"> {{ $employee[$i]['applied']  }} </a></td>

@@ -114,7 +114,7 @@
                                         <td>{{ $value->no_of_person }}</td>
                                         <td><a href="#">0 </a></td>
                                         <td>{{ '$'.$value->rate.'/hr' }}</td>
-                                        <td data-order="{{ Carbon\Carbon::parse($value->start_date)->format('d-m-Y H:i:s') }}">{{ Carbon\Carbon::parse($value->start_date)->format('d-m-Y H:i:s') }}</td>
+                                        <td data-order="{{ Carbon\Carbon::parse($value->start_date)->format('m-d-Y H:i:s') }}">{{ Carbon\Carbon::parse($value->start_date)->format('m-d-Y H:i:s') }}</td>
                                         <td>{{ $value->business_manager }}</td>
                                         <td>{{ $value->geolocation_address  }}</td>
 
