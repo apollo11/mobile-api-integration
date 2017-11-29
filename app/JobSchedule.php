@@ -358,14 +358,6 @@ class JobSchedule extends Model
 
             )
             ->where('job_schedules.job_id' , '=', $id)
-           /* ->whereIn('job_schedules.job_status',[
-                'accepted'
-                , 'cancelled'
-                , 'completed'
-                , 'rejected'
-                , 'auto_complete'
-                , 'auto_cancelled'
-            ])*/
             ->get();
 
         return $jobs;
