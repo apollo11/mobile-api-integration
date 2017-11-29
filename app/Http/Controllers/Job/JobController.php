@@ -360,23 +360,6 @@ class JobController extends Controller
     }
 
     /**
-     * @param $id
-     * @return array
-     */
-    public function parsingToken($id)
-    {
-        $device = array();
-        $token = new DeviceToken();
-        $tokenValue = $token->getDeviceTokenByUserId($id);
-        foreach ($tokenValue as $value) {
-            $device[] = $value->device_token;
-        }
-
-        return $device;
-
-    }
-
-    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request $request
