@@ -52,12 +52,28 @@ class UserMgtController extends Controller
     {
         $data = $request->all();
 
+        // print_r($data['employer']);
+        // echo "</br></br>";
+        // $string_array = serialize($data['employer']);
+        // echo $string_array;
+        // echo "</br></br>";
+        // print_r(unserialize($string_array));
+
+        $employer_string_array;
+        if (isset($data['employer'])) {
+            $employer_string_array = serialize($data['employer']);
+        }
+        else {
+            $employer_string_array = null;
+        }
+        
+
         $lastId = User::create([
             'name' => $data['name'], //$request->input('name'),
             'email' => $data['email'] ,//$request->input('email'),
             'password' => bcrypt($data['password']),
             'role' => $data['role'], //$request->input('role'),
-            'employer' => null,
+            'employer' => $employer_string_array,
             'mobile_no' => $data['mobile_no'], //$request->input('mobile_no'),
             'dashboard_permissions' =>  $data['dashboard'] ?? null,
             'employees_permissions' => $data['employees'] ?? null,
@@ -120,6 +136,9 @@ class UserMgtController extends Controller
 
         $employer = User::where('role_id',1)->pluck('company_name', 'id');
 
+        // print_r(unserialize($details->employer));
+        // echo (unserialize($details->employer))[0];
+
         return view('usermgt.edit-form',['details' => $details
             , 'employer' =>  $employer
             , 'dashboard' => $this->parseObject($details->dashboard_permissions)
@@ -181,12 +200,20 @@ class UserMgtController extends Controller
                 ->withInput();
         } else {
 
+            $employer_string_array;
+            if (isset($data['employer'])) {
+                $employer_string_array = serialize($data['employer']);
+            }
+            else {
+                $employer_string_array = null;
+            }
+
             $user = \App\User::find($id);
             $user->update([
                 'name' => $data['name'],
                 'email' => $data['email'],
                 'role' => $data['role'],
-                'employer' => null,
+                'employer' => $employer_string_array,
                 'mobile_no' => $data['mobile_no'],
                 'dashboard_permissions' => $data['dashboard'] ?? null,
                 'employees_permissions' => $data['employees'] ?? null,

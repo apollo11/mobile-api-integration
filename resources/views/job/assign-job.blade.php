@@ -13,7 +13,7 @@
                     @if($errors->has('user_assign'))
                         <div class="alert alert-danger alert-dismissable">
                             <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
-                            <strong>Error!</strong> Something went wrong. Please check.
+                            <strong>Error!</strong> Something went wrong. Please select data before making changes.
                         </div>
                     @endif
 

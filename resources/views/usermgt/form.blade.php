@@ -87,14 +87,6 @@
                                     <div class="form-group {{ $errors->has('employer') ? ' has-error' : '' }}">
                                         <label class="col-md-3 control-label">Employer</label>
                                         <div class="col-md-7 employer-multiple">
-                                            <div class="mt-checkbox-inline">
-                                                <label class="mt-checkbox">
-                                                    <input type="checkbox" name="employer[]" value="all" {{ old('employer') == 'all' ? 'checked' : '' }} />
-                                                    <span></span>
-                                                    All
-                                                </label>
-                                            </div>
-
                                             @foreach($employer as $key )
                                                 @if(!empty($key))
                                                 <div class="mt-checkbox-inline">
@@ -323,8 +315,7 @@
                                 <div class="form-actions">
                                     <div class="row">
                                         <div class="col-md-offset-3 col-md-9">
-                                            <button type="submit" class="btn green">Submit</button>
-                                            <button type="button" class="btn default">Cancel</button>
+                                            <button type="submit" class="btn green">Submit</button>xw
                                         </div>
                                     </div>
                                 </div>

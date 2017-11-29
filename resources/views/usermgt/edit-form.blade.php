@@ -22,7 +22,7 @@
                         <div class="portlet-title">
                             <div class="caption">
                                 <i class="icon-settings font-dark"></i>
-                                <span class="caption-subject font-dark sbold uppercase">Add User</span>
+                                <span class="caption-subject font-dark sbold uppercase">Update User</span>
                             </div>
                         </div>
                         <div class="portlet-body form">
@@ -85,22 +85,17 @@
                                     <div class="form-group {{ $errors->has('employer') ? ' has-error' : '' }}">
                                         <label class="col-md-3 control-label">Employer</label>
                                         <div class="col-md-7 employer-multiple">
-                                            <div class="mt-checkbox-inline">
-                                                <label class="mt-checkbox">
-                                                    <input type="checkbox" name="employer[]" value="all" {{ old('employer') == 'all' ? 'checked' : '' }} />
-                                                    <span></span>
-                                                    All
-                                                </label>
-                                            </div>
+                                            <?php $i = 0; ?>
                                             @foreach($employer as $key )
                                                 @if(!empty($key))
                                                     <div class="mt-checkbox-inline">
                                                         <label class="mt-checkbox">
-                                                            <input type="checkbox" name="employer[]" value="{{ $key }}" {{ old('empoyer') ? 'checked' : '' }} />
+                                                            <input type="checkbox" name="employer[]" value="{{ $key }}" <?php if ($key == unserialize($details->employer)[$i]) echo "checked='checked'"; ?> />
                                                             <span></span>
                                                             {{ $key }}
                                                         </label>
                                                     </div>
+                                                    <?php $i++; ?>
                                                 @endif
                                             @endforeach
                                             @if ($errors->has('employer'))
@@ -297,7 +292,6 @@
                                     <div class="row">
                                         <div class="col-md-offset-3 col-md-9">
                                             <button type="submit" class="btn green">Submit</button>
-                                            <button type="button" class="btn default">Cancel</button>
                                         </div>
                                     </div>
                                 </div>

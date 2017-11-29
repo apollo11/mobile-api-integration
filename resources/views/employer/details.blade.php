@@ -196,7 +196,7 @@
                                 </div>
 
                                 <div style="display: inline-block; vertical-align: top;">
-                                    <button type="button" class="btn btn-info" onclick="filter()">Apply</button>
+                                    <button type="button" class="btn btn-info" onclick="filter($('#min').val(), $('#max').val())">Apply</button>
                                 </div>
                             </div>
 
@@ -308,6 +308,12 @@
     
     <!-- <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.js"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/plug-ins/1.10.16/filtering/row-based/range_dates.js"></script> -->
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            localStorage.setItem('viewtype', 'employer-details');
+        });
+    </script>
 
 @endsection
 

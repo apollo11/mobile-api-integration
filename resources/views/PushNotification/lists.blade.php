@@ -45,7 +45,7 @@
                                     </div>
 
                                     <div style="display: inline-block; vertical-align: top;">
-                                        <button type="button" class="btn btn-info" onclick="filter()">Apply</button>
+                                        <button type="button" class="btn btn-info" onclick="filter($('#min').val(), $('#max').val())">Apply</button>
                                     </div>
                                 </div>
                                 
@@ -100,6 +100,13 @@
                 </div>
         </div>
     </div>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            localStorage.setItem('viewtype', 'pushnotification-list');
+        });
+    </script>
+
 @endsection
 
 @include('layouts.pushnotification-datatables-include')
