@@ -418,8 +418,7 @@
                                         <tr class="odd gradeX" id="sche-{{ $jobs->schedule_id }}">
                                             <th>
                                                 <label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">
-                                                    <input type="checkbox" class="group-checkable"
-                                                           data-set="#employee-table .checkboxes"/>
+                                                    <input type="checkbox" class="group-checkable" data-set="#employee-table .checkboxes"/>
                                                     <span></span>
                                                 </label>
                                             </th>
@@ -432,7 +431,7 @@
                                                     -
                                                 @endif
                                             </td>
-                                            <td>@if($jobs->schedule_status == 'cancelled') <a href="{{ route('cancel.details',['userId' => $jobs->user_id, 'jobId' => $jobs->id]) }}">{{ ucfirst($jobs->schedule_status) }}</a>  @else {{ ucfirst($jobs->schedule_status) }} @endif</td>
+                                            <td>@if($jobs->schedule_status == 'cancelled') <a href="{{ route('cancel.details',['userId' => $jobs->user_id, 'jobId' => $jobs->id]) }}">{{ ucfirst($jobs->schedule_status) }}</a>  @else {{ jobschedule_status_display($jobs->schedule_status) }} @endif</td>
                                             <td>
                                                 <div class="btn-group">
                                                     <button class="btn btn-xs green dropdown-toggle" type="button"
