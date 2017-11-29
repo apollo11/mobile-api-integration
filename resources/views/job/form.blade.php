@@ -33,8 +33,7 @@
                                     <div class="form-group{{ $errors->has('job_title') ? ' has-error' : '' }}">
                                         <label class="col-md-3 control-label">Job Title <span class="is-required">*</span></label>
                                         <div class="col-md-7">
-                                            <input type="text" class="form-control" placeholder="Enter Job Title"
-                                                   value="{{ old('job_title') }}" name="job_title">
+                                            <input type="text" class="form-control" placeholder="Enter Job Title" value="{{ old('job_title') }}" name="job_title">
                                             @if ($errors->has('job_title'))
                                                 <span class="help-block">
                                                 {{ $errors->first('job_title') }}
@@ -438,7 +437,7 @@
                                     <div class="row">
                                         <div class="col-md-offset-3 col-md-9">
                                             <button type="submit" class="btn green">Submit</button>
-                                            <button type="button" class="btn default">Cancel</button>
+                                            <a href="{{ route('job.lists')  }}" class="btn default">Cancel</a>
                                         </div>
                                     </div>
                                 </div>

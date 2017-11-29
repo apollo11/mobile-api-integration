@@ -165,8 +165,7 @@
                                                     </li>
                                                     <li>
                                                         <a href="{{ route('job.multiple',['id' =>  $value->id, 'param' => 'Reject']) }}"
-                                                           onclick="event.preventDefault();
-                                                                   document.getElementById('{{'reject-'.$value->id }}').submit();">
+                                                           onclick="event.preventDefault(); document.getElementById('{{'reject-'.$value->id }}').submit();">
                                                             <i class="fa fa-close"></i> Reject
                                                         </a>
                                                     </li>
