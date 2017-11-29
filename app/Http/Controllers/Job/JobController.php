@@ -342,9 +342,13 @@ class JobController extends Controller
             $this->insertUpdateAssignJob($user_ids, $id);
             $this->assignJobNotification($jobDetails, $token);
 
+            return back();
+
+        } else {
+            return back();
+
         }
 
-        return back();
     }
 
     /**
