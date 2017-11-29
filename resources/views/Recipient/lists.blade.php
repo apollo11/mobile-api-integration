@@ -105,7 +105,7 @@
                                         </td>
                                         <td> {{ $loop->iteration  }}</td>
                                         <td>{{ $key->group_name }}</td>
-                                        <td>{{ $key->created_at }}</td>
+                                        <td data-order="{{ Carbon\Carbon::parse($key->created_at)->format('m-d-Y H:i:s') }}">{{ Carbon\Carbon::parse($key->created_at)->format('m-d-Y H:i:s') }}</td>
                                         <td>{{ $key->email }}</td>
                                         <td>
                                             <div class="btn-group">
