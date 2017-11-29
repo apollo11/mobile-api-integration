@@ -90,7 +90,8 @@ class UserMgtController extends Controller
         $this->saveEmployer($lastId->id, $data);
         $this->sendEmailToUser($data);
 
-        return redirect()->back()->with('message', 'Adding new user successfully saved.');
+        // return redirect()->back()->with('message', 'Adding new user successfully saved.');
+        return redirect('user/mgt/list');
     }
     /**
      * Display the specified resource.

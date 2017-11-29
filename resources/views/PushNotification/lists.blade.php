@@ -15,7 +15,7 @@
                                 {{ csrf_field() }}
                                 @if(Auth::user()->role_id == 0)
                                     <div class="actions">
-                                        <a href="{{ route('pushnotification.create') }}"
+                                        <a href="{{ route('pushnotification.quickNotification') }}"
                                            class="btn sbold green"> Add New Notification
                                             <i class="fa fa-plus"></i>
                                         </a>
@@ -62,12 +62,13 @@
                                     </tr>
                                     </thead>
                                     <tbody>
+                                    <?php $i = 1; ?>
                                     @foreach($list as $key)
                                     <tr>
-                                        <td>{{ $key->id }}</td>
+                                        <td>{{ $i }}</td>
                                         <td>{{ $key->message }}</td>
-                                        <td>{{ $key->recipient_group_id }}</td>
-                                        <td data-order="{{ Carbon\Carbon::parse($key->created_at)->format('m-d-Y H:i:s') }}">{{ Carbon\Carbon::parse($key->created_at)->format('m-d-Y H:i:s') }}</td>
+                                        <td>{{ $key->group_name }}</td>
+                                        <td data-order="{{ Carbon\Carbon::parse($key->publish_date)->format('m-d-Y H:i:s') }}">{{ Carbon\Carbon::parse($key->created_date)->format('m-d-Y H:i:s') }}</td>
                                         <td data-order="{{ Carbon\Carbon::parse($key->updated_at)->format('m-d-Y H:i:s') }}">{{ Carbon\Carbon::parse($key->updated_at)->format('m-d-Y H:i:s') }}</td>
                                         <td>
                                             <div class="btn-group">
@@ -87,8 +88,8 @@
                                                 </ul>
                                             </div>
                                         </td>
-
                                     </tr>
+                                    <?php $i++; ?>
                                     @endforeach
                                     </tbody>
                                 </table>

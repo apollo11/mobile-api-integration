@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\PushNotification;
 
+use Carbon\Carbon;
 use GuzzleHttp\Exception\RequestException;
 use Validator;
 use App\Http\Traits\PushNotiftrait;
@@ -31,9 +32,11 @@ class PushNotificationController extends Controller
 
     public function notifyByPublishDateTime() {
 
-        $pushNotification = PushNotification::where("created_at",">=","NOW()")
-        ->where("created_at","<","DATE_ADD(NOW(), INTERVAL 5 MINUTE)")
+        $pushNotification = PushNotification::where("publish_date",">=","NOW()")
+        ->where("publish_date","<","DATE_ADD(NOW(), INTERVAL 5 MINUTE)")
         ->get();
+
+        // print_r($pushNotification);
 
         if (count($pushNotification) > 0) 
         {
@@ -76,40 +79,121 @@ class PushNotificationController extends Controller
 
 
 
+
+    public function quickNotification() {
+
+        $pushnotification = new PushNotification();
+        $groups = \App\RecipientGroup::all();
+        return view('PushNotification.quick-form', ['recipientGroup' => $groups]);
+    }
+
+
+    public function quickNotificationadd(Request $request) {
+
+        $validator = $this->ruless($request->all());
+
+        if ($validator->fails()) {
+            return redirect('pushnotification/quickNotification')
+                ->withErrors($validator)
+                ->withInput();
+        } else {
+
+            $deviceTokenResult = array();
+
+            $recipient_group_id = $request->input('recipient_group');
+            if ($recipient_group_id == 0) {
+                $recipient_group_name = "All";   
+
+                $deviceTokenResult = DeviceToken::join('user_recipient_groups', 'user_recipient_groups.user_id', '=', 'user_push_notification_tokens.user_id')
+                ->get();
+
+            }
+            else {
+                $recipient_group_name = $request->input('group_name');
+                $deviceTokenResult = DeviceToken::join('user_recipient_groups', 'user_recipient_groups.user_id', '=', 'user_push_notification_tokens.user_id')
+                ->where('user_recipient_groups.recipient_group_id', '=', $recipient_group_id)
+                ->get();
+            }
+        
+            $pushNotification = new PushNotification();
+            $pushNotification->is_read = 0;
+            $pushNotification->type = "custom";
+            $pushNotification->recipient_group_id = $request->input('receipient-group');
+            $pushNotification->group_name = $recipient_group_name;
+            $pushNotification->title = $request->input('subject');
+            $pushNotification->message = $request->input('message-content');
+            $pushNotification -> save();
+
+            // print_r($deviceTokenResult);
+
+            $deviceTokens = array();
+            for ($j=0; $j < count($deviceTokenResult); $j++) { 
+                array_push($deviceTokens, $deviceTokenResult[$j]->device_token);
+            }
+
+            $data['title'] = $request->input('subject');
+            $data["body"] = $request->input('message-content');
+            $data["registration_ids"] = $deviceTokens;
+            $data["badge"] = 1;
+            $data["type"] = "custom";
+
+
+            if ($this->pushNotif($data) == "200") {
+                $pushNotificationList = PushNotification::all();
+                return view('PushNotification.lists', ['list' => $pushNotificationList]);
+            } else {
+                // echo "Error occured while sending scheduled push notification";
+            }                
+        }
+    }
+
+
+
+
+
+
+
     public function create()
     {
-        $groups = RecipientGroup::all();
+        // $groups = RecipientGroup::all();
         $pushnotification = new PushNotification();
-        return view('PushNotification.form', ['groups' => $groups]);
+        $groups = \App\RecipientGroup::all();
+
+        return view('PushNotification.form', ['recipientGroup' => $groups]);
     }
 
     public function add(Request $request)
     {
+
         $data = $request->all();
 
         $validator = $this->rules($data);
 
         if ($validator->fails()) {
-
             return redirect('pushnotification/create')
                 ->withErrors($validator)
                 ->withInput();
         } else {
 
-            // echo $request->input('publish-date');
-            // echo "</br></br>";
-            // echo date("Y-m-d h:i:sa");
-
-
+            $publishDate = $request->input('publish-date');
+            $recipient_group_id = $request->input('recipient_group');
+            // echo $recipient_group_id;
+            // echo $recipient_group_name;
+            if ($recipient_group_id == 0) {
+                $recipient_group_name = "All";   
+            }
+            else {
+                $recipient_group_name = $request->input('group_name');
+            }
+        
             $pushNotification = new PushNotification();
             $pushNotification->is_read = 0;
             $pushNotification->type = "custom";
             $pushNotification->recipient_group_id = $request->input('receipient-group');
+            $pushNotification->group_name = $recipient_group_name;
             $pushNotification->title = $request->input('subject');
             $pushNotification->message = $request->input('message-content');
-            $dateTimeFormatter = explode(' ', $request->input('publish-date'));
-            $dateFormatter = explode('-', $dateTimeFormatter[0]);
-            $pushNotification->created_at = $dateFormatter[0] . '-' . $dateFormatter[2] . '-' . $dateFormatter[1] . " " . $dateTimeFormatter[1] . ":00";
+            $pushNotification->publish_date = $request->input('publish-date');
             $pushNotification -> save();
             return redirect('pushnotification/lists');
         }
@@ -119,7 +203,7 @@ class PushNotificationController extends Controller
     public function edit($id)
     {
         $pushNotification = PushNotification::find($id);
-        $groups = RecipientGroup::all();
+        $groups = \App\RecipientGroup::all();
         return view('PushNotification.edit-form', ['pushNotification'=>$pushNotification, 'groups'=>$groups]);
     }
 
@@ -127,10 +211,11 @@ class PushNotificationController extends Controller
     {
         $data = $request->all();
 
+        // echo $request->input('publish-date');
+
         $validator = $this->rules($data);
 
         if ($validator->fails()) {
-
             return redirect('pushnotification/lists')
                 ->withErrors($validator)
                 ->withInput();
@@ -141,15 +226,11 @@ class PushNotificationController extends Controller
             $pushNotification->recipient_group_id = $request->input('receipient-group');
             $pushNotification->title = $request->input('subject');
             $pushNotification->message = $request->input('message-content');
-            $dateTimeFormatter = explode(' ', $request->input('publish-date'));
-            $dateFormatter = explode('-', $dateTimeFormatter[0]);
-            $pushNotification->created_at = $dateFormatter[0] . '-' . $dateFormatter[2] . '-' . $dateFormatter[1] . " " . $dateTimeFormatter[1] . ":00";
-            
+            $pushNotification->publish_date = $request->input('publish-date');
             $pushNotification -> save();
             return redirect('pushnotification/lists');
         }
     }
-
 
 
     public function delete($id)
@@ -165,10 +246,24 @@ class PushNotificationController extends Controller
     public function rules(array $data)
     {
         return Validator::make($data, [
-            'receipient-group' => 'required',
+            // 'receipient-group' => 'required',
             'subject' => 'required',
-            'publish-date' => 'required|date',
-            'message-content' => 'required'
+            'publish-date' => 'required|date|after:today',
+            'message-content' => 'required',
         ]);
     }
+
+
+    public function ruless(array $data)
+    {
+        return Validator::make($data, [
+            // 'receipient-group' => 'required',
+            'subject' => 'required',
+            'message-content' => 'required',
+        ]);
+    }
+
+
 }
+
+?>

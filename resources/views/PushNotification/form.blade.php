@@ -30,21 +30,24 @@
                                 {{ csrf_field() }}
                                 <div class="form-body">
 
-                                    <div class="form-group{{ $errors->has('receipient-group') ? ' has-error' : '' }}">
-                                        <label class="col-md-3 control-label">Receipient Group<span class="is-required">*</span></label>
+                                    <div class="form-group{{ $errors->has('recipient_group') ? ' has-error' : '' }}">
+                                        <label class="col-md-3 control-label">Recipient</label>
                                         <div class="col-md-7">
-                                            <select class="form-control" name="receipient-group">
-                                                @foreach( $groups as $group)
-                                                    @if($loop->count == 0)
-                                                         <option value="all"> - ALL - </option>
+                                            <select class="form-control" name="recipient_group">
+                                                <option value="0" {{ old('recipient_group') == 0 ? "selected" : "" }}>All</option>
+                                                @foreach($recipientGroup as $key => $value)
+                                                    @if($loop->count > 0)
+                                                        <option value="{{ $value->id }}" {{ old('recipient_group') == $value->id ? "selected" : "" }}>{{ $value->group_name }}</option>
                                                     @else
-                                                        <option value="{{ $group->id }}" {{ old('group') == $group->id ? "selected" : "" }}>{{ $group->group_name }}</option>
+                                                        <option value=""> No Available Recipient group </option>
                                                     @endif
+                                                    <input type="text" class="form-control" value="{{ $value->group_name }}" name="group_name" style="display: none;">
                                                 @endforeach
                                             </select>
-                                            @if ($errors->has('receipient-group'))
+
+                                            @if ($errors->has('recipient_group'))
                                                 <span class="help-block">
-                                               {{ $errors->first('receipient-group') }}
+                                                {{ $errors->first('recipient_group') }}
                                                </span>
                                             @endif
                                         </div>
@@ -127,4 +130,11 @@
             </div>
         </div>
     </div>
+
+    <script>
+    $('#birthdate').click(function(){
+        ('#birthdate').datetimepicker('setDate', (new Date()) );
+    });
+</script>
+    @include('layouts.invalid-date')
 @endsection
