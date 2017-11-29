@@ -13,6 +13,7 @@ class Payout extends Model
         $jobs = DB::table('job_schedules')
             ->join('users', 'job_schedules.user_id', '=', 'users.id')
             ->leftJoin('jobs', 'jobs.id', '=', 'job_schedules.job_id')
+            ->leftJoin('additional_infos','users.id','additional_infos.user_id')
             ->leftJoin('users as employer', 'employer.id', '=', 'jobs.user_id')
             ->select(
                 'users.name'
@@ -23,7 +24,7 @@ class Payout extends Model
                 , 'job_schedules.job_id'
                 , 'job_schedules.job_status as schedule_status'
                 , 'jobs.job_title'
-                , 'users.rate as user_hourly_rate'
+                , 'additional_infos.rate as user_hourly_rate'
                 , 'jobs.job_date as start_date'
                 , 'jobs.job_title'
                 , 'jobs.geolocation_address'
