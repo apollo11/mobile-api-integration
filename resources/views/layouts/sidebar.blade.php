@@ -10,7 +10,7 @@
             <!-- DOC: To removle the sidebar toggler from the sidebar you just need to completely remove the below "sidebar-toggler-wrapper" LI element -->
             <li class="sidebar-toggler-wrapper">
                 <!-- BEGIN SIDEBAR TOGGLER BUTTON -->
-                <div class="sidebar-toggler">
+                <div class="sidebar-toggler hide">
                 </div>
                 <!-- END SIDEBAR TOGGLER BUTTON -->
             </li>
