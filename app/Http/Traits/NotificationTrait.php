@@ -146,6 +146,20 @@ trait NotificationTrait
 
     }
 
+    public function jobCancelled($job, $token)
+    {
+        $data['title'] = "Cancel Job Successfully!";
+        $data["body"] = "You have successfully cancelled your job $job->job_title at $job->location  on $job->job_date !";
+
+        $data["registration_ids"] = $token;
+        $data["badge"] = 1;
+        $data["type"] = constant('JOB_CANCELLED_BY_USER');
+
+        return  $this->pushNotif($data);
+
+    }
+
+
 
 
 
