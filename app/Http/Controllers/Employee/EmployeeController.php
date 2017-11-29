@@ -100,7 +100,6 @@ class EmployeeController extends Controller
         } else {
 
             $this->save($data);
-            $this->lastInsertId;
             $this->saveNotif();
 
            return $this->successResponse($data);
