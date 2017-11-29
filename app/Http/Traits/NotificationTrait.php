@@ -97,6 +97,18 @@ trait NotificationTrait
         return  $this->pushNotif($data);
 
     }
+    public function rejectEmployeedNotif($token)
+    {
+        $data['title'] = "Your interview has been rejected by YY Part-time Jobs!";
+        $data["body"] = "We are sorry to inform you that you are rejected by YY Part-time jobs!.";
+        $data["registration_ids"] = $token;
+        $data["badge"] = 1;
+        $data["type"] = constant('USER_REJECT');
+
+        return  $this->pushNotif($data);
+
+    }
+
 
 
 }

@@ -572,6 +572,9 @@ class EmployeeController extends Controller
         $user->employee_status = "reject";
         $user->save();
 
+        $this->updateRejectInterview($id);
+        $this->saveProfileNotif((array) $id, constant('USER_REJECT'));
+
         return back();
     }
 
@@ -926,6 +929,10 @@ class EmployeeController extends Controller
 
     }
 
+    /**
+     * @param $id
+     * @return \Illuminate\Http\JsonResponse|int
+     */
     public function updateNotifInterview($id)
     {
         $userId[] = $id;
@@ -933,7 +940,19 @@ class EmployeeController extends Controller
         $result = $this->interviewApprovedNotif($token);
 
         return $result;
+    }
 
+    /**
+     * @param $id
+     * @return \Illuminate\Http\JsonResponse|int
+     */
+    public function updateRejectInterview($id)
+    {
+        $userId[] = $id;
+        $token = $this->parsingToken($userId);
+        $result = $this->rejectEmployeedNotif($token);
+
+        return $result;
     }
 
 
@@ -951,6 +970,10 @@ class EmployeeController extends Controller
         ]);
     }
 
+    /**
+     * @param $id
+     * @param $type
+     */
     public function saveProfileNotif($id, $type)
     {
         $userId = $id;
