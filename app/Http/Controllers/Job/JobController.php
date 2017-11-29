@@ -17,6 +17,7 @@ use App\Industry;
 use Carbon\Carbon;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
+use App\Http\Traits\NotificationTrait;
 use App\Http\Traits\DateFormatDate;
 use App\Http\Traits\PushNotiftrait;
 use App\Http\Traits\JobDetailsOutputTrait;
@@ -31,6 +32,7 @@ class JobController extends Controller
     use JobDetailsOutputTrait;
     use HttpResponse;
     use PushNotiftrait;
+    use NotificationTrait;
 
     private $request;
     protected $data;
@@ -331,8 +333,27 @@ class JobController extends Controller
      */
     public function sendNotification(Request $request, $id)
     {
+
+
+        $deviceTokenObj = new DeviceToken();
+        $user_ids = $request->input("employees-list");
+        $jobDetails = \App\Job::where('id', $id)->first();
+
+
+        $tokenOutput = $deviceTokenObj->getDeviceTokenByUserId(5);
+
+        return $sms;
+
+        foreach ($tokenOutput as $value)
+        {
+            $sms = $this->assignJobNotification($jobDetails, $token);
+
+
+        }
+
+
+         $this->insertUpdateAssignJob($user_ids, $id);
         $data['title'] = "New Jobs Assigned to You";
-        $jobDetails = Job::where('id', $id)->get();
 
 
         if (count($request->input("employees-list")) > 0) {

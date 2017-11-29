@@ -84,7 +84,7 @@ Route::group(['middleware' => ['auth']], function () {
 
        Route::get('/getJobsSeekers/{id?}','Job\JobController@getJobsSeekers')->name('job.getJobsSeekers');
 
-       Route::POST('/notification/{id?}','Job\JobController@sendNotification')->name('job.sendNotification');
+       Route::post('/notification/{id?}','Job\JobController@sendNotification')->name('job.sendNotification');
        Route::get('/lists/{notification_status?}','Job\JobController@index')->name('job.lists');
 
        Route::get('location_tracking/{id}','Job\JobController@location_tracking')->name('job.location_tracking')->middleware('can:job-view');
