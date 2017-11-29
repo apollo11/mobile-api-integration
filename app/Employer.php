@@ -36,7 +36,7 @@ class Employer extends Model
     /**
      * @return mixed
      */
-    public function employerList()
+    public function employerList($user_id='')
     {
         $employer = DB::table('users as employer')
             ->leftJoin('employers as role', 'employer.id', '=', 'role.user_id')
@@ -54,6 +54,9 @@ class Employer extends Model
             )
             ->where('employer.role_id', '=', 1)
             ->whereNull('employer.platform')
+            ->when(!empty($user_id), function ($query) use ($user_id) {
+                return $query->where('employer.id', $user_id);
+            })
             ->get();
 
         return $employer;

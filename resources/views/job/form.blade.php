@@ -299,29 +299,15 @@
                                         <label class="col-md-3 control-label">Employer<span class="is-required">*</span></label>
 
                                         <div class="col-md-7">
-                                                @if(Auth::user()->role_id == 1)
-                                                    <select class="form-control" name="job_employer">
-                                                        @foreach( $employer as $value)
-                                                            {{ $input = $value->id.'.'.$value->company_name }}
-                                                            @if($value->company_name == Auth::user()->company_name)
-                                                                <option value="{{ $input }}" {{ old('job_employer') == $input ? "selected" : "" }}>{{ $value->company_name }}</option>
-                                                            @endif
-                                                            @break;
-                                                        @endforeach
-                                                    </select>
-                                                @endif
-
-                                            @if(Auth::user()->role_id == 0)
                                                 <select class="form-control" name="job_employer">
+                                                     @if(Auth::user()->role_id == 0)
+                                                    <option value="">None</option>
+                                                    @endif
+
                                                     @foreach( $employer as $value)
-                                                        @if($loop->count == 0)
-                                                            <option value="">None</option>
-                                                        @else
-                                                            <option value="{{ $value->id.'.'.$value->company_name}}" {{ old('job_employer') == $input ? "selected" : "" }}>{{ $value->company_name }}</option>
-                                                        @endif
+                                                        <option value="{{ $value->id.'.'.$value->company_name}}" {{ old('job_employer') == $input ? "selected" : "" }}>{{ $value->company_name }}</option>
                                                     @endforeach
                                                 </select>
-                                            @endif
 
                                             @if ($errors->has('job_employer'))
                                                 <span class="help-block">
@@ -330,20 +316,6 @@
                                             @endif
                                         </div>
                                     </div>
-
-
-                                    {{--<div class="form-group{{ $errors->has('hourly_rate') ? ' has-error' : '' }}">--}}
-                                        {{--<label class="col-md-3 control-label">Hourly Rate<span class="is-required">*</span></label>--}}
-                                        {{--<div class="col-md-7">--}}
-                                            {{--<input type="text" class="form-control" placeholder="Enter Hourly Rate"--}}
-                                                   {{--value="{{ old('hourly_rate') }}" name="hourly_rate">--}}
-                                            {{--@if ($errors->has('hourly_rate'))--}}
-                                                {{--<span class="help-block">--}}
-                                                {{--{{ $errors->first('hourly_rate') }}--}}
-                                               {{--</span>--}}
-                                            {{--@endif--}}
-                                        {{--</div>--}}
-                                    {{--</div>--}}
 
                                     <div class="form-group {{ $errors->has('preferred_language') ? ' has-error' : '' }}">
                                         <label class="col-md-3 control-label">Preferred Language</label>

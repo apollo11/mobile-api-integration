@@ -88,15 +88,22 @@ class JobController extends Controller
      */
     public function create()
     {
+        $role = Auth::user()->role;
+        $roleId = Auth::user()->role_id;
+        if ($role == 'employer') {
+            $userid = Auth::user()->id;
+        } else {
+            $userid = '';
+        }
+
         $user = new Employer();
         $location = new Location();
         $nationality = new Nationality();
         $industry = $this->industry();
-        $employer = $user->employerList();
+        $employer = $user->employerList($userid);
         $age = $this->age();
         $businessMngr = \App\User::where('role', 'business_manager')->pluck('name', 'id');
         $group = \App\RecipientGroup::all();
-
 
         return view('job.form', ['user' => $user
             , 'industry' => $industry
@@ -194,7 +201,7 @@ class JobController extends Controller
             'industry_id' => $data['industry_id'],
             'industry' => $data['industry'],
             'notes' => empty($data['notes']) ? '' : $data['notes'],
-            'status' => Auth::user()->role_id == 0 ? 'active' : 'inactive',
+            'status' => Auth::user()->role_id == 0 ? 'active' : 'pending',
             'min_age' => $data['min_age'] ?? 0,
             'max_age' => $data['max_age'] ?? 0,
             'latitude' => $data['postal_code']['lat'],
@@ -593,6 +600,8 @@ class JobController extends Controller
         $employee = new Employee();
 
         $details = $job->jobAdminDetails($id);
+        if(empty($details)){abort(404);}
+
         $relatedCandidates = $schedule->getRelatedCandidates($id);
         $employeeList = $employee->employeeLists($param);
         $age = $this->getAgeViaId($id);
@@ -910,5 +919,7 @@ class JobController extends Controller
         }
     }
 
+    public function update_schedule(){
 
+    }
 }
