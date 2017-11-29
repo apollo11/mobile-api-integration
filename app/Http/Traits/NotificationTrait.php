@@ -19,7 +19,7 @@ trait NotificationTrait
     {
         $device = array();
         $token = new DeviceToken();
-        $tokenValue = $token->getDeviceTokenByUserId($id);
+        $tokenValue = $token->getMultipleDeviceTokenByUserId($id);
         foreach ($tokenValue as $value) {
             $device[] = $value->device_token;
         }
@@ -28,6 +28,11 @@ trait NotificationTrait
 
     }
 
+    /**
+     * @param $jobDetails
+     * @param $token
+     * @return \Illuminate\Http\JsonResponse|int
+     */
     public function assignJobNotification($jobDetails, $token)
     {
 
@@ -41,6 +46,26 @@ trait NotificationTrait
         $data["job_id"] = $jobDetails->id;
 
          return $this->pushNotif($data);
+
+    }
+
+    /**
+     * @param $jobDetails
+     * @param $token
+     * @return \Illuminate\Http\JsonResponse|int
+     */
+    public function registrationNotification($user, $token)
+    {
+
+        $data['title'] = "Registration Successful!";
+        $message = "Hello $user->name, welcome to YY Part-time jobs! I hopen you have a wonderful time here! Try finding your favourite jobs by today!";
+
+        $data["body"] = $message;
+        $data["registration_ids"] = $token;
+        $data["badge"] = 1;
+        $data["type"] = constant('REGISTRATION');
+
+        return $this->pushNotif($data);
 
 
     }

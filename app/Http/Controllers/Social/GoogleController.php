@@ -16,6 +16,8 @@ class GoogleController extends Controller
     use HttpRequest;
     use HttpResponse;
 
+    protected $lastInsertId;
+
     /**
      * Display a listing of the resource.
      *
@@ -82,6 +84,10 @@ class GoogleController extends Controller
         $user->social_google_id = $googleId;
 
         $user->save();
+
+        $this->lastInsertId = $user->id;
+        $this->saveNotif();
+
     }
 
     /**
@@ -202,4 +208,18 @@ class GoogleController extends Controller
     {
         return $this->getSocialGoogleResponse($token);
     }
+
+    /**
+     * @return mixed|static
+     */
+    public function saveNotif()
+    {
+        $id =  $this->lastInsertId;
+        $save = \App\User::find($id);
+
+        $save->userNotification()->create([
+            'type' => constant('REGISTRATION')
+        ]);
+    }
+
 }
