@@ -20,7 +20,7 @@
             @if($errors->has('multicheck'))
                 <div class="alert alert-danger alert-dismissable">
                     <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
-                    <strong>Error!</strong> Something went wrong. Please check.
+                    <strong>Error!</strong> Something went wrong. Please select data before making changes.
                 </div>
             @endif
             <form action="{{ route('job.multiple')  }}" method="POST">
@@ -67,7 +67,7 @@
                                     </div>
 
                                     <div style="display: inline-block; vertical-align: top;">
-                                        <button type="button" class="btn btn-info" onclick="filter()">Apply</button>
+                                        <button type="button" class="btn btn-info" onclick="filter($('#min').val(), $('#max').val())">Apply</button>
                                     </div>
                                 </div>
 
@@ -119,7 +119,6 @@
                                         <td>{{ $value->geolocation_address  }}</td>
 
                                         @if($value->status == 'inactive')
-
                                             <td><span class="label label-sm label-danger">{{ ($value->start_date < \Carbon\Carbon::now()) ? 'Expired' : ucfirst($value->status) }}</span></td>
 
                                         @elseif($value->status == 'active')
@@ -142,12 +141,14 @@
                                                     <i class="fa fa-angle-down"></i>
                                                 </button>
                                                 <ul class="dropdown-menu" role="menu">
+                                                    @if ($value->status =='pending' || $value->status == 'inactive')
                                                     <li>
                                                         <a href="{{ route('job.multiple',['id' =>  $value->id, 'param' =>'Delete' ]) }}"
                                                            onclick="event.preventDefault();
                                                                    document.getElementById('{{'destroy-'.$value->id }}').submit();">
                                                             <i class="fa fa-trash"></i> Delete</a>
                                                     </li>
+                                                    @endif
                                                     <li>
                                                         <a href="{{ route('job.edit',['id' => $value->id]) }}">
                                                             <i class="fa fa-edit"></i> Edit </a>
@@ -156,27 +157,35 @@
                                                         <a href="{{ route('job.details',['id' =>  $value->id])  }}">
                                                             <i class="fa fa-eye"></i> View </a>
                                                     </li>
-                                                     @if ($role_id == 0)
-                                                    <li>
-                                                        <a href="{{ route('job.multiple',['id' =>  $value->id, 'param' => 'Approve'])  }}"
-                                                           onclick="event.preventDefault();
-                                                                   document.getElementById('{{'approve-'.$value->id }}').submit();">
-                                                            <i class="fa fa-check-square-o"></i> Approve</a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="{{ route('job.multiple',['id' =>  $value->id, 'param' => 'Reject']) }}"
-                                                           onclick="event.preventDefault();
-                                                                   document.getElementById('{{'reject-'.$value->id }}').submit();">
-                                                            <i class="fa fa-close"></i> Reject
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="{{ route('job.getJobsSeekers',['id' => $value->id]) }}">
-                                                            <i class="fa fa-tasks"></i> Assign
-                                                        </a>
-                                                    </li>
+                                                    @if ($role_id == 0)
+                                                        @if ($value->status=='pending' || $value->status =='inactive')
+                                                            @if ($value->start_date >= \Carbon\Carbon::now()) 
+                                                            <li>
+                                                                <a href="{{ route('job.multiple',['id' =>  $value->id, 'param' => 'Approve'])  }}"
+                                                                   onclick="event.preventDefault();
+                                                                           document.getElementById('{{'approve-'.$value->id }}').submit();">
+                                                                    <i class="fa fa-check-square-o"></i> Approve</a>
+                                                            </li>
+                                                            @endif
+                                                        @endif
+                                                        @if ($value->status=='pending' || $value->status =='active')
+                                                        <li>
+                                                            <a href="{{ route('job.multiple',['id' =>  $value->id, 'param' => 'Reject']) }}"
+                                                               onclick="event.preventDefault(); document.getElementById('{{'reject-'.$value->id }}').submit();">
+                                                                <i class="fa fa-close"></i> Reject
+                                                            </a>
+                                                        </li>
+                                                        @endif
 
-                                                     <?php $job_date = (new DateTime($value->start_date))->modify('-1 hour'); ?>
+                                                        @if ($value->start_date >= \Carbon\Carbon::now() && $value->status=='active') 
+                                                        <li>
+                                                            <a href="{{ route('job.getJobsSeekers',['id' => $value->id]) }}">
+                                                                <i class="fa fa-tasks"></i> Assign
+                                                            </a>
+                                                        </li>
+                                                        @endif
+
+                                                        <?php $job_date = (new DateTime($value->start_date))->modify('-1 hour'); ?>
                                                         @if ($currenttime > $job_date && $value->status == 'active' )
                                                             <li><a href="{{ route('job.location_tracking',['id' => $value->id]) }}">
                                                                     <i class="fa fa-map-marker"></i> Track Location </a>
@@ -211,6 +220,10 @@
         setTimeout(function(){
             $("#notification_status_container").hide()
         }, 3000)
+
+        $(document).ready(function() {
+            localStorage.setItem('viewtype', 'job-list');
+        });
     </script>
     
 @endsection

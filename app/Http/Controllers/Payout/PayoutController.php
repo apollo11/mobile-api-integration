@@ -90,9 +90,7 @@ class PayoutController extends Controller
             $result = redirect(route('payout.edit',['id' => $id]))
                 ->withErrors($validator)
                 ->withInput();
-
         } else {
-
             $payoutObj->updateWorkingHours($id, $data['working_hours']);
             $result = redirect(route('payout.lists',['id' => $id]));
         }

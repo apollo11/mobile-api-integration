@@ -280,7 +280,6 @@ class Job extends Model
     {
         $jobs = DB::table('users')
             ->join('jobs', 'users.id', '=', 'jobs.user_id')
-            ->leftJoin('assign_job_job as assign', 'assign.job_id', '=', 'jobs.id')
             ->select(
                 'jobs.id'
                 , 'jobs.user_id'
@@ -318,8 +317,6 @@ class Job extends Model
                 , 'jobs.latitude'
                 , 'jobs.longitude'
                 , 'jobs.geolocation_address'
-                , 'assign.is_assigned'
-                , 'assign.id as id_assigned'
                 , 'jobs.business_manager as job_manager'
                 , 'jobs.business_manager_id as job_manager_id'
 
@@ -340,7 +337,6 @@ class Job extends Model
     {
         $jobDetails = DB::table('users as employer')
             ->leftJoin('jobs', 'jobs.user_id', '=', 'employer.id')
-            ->leftJoin('assign_job_job as assign', 'assign.job_id', '=', 'jobs.id')
             ->select(
                 'jobs.id'
                 , 'employer.id as user_id'
@@ -382,8 +378,6 @@ class Job extends Model
                 , 'jobs.zip_code'
                 , 'jobs.business_manager as job_manager'
                 , 'jobs.business_manager_id as job_manager_id'
-                , 'assign.is_assigned'
-                , 'assign.id as id_assigned'
             )
             ->where('jobs.id', '=', $id)
             ->first();

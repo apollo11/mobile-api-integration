@@ -8,8 +8,13 @@
 <script src="{{ asset('assets/pages/scripts/table-datatables-buttons.min.js') }}" type="text/javascript"></script>
 <!-- <script type="text/javascript" src="https://cdn.datatables.net/plug-ins/1.10.16/filtering/row-based/range_dates.js"></script> -->
 <script>
+	var startDate;
+	var endDate;
+	var columnDate;
 	var table;
+	var columnDateIndex;
 	$(document).ready(function() {
+		columnDateIndex = 0;
 	    table = $('#employee-table').DataTable({
 	        dom: 'Bfrtip',
 	        buttons: [
@@ -27,10 +32,52 @@
 
 
 	// Date range filter
-	function filter()
+	function filter(startDate, endDate)
 	{
 		console.log('Date Filter Called');
-    	table.draw();
+
+		var viewType = localStorage.getItem('viewtype');
+        console.log(viewType);
+		if (viewType == "employee-list") {
+        	columnDateIndex = 5;
+        }
+        else if (viewType == "employee-details") {
+        	columnDateIndex = 2;
+        }
+        else if (viewType == "employer-details") {
+        	columnDateIndex = 7;
+        }
+        else if (viewType == "payout-list") {
+        	columnDateIndex = 7;
+        }
+        else if (viewType == "job-list") {
+        	columnDateIndex = 7;
+        }
+        else if (viewType == "job-details") {
+        	columnDateIndex = 4;
+        }
+        else if (viewType == "pushnotification-list") {
+        	columnDateIndex = 3;
+        }
+        else if (viewType == "recipient-list") {
+        	columnDateIndex = 3;
+        }
+        else {
+        	columnDateIndex = 0;
+        }
+
+        startDate = new Date(startdate.toString());
+        endDate = new Date(enddate.toString());
+
+		if (startDate > endDate) {
+        	console.log('invalid selection');
+        	alert('Start date cannot be earlier than end date');
+        	return true;
+        }
+        else {
+        	table.draw();	
+        }
+    	
     }
 
 
@@ -47,11 +94,12 @@
         	min = new Date(min);
         	max = new Date(max);
 
-        	var capturedDate = new Date(data[7]); // use data for the age column
+        	// columnDate = new Date(data[7]); // use data for the age column
+        	var columnDate = new Date(data[columnDateIndex]);	
  
-        	if (capturedDate > min && capturedDate <= max)
+        	if (columnDate >= min && columnDate <= max)
         	{
-        		console.log('Filtered Date ==> ', capturedDate);
+        		console.log('Filtered Date ==> ', columnDate);
             	return true;
         	}
         	return false;
