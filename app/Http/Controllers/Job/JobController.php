@@ -971,7 +971,7 @@ class JobController extends Controller
                 $job_status = '';
                 switch($status){
                     case 'accept':
-                        if($jobdetail->schedule_status=='pending' || $jobdetail->job_status=='reject_request'){
+                        if($jobdetail->job_status=='pending' || $jobdetail->job_status=='reject_request'){
                             $job_status = 'accepted';
                         }else{
                             $error = 'Invalid data';
