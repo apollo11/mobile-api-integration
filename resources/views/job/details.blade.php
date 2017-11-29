@@ -34,7 +34,7 @@
             </div>
 
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-12">
                     <div class="portlet light bordered">
                         <div class="portlet-title">
                             <div class="caption font-dark">
@@ -46,10 +46,8 @@
                                    href="{{ route('job.edit',['id' => $details->id ])  }}">
                                     Update</a>
                                 @if($role_id == 0)
-                                    <a class="btn sbold green"
-                                       href="{{ route('job.multiple',['id' => $details->id, 'param' => 'Approve'])  }}"
-                                       onclick="event.preventDefault();
-                                               document.getElementById('{{'approve-'.$details->id }}').submit();">
+                                    <a class="btn sbold green" href="{{ route('job.multiple',['id' => $details->id, 'param' => 'Approve'])  }}"
+                                       onclick="event.preventDefault(); document.getElementById('{{'approve-'.$details->id }}').submit();">
                                         Approve</a>
                                     <a class="btn sbold green"
                                        href="{{ route('job.multiple',['id' => $details->id, 'param' => 'Reject']) }}"
@@ -72,50 +70,64 @@
                         <div class="portlet-body">
                             <div class="table-toolbar">
                                 <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="btn-group">
+                                    <div class="col-md-6">
+                                        <div class="">
                                             <div class="portlet-body">
                                                 <div class="table-scrollable">
                                                     <table class="table table-hover">
                                                         <tbody>
                                                         <tr>
-                                                            <td><strong>Job Image</strong></td>
-                                                            <td ><img src="/{{ $details->job_image_path }}" width="200px"/></td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td><strong>Company Name: </strong></td>
-                                                            <td>{{ $details->company_name }}</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td> <strong>Business Manager </strong></td>
-                                                            <td>{{ $details->job_manager }}</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td><strong>Role</strong></td>
-                                                            <td>{{ $details->role }}</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td><strong>Job Title</strong></td>
+                                                            <td width="40%"><strong>Job Title</strong></td>
                                                             <td>{{ $details->job_title }}</td>
                                                         </tr>
                                                         <tr>
-                                                            <td> <strong>Job Description: </strong></td>
+                                                            <td> <strong>Job Description</strong></td>
                                                             <td>{{ $details->job_description }}</td>
                                                         </tr>
+
                                                         <tr>
-                                                            <td><strong>Job Location: </strong></td>
+                                                            <td><strong>Job Requirements </strong></td>
+                                                            <td>{{ $details->job_requirements }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><strong>Job Function / Role</strong></td>
+                                                            <td>{{ $details->role }}</td>
+                                                        </tr>
+
+                                                        <tr>
+                                                            <td><strong>Job Location</strong></td>
                                                             <td>{{ $details->geolocation_address }}</td>
                                                         </tr>
-                                                        <tr>
-                                                            <td><strong>Job Industry: </strong></td>
-                                                            <td>{{ $details->industry }}</td>
 
+                                                        <tr>
+                                                            <td><strong>Start Date &amp; Time</strong></td>
+                                                            <td>{{ $details->start_date  }}</td>
                                                         </tr>
                                                         <tr>
-                                                            <td><strong>Age Required</strong></td>
+                                                            <td><strong>End Date &amp; Time</strong></td>
+                                                            <td>{{ $details->end_date }}</td>
+                                                        </tr>
+
+                                                        <tr>
+                                                            <td><strong>Job Industry</strong></td>
+                                                            <td>{{ $details->industry }}</td>
+                                                        </tr>
+
+                                                    </tbody>
+                                                    </table><br><br>
+
+                                                    <table class="table table-hover">
+                                                        <tbody>
+                                                        <tr>
+                                                            <td><strong>No. of person requested</strong></td>
+                                                            <td>{{ $details->no_of_person }}</td>
+                                                        </tr>
+
+                                                        <tr>
+                                                            <td width="40%"><strong>Age Required</strong></td>
                                                             <td>
                                                                 @if(count($age) > 0)
-                                                                <ul>
+                                                                <ul class="ul-in-table">
                                                                     @foreach($age as $key)
                                                                       <li>{{ $key->name }}</li>
                                                                     @endforeach
@@ -125,50 +137,19 @@
                                                             </td>
                                                         </tr>
                                                         <tr>
-                                                            <td><strong>No. of person requested</strong></td>
-                                                            <td>{{ $details->no_of_person }}</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td><strong>Contact Person</strong></td>
-                                                            <td>{{ $details->contact_person }}</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td><strong>Contact No.: </strong></td>
-                                                            <td>{{ $details->contact_no }}</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td><strong>Gender Needed: </strong></td>
+                                                            <td><strong>Gender Needed</strong></td>
                                                             <td>{{ ucfirst($details->choices) }}</td>
                                                         </tr>
                                                         <tr>
-                                                            <td><strong>Rate:</strong></td>
-                                                            <td>${{ $details->rate }}/hr</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td><strong>Nationality:</strong></td>
+                                                            <td><strong>Nationality</strong></td>
                                                             <td>{{ ucfirst($details->nationality) }}</td>
                                                         </tr>
+
                                                         <tr>
-                                                            <td><strong>Start Job Date and Time</strong></td>
-                                                            <td>{{ $details->start_date  }}</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td><strong>Job End Date and Time</strong></td>
-                                                            <td>{{ $details->end_date }}</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td><strong>Job Requirements </strong></td>
-                                                            <td>{{ $details->job_requirements }}</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td><strong>Notes</strong></td>
-                                                            <td>{{ $details->notes }}</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td><strong>Language</strong></td>
+                                                            <td><strong>Preferred Language</strong></td>
                                                             <td>
                                                                 @if(count($language) > 0)
-                                                                <ul>
+                                                                <ul class="ul-in-table">
                                                                     @foreach($language as $key)
                                                                         <li>{{ ucfirst($key->name) }}</li>
                                                                     @endforeach
@@ -176,6 +157,12 @@
                                                                 </ul>
                                                             </td>
                                                         </tr>
+
+                                                        <tr>
+                                                            <td><strong>Important Notes</strong></td>
+                                                            <td>{{ $details->notes }}</td>
+                                                        </tr>
+
                                                         <tr>
                                                             <td><strong>Status</strong></td>
                                                             @if($details->status == 'inactive')
@@ -188,6 +175,40 @@
                                                             @else
                                                                 <td><span class="label label-sm label-warning">{{ ucfirst($details->status) }} </span></td>
                                                             @endif
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="">
+                                            <div class="portlet-body">
+                                                <div class="table-scrollable">
+                                                    <table class="table table-hover">
+                                                        <tbody>
+                                                        <tr>
+                                                            <td colspan="2" align="left"><img src="{{ url($details->job_image_path) }}" width="50%"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="40%"><strong>Employer</strong></td>
+                                                            <td>{{ $details->company_name }}</td>
+                                                        </tr>
+
+                                                        <tr>
+                                                            <td><strong>Business Manager</strong></td>
+                                                            <td>{{ $details->job_manager }}</td>
+                                                        </tr>
+
+                                                        <tr>
+                                                            <td><strong>Contact Person</strong></td>
+                                                            <td>{{ $details->contact_person }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><strong>Contact No.</strong></td>
+                                                            <td>{{ $details->contact_no }}</td>
                                                         </tr>
                                                         </tbody>
                                                     </table>
