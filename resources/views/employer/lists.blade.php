@@ -89,7 +89,7 @@
                                             <td> {{ $user['contact_person'] }}</td>
                                             <td> {{ $user['contact_no'] }}</td>
                                             <td> {{ $user['email'] }}</td>
-                                            <td> {{ $user['business_manager'] }}</td>
+                                            <td> {{ $user['business_manager_name'] }}</td>
                                             <td>{{ $user['posting'] }}</td>
                                             <td>{{ $user['applied'] }}</td>
                                             @if($user['status'] == 0 )
