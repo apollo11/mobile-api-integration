@@ -102,7 +102,7 @@
                                             <td>{{ $loop->iteration }}</td>
                                             <td>{{ $value->company_name }}</td>
                                             <td>{{ $value->name }}</td>
-                                            <td>{{ $value->job_salary }}</td>
+                                            <td><?php  round($value->job_salary,2); ?></td>
                                             <td>{{ $value->working_hours }}</td>
                                             <td>{{ $value->user_hourly_rate }}</td>
                                             <td data-order="{{ Carbon\Carbon::parse($value->start_date)->format('m-d-Y H:i:s') }}">{{ Carbon\Carbon::parse($value->start_date)->format('m-d-Y H:i:s') }}</td>
