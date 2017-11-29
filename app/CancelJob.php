@@ -55,7 +55,10 @@ class CancelJob extends Model
     {
         $cancelledJob = DB::table('job_schedules')
             ->leftJoin('jobs', 'jobs.id', '=', 'job_schedules.job_id')
-            ->leftJoin('assign_job_job as assign', 'assign.job_id', '=', 'job_schedules.job_id')
+            ->leftJoin('assign_job_job as assign', function ($join) use ($userId) {
+                $join->on('assign.job_id', '=', 'jobs.id')
+                    ->where('assign.user_id', '=', $userId);
+            })
             ->select(
                 'jobs.id'
                 , 'jobs.description as job_description'
