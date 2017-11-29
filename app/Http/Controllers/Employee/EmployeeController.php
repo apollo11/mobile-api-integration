@@ -78,7 +78,8 @@ class EmployeeController extends Controller
      */
     public function create()
     {
-        return view('employee.form');
+        $businessMngr = \App\User::where('role', 'business_manager')->pluck('name', 'id');
+        return view('employee.form', ['business_manager'=>$businessMngr]);
     }
 
     /**
