@@ -53,7 +53,6 @@
                                 @endif
                             </div>
                             <div class="portlet-body job-lists-table">
-
                                 <div>
                                     <div style="width: 40%; display: inline-block;">
                                         <div class="input-group date" data-provide="datepicker">
@@ -95,15 +94,15 @@
                                         <th>Contact No.</th>
                                         @endif
 
-                                        <th> Gender</th>
-                                        <th> DOB</th>
+                                        <th>Gender</th>
+                                        <th>DOB</th>
                                         <th>Ratings</th>
-                                        <th> Agent Name</th>
+                                        <th>Agent Name</th>
                                         <th>Jobs applied</th>
                                         <th>Jobs completed</th>
-                                        <th> Status</th>
-                                        <th> Joined</th>
-                                        <th> Actions</th>
+                                        <th>Status</th>
+                                        <th>Joined</th>
+                                        <th>Actions</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -112,13 +111,11 @@
 
                                         <tr class="odd gradeX">
                                             <td>
-                                             @if($employee[$i]['employee_status'] != 'reject' && $employee[$i]['employee_status'] != 'approved')
                                                 <label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">
                                                     <input type="checkbox" id="multicheck" name="multicheck[]" class="checkboxes"
                                                            value="{{ $employee[$i]['id'] }}"/>
                                                     <span></span>
                                                 </label>
-                                            @endif
                                             </td>
                                             <td><a href="{{ route('employee.details',['id' => $employee[$i]['id']])  }}"> {{ $employee[$i]['name'] }} </a></td>
                                             <td>
@@ -180,6 +177,7 @@
                                                             </li>
                                                             @endif
 
+                                                            @if($employee[$i]['employee_status'] != 'upload')
                                                             <li>
                                                                 <a href="{{ route('employee.upload',['id' => $employee[$i]['id']]) }}"
                                                                    onclick="event.preventDefault();
@@ -187,6 +185,7 @@
                                                                     <i class="fa fa-folder-open"></i> Upload
                                                                 </a>
                                                             </li>
+                                                            @endif
 
                                                             @if($employee[$i]['employee_status'] != 'reject' && $employee[$i]['employee_status'] != 'approved')
                                                             <li>

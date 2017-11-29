@@ -7,9 +7,10 @@ use App\User as User;
 use App\Job as Job;
 use App\AssignJob;
 use App\DeviceToken;
+use App\Http\Controllers\Controller;
 use App\Http\Traits\PushNotiftrait;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class AssignJobsController extends Controller
 {
@@ -31,7 +32,11 @@ class AssignJobsController extends Controller
         $job = new AssignJob();
         $jobsLists = $job->assignedJobs();
 
-        return view('job.lists', ['job' => $jobsLists]);
+        $role = Auth::user()->role;
+        $roleId = Auth::user()->role_id;
+
+        return view('job.lists', ['job' => $jobsLists, 'role' => $role
+            , 'role_id' => $roleId, 'notification_status' =>null]);
     }
 
     /**

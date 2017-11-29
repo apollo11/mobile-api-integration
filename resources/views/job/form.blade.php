@@ -33,8 +33,7 @@
                                     <div class="form-group{{ $errors->has('job_title') ? ' has-error' : '' }}">
                                         <label class="col-md-3 control-label">Job Title <span class="is-required">*</span></label>
                                         <div class="col-md-7">
-                                            <input type="text" class="form-control" placeholder="Enter Job Title"
-                                                   value="{{ old('job_title') }}" name="job_title">
+                                            <input type="text" class="form-control" placeholder="Enter Job Title" value="{{ old('job_title') }}" name="job_title">
                                             @if ($errors->has('job_title'))
                                                 <span class="help-block">
                                                 {{ $errors->first('job_title') }}
@@ -70,7 +69,7 @@
                                     </div>
 
                                     <div class="form-group{{ $errors->has('job_role') ? ' has-error' : '' }}">
-                                        <label class="col-md-3 control-label">Job Function / Role<span class="is-required">*</span></label>
+                                        <label class="col-md-3 control-label">Job Function / Role</label>
                                         <div class="col-md-7">
                                             <input type="text" class="form-control" placeholder="Enter Job Role"
                                                    value="{{ old('job_role') }}" name="job_role">
@@ -82,20 +81,39 @@
                                         </div>
                                     </div>
 
-                                    <div class="form-group{{ $errors->has('age') ? ' has-error' : '' }}">
+                                    {{--<div class="form-group{{ $errors->has('age') ? ' has-error' : '' }}">--}}
+                                        {{--<label class="col-md-3 control-label">Age</label>--}}
+                                        {{--<div class="col-md-7">--}}
+                                            {{--<select class="form-control" name="age">--}}
+                                                {{--@foreach($age as $key => $value)--}}
+                                                {{--<option value="{{ $value }}" {{ old('age') == $value ? "selected" : "" }}>{{ $value }}</option>--}}
+                                                {{--@endforeach--}}
+                                            {{--</select>--}}
+
+                                            {{--@if ($errors->has('age'))--}}
+                                                {{--<span class="help-block">--}}
+                                                {{--{{ $errors->first('age') }}--}}
+                                               {{--</span>--}}
+                                            {{--@endif--}}
+                                        {{--</div>--}}
+                                    {{--</div>--}}
+                                    <div class="form-group {{ $errors->has('age') ? ' has-error' : '' }}">
                                         <label class="col-md-3 control-label">Age</label>
                                         <div class="col-md-7">
-                                            <select class="form-control" name="age">
+                                            <div class="mt-checkbox-inline">
                                                 @foreach($age as $key => $value)
-                                                <option value="{{ $value }}" {{ old('age') == $value ? "selected" : "" }}>{{ $value }}</option>
+                                                <label class="mt-checkbox">
+                                                    <input type="checkbox" name="age[]" value="{{ $value }}" />
+                                                    {{ $value }}
+                                                    <span></span>
+                                                </label>
                                                 @endforeach
-                                            </select>
-
-                                            @if ($errors->has('age'))
-                                                <span class="help-block">
+                                                @if ($errors->has('age'))
+                                                    <span class="help-block">
                                                 {{ $errors->first('age') }}
                                                </span>
-                                            @endif
+                                                @endif
+                                            </div>
                                         </div>
                                     </div>
 
@@ -281,29 +299,15 @@
                                         <label class="col-md-3 control-label">Employer<span class="is-required">*</span></label>
 
                                         <div class="col-md-7">
-                                                @if(Auth::user()->role_id == 1)
-                                                    <select class="form-control" name="job_employer">
-                                                        @foreach( $employer as $value)
-                                                            {{ $input = $value->id.'.'.$value->company_name }}
-                                                            @if($value->company_name == Auth::user()->company_name)
-                                                                <option value="{{ $input }}" {{ old('job_employer') == $input ? "selected" : "" }}>{{ $value->company_name }}</option>
-                                                            @endif
-                                                            @break;
-                                                        @endforeach
-                                                    </select>
-                                                @endif
-
-                                            @if(Auth::user()->role_id == 0)
                                                 <select class="form-control" name="job_employer">
+                                                     @if(Auth::user()->role_id == 0)
+                                                    <option value="">None</option>
+                                                    @endif
+
                                                     @foreach( $employer as $value)
-                                                        @if($loop->count == 0)
-                                                            <option value="">None</option>
-                                                        @else
-                                                            <option value="{{ $value->id.'.'.$value->company_name}}" {{ old('job_employer') == $input ? "selected" : "" }}>{{ $value->company_name }}</option>
-                                                        @endif
+                                                        <option value="{{ $value->id.'.'.$value->company_name}}" {{ old('job_employer') == $input ? "selected" : "" }}>{{ $value->company_name }}</option>
                                                     @endforeach
                                                 </select>
-                                            @endif
 
                                             @if ($errors->has('job_employer'))
                                                 <span class="help-block">
@@ -313,36 +317,43 @@
                                         </div>
                                     </div>
 
+                                    <div class="form-group {{ $errors->has('preferred_language') ? ' has-error' : '' }}">
+                                        <label class="col-md-3 control-label">Preferred Language</label>
+                                        <div class="col-md-7">
+                                            <div class="mt-checkbox-inline">
+                                                @foreach($language as $key => $value)
+                                                    <label class="mt-checkbox">
+                                                        <input type="checkbox" name="preferred_language[]" value="{{ $value }}">
+                                                        {{ ucfirst($value) }}
+                                                        <span></span>
+                                                    </label>
+                                                @endforeach
+                                                @if ($errors->has('preferred_language'))
+                                                    <span class="help-block">
+                                                {{ $errors->first('preferred_language') }}
+                                               </span>
+                                                @endif
 
-                                    {{--<div class="form-group{{ $errors->has('hourly_rate') ? ' has-error' : '' }}">--}}
-                                        {{--<label class="col-md-3 control-label">Hourly Rate<span class="is-required">*</span></label>--}}
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {{--<div class="form-group{{ $errors->has('preferred_language') ? ' has-error' : '' }}">--}}
+                                        {{--<label class="col-md-3 control-label">Preferred Language</label>--}}
                                         {{--<div class="col-md-7">--}}
-                                            {{--<input type="text" class="form-control" placeholder="Enter Hourly Rate"--}}
-                                                   {{--value="{{ old('hourly_rate') }}" name="hourly_rate">--}}
-                                            {{--@if ($errors->has('hourly_rate'))--}}
+                                            {{--<select class="form-control" name="preferred_language">--}}
+                                                {{--<option value="">-- select one --</option>--}}
+                                                {{--@foreach($language as $key => $value)--}}
+                                                    {{--<option value="{{$value}}" {{ old('preferred_language') == $value ? "selected" : "" }}> {{ ucfirst($value)   }}</option>--}}
+                                                {{--@endforeach--}}
+                                            {{--</select>--}}
+                                            {{--@if ($errors->has('preferred_language'))--}}
                                                 {{--<span class="help-block">--}}
-                                                {{--{{ $errors->first('hourly_rate') }}--}}
+                                                {{--{{ $errors->first('preferred_language') }}--}}
                                                {{--</span>--}}
                                             {{--@endif--}}
                                         {{--</div>--}}
                                     {{--</div>--}}
-
-                                    <div class="form-group{{ $errors->has('preferred_language') ? ' has-error' : '' }}">
-                                        <label class="col-md-3 control-label">Preferred Language</label>
-                                        <div class="col-md-7">
-                                            <select class="form-control" name="preferred_language">
-                                                <option value="">-- select one --</option>
-                                                @foreach($language as $key => $value)
-                                                    <option value="{{$value}}" {{ old('preferred_language') == $value ? "selected" : "" }}> {{ ucfirst($value)   }}</option>
-                                                @endforeach
-                                            </select>
-                                            @if ($errors->has('preferred_language'))
-                                                <span class="help-block">
-                                                {{ $errors->first('preferred_language') }}
-                                               </span>
-                                            @endif
-                                        </div>
-                                    </div>
 
                                     <div class="form-group{{ $errors->has('date') ? ' has-error' : '' }}">
                                         <label class="control-label col-md-3">Start Job Date and Time<span class="is-required">*</span></label>
@@ -438,7 +449,7 @@
                                     <div class="row">
                                         <div class="col-md-offset-3 col-md-9">
                                             <button type="submit" class="btn green">Submit</button>
-                                            <button type="button" class="btn default">Cancel</button>
+                                            <a href="{{ route('job.lists')  }}" class="btn default">Cancel</a>
                                         </div>
                                     </div>
                                 </div>

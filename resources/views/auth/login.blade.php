@@ -4,9 +4,7 @@
     <!-- BEGIN LOGO -->
     <div class="login">
         <div class="logo">
-            <a href="index.html">
                 <img src="{{ asset('/assets/pages/img/logo.png') }}" alt="" width="100px"/>
-            </a>
         </div>
         <div class="content">
             <!-- BEGIN LOGIN FORM -->
