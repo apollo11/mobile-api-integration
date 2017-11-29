@@ -31,7 +31,7 @@ class JobController extends Controller
     use DateFormatDate;
     use JobDetailsOutputTrait;
     use HttpResponse;
-    use PushNotiftrait;
+    //use PushNotiftrait;
     use NotificationTrait;
 
     private $request;
@@ -333,8 +333,6 @@ class JobController extends Controller
      */
     public function sendNotification(Request $request, $id)
     {
-
-
         $deviceTokenObj = new DeviceToken();
         $user_ids = $request->input("employees-list");
         $jobDetails = \App\Job::where('id', $id)->first();
@@ -342,14 +340,13 @@ class JobController extends Controller
 
         $tokenOutput = $deviceTokenObj->getDeviceTokenByUserId(5);
 
-        return $sms;
 
         foreach ($tokenOutput as $value)
         {
-            $sms = $this->assignJobNotification($jobDetails, $token);
-
-
+            $sms[] =  $this->assignJobNotification($jobDetails, $value->device_token);
         }
+
+        return $sms;
 
 
          $this->insertUpdateAssignJob($user_ids, $id);
