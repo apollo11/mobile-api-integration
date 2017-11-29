@@ -122,6 +122,9 @@ Route::group(['middleware' => ['auth']], function () {
         Route::POST('update', 'PushNotification\PushNotificationController@update')->name('pushnotification.update');
         Route::get('delete/{id}', 'PushNotification\PushNotificationController@delete')->name('pushnotification.delete');
 
+        Route::get('quickNotification', 'PushNotification\PushNotificationController@quickNotification')->name('pushnotification.quickNotification');
+        Route::POST('quick_notification_add', 'PushNotification\PushNotificationController@quickNotificationadd')->name('pushnotification.quickNotificationadd');
+
         Route::get('scheduledNotification', 'PushNotification\PushNotificationController@notifyByPublishDateTime')->name('pushnotification.notifyByPublishDateTime');
     });
 

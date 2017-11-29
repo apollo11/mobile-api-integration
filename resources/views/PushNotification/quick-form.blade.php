@@ -10,7 +10,7 @@
                         <i class="fa fa-circle"></i>
                     </li>
                     <li>
-                        <span>Edit Notification</span>
+                        <span>Create New Notification</span>
                     </li>
                 </ul>
             </div>
@@ -21,30 +21,33 @@
                         <div class="portlet-title">
                             <div class="caption">
                                 <i class="icon-settings font-dark"></i>
-                                <span class="caption-subject font-dark sbold uppercase">Edit Notification</span>
+                                <span class="caption-subject font-dark sbold uppercase">Add Notification</span>
                             </div>
                         </div>
                         <div class="portlet-body form">
-                            <form class="form-horizontal" method="POST" role="form" action="{{ route('pushnotification.update') }}"
+                            <form class="form-horizontal" method="POST" role="form" action="{{ route('pushnotification.quickNotificationadd') }}"
                                   enctype="multipart/form-data">
                                 {{ csrf_field() }}
                                 <div class="form-body">
-                                    <input type="hidden" value="{{$pushNotification->id}}" name="id">
-                                    <div class="form-group{{ $errors->has('receipient-group') ? ' has-error' : '' }}">
-                                        <label class="col-md-3 control-label">Receipient Group<span class="is-required">*</span></label>
+
+                                    <div class="form-group{{ $errors->has('recipient_group') ? ' has-error' : '' }}">
+                                        <label class="col-md-3 control-label">Recipient</label>
                                         <div class="col-md-7">
-                                            <select class="form-control" name="receipient-group">
-                                                @foreach( $groups as $group)
-                                                    @if($loop->count == 0)
-                                                         <option value="all"> - ALL - </option>
+                                            <select class="form-control" name="recipient_group">
+                                                <option value="0" {{ old('recipient_group') == 0 ? "selected" : "" }}>All</option>
+                                                @foreach($recipientGroup as $key => $value)
+                                                    @if($loop->count > 0)
+                                                        <option value="{{ $value->id }}" {{ old('recipient_group') == $value->id ? "selected" : "" }}>{{ $value->group_name }}</option>
                                                     @else
-                                                        <option value="{{ $group->id }}" {{ old('group') == $group->id ? "selected" : "" }}>{{ $group->group_name }}</option>
+                                                        <option value=""> No Available Recipient group </option>
                                                     @endif
+                                                    <input type="text" class="form-control" value="{{ $value->group_name }}" name="group_name" style="display: none;">
                                                 @endforeach
                                             </select>
-                                            @if ($errors->has('receipient-group'))
+
+                                            @if ($errors->has('recipient_group'))
                                                 <span class="help-block">
-                                               {{ $errors->first('receipient-group') }}
+                                                {{ $errors->first('recipient_group') }}
                                                </span>
                                             @endif
                                         </div>
@@ -53,7 +56,7 @@
                                     <div class="form-group{{ $errors->has('subject') ? ' has-error' : '' }}">
                                         <label class="col-md-3 control-label">Notification Subject <span class="is-required">*</span></label>
                                         <div class="col-md-7">
-                                            <input type="text" class="form-control" value="{{ $pushNotification->title }}" name="subject">
+                                            <input type="text" class="form-control" value="{{ old('subject') }}" name="subject">
                                             @if ($errors->has('subject'))
                                                 <span class="help-block">
                                                 {{ $errors->first('subject') }}
@@ -62,31 +65,11 @@
                                         </div>
                                     </div>
 
-                                    <div class="form-group{{ $errors->has('publish-date') ? ' has-error' : '' }}">
-                                        <label class="control-label col-md-3">Publish Date<span class="is-required">*</span></label>
-                                        <div class="col-md-7">
-                                            <div class="input-group date form_datetime form_datetime bs-datetime"
-                                                 id="birthdate">
-                                                <input type="text" name="publish-date" size="16" class="form-control" value="{{ $pushNotification->publish_date }} ">
-                                                <span class="input-group-addon">
-                                                    <button class="btn default date-set" type="button">
-                                                        <i class="fa fa-calendar"></i>
-                                                    </button>
-                                                </span>
-                                                @if ($errors->has('publish-date'))
-                                                    <span class="help-block">
-                                                {{ $errors->first('publish-date') }}
-                                               </span>
-                                                @endif
-                                            </div>
-                                        </div>
-                                    </div>
-
                                     <div class="form-group{{ $errors->has('message-content') ? ' has-error' : '' }}">
                                         <label class="col-md-3 control-label">Notification Content<span class="is-required">*</span></label>
                                         <div class="col-md-7">
                                             <textarea class="form-control" name="message-content"
-                                                      rows="5" placeholder="Message Content">{{ $pushNotification->message }}</textarea>
+                                                      rows="5" placeholder="Message Content">{{ old('message-content') }}</textarea>
                                             @if ($errors->has('message-content'))
                                                 <span class="help-block">
                                                 {{ $errors->first('message-content') }}
@@ -110,4 +93,5 @@
             </div>
         </div>
     </div>
+
 @endsection
