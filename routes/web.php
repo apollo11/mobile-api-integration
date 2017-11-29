@@ -122,6 +122,9 @@ Route::group(['middleware' => ['auth']], function () {
         Route::POST('update', 'PushNotification\PushNotificationController@update')->name('pushnotification.update');
         Route::get('delete/{id}', 'PushNotification\PushNotificationController@delete')->name('pushnotification.delete');
 
+        Route::get('quickNotification', 'PushNotification\PushNotificationController@quickNotification')->name('pushnotification.quickNotification');
+        Route::POST('quick_notification_add', 'PushNotification\PushNotificationController@quickNotificationadd')->name('pushnotification.quickNotificationadd');
+
         Route::get('scheduledNotification', 'PushNotification\PushNotificationController@notifyByPublishDateTime')->name('pushnotification.notifyByPublishDateTime');
     });
 
@@ -147,7 +150,8 @@ Route::group(['middleware' => ['auth']], function () {
     });
 
     Route::prefix('reports')->group(function() {
-       Route::get('/weekly_report', 'Reports\ReportsController@weekly_report')->name('reports.weekly_report');
+      Route::get('/weekly_report', 'Reports\ReportsController@weekly_report')->name('reports.weekly_report');
+      Route::post('weekly_report_filter', 'Reports\ReportsController@weekly_report_filter')->name('reports.weekly_report_filter');
     });
 
     Route::prefix('user/mgt')->group(function() {

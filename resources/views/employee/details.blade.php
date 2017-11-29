@@ -418,8 +418,7 @@
                                         <tr class="odd gradeX" id="sche-{{ $jobs->schedule_id }}">
                                             <th>
                                                 <label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">
-                                                    <input type="checkbox" class="group-checkable"
-                                                           data-set="#employee-table .checkboxes"/>
+                                                    <input type="checkbox" class="group-checkable" data-set="#employee-table .checkboxes"/>
                                                     <span></span>
                                                 </label>
                                             </th>
@@ -432,7 +431,7 @@
                                                     -
                                                 @endif
                                             </td>
-                                            <td>@if($jobs->schedule_status == 'cancelled') <a href="{{ route('cancel.details',['userId' => $jobs->user_id, 'jobId' => $jobs->id]) }}">{{ ucfirst($jobs->schedule_status) }}</a>  @else {{ ucfirst($jobs->schedule_status) }} @endif</td>
+                                            <td>@if($jobs->schedule_status == 'cancelled') <a href="{{ route('cancel.details',['userId' => $jobs->user_id, 'jobId' => $jobs->id]) }}">{{ ucfirst($jobs->schedule_status) }}</a>  @else {{ jobschedule_status_display($jobs->schedule_status) }} @endif</td>
                                             <td>
                                                 <div class="btn-group">
                                                     <button class="btn btn-xs green dropdown-toggle" type="button"
@@ -440,16 +439,6 @@
                                                         <i class="fa fa-angle-down"></i>
                                                     </button>
                                                     <ul class="dropdown-menu" role="menu">
-                                                        <li>
-                                                            <a href="{{ route('job.multiple',['id' =>  $jobs->jobid, 'param' =>'Delete' ]) }}"
-                                                               onclick="event.preventDefault();
-                                                                       document.getElementById('{{'destroy-'.$jobs->jobid }}').submit();">
-                                                                <i class="fa fa-trash"></i> Delete</a>
-                                                        </li>
-                                                        <li>
-                                                            <a href="{{ route('job.edit',['id' => $jobs->jobid ]) }}">
-                                                                <i class="fa fa-edit"></i> Edit </a>
-                                                        </li>
                                                         <li>
                                                             <a href="{{ route('job.details',['id' =>  $jobs->jobid ])  }}">
                                                                 <i class="fa fa-eye"></i> View </a>
@@ -487,13 +476,13 @@
                                                                 <a href="{{ route('payout.accepted',['id' => $jobs->schedule_id, 'userId' => $jobs->user_id])  }}"
                                                                    onclick="event.preventDefault();
                                                                            document.getElementById('{{'accept-'.$jobs->jobid }}').submit();">
-                                                                    <i class="fa fa-check-square-o"></i> Approve</a>
+                                                                    <i class="fa fa-check-square-o"></i> Accept Request</a>
                                                             </li>
                                                             <li>
                                                                 <a href="{{ route('payout.rejected',['id' => $jobs->schedule_id, 'userId' => $jobs->user_id]) }}"
                                                                    onclick="event.preventDefault();
                                                                            document.getElementById('{{'reject-'.$jobs->jobid }}').submit();">
-                                                                    <i class="fa fa-close"></i> Reject
+                                                                    <i class="fa fa-close"></i> Reject Request
                                                                 </a>
                                                             </li>
                                                         @endif

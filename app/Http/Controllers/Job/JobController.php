@@ -12,6 +12,7 @@ use App\Employer;
 use App\JobSchedule;
 use App\Nationality;
 use App\Job;
+use App\Age;
 use App\Location;
 use App\Industry;
 use Carbon\Carbon;
@@ -135,20 +136,6 @@ class JobController extends Controller
         // $age = explode('-', $request->input('age'));
         $employer = explode('.', $request->input('job_employer'));
 
-        $split = [
-            'location_id' => $location[0],
-            'location' => $location[1],
-            'industry_id' => $industry[0],
-            'industry' => $industry[1],
-            'employer_id' => $employer[0],
-            'employer' => $employer[1],
-            'business_id' => $businessMngr[0],
-            'business' => $businessMngr[1],
-//            'min_age' => $age[0],
-//            'max_age' => $age[1],
-
-        ];
-
         $validator = $this->rules($data);
 
         if ($validator->fails()) {
@@ -157,6 +144,20 @@ class JobController extends Controller
                 ->withErrors($validator)
                 ->withInput();
         } else {
+             $split = [
+                'location_id' => $location[0],
+                'location' => $location[1],
+                'industry_id' => $industry[0],
+                'industry' => $industry[1],
+                'employer_id' => $employer[0],
+                'employer' => $employer[1],
+                'business_id' => $businessMngr[0],
+                'business' => $businessMngr[1],
+    //            'min_age' => $age[0],
+    //            'max_age' => $age[1],
+
+            ];
+
             $data['address'] = $this->getFormattedAddress($data['postal_code']['lat'], $data['postal_code']['lng']);
             $profile['job_image'] = $request->file('job_image')->store('jobs');
 
@@ -225,7 +226,7 @@ class JobController extends Controller
 
         $user = \App\Job::find($data['job_id']);
 
-        $user->update([
+        $toupdate = [
             'job_title' => $data['job_title'],
             'job_id' => $data['employer_id'],
             'location_id' => $data['location_id'],
@@ -235,7 +236,6 @@ class JobController extends Controller
             'role' => $data['job_role'] ?? '',
             'gender' => empty($data['gender']) ? '' : $data['gender'],
             'nationality' => empty($data['nationality']) ? '' : $data['nationality'],
-            'job_image_path' => $data['job_image'],
             'no_of_person' => $data['no_of_person'],
             'contact_person' => empty($data['contact_person']) ? '' : $data['contact_person'],
             'contact_no' => empty($data['contact_no']) ? '' : $data['contact_no'],
@@ -256,7 +256,12 @@ class JobController extends Controller
             'longitude' => $data['postal_code']['lng'],
             'geolocation_address' => $data['address'],
             'zip_code' => $data['zip_code']
-        ]);
+        ];
+
+        if(isset($data['job_image'])){
+            $toupdate['job_image_path'] = $data['job_image'];
+        }
+        $user->update($toupdate);
     }
 
     /**
@@ -286,14 +291,41 @@ class JobController extends Controller
         $user = new Employer();
         $job = new Job();
         $nationObj = new Nationality();
+        $modelAge = new Age();
+
+        $role = Auth::user()->role;
+        $roleId = Auth::user()->role_id;
+        if ($role == 'employer') {
+            $userid = Auth::user()->id;
+        } else {
+            $userid = '';
+        }
 
         $details = $job->jobAdminDetails($id);
+        if(empty($details)){abort(404);}
+
         $location = $this->location();
         $industry = $this->industry();
         $nationality = $this->nationalityList();
         $age = $this->age();
-        $employer = $user->employerList();
+        $employer = $user->employerList($userid);
         $businessMngr = \App\User::where('role', 'business_manager')->pluck('name', 'id');
+
+        $age_arr = array();
+        $selectedage = $modelAge->getAgeByJob($id);
+        if(!empty($selectedage)){
+            foreach($selectedage as $k=>$v){
+                $age_arr[] = $v->name;
+            }
+        }
+
+        $lang_arr = array();
+        $selectedLang = $this->getLanguageViaId($id);
+        if(!empty($selectedLang)){
+            foreach($selectedLang as $k){
+                $lang_arr[] = $k->name;
+            }
+        }
 
         return view('job.edit-form', ['user' => $user
             , 'industry' => $industry
@@ -303,6 +335,8 @@ class JobController extends Controller
             , 'age' => $age
             , 'language' => $nationObj->language()
             , 'employer' => $employer
+            , 'existing_age' => $age_arr
+            , 'existing_lang' => $lang_arr
         ], compact('businessMngr'));
 
     }
@@ -368,6 +402,10 @@ class JobController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $job = new Job();
+        $details = $job->jobAdminDetails($id);
+        if(empty($details)){abort(404);}
+
         $data = $request->all();
         $zipCode = $this->getAddress($request->input('postal_code'));
         $data['postal_code'] = $zipCode;
@@ -393,7 +431,7 @@ class JobController extends Controller
             'business' => $businessMngr[1]
         ];
 
-        $validator = $this->rules($data);
+        $validator = $this->rules($data,$details->job_image_path );
 
         if ($validator->fails()) {
             return redirect(route('job.edit', ['id' => $id]))
@@ -402,9 +440,16 @@ class JobController extends Controller
         } else {
 
             $data['address'] = $this->getFormattedAddress($data['postal_code']['lat'], $data['postal_code']['lng']);
-            $profile['job_image'] = $request->file('job_image')->store('jobs');
+            
 
-            $mergeData = array_merge($data, $profile, $split);
+            if ($request->hasFile('job_image')) {
+                $profile['job_image'] = $request->file('job_image')->store('jobs');
+                $mergeData = array_merge($data, $profile, $split);
+            }else{
+                $mergeData = array_merge($data, $split);
+                // $merge = $data;
+
+            }
 
             $this->deleteAge($mergeData, $id);
             $this->saveAge($id, $data);
@@ -459,13 +504,12 @@ class JobController extends Controller
     /**
      * Validation Rule
      */
-    public function rules(array $data)
+    public function rules(array $data, $job_image_path='')
     {
-        return Validator::make($data, [
+        $rules = [
             'job_title' => 'required',
             'job_description' => 'required|string',
             'job_role' => 'nullable',
-            'job_image' => 'required',
             'no_of_person' => 'required|numeric',
             'job_employer' => 'required|string',
             'date' => 'required|date',
@@ -473,7 +517,11 @@ class JobController extends Controller
             'job_location' => 'required|string',
             'industry' => 'required|string',
             'postal_code' => 'required'
-        ]);
+        ];
+        if(empty($job_image_path)){
+            $rules['job_image'] = 'required'; 
+        }
+        return Validator::make($data, $rules);
     }
 
 
@@ -923,7 +971,7 @@ class JobController extends Controller
                 $job_status = '';
                 switch($status){
                     case 'accept':
-                        if($jobdetail->schedule_status=='pending' || $jobdetail->job_status=='reject_request'){
+                        if($jobdetail->job_status=='pending' || $jobdetail->job_status=='reject_request'){
                             $job_status = 'accepted';
                         }else{
                             $error = 'Invalid data';

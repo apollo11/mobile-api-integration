@@ -38,6 +38,7 @@ class EmployerController extends Controller
             $data[] = [
                 'id' => $value->id,
                 'business_manager' => $value->business_manager,
+                'business_manager_name' => $value->business_manager_name,
                 'company_name' => $value->company_name,
                 'status' => $value->status,
                 'applied' => $applied,
