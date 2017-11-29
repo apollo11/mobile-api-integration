@@ -105,7 +105,7 @@
                                             <td>{{ $value->job_salary }}</td>
                                             <td>{{ $value->working_hours }}</td>
                                             <td>{{ $value->rate }}</td>
-                                            <td>{{ $value->start_date }}</td>
+                                            <td data-order="{{ Carbon\Carbon::parse($value->start_date)->format('m-d-Y H:i:s') }}">{{ Carbon\Carbon::parse($value->start_date)->format('m-d-Y H:i:s') }}</td>
                                             <td>{{ $value->business_manager }}</td>
                                             <td>{{ $value->nric_no }}</td>
                                             <td>{{ $value->job_title }}</td>

@@ -96,7 +96,11 @@ class PushNotificationController extends Controller
                 ->withInput();
         } else {
 
-            echo 
+            // echo $request->input('publish-date');
+            // echo "</br></br>";
+            // echo date("Y-m-d h:i:sa");
+
+
             $pushNotification = new PushNotification();
             $pushNotification->is_read = 0;
             $pushNotification->type = "custom";

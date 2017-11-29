@@ -300,7 +300,7 @@
                                         <td>{{ $value->name }}</td>
                                         <td>{{ $value->nric_no }}</td>
                                         <td>{{ $value->gender }}</td>
-                                        <td>{{ $value->birthdate }}</td>
+                                        <td data-order="{{ Carbon\Carbon::parse($value->birthdate)->format('m-d-Y H:i:s') }}">{{ Carbon\Carbon::parse($value->birthdate)->format('m-d-Y H:i:s') }}</td>
                                         <td>{{ $value->nationality }}</td>
                                         <td>{{ $value->religion }}</td>
                                         <td>{{ $value->mobile_no }}</td>
