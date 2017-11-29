@@ -97,7 +97,7 @@
                                         <th>Gender</th>
                                         <th>DOB</th>
                                         <!-- <th>Ratings</th> -->
-                                        <th>Business Manager</th>
+                                        <!-- <th>Business Manager</th> -->
                                         <th>Jobs applied</th>
                                         <th>Jobs completed</th>
                                         <th>Status</th>
@@ -126,8 +126,6 @@
                                             @endif
                                             <td> {{ $employee[$i]['gender'] }}</td>
                                             <td data-order="{{ Carbon\Carbon::parse($employee[$i]['birthdate'])->format('m-d-Y H:i:s') }}">{{ Carbon\Carbon::parse($employee[$i]['birthdate'])->format('m-d-Y H:i:s') }}</td>
-                                            <!-- <td>{{ 'Not yet available' }}</td> -->
-                                            <td>{{ $employee[$i]['business_manager'] }}</td>
                                             <td> <a href="{{ route('employee.details',['id' => $employee[$i]['id']])  }}"> {{ $employee[$i]['applied']  }} </a></td>
                                             <td><a href="{{ route('employee.details',['id' => $employee[$i]['id']])  }}"> {{ $employee[$i]['completed'] }} </a></td>
 
