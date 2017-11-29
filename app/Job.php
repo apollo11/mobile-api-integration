@@ -278,8 +278,10 @@ class Job extends Model
      */
     public function jobList(array $param)
     {
-        $jobs = DB::table('users')
-            ->join('jobs', 'users.id', '=', 'jobs.user_id')
+        $jobs = DB::table('jobs')
+            ->join('users', 'users.id', '=', 'jobs.user_id')
+            ->leftjoin('users as bm', 'bm.id', '=', 'jobs.business_manager_id')
+            ->leftjoin('job_schedules','job_schedules.job_id','jobs.id')
             ->select(
                 'jobs.id'
                 , 'jobs.user_id'
@@ -288,7 +290,7 @@ class Job extends Model
                 , 'users.profile_image_path'
                 , 'users.rate as employer_rate'
                 , 'users.employee_status as status'
-                , 'users.business_manager'
+                , 'bm.name as business_manager'
                 , 'users.id as employer_id'
                 , 'jobs.description as job_description'
                 , 'jobs.status'
@@ -319,7 +321,7 @@ class Job extends Model
                 , 'jobs.geolocation_address'
                 , 'jobs.business_manager as job_manager'
                 , 'jobs.business_manager_id as job_manager_id'
-
+                , DB::raw('count(job_schedules.id) as total_applied')
             )
             ->when(!empty($param['status']), function ($query) use ($param) {
                 return $query->where('jobs.status', $param['status']);
@@ -327,6 +329,7 @@ class Job extends Model
             ->when(!empty($param['userid']), function ($query) use ($param) {
                 return $query->where('jobs.user_id', $param['userid']);
             })
+            ->groupBy('jobs.id')
             ->orderBy('jobs.id', 'DESC')
             ->get();
 
