@@ -7,7 +7,7 @@
             <a href="{{ route('home') }}">
                 <img src="{{ asset('/assets/pages/img/logo.png') }}" width="30px" height="20px" class="logo-default"/> </a>
             </a>
-            <div class="menu-toggler sidebar-toggler hide">
+            <div class="menu-toggler sidebar-toggler"><span></span>
                 <!-- DOC: Remove the above "hide" to enable the sidebar toggler button on header -->
             </div>
         </div>
@@ -22,7 +22,7 @@
         <div class="top-menu">
             <ul class="nav navbar-nav pull-right">
                 <!-- BEGIN NOTIFICATION DROPDOWN -->
-                <li class="dropdown dropdown-extended dropdown-notification" id="header_notification_bar">
+                <!--<li class="dropdown dropdown-extended dropdown-notification" id="header_notification_bar">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
                         <i class="icon-bell"></i>
                         <span class="badge badge-default">
@@ -125,7 +125,7 @@
                             </a>
                         </li>
                     </ul>
-                </li>
+                </li>-->
                 <!-- END NOTIFICATION DROPDOWN -->
 
                 <!-- BEGIN USER LOGIN DROPDOWN -->
@@ -161,21 +161,7 @@
                     </ul>
                 </li>
                 <!-- END USER LOGIN DROPDOWN -->
-                <!-- BEGIN QUICK SIDEBAR TOGGLER -->
-                {{--<li class="dropdown dropdown-quick-sidebar-toggler">--}}
-                    {{--<a href="javascript:;" class="dropdown-toggle">--}}
-                        {{--<i class="icon-logout"></i>--}}
-                    {{--</a>--}}
-
-                    {{--<a href="{{ route('logout') }}"--}}
-                       {{--onclick="event.preventDefault();--}}
-                                {{--document.getElementById('logout-form').submit();">--}}
-                        {{--<i class="icon-key"></i> Log Out--}}
-                    {{--</a>--}}
-                    {{--<form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">--}}
-                        {{--{{ csrf_field() }}--}}
-                    {{--</form>--}}
-                {{--</li>--}}
+               
                 <!-- END QUICK SIDEBAR TOGGLER -->
             </ul>
         </div>
