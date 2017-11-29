@@ -16,6 +16,8 @@ class FaceBookController extends Controller
     use HttpRequest;
     use HttpResponse;
 
+    protected $lastInsertId;
+
     /**
      * Display a listing of the resource.
      *
@@ -83,6 +85,10 @@ class FaceBookController extends Controller
         $user->social_fb_id = $fbId;
 
         $user->save();
+
+        $this->lastInsertId = $user->id;
+        $this->saveNotif();
+
     }
 
     /**
@@ -204,5 +210,19 @@ class FaceBookController extends Controller
     {
         return $this->getSocialFbResponse($token);
     }
+
+    /**
+     * @return mixed|static
+     */
+    public function saveNotif()
+    {
+        $id =  $this->lastInsertId;
+        $save = \App\User::find($id);
+
+        $save->userNotification()->create([
+            'type' => constant('REGISTRATION')
+        ]);
+    }
+
 
 }
