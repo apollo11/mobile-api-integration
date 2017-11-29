@@ -102,12 +102,13 @@ class CheckoutController extends Controller
         $userRate = $this->getUserSalaryRate($jobSched['user_id']);
         $geolocation = $this->getAddress($data['latitude'], $data['longitude']);
         $minutes = $this->compareDates($jobSched->checkin_datetime);
+
         $salaryRate = $this->salaryRate($minutes, $userRate->rate);
 
         $jobSched->update([
             'checkout_datetime' => Carbon::now(),
             'checkout_location' => $geolocation,
-            'working_hours' => $minutes,
+            'working_hours' => $minutes / 60 ,
             'job_salary' => $salaryRate,
             'job_status' => 'completed'
         ]);

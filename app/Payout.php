@@ -38,7 +38,6 @@ class Payout extends Model
             ->when(!empty($param['payment_status']), function ($query) use ($param) {
                 $query->where('job_schedules.payment_status', $param['payment_status']);
             })
-
             ->where('job_schedules.job_status', 'approved')
             ->where('users.role_id', 2)
             ->get();
