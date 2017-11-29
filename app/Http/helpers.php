@@ -16,4 +16,21 @@ function getDatesByRange($startdate,$stopdate){
     return $daterange_arr;
 }
 
+function jobschedule_status_display($status){
+    switch($status){
+        case 'reject_request':
+            return 'Rejected request';
+        break;
+        case 'auto_completed':
+            return 'Auto completed';
+        break;
+        case 'auto_cancelled':
+            return 'Auto cancelled';
+        break;
+        default:
+            return ucfirst($status);
+        break;
+    }
+}
+
 ?>

@@ -908,7 +908,70 @@ class JobController extends Controller
         }
     }
 
-    public function update_schedule(){
+    public function update_schedule(Request $request){
+        $id = $request->input('id');
+        $status = $request->input('status');
 
+        $response = array('success'=>false,'data'=>array());
+        if(empty($id) || empty($status)){
+           $response['data'] = array('error'=>'Invalid data');
+        }else{
+           $jobdetail = \App\JobSchedule::find($id);
+            if(empty($jobdetail)){
+                $response['data'] = array('error'=>'Invalid data');
+            }else{
+                $job_status = '';
+                switch($status){
+                    case 'accept':
+                        if($jobdetail->schedule_status=='pending' || $jobdetail->job_status=='reject_request'){
+                            $job_status = 'accepted';
+                        }else{
+                            $error = 'Invalid data';
+                        }
+                        break;
+                    case 'reject_request':
+                        if($jobdetail->job_status=='pending' || $jobdetail->job_status=='accepted'){
+                            $job_status = 'reject_request';
+                        }else{
+                            $error = 'Invalid data';
+                        }
+                        break;
+                    case 'cancel':
+                        if($jobdetail->job_status=='pending' || $jobdetail->job_status=='rejected_request' || $jobdetail->job_status=='accepted'){
+                            $job_status = 'cancelled';
+                        }else{
+                            $error = 'Invalid data';
+                        }
+                        break;
+                    case 'approve':
+                        if($jobdetail->job_status=='completed'){
+                            $job_status = 'approved';
+                            $jobdetail->payment_status = 'pending';
+                        }else{
+                            $error = 'Invalid data';
+                        }
+                        break;
+                    case 'reject':
+                        if($jobdetail->job_status=='completed'){
+                            $job_status = 'rejected';
+                        }else{
+                            $error = 'Invalid data';
+                        }
+                        break;
+                    default:
+                        $error = "Invalid data";
+                        break;
+                }
+                if(!empty($error)){
+                    $response['data'] = array('error'=>'Invalid data');
+                }else{
+                    $jobdetail->job_status = $job_status;
+                    $jobdetail->save();
+                    $response['success'] = true;
+                    $response['data'] = array('msg'=>'Updated successfully.');
+                }
+            }
+        }
+        return response()->json($response);
     }
 }

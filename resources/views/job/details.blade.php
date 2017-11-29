@@ -42,20 +42,24 @@
                                 <span class="caption-subject bold uppercase">Job Details</span>
                             </div>
                             <div class="actions">
-                                <a class="btn sbold green"
-                                   href="{{ route('job.edit',['id' => $details->id ])  }}">
-                                    Update</a>
+                                <a class="btn sbold green" href="{{ route('job.edit',['id' => $details->id ])  }}">Update</a>
+
                                 @if($role_id == 0)
-                                    <a class="btn sbold green" href="{{ route('job.multiple',['id' => $details->id, 'param' => 'Approve'])  }}"
-                                       onclick="event.preventDefault(); document.getElementById('{{'approve-'.$details->id }}').submit();">
-                                        Approve</a>
-                                    <a class="btn sbold green"
-                                       href="{{ route('job.multiple',['id' => $details->id, 'param' => 'Reject']) }}"
-                                       onclick="event.preventDefault();
-                                               document.getElementById('{{'reject-'.$details->id }}').submit();">
-                                        Reject
-                                    </a>
-                                    <a class="btn sbold green" href="{{ route('job.getJobsSeekers',['id' => $details->id]) }}" class="btn">Assign Job</a>
+                                    @if( ($details->status=='pending' || $details->status =='inactive') && ($details->start_date >= \Carbon\Carbon::now()) ) 
+                                        <a class="btn sbold green" href="{{ route('job.multiple',['id' => $details->id, 'param' => 'Approve'])  }}"
+                                           onclick="event.preventDefault(); document.getElementById('{{'approve-'.$details->id }}').submit();">
+                                            Approve</a>
+                                    @endif
+                                    @if ($details->status=='pending' || $details->status =='active')
+                                        <a class="btn sbold green" href="{{ route('job.multiple',['id' => $details->id, 'param' => 'Reject']) }}" 
+                                           onclick="event.preventDefault();
+                                                   document.getElementById('{{'reject-'.$details->id }}').submit();">
+                                            Reject
+                                        </a>
+                                    @endif
+                                    @if ($details->status =='active')
+                                        <a class="btn sbold green" href="{{ route('job.getJobsSeekers',['id' => $details->id]) }}" class="btn">Assign Job</a>
+                                    @endif
                                 @endif
                                 <input class="btn sbold green" name="multiple" onclick="window.print()" value="Print" type="submit"/>
                                 <?php
@@ -225,6 +229,7 @@
             </div>
             <div class="row">
                 <div class="col-md-12">
+                    <div id="update_schedule_status"></div>
                     <div class="portlet light bordered related-jobs">
                         <div class="portlet-title">
                             <div class="caption font-dark">
@@ -261,6 +266,8 @@
                                 </div>
                             </div>
                             
+
+                            
                             <table class="table table-striped table-bordered table-hover table-checkable order-column"
                                    id="employee-table">
                                 <thead>
@@ -289,6 +296,7 @@
                                 <tbody>
                                 @if(count($related) > 0)
                                     @foreach($related as $value)
+                                    <?php //print_r($value);?>
                                     <tr class="odd gradeX">
                                         <td>
                                             <label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">
@@ -307,7 +315,7 @@
                                         <td>{{ $value->email }}</td>
                                         <td>{{ $value->rate }}</td>
                                         <td>{{ $value->job_rate }}</td>
-                                        <td>@if($value->schedule_status == 'cancelled'){{ ucfirst($value->schedule_status) }} @else {{ ucfirst($value->schedule_status) }} @endif</td>
+                                        <td>{{ jobschedule_status_display($value->schedule_status) }}</td>
                                         <td>
                                             <div class="btn-group">
                                                 <button class="btn btn-xs green dropdown-toggle" type="button"
@@ -315,35 +323,35 @@
                                                     <i class="fa fa-angle-down"></i>
                                                 </button>
                                                 <ul class="dropdown-menu" role="menu">
-                                                    <!-- <li>
-                                                        <a href="{{ route('employee.destroy-one',['id' => $value->userid]) }}"
-                                                           onclick="event.preventDefault();
-                                                                   document.getElementById('{{'destroy-'.$value->userid }}').submit();">
-                                                            <i class="fa fa-trash"></i> Delete</a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="{{ route('employee.edit',['id' => $value->userid ])  }}">
-                                                            <i class="fa fa-edit"></i> Edit </a>
-                                                    </li> -->
-
                                                     @if($value->schedule_status=='pending' || $value->schedule_status=='reject_request')
                                                         <li>
-                                                            <a href="{{ route('job.update_schedule') }}" data-id="{{$value->id}}" data-status="accept">
+                                                            <a href="{{ route('job.update_schedule') }}" class="update-schedule" data-id="{{$value->schedule_id}}" data-status="accept">
                                                             <i class="fa fa-check"></i> Accept Request</a>
                                                         </li>
                                                     @endif
 
                                                     @if($value->schedule_status=='pending' || $value->schedule_status=='accepted')
                                                         <li>
-                                                            <a href="{{ route('job.update_schedule') }}" data-id="{{$value->id}}" data-status="reject_request">
+                                                            <a href="{{ route('job.update_schedule') }}" class="update-schedule" data-id="{{$value->schedule_id}}" data-status="reject_request">
                                                             <i class="fa fa-times"></i> Reject Request</a>
                                                         </li>
                                                     @endif
 
                                                     @if($value->schedule_status=='pending' || $value->schedule_status=='rejected_request' || $value->schedule_status=='accepted')
                                                         <li>
-                                                            <a href="{{ route('job.update_schedule') }}" data-id="{{$value->id}}" data-status="reject_request">
+                                                            <a href="{{ route('job.update_schedule') }}" class="update-schedule" data-id="{{$value->schedule_id}}" data-status="cancel">
                                                             <i class="fa fa-times"></i> Cancel Request</a>
+                                                        </li>
+                                                    @endif
+
+                                                    @if($value->schedule_status=='completed')
+                                                        <li>
+                                                            <a href="{{ route('job.update_schedule') }}" class="update-schedule" data-id="{{$value->schedule_id}}" data-status="approve">
+                                                            <i class="fa fa-check"></i> Approve</a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="{{ route('job.update_schedule') }}" class="update-schedule" data-id="{{$value->schedule_id}}" data-status="reject">
+                                                            <i class="fa fa-times"></i> Reject</a>
                                                         </li>
                                                     @endif
 
@@ -398,7 +406,6 @@
                 { "extend": 'excel', "text":'Export',"className": 'btn sbold red' }
             ],
             autoFill: true,
-    //                "scrollCollapse": true,
             "scrollY":"500",
             "scrollX" : true,
             "sScrollXInner": "100%",
@@ -426,6 +433,39 @@
             rate_submitJobRating(url);
             
             e.preventDefault(); 
+        });
+
+        $('.update-schedule').click(function(e){
+            var id = $(this).data('id');
+            var status = $(this).data('status');
+            var url = $(this).attr('href');
+
+            $.ajax({
+                  url: url,
+                  method: 'POST',
+                  dataType: 'json',
+                  data : {
+                    'id' : id,
+                    'status' : status,
+                    "_token": "{{ csrf_token() }}",
+                  },
+                  success: function(data){
+                    var detail = data.data;
+                    if(data.success==true){
+                        /*$('#update_schedule_status').html('').removeClass('alert alert-danger');
+                        $('#update_schedule_status').html(detail.msg).addClass('alert alert-success');
+                        setTimeout(function(){
+                            window.location.reload(true);
+                        },3000);*/
+                        window.location.reload(true);
+                    }else{
+                        $('#update_schedule_status').html('').removeClass('alert-success');
+                        $('#update_schedule_status').addClass('alert alert-danger').html(detail.error);
+                    }
+                  }
+            });
+            e.preventDefault();
+            return false;
         });
     });
 </script>
