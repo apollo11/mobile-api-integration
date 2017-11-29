@@ -558,9 +558,10 @@ class NotificationController extends Controller
             $data["type"] = "job_reminder";
             $data["job_id"] = $key;
 
+            $this->save24HrNotif($resultArray[$key]->user_id, $key);
+            
             if ($this->pushNotif($data) == "200") {
                 //Success
-                $this->save24HrNotif($resultArray[$key]->user_id, $key);
             } else {
                 //Failed
             }    
@@ -587,9 +588,10 @@ class NotificationController extends Controller
             $data["badge"] = 1;
             $data["type"] = "birthday";
 
+            $this->saveBirthdayNotif($deviceTokenResult[$i]->user_id);
+
             if ($this->pushNotif($data) == "200") {
                 //Success
-                $this->saveBirthdayNotif($deviceTokenResult[$i]->user_id);
             } else {
                 //Failed
             }

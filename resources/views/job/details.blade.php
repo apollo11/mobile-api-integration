@@ -219,7 +219,7 @@
                                 </div>
 
                                 <div style="display: inline-block; vertical-align: top;">
-                                    <button type="button" class="btn btn-info" onclick="filter()">Apply</button>
+                                    <button type="button" class="btn btn-info" onclick="filter($('#min').val(), $('#max').val())">Apply</button>
                                 </div>
                             </div>
                             
@@ -329,6 +329,9 @@
 <script src="{{ asset('assets/layouts/layout/scripts/rate_job.js') }}" type="text/javascript"></script>
 <script>
     $(document).ready(function() {
+
+        localStorage.setItem('viewtype', 'job-details');
+
         $('#employee-table').DataTable({
             dom: 'Bfrtip',
             buttons: [

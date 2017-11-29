@@ -25,7 +25,7 @@
             @if($errors->has('multicheck'))
             <div class="alert alert-danger alert-dismissable">
                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
-                <strong>Error!</strong> Something went wrong. Please check.
+                <strong>Error!</strong> Something went wrong. Please select data before making changes.
             </div>
             @endif
 
@@ -74,7 +74,7 @@
                                     </div>
 
                                     <div style="display: inline-block; vertical-align: top;">
-                                        <button type="button" class="btn btn-info" onclick="filter()">Apply</button>
+                                        <button type="button" class="btn btn-info" onclick="filter($('#min').val(), $('#max').val())">Apply</button>
                                     </div>
                                 </div>
 
@@ -221,6 +221,14 @@
             </form>
         </div>
     </div>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        // console.log('1');
+        localStorage.setItem('viewtype', 'employee-list');
+        // console.log(localStorage.getItem('viewType'));
+    });
+</script>
 @endsection
 
 @include('layouts.employee-datatables-include',['title'=>'Employees'])

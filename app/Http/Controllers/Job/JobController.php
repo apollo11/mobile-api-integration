@@ -327,7 +327,6 @@ class JobController extends Controller
         $data['title'] = "New Jobs Assigned to You";
         $jobDetails = Job::where('id', $id)->get();
         
-
         if(count($request->input("employees-list")) > 0) {    
 
             $user_ids = $request->input("employees-list");
@@ -347,11 +346,14 @@ class JobController extends Controller
                 $data["type"] = $this->assignedJob;
                 $data["job_id"] = $id;
 
+                $this->saveAssignedNotif($deviceTokenResult[$i]->user_id, $id);
+
+                return redirect(route("job.lists"));
+
                 if ($this->pushNotif($data) == "200") {
-                    $this->saveAssignedNotif($deviceTokenResult[$i]->user_id, $id);
-                    return redirect(route("job.lists",["success"]));
+                    // return redirect(route("job.lists",["success"]));
                 } else {
-                    return redirect(route("job.lists",["failed"]));
+                    // return redirect(route("job.lists",["failed"]));
                 }
             }    
         }

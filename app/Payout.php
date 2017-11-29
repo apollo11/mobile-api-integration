@@ -30,7 +30,7 @@ class Payout extends Model
                 , 'users.nric_no'
                 , 'users.contact_no'
                 , 'users.employee_points'
-                , 'employer.company_name'
+                , 'employer.company_name as company_name' 
                 , 'employer.business_manager'
                 , 'job_schedules.payment_status'
             )
