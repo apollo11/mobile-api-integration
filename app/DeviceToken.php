@@ -45,8 +45,8 @@ class DeviceToken extends Model
     public function getDeviceTokenByUserId($userId)
     {
         $token = DB::table('user_push_notification_tokens')
-            ->select('id', 'device_token', 'user_id')
-            ->where('user_id', $userId)
+            ->select('device_token')
+            ->whereIn('user_id', $userId)
             ->get();
 
         return $token;

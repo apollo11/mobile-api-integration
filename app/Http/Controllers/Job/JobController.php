@@ -340,53 +340,23 @@ class JobController extends Controller
      */
     public function sendNotification(Request $request, $id)
     {
-        $data['title'] = "New Jobs Assigned to You";
-        $jobDetails = Job::where('id', $id)->get();
-        
-       if(count($request->input("employees-list")) > 0) {    
+        $user_ids = $request->input("employees-list");
+        $jobDetails = \App\Job::where('id', $id)->first();
+        $token = $this->parsingToken($user_ids);
 
-           $user_ids = $request->input("employees-list");
+        if (count($request->input("employees-list")) > 0) {
+
             $this->insertUpdateAssignJob($user_ids, $id);
+            $this->assignJobNotification($jobDetails, $token);
 
-           $deviceTokenResult = DeviceToken::whereIn('user_id', $user_ids)->get();
-        
-           for ($i=0; $i < count($deviceTokenResult); $i++) {
-                $deviceTokens = array();
-                array_push($deviceTokens, $deviceTokenResult[$i]->device_token);
-                
-               $message = "Dear Sir/Madam, You have been assigned a job successfully!  Below is the job information: " . "\n" . "Job Name: " . $jobDetails[0]->job_title . "\n" . " Job Date and Time: " . $jobDetails[0]->job_date . "\n" . " Job Location: " . $jobDetails[0]->location . "\n" . " Hourly Rate: " . $jobDetails[0]->rate . "\n" .  " Contact Person: " . $jobDetails[0]->contact_person . "\n" . " Contact No.: " . $jobDetails[0]->contact_no;
-
-               $data["body"] = $message;
-                $data["registration_ids"] = $deviceTokens;
-                $data["badge"] = 1;
-                $data["type"] = $this->assignedJob;
-                $data["job_id"] = $id;
-
-               $this->saveAssignedNotif($deviceTokenResult[$i]->user_id, $id);
-
-               return redirect(route("job.lists"));
-
-               if ($this->pushNotif($data) == "200") {
-                    // return redirect(route("job.lists",["success"]));
-                } else {
-                    // return redirect(route("job.lists",["failed"]));
-                }
-            }    
-       }
-        else
-        {
             return back();
-        }
-        
-   }
 
-    /**
-     * @param $data
-     * @return mixed
-     */
-    public function parsingToken($data)
-    {
-        return $data;
+        } else {
+
+            return back();
+
+        }
+
     }
 
     /**
