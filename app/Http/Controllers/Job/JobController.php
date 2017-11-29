@@ -333,34 +333,35 @@ class JobController extends Controller
      */
     public function sendNotification(Request $request, $id)
     {
-        $deviceTokenObj = new DeviceToken();
         $user_ids = $request->input("employees-list");
         $jobDetails = \App\Job::where('id', $id)->first();
-
-        $tokenOutput = $deviceTokenObj->getDeviceTokenByUserId($user_ids);
-
-        foreach ($tokenOutput as $value) {
-            $sms[] = $this->assignJobNotification($jobDetails, $value->device_token);
-        }
+        $token = $this->parsingToken($user_ids);
 
         if (count($request->input("employees-list")) > 0) {
+
             $this->insertUpdateAssignJob($user_ids, $id);
-            $this->parsingToken($sms);
+            $this->assignJobNotification($jobDetails, $token);
 
-            return back();
-
-        } else {
-            return back();
         }
+
+        return back();
     }
 
     /**
-     * @param $data
-     * @return mixed
+     * @param $id
+     * @return array
      */
-    public function parsingToken($data)
+    public function parsingToken($id)
     {
-        return $data;
+        $device = array();
+        $token = new DeviceToken();
+        $tokenValue = $token->getDeviceTokenByUserId($id);
+        foreach ($tokenValue as $value) {
+            $device[] = $value->device_token;
+        }
+
+        return $device;
+
     }
 
     /**
