@@ -13,7 +13,7 @@ use App\Mail\EmployeeRegistration;
 use App\AdditionalInfo;
 use App\JobSchedule;
 use App\JobRatings;
-
+use App\Http\Traits\NotificationTrait;
 use App\Http\Traits\OauthTrait;
 use App\Http\Traits\HttpResponse;
 
@@ -24,8 +24,12 @@ use App\Http\Controllers\Controller;
 
 class EmployeeController extends Controller
 {
+
     use OauthTrait;
     use HttpResponse;
+    use NotificationTrait;
+
+    protected $lastInsertId;
 
     /**
      * Display a listing of the resource.
@@ -35,9 +39,9 @@ class EmployeeController extends Controller
     public function index(Request $request)
     {
         $param = [
-          'checkin' => $request->get('checkin'),
-          'checkout' => $request->get('checkout'),
-          'job_status' => $request->get('status'),
+            'checkin' => $request->get('checkin'),
+            'checkout' => $request->get('checkout'),
+            'job_status' => $request->get('status'),
         ];
 
         $employee = new Employee();
@@ -64,7 +68,7 @@ class EmployeeController extends Controller
         }
         $dataUndefined = !empty($data) ? $data : [];
 
-        return view('employee.lists', ['employee' => $dataUndefined, 'count' => count($dataUndefined), 'logged_in_role'=>Auth::user()->role ]);
+        return view('employee.lists', ['employee' => $dataUndefined, 'count' => count($dataUndefined), 'logged_in_role' => Auth::user()->role]);
     }
 
     /**
@@ -96,8 +100,10 @@ class EmployeeController extends Controller
         } else {
 
             $this->save($data);
+            $this->lastInsertId;
+            $this->saveNotif();
 
-            return $this->successResponse($data);
+           return $this->successResponse($data);
 
         }
 
@@ -120,6 +126,7 @@ class EmployeeController extends Controller
         } else {
             $this->save($data);
             $this->sendEmailtoEmployee($data);
+            $this->saveNotif();
 
             return redirect('employee/lists');
 
@@ -131,11 +138,11 @@ class EmployeeController extends Controller
      */
     public function sendEmailToEmployee(array $data)
     {
-        try{
-            Mail::to($data['email'])->send( new EmployeeRegistration($data));
+        try {
+            Mail::to($data['email'])->send(new EmployeeRegistration($data));
         } catch (Exception $e) {
 
-        } 
+        }
     }
 
     /**
@@ -157,6 +164,8 @@ class EmployeeController extends Controller
         $user->school = $school;
 
         $user->save();
+
+        $this->lastInsertId = $user->id;
     }
 
     public function validateUser(Request $request)
@@ -202,7 +211,9 @@ class EmployeeController extends Controller
 
 
         $details = $userDetails->userInfo($id);
-        if(empty($details)){abort(404);}
+        if (empty($details)) {
+            abort(404);
+        }
 
         $contactMethod = [
             'sms'
@@ -241,7 +252,7 @@ class EmployeeController extends Controller
         $data = $request->all();
         $validator = $this->updateRules($data);
 
-        if($validator->fails()) {
+        if ($validator->fails()) {
 
             return back()
                 ->withErrors($validator)
@@ -249,9 +260,9 @@ class EmployeeController extends Controller
 
         } else {
 
-           $this->updateBasicAdditionalInfo($data, $id);
+            $this->updateBasicAdditionalInfo($data, $id);
 
-            return redirect('employee/details/'.$id);
+            return redirect('employee/details/' . $id);
         }
     }
 
@@ -269,7 +280,7 @@ class EmployeeController extends Controller
 
         $user = \App\User::find($id);
 
-        if(is_null($additonalInfo)) {
+        if (is_null($additonalInfo)) {
 
             $user->additionalInfo()->updateOrCreate([
                 'gender' => $data['gender'],
@@ -570,10 +581,12 @@ class EmployeeController extends Controller
         $userDetails = new AdditionalInfo();
 
         $details = $userDetails->userInfo($id);
-        if(empty($details)){abort(404);}
+        if (empty($details)) {
+            abort(404);
+        }
 
         $jobInfo = $this->availableJobs($id);
-        
+
         $applied = $this->appliedJobs($id);
         $completed = $this->completedJobs($id);
 
@@ -601,7 +614,7 @@ class EmployeeController extends Controller
         }
 
         $job = new JobSchedule();
-        $jobInfo = $job->getAvailJobsByUser($id,$employerid);
+        $jobInfo = $job->getAvailJobsByUser($id, $employerid);
 
         return $jobInfo;
 
@@ -749,21 +762,21 @@ class EmployeeController extends Controller
             'profile_image' => 'required|file',
         ]);
 
-        if($validator->fails()) {
+        if ($validator->fails()) {
 
-            return redirect(route('employee.details',['id' => $id]))
+            return redirect(route('employee.details', ['id' => $id]))
                 ->withErrors($validator)
                 ->withInput();
 
         } else {
 
-           $profileImg = $this->uploadingFile($request);
+            $profileImg = $this->uploadingFile($request);
 
 
-           $user->profile_image_path = $profileImg['profile_image'];
-           $user->save();
+            $user->profile_image_path = $profileImg['profile_image'];
+            $user->save();
 
-            return redirect(route('employee.details',['id' => $id]));
+            return redirect(route('employee.details', ['id' => $id]));
         }
 
     }
@@ -794,30 +807,31 @@ class EmployeeController extends Controller
     }
 
 
-    function jobdetail($user_id,$job_schedule_id){
-        $response = array('success'=>false,'data'=>array());
-        if(empty($user_id) || empty($job_schedule_id)){
-           $response['data'] = array('error'=>'Invalid data');
-        }else{
+    function jobdetail($user_id, $job_schedule_id)
+    {
+        $response = array('success' => false, 'data' => array());
+        if (empty($user_id) || empty($job_schedule_id)) {
+            $response['data'] = array('error' => 'Invalid data');
+        } else {
             $JobSchedule = new JobSchedule();
-            $jobdetail = $JobSchedule->getJobByUser($user_id,$job_schedule_id);
-            if(empty($jobdetail)){
-                $response['data'] = array('error'=>'Invalid data');
-            }else{
-                if($jobdetail->rating_point!=null || !empty($jobdetail->rating_point) ){
+            $jobdetail = $JobSchedule->getJobByUser($user_id, $job_schedule_id);
+            if (empty($jobdetail)) {
+                $response['data'] = array('error' => 'Invalid data');
+            } else {
+                if ($jobdetail->rating_point != null || !empty($jobdetail->rating_point)) {
                     $response['data'] = array(
                         // 'error'=>"You cannot rate the same job again.",
-                        'jobdetail'=>$jobdetail
+                        'jobdetail' => $jobdetail
                     );
-                }else{
+                } else {
                     $total_working_hours = '-';
-                    if(
-                        !empty($jobdetail->checkin_datetime) && $jobdetail->checkin_datetime !=null && 
-                        !empty($jobdetail->checkout_datetime) && $jobdetail->checkout_datetime !=null 
-                    ){
-                        $d1 = new \DateTime($jobdetail->checkin_datetime); 
+                    if (
+                        !empty($jobdetail->checkin_datetime) && $jobdetail->checkin_datetime != null &&
+                        !empty($jobdetail->checkout_datetime) && $jobdetail->checkout_datetime != null
+                    ) {
+                        $d1 = new \DateTime($jobdetail->checkin_datetime);
                         $d2 = new \DateTime($jobdetail->checkout_datetime);
-                        $interval= $d1->diff($d2);
+                        $interval = $d1->diff($d2);
                         $total_working_hours = $interval->format('%hhrs %imins');
                     }
                     $jobdetail->total_working_hours = $total_working_hours;
@@ -829,27 +843,28 @@ class EmployeeController extends Controller
         return response()->json($response);
     }
 
-    function rate_job($user_id,$job_schedule_id,Request $request){
-         $response = array('success'=>false,'data'=>array());
-        if(empty($user_id) || empty($job_schedule_id)){
-           $response['data'] = array('error'=>'Invalid data');
-        }else{
+    function rate_job($user_id, $job_schedule_id, Request $request)
+    {
+        $response = array('success' => false, 'data' => array());
+        if (empty($user_id) || empty($job_schedule_id)) {
+            $response['data'] = array('error' => 'Invalid data');
+        } else {
             $JobSchedule = new JobSchedule();
-            $jobdetail = $JobSchedule->getJobByUser($user_id,$job_schedule_id);
-            if(empty($jobdetail)){
-                $response['data'] = array('error'=>'Invalid data');
-            }else{  
-                if($jobdetail->rating_point!=null || !empty($jobdetail->rating_point) ){
+            $jobdetail = $JobSchedule->getJobByUser($user_id, $job_schedule_id);
+            if (empty($jobdetail)) {
+                $response['data'] = array('error' => 'Invalid data');
+            } else {
+                if ($jobdetail->rating_point != null || !empty($jobdetail->rating_point)) {
                     // $response['data'] = array('error'=>"You cannot rate the same job again.");
-                }else{
+                } else {
                     $data = $request->all();
                     $validator = $this->ratejobRules($data);
                     if ($validator->fails()) {
                         $errors = $validator->errors()->all();
                         $errormsg = '';
-                        $errormsg = implode('<br>',$errors);
-                       
-                        $response['data'] = array('error'=>$errormsg);
+                        $errormsg = implode('<br>', $errors);
+
+                        $response['data'] = array('error' => $errormsg);
                     } else {
                         $job_ratings = new JobRatings();
                         $job_ratings->employee_id = $user_id;
@@ -862,7 +877,7 @@ class EmployeeController extends Controller
                         $job_ratings->save();
 
                         $response['success'] = true;
-                        $response['data'] = array('msg'=>'Updated successfully.');
+                        $response['data'] = array('msg' => 'Updated successfully.');
                     }
                 }
             }
@@ -870,6 +885,10 @@ class EmployeeController extends Controller
         return response()->json($response);
     }
 
+    /**
+     * @param array $data
+     * @return mixed
+     */
     function ratejobRules(array $data)
     {
         $validations = [
@@ -877,7 +896,40 @@ class EmployeeController extends Controller
         ];
         $messages = ['required' => 'Please select a rating '];
 
-        $validator = Validator::make($data, $validations,$messages);
+        $validator = Validator::make($data, $validations, $messages);
         return $validator;
     }
+
+    /**
+     * @param Request $request
+     * @param $id
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
+    public function sendNotification()
+    {
+//        $id =  $this->lastInsertId;
+//        $findToken = \App\DeviceToken::where('user_id',$id )->get();
+//        if(!$findToken)
+//        $user = \App\User::where('id', $id)->first();
+//        $token = $this->parsingToken($id);
+//        return $token;
+//            $this->saveNotif($id);
+//            $this->registrationNotification($user, $token);
+
+    }
+
+    /**
+     * @return mixed|static
+     */
+    public function saveNotif()
+    {
+        $id =  $this->lastInsertId;
+        $save = \App\User::find($id);
+
+        $save->userNotification()->create([
+            'type' => constant('REGISTRATION')
+        ]);
+    }
+
 }
+
