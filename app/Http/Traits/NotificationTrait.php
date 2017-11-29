@@ -50,7 +50,7 @@ trait NotificationTrait
     }
 
     /**
-     * @param $jobDetails
+     * @param $user
      * @param $token
      * @return \Illuminate\Http\JsonResponse|int
      */
@@ -67,10 +67,36 @@ trait NotificationTrait
 
         return $this->pushNotif($data);
 
+    }
+
+    /**
+     * @param $token
+     * @return \Illuminate\Http\JsonResponse|int
+     */
+    public function updateProfileNotif($token)
+    {
+
+        $data['title'] = "Update your profile!";
+        $data["body"] = "Please update your profile details on your profile page.";
+        $data["registration_ids"] = $token;
+        $data["badge"] = 1;
+        $data["type"] = constant('PROFILE');
+
+        return  $this->pushNotif($data);
 
     }
 
+    public function interviewApprovedNotif($token)
+    {
+        $data['title'] = "Your interview has been approved by YY Part-time Jobs!";
+        $data["body"] = "Congratulations! You have been approved by YY part-time jobs admin. Now you can start applying for your interested jobs!.";
+        $data["registration_ids"] = $token;
+        $data["badge"] = 1;
+        $data["type"] = constant('INTERVIEW');
 
+        return  $this->pushNotif($data);
+
+    }
 
 
 }
