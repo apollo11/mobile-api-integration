@@ -309,9 +309,9 @@ class History extends Model
         $count = DB::table('users')
             ->join('job_schedules', 'job_schedules.user_id', '=', 'users.id')
             ->join('jobs', 'jobs.id', '=', 'job_schedules.job_id')
-            ->where('job_schedules.job_status', '=', 'approved')
+            ->where('job_schedules.payment_status', 'processed')
             ->where('users.id', '=', $userid)
-            ->sum('jobs.rate');
+            ->sum('job_schedules.job_salary');
 
         return $count;
     }
