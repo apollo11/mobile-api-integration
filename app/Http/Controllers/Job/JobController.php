@@ -60,25 +60,26 @@ class JobController extends Controller
     {
         $role = Auth::user()->role;
         $roleId = Auth::user()->role_id;
-
+        $param = [];
+        $status = $request->get('status');
 
         if ($role == 'employer') {
-            $userid = Auth::user()->id;
-        } else {
-            $userid = '';
+            $param['userid'] = Auth::user()->id;
         }
 
-        $param = [
-            'status' => $request->get('status'),
-            'userid' => $userid
-        ];
-
-        $jobsLists = $this->jobLists($param);
+        if($status=='unassigned'){
+            $param['unassigned'] = true;
+            $param['status'] = 'active';
+        }else{
+            $param['status'] = $status;
+        }
+            $jobsLists = $this->jobLists($param);
 
         return view('job.lists', [
             'job' => $jobsLists
             , 'role' => $role
             , 'role_id' => $roleId
+            , 'status' => $status
             , 'notification_status' => $notification_status]);
     }
 

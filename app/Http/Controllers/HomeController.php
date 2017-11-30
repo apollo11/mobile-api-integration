@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Employer;
 use App\Job;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
@@ -25,17 +26,23 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $param = [
-            'jobRequest' => $this->countJobRequest(),
-            'inactiveJob' => $this->countInactiveJob(),
-            'unassigned' => $this->countUnassignedJob(),
-            'cancelled' => $this->countCancelledJobs(),
-            'registeredEmployer' => $this->countEmployer(),
-            'checkout' => $this->checkOut(),
-            'checkin' => $this->checkIn(),
-            'approved' => $this->approved(),
-        ];
+        $param = [];
+        $user_role_id = Auth::user()->role_id;
+        $user_id = '';
 
+        if($user_role_id==1 || $user_role_id==0){
+            if($user_role_id==1){$user_id = Auth::user()->id;}
+            $param = [
+                'jobRequest' => $this->countJobRequest($user_id),
+                'approved' => $this->approved($user_id),
+                // 'inactiveJob' => $this->countInactiveJob($user_id),
+                'unassigned' => $this->countUnassignedJob($user_id),
+                'cancelled' => $this->countCancelledJobs(),
+                'registeredEmployer' => $this->countEmployer(),
+                'checkout' => $this->checkOut(),
+                'checkin' => $this->checkIn(),
+            ];
+        }
         return view('home', $param);
     }
 
@@ -43,10 +50,10 @@ class HomeController extends Controller
     /**
      * @return mixed
      */
-    public function countJobRequest()
+    public function countJobRequest($user_id)
     {
         $job = new Job();
-        $count = $job->countJobRequest();
+        $count = $job->countJobRequest($user_id);
 
         return $count;
     }
@@ -54,10 +61,10 @@ class HomeController extends Controller
     /**
      * @return mixed
      */
-    public function countInactiveJob()
+    public function countInactiveJob($user_id)
     {
         $job = new Job();
-        $count = $job->countInactiveJobs();
+        $count = $job->countInactiveJobs($user_id);
 
         return $count;
     }
@@ -65,10 +72,10 @@ class HomeController extends Controller
     /**
      * No. of Jobs unassigned
      */
-    public function countUnassignedJob()
+    public function countUnassignedJob($user_id)
     {
         $job = new Job();
-        $count = $job->unAssignedJobs();
+        $count = $job->unAssignedJobs($user_id);
 
         return $count;
     }
@@ -135,10 +142,10 @@ class HomeController extends Controller
     /**
      * Count approved Job
      */
-    public function approved()
+    public function approved($user_id)
     {
         $job = new Job();
-        $count = $job->approvedJob();
+        $count = $job->approvedJob($user_id);
 
         return $count;
     }

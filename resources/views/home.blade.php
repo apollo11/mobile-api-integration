@@ -22,7 +22,7 @@
             <!-- BEGIN DASHBOARD STATS 1-->
             <div class="row">
                 <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                    <a href="{{ route('job.lists') }}" class="dashboard-stat dashboard-stat-v2 blue" href="#">
+                    <a href="{{ route('job.lists') }}?status=pending" class="dashboard-stat dashboard-stat-v2 blue" href="#">
                         <div class="visual">
                             <i class="fa fa-comments"></i>
                         </div>
@@ -48,7 +48,7 @@
                     </a>
                 </div>
                 <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                    <a href="{{ route('assign.lists') }}" class="dashboard-stat dashboard-stat-v2 green" href="#">
+                    <a href="{{ route('job.lists') }}?status=unassigned" class="dashboard-stat dashboard-stat-v2 green" href="#">
                         <div class="visual">
                             <i class="fa fa-comments"></i>
                         </div>

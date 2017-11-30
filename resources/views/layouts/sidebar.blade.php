@@ -15,17 +15,15 @@
                 <!-- END SIDEBAR TOGGLER BUTTON -->
             </li>
             <!-- DOC: To remove the search box from the sidebar you just need to completely remove the below "sidebar-search-wrapper" LI element -->
-            @if (Auth::user()->role_id == 0)
-                @can('dashboard-view')
-                    <li class="start {{{ ((Request::is('home') || Request::is('/')) ? ' active' : '') }}}">
-                        <a href="{{ route('home') }}">
-                            <i class="icon-home"></i>
-                            <span class="title">Dashboard</span>
-                            <span class="selected"></span>
-                        </a>
-                    </li>
-                @endcan
-            @endif
+            @can('dashboard-view')
+                <li class="start {{{ ((Request::is('home') || Request::is('/')) ? ' active' : '') }}}">
+                    <a href="{{ route('home') }}">
+                        <i class="icon-home"></i>
+                        <span class="title">Dashboard</span>
+                        <span class="selected"></span>
+                    </a>
+                </li>
+            @endcan
             @can('employee-view')
                 <li {{{ ($current_route == 'employee.lists' ? 'class=active' : '') }}}>
                     <a href="{{ route('employee.lists') }}">
@@ -34,7 +32,8 @@
                     </a>
                 </li>
             @endcan
-             @if (Auth::user()->role_id == 0)
+             
+            @if (Auth::user()->role_id == 0)
                  @can('employer-view')
                     <li class="nav-item {{{ (  ($current_route == 'employer.new.list' || $current_route == 'employer.lists') ? ' active' : '') }}}">
                         <a href="javascript:;" class="nav-link nav-toggle ">

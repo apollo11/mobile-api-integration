@@ -31,6 +31,11 @@
                                 <div class="caption font-dark">
                                     <i class="icon-settings font-dark"></i>
                                     <span class="caption-subject bold uppercase">list of Jobs</span>
+                                    <div>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;<small><u><a href="{{route('job.lists')}}" class="underline">All Jobs</a></u></small>
+                                    | <small><u><a href="{{route('job.lists')}}?status=active" class="underline">Approved</a></u></small>
+                                    | <small><u><a href="{{route('job.lists')}}?status=unassigned" class="underline">Unassigned</a></u></small>
+                                    </div>
                                 </div>
                                 {{ csrf_field() }}
                                 <div class="actions">
@@ -117,7 +122,7 @@
                                         <td>{{ $value->geolocation_address  }}</td>
 
                                         @if($value->status == 'inactive')
-                                            <td><span class="label label-sm label-danger">{{ ($value->start_date < \Carbon\Carbon::now()) ? 'Expired' : ucfirst($value->status) }}</span></td>
+                                            <td><span class="label label-sm label-danger">{{ ( $value->start_date < \Carbon\Carbon::now() ) ? 'Expired' : ucfirst($value->status) }}</span></td>
 
                                         @elseif($value->status == 'active')
                                             <td>
@@ -157,14 +162,12 @@
                                                     </li>
                                                     @if ($role_id == 0)
                                                         @if ($value->status=='pending' || $value->status =='inactive')
-                                                            @if ($value->start_date >= \Carbon\Carbon::now()) 
                                                             <li>
                                                                 <a href="{{ route('job.multiple',['id' =>  $value->id, 'param' => 'Approve'])  }}"
                                                                    onclick="event.preventDefault();
                                                                            document.getElementById('{{'approve-'.$value->id }}').submit();">
                                                                     <i class="fa fa-check-square-o"></i> Approve</a>
                                                             </li>
-                                                            @endif
                                                         @endif
                                                         @if ($value->status=='pending' || $value->status =='active')
                                                         <li>
