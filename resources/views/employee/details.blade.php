@@ -183,7 +183,7 @@
                                                         @if($userDetails->points)
                                                         <tr>
                                                             <td><strong>Points</strong></td>
-                                                            <td> {{ $userDetails->points }}</td>
+                                                            <td> {{ $userDetails->employee_points }}</td>
                                                         </tr>
                                                         @endif
 

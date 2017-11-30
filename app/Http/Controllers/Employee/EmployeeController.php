@@ -329,16 +329,20 @@ class EmployeeController extends Controller
                 'points' => $data['points']
             ]);
 
-
+            $user->name = $data['name'];
+            $user->mobile_no = $data['mobile_no'];
+            $user->school = !empty($data['school']) ? $data['school'] : null;
+            $user->email = $data['email'];
+            $user->employee_points = $data['points'];
             $user->employee_status = isset($data['employee_status']) ? $data['employee_status'] : 'pending';
             $user->save();
         }
 
-        \App\User::where('id', $id)
+       /* \App\User::where('id', $id)
             ->update([
                 'name' => $data['name'],
                 'mobile_no' => $data['mobile_no']
-            ]);
+            ]);*/
 
     }
 

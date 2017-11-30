@@ -441,7 +441,12 @@ class JobSchedule extends Model
                     $join->on('assign.job_id', '=', 'jobs.id')
                         ->where('assign.user_id', '=', $userId);
                 })
-            ->select('jobs.id', 'jobs.job_date', 'jobs.end_date', 'assign.is_assigned')
+            ->select('jobs.id', 
+                'jobs.job_date', 
+                'jobs.end_date', 
+                'assign.is_assigned',
+                'jobs.choices'
+            )
             ->where('jobs.id', $id)
             ->first();
 

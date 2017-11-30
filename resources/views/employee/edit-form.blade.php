@@ -205,7 +205,7 @@
                                         <label class="col-md-3 control-label">Points<span class="is-required">*</span></label>
                                         <div class="col-md-7">
                                             <input type="text" class="form-control" placeholder="Enter points"
-                                                   name="points" value="{{ old('points',$details->points) }}"/>
+                                                   name="points" value="{{ old('points',$details->employee_points) }}"/>
                                             @if ($errors->has('points'))
                                                 <span class="help-block">
                                                     {{ $errors->first('points') }}
