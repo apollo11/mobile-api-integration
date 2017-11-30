@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Employer;
 use App\Job;
+use App\Payout;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -45,7 +46,7 @@ class HomeController extends Controller
             if($user_role_id==1){
                 $user_id = Auth::user()->id;
             }else{
-                $param['pending_payout'] = 0;
+                $param['pending_payout'] = $this->countPendingPayout();
                 $param['registeredEmployer'] = $this->countEmployer();
             }
         }
@@ -96,7 +97,6 @@ class HomeController extends Controller
         $count = $job->cancelledJobs();
 
         return $count;
-
     }
 
     /**
@@ -108,19 +108,18 @@ class HomeController extends Controller
         $count = $job->registeredEmployersviaMobile();
 
         return $count;
-
     }
 
     /**
      * Count Newly registered employee
      */
-
+/*
     public function countNewlyRegEmployee()
     {
         $employer = new Employer();
 
         return view('layouts.sidebar',['newlyReg' => $employer->countRegMobile()]);
-    }
+    }*/
 
     /**
      * Count Check in
@@ -155,5 +154,10 @@ class HomeController extends Controller
         $count = $job->approvedJob($user_id);
 
         return $count;
+    }
+
+    public function countPendingPayout(){
+        $payout = new Payout();
+        return $payout->count_pendingpayout();
     }
 }

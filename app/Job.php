@@ -456,6 +456,7 @@ class Job extends Model
         $job = DB::table('users')
             ->join('job_schedules', 'users.id', '=', 'job_schedules.user_id')
             ->whereNotNull('job_schedules.checkin_datetime')
+            ->where(DB::raw('date(job_schedules.checkin_datetime)'),'=date(NOW())')
             ->where('users.role_id','=', 2)
             ->count();
 
@@ -470,6 +471,7 @@ class Job extends Model
         $job = DB::table('users')
             ->join('job_schedules', 'users.id', '=', 'job_schedules.user_id')
             ->whereNotNull('job_schedules.checkout_datetime')
+            ->where(DB::raw('date(job_schedules.checkin_datetime)'),'=date(NOW())')
             ->where('users.role_id','=', 2)
             ->count();
 
@@ -506,9 +508,8 @@ class Job extends Model
             ->groupBy('jobs.id')
             ->havingRaw(' (no_of_person - count(job_schedules.id) ) > 0 ')
             ->get();
-        if(!empty($job)){
-            return count($job);
-        }
+
+        if(!empty($job)){ return count($job); }
         return 0;
     }
 

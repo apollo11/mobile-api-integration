@@ -84,7 +84,8 @@
                 </div>
 
                 <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                    <a href="{{ route('employee.lists') }}?checkin=true" class="dashboard-stat dashboard-stat-v2 blue" href="#">
+                    <!-- <a href="{{ route('employee.lists') }}?checkin=true" class="dashboard-stat dashboard-stat-v2 blue" href="#"> -->
+                    <div class="dashboard-stat dashboard-stat-v2 blue">
                         <div class="visual">
                             <i class="fa fa-comments"></i>
                         </div>
@@ -94,10 +95,11 @@
                             </div>
                             <div class="desc"> Checked In jobseekers today</div>
                         </div>
-                    </a>
+                    </div>
                 </div>
                 <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                    <a href="{{ route('employee.lists') }}?checkout=true" class="dashboard-stat dashboard-stat-v2 red" >
+                    <!-- <a href="{{ route('employee.lists') }}?checkout=true" class="dashboard-stat dashboard-stat-v2 red" > -->
+                    <div class="dashboard-stat dashboard-stat-v2 red">
                         <div class="visual">
                             <i class="fa fa-comments"></i>
                         </div>
@@ -107,10 +109,11 @@
                             </div>
                             <div class="desc"> Checked out jobseekers today</div>
                         </div>
-                    </a>
+                    </div>
                 </div>
                 <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                    <a href="{{ route('employee.lists') }}?status=cancelled" class="dashboard-stat dashboard-stat-v2 green" href="#">
+                    <!-- <a href="{{ route('employee.lists') }}?status=cancelled" class="dashboard-stat dashboard-stat-v2 green"> -->
+                    <div class="dashboard-stat dashboard-stat-v2 green">
                         <div class="visual">
                             <i class="fa fa-comments"></i>
                         </div>
@@ -120,7 +123,7 @@
                             </div>
                             <div class="desc">No. of Cancellation by jobseeker</div>
                         </div>
-                    </a>
+                    </div>
                 </div>
                 <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                     @if (isset($registeredEmployer))
