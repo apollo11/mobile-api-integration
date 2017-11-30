@@ -16,9 +16,11 @@
 		columnDateIndex = 0;
 	    table = $('#employee-table').DataTable({
 	        dom: 'Bfrtip',
+            @if(!isset($exportbtn) || $exportbtn)
 	        buttons: [
 	            { "extend": 'excel', "text":'Export',"className": 'btn sbold red' @if(!empty($title)) ,"title" : "{{ $title }}" @endif  }
 	        ],
+            @endif
 	        autoFill: true,
 	
 	        "scrollY":"500",
