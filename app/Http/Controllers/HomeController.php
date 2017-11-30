@@ -29,20 +29,27 @@ class HomeController extends Controller
         $param = [];
         $user_role_id = Auth::user()->role_id;
         $user_id = '';
+       
 
         if($user_role_id==1 || $user_role_id==0){
-            if($user_role_id==1){$user_id = Auth::user()->id;}
-            $param = [
+             $param = [
                 'jobRequest' => $this->countJobRequest($user_id),
                 'approved' => $this->approved($user_id),
-                // 'inactiveJob' => $this->countInactiveJob($user_id),
                 'unassigned' => $this->countUnassignedJob($user_id),
+
                 'cancelled' => $this->countCancelledJobs(),
-                'registeredEmployer' => $this->countEmployer(),
                 'checkout' => $this->checkOut(),
-                'checkin' => $this->checkIn(),
+                'checkin' => $this->checkIn()
             ];
+
+            if($user_role_id==1){
+                $user_id = Auth::user()->id;
+            }else{
+                $param['pending_payout'] = 0;
+                $param['registeredEmployer'] = $this->countEmployer();
+            }
         }
+        $param['role_id']=$user_role_id;
         return view('home', $param);
     }
 
@@ -61,13 +68,13 @@ class HomeController extends Controller
     /**
      * @return mixed
      */
-    public function countInactiveJob($user_id)
+  /*  public function countInactiveJob($user_id)
     {
         $job = new Job();
         $count = $job->countInactiveJobs($user_id);
 
         return $count;
-    }
+    }*/
 
     /**
      * No. of Jobs unassigned

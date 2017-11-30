@@ -16,11 +16,12 @@
             </div>
             <!-- END PAGE BAR -->
             <!-- BEGIN PAGE TITLE-->
-            <h1 class="page-title"> Dashboard </h1>
+            <h1 class="page-title">  </h1>
             <!-- END PAGE TITLE-->
             <!-- END PAGE HEADER-->
             <!-- BEGIN DASHBOARD STATS 1-->
             <div class="row">
+            @if($role_id==0 || $role_id==1 )
                 <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                     <a href="{{ route('job.lists') }}?status=pending" class="dashboard-stat dashboard-stat-v2 blue" href="#">
                         <div class="visual">
@@ -60,18 +61,26 @@
                         </div>
                     </a>
                 </div>
+
                 <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                @if (isset($pending_payout))
                     <a class="dashboard-stat dashboard-stat-v2 purple" href="{{ route('payout.lists') }}?payment-status=pending">
                         <div class="visual">
                             <i class="fa fa-comments"></i>
                         </div>
                         <div class="details">
                             <div class="number">
-                                <span data-counter="counterup" data-value="0">0</span>
+                                <span data-counter="counterup" data-value="{{$pending_payout}}">{{$pending_payout}}</span>
                             </div>
                             <div class="desc">Pending Salary Transfers</div>
                         </div>
                     </a>
+                @else
+                    <div class="dashboard-stat dashboard-stat-v2 ">
+                        <div class="visual">&nbsp;</div>
+                        <div class="details">&nbsp;</div>
+                    </div>
+                @endif
                 </div>
 
                 <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
@@ -114,6 +123,7 @@
                     </a>
                 </div>
                 <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    @if (isset($registeredEmployer))
                     <a href="{{ route('employer.new.list') }}" class="dashboard-stat dashboard-stat-v2 purple" href="#">
                         <div class="visual">
                             <i class="fa fa-comments"></i>
@@ -125,7 +135,20 @@
                             <div class="desc">No. of Registered Employers on mobile</div>
                         </div>
                     </a>
+                    @else
+                        <div class="dashboard-stat dashboard-stat-v2 ">
+                            <div class="visual">&nbsp;</div>
+                            <div class="details">&nbsp;</div>
+                        </div>
+                    @endif
                 </div>
+            @else
+                <div class="col-md-12">
+                <blockquote>
+                    Welcome back! 
+                </blockquote>
+                </div>
+            @endif
             </div>
             <div class="clearfix"></div>
             <!-- END DASHBOARD STATS 1-->

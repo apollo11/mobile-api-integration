@@ -172,8 +172,8 @@ Route::group(['middleware' => ['auth']], function () {
 
 });
 
-Route::get('/', 'HomeController@index')->middleware('can:dashboard-view');
-Route::get('/home', 'HomeController@index')->name('home')->middleware('can:dashboard-view');
+Route::get('/', 'HomeController@index');
+Route::get('/home', 'HomeController@index')->name('home');
 
 /*content page for mobile app*/
 Route::get('/terms-conditions', 'WebContentController@index')->name('content');
