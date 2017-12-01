@@ -1,12 +1,12 @@
 @extends('layouts.app')
 @section('content')
     @foreach($jobInfo as $jobs)
-        <form id="destroy-{{ $jobs->jobid }}" action="{{ route('job.multiple',['id' => $jobs->jobid,'param' => 'Delete']) }}"
+       <!--  <form id="destroy-{{ $jobs->jobid }}" action="{{ route('job.multiple',['id' => $jobs->jobid,'param' => 'Delete']) }}"
               method="POST" style="display: none;">
             {{ csrf_field() }}
             <input type="submit" name="multiple" value="Delete">
         </form>
-
+ -->
         <form id="payout-{{ $jobs->jobid }}" action="{{ route('payout.approved',['id' => $jobs->schedule_id, 'userId' => $jobs->user_id]) }}"
               method="POST" style="display: none;">
             {{ csrf_field() }}
@@ -59,7 +59,7 @@
                                 <i class="icon-settings font-dark"></i>
                                 <span class="caption-subject bold uppercase">Employees</span>
                             </div>
-                            <div class="actions">
+                            <div class="actions   hidden-print">
                                 @if($role_id == 0)
                                     <a class="btn sbold green" href="{{ route('employee.edit',['id' => $userDetails->id])  }}">Update</a>
                                      @if($userDetails->employee_status != 'reject' && $userDetails->employee_status != 'approved')
@@ -72,8 +72,7 @@
                                     </a>
                                     @endif
                                 @endif
-                                <input class="btn sbold green" name="multiple" onclick="window.print()" value="Print"
-                                       type="submit"/>
+                                <input class="btn sbold green" name="multiple" onclick="window.print()" value="Print" type="submit"/>
                             </div>
                         </div>
                         <div class="portlet-body">
@@ -295,7 +294,7 @@
                     </div>
                     <!-- END EXAMPLE TABLE PORTLET-->
                 </div>
-                <div class="col-sm-6">
+                <div class="col-sm-6 hidden-print">
                     <!-- BEGIN EXAMPLE TABLE PORTLET-->
                     <div class="portlet light bordered">
                         <div class="portlet-body">
@@ -354,7 +353,7 @@
                     <!-- END EXAMPLE TABLE PORTLET-->
                 </div>
             </div>
-            <div class="row">
+            <div class="row  hidden-print">
                 <div class="col-md-12">
                     <div class="portlet light bordered related-jobs">
                         <div class="portlet-title">
@@ -363,8 +362,6 @@
                                 <span class="caption-subject bold uppercase">Related Jobs</span>
                             </div>
                             {{ csrf_field() }}
-
-                            <input class="btn sbold green" name="multiple" value="Delete" type="submit"/>
                         </div>
                         <div class="portlet-body employer-details-table">
 
@@ -397,7 +394,7 @@
                                 <tr>
                                     <th>
                                         <label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">
-                                            <input type="checkbox" class="group-checkable"
+                                            <input id ="group-checkable" type="checkbox" class="group-checkable"
                                                    data-set="#employee-table .checkboxes"/>
                                             <span></span>
                                         </label>
@@ -411,17 +408,17 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                @if(count($jobInfo) > 0)
                                     <?php $currenttime = new DateTime('');?>
                                     @foreach($jobInfo as $jobs)
                                         @if(!empty($jobs->job_title))
                                         <tr class="odd gradeX" id="sche-{{ $jobs->schedule_id }}">
-                                            <th>
+                                            <td>
                                                 <label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">
-                                                    <input type="checkbox" class="group-checkable" data-set="#employee-table .checkboxes"/>
+                                                    <input type="checkbox" id="multicheck" name="multicheck[]" class="checkboxes"
+                                                           value="{{ $jobs->id }}"/>
                                                     <span></span>
                                                 </label>
-                                            </th>
+                                            </td>
                                             <td>{{ $jobs->job_title }}</td>
                                             <td data-order="{{ Carbon\Carbon::parse($jobs->start_date)->format('m-d-Y H:i:s') }}">{{ Carbon\Carbon::parse($jobs->start_date)->format('m-d-Y H:i:s') }}</td>
                                             <td>{{ $jobs->company_name }}</td>
@@ -492,7 +489,6 @@
                                         </tr>
                                         @endif
                                     @endforeach
-                                @endif
                                 </tbody>
                             </table>
                         </div>
@@ -526,6 +522,10 @@
             dom: 'Bfrtip',
             buttons: [
                 { "extend": 'excel', "text":'Export',"className": 'btn sbold red', "title" : "Employee - related jobs"}
+            ],
+            "aoColumnDefs": [
+              { "bSearchable": false, "aTargets": [ -1 ] },
+              {  bSortable: false, aTargets: [ "nosort",-1 ]  }
             ],
             autoFill: true,
             "scrollY":"500",

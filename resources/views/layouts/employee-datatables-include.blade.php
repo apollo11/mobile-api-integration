@@ -21,6 +21,11 @@
 	            { "extend": 'excel', "text":'Export',"className": 'btn sbold red' @if(!empty($title)) ,"title" : "{{ $title }}" @endif  }
 	        ],
             @endif
+            
+            "aoColumnDefs": [
+              { "bSearchable": false, "aTargets": [ -1 ] },
+              {  bSortable: false, aTargets: [ "nosort",-1 ]  }
+            ],
 	        autoFill: true,
 	
 	        "scrollY":"500",
