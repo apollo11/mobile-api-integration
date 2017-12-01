@@ -333,6 +333,9 @@ class Job extends Model
                 return $query->where('jobs.user_id', $param['userid']);
             })
             ->groupBy('jobs.id')
+            ->when(!empty($param['unassigned']), function ($query) use ($param) {
+                return $query->havingRaw(' (no_of_person - count(job_schedules.id) ) > 0 ');
+            })
             ->orderBy('jobs.id', 'DESC')
             ->get();
 
@@ -418,12 +421,15 @@ class Job extends Model
     /**
      * @return mixed
      */
-    public function countJobRequest()
+    public function countJobRequest($user_id)
     {
-        $job = DB::table('users')
-            ->join('jobs', 'users.id', '=', 'jobs.user_id')
-     //       ->whereIn('jobs.status', ['draft mode', 'inactive'])
-            ->count();
+        $job = DB::table('jobs')
+            ->join('users', 'users.id', '=', 'jobs.user_id')
+            ->when(!empty($user_id), function ($query) use ($user_id) {
+                return $query->where('jobs.user_id', $user_id);
+              })
+           ->whereIn('jobs.status', ['draft mode', 'pending'])
+           ->count();
 
         return $job;
     }
@@ -432,10 +438,13 @@ class Job extends Model
     /**
      * count inactive jobs
      */
-    public function countInactiveJobs()
+    public function countInactiveJobs($user_id)
     {
         $job = DB::table('users')
             ->join('jobs', 'users.id', '=', 'jobs.user_id')
+            ->when(!empty($user_id), function ($query) use ($user_id) {
+                return $query->where('jobs.user_id', $user_id);
+             })
             ->where('jobs.status', 'inactive')
             ->count();
 
@@ -450,6 +459,7 @@ class Job extends Model
         $job = DB::table('users')
             ->join('job_schedules', 'users.id', '=', 'job_schedules.user_id')
             ->whereNotNull('job_schedules.checkin_datetime')
+            ->where(DB::raw('date(job_schedules.checkin_datetime)'),'=date(NOW())')
             ->where('users.role_id','=', 2)
             ->count();
 
@@ -464,6 +474,7 @@ class Job extends Model
         $job = DB::table('users')
             ->join('job_schedules', 'users.id', '=', 'job_schedules.user_id')
             ->whereNotNull('job_schedules.checkout_datetime')
+            ->where(DB::raw('date(job_schedules.checkin_datetime)'),'=date(NOW())')
             ->where('users.role_id','=', 2)
             ->count();
 
@@ -473,13 +484,15 @@ class Job extends Model
     /**
      * Count Approved Job
      */
-    public function approvedJob()
+    public function approvedJob($user_id)
     {
         $job = DB::table('users')
             ->join('jobs', 'users.id', '=', 'jobs.user_id')
             ->where('jobs.status', 'active')
+             ->when(!empty($user_id), function ($query) use ($user_id) {
+                return $query->where('jobs.user_id', $user_id);
+              })
             ->count();
-
         return $job;
     }
 
@@ -487,14 +500,20 @@ class Job extends Model
     /**
      * @return mixed
      */
-    public function unAssignedJobs()
+    public function unAssignedJobs($user_id)
     {
         $job = DB::table('jobs')
-            ->leftJoin('assign_job_job', 'jobs.id', '=', 'assign_job_job.job_id')
-            ->whereNull('assign_job_job.id')
-            ->count();
+            ->leftJoin('job_schedules', 'jobs.id', '=', 'job_schedules.job_id')
+            ->where('jobs.status','active')
+            ->when(!empty($user_id), function ($query) use ($user_id) {
+                return $query->where('jobs.user_id', $user_id);
+              })
+            ->groupBy('jobs.id')
+            ->havingRaw(' (no_of_person - count(job_schedules.id) ) > 0 ')
+            ->get();
 
-        return $job;
+        if(!empty($job)){ return count($job); }
+        return 0;
     }
 
 

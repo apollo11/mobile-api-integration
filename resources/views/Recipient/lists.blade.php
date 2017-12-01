@@ -149,4 +149,4 @@
 
 @endsection
 
-@include('layouts.employee-datatables-include')
+@include('layouts.employee-datatables-include',['exportbtn'=>false])

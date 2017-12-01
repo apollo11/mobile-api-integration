@@ -179,5 +179,15 @@ class Payout extends Model
     }
 
 
+     public function count_pendingpayout()
+    {
+        $jobs = DB::table('job_schedules')
+            ->join('users', 'job_schedules.user_id', '=', 'users.id')
+            ->where('job_schedules.payment_status','pending')
+            ->where('job_schedules.job_status', 'approved')
+            ->where('users.role_id', 2)
+            ->count();
 
+        return $jobs;
+    }
 }

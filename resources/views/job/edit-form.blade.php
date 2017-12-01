@@ -140,7 +140,7 @@
                                     <div class="form-group{{ $errors->has('end_date') ? ' has-error' : '' }}">
                                         <label class="control-label col-md-3">End Date and Time<span class="is-required">*</span></label>
                                         <div class="col-md-7">
-                                            <div class="input-group date form_datetime form_datetime bs-datetime" id="end-date">
+                                            <div class="input-group date form_datetime form_datetime bs-datetime" id="end-date"  data-date-format="yyyy-mm-dd hh:ii">
                                                 <input type="text" name="end_date" value="{{ old('end_date',$details->end_date) }}" size="16" class="form-control">
                                                 <span class="input-group-addon">
                                                     <button class="btn default date-set" type="button">
