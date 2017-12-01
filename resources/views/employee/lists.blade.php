@@ -126,7 +126,7 @@
                                             <td> {{ $v['gender'] }}</td>
                                             <td data-order="{{ Carbon\Carbon::parse($v['birthdate'])->format('m-d-Y H:i:s') }}">{{ Carbon\Carbon::parse($v['birthdate'])->format('m-d-Y H:i:s') }}</td>
                                             
-                                            <td>{{$v['business_manager']}}</td>
+                                            <td>{{$v['business_manager_name']}}</td>
 
                                             <td> <a href="{{ route('employee.details',['id' => $v['id']])  }}"> {{ $v['applied']  }} </a></td>
                                             <td><a href="{{ route('employee.details',['id' => $v['id']])  }}"> {{ $v['completed'] }} </a></td>

@@ -20,6 +20,7 @@ class Employee extends Model
     {
         $employee = DB::table('users')
             ->leftJoin('additional_infos', 'additional_infos.user_id', '=', 'users.id')
+            ->leftJoin('users as bm','users.business_manager','bm.id')
             // ->leftJoin('job_schedules', 'job_schedules.user_id', '=', 'users.id')
             ->select(
                   'users.id'
@@ -34,6 +35,7 @@ class Employee extends Model
                 , 'additional_infos.birthdate'
                 , 'users.created_at as joined'
                 , 'users.updated_at as updated'
+                , 'bm.name as business_manager_name'
             )
             // ->when(!empty($param['checkin']), function ($query) use ($param) {
             //     return $query->whereNotNull('job_schedules.checkin_datetime');

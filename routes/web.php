@@ -89,15 +89,12 @@ Route::group(['middleware' => ['auth']], function () {
 
        Route::post('/update_schedule', 'Job\JobController@update_schedule')->name('job.update_schedule');
        
-
        Route::get('location_tracking/{id}','Job\JobController@location_tracking')->name('job.location_tracking')->middleware('can:job-view');
-
-       
     });
-
+/*
     Route::prefix('assign')->group(function() {
         Route::get('/lists','AssignJob\AssignJobsController@index')->name('assign.lists');
-    });
+    });*/
 
     Route::prefix('cancel/job')->group(function() {
         Route::get('details/{userId}/{jobId}', 'CancelJob\CancelJobController@details')->name('cancel.details');

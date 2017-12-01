@@ -50,6 +50,7 @@ class AdditionalInfo extends Model
     {
         $additionalInfo = DB::table('users')
             ->leftJoin('additional_infos as info', 'info.user_id', '=', 'users.id')
+            ->leftJoin('users as bm','users.business_manager','bm.id')
             // ->leftJoin('job_ratings','job_ratings.employee_id','=','users.id')
             ->select(
                 'users.id'
@@ -67,6 +68,7 @@ class AdditionalInfo extends Model
                 , 'users.social_fb_id'
                 , 'users.profile_image_path as profile_photo'
                 , 'users.business_manager as agent_name'
+                , 'bm.name as business_manager_name'
                 , 'info.id as profile_id'
                 , 'info.gender'
                 , 'info.birthdate'

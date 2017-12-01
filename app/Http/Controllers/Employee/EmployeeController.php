@@ -63,7 +63,7 @@ class EmployeeController extends Controller
                 'gender' => $value->gender,
                 'completed' => $completed,
                 'applied' => $applied,
-                'business_manager' => $value->business_manager
+                'business_manager_name' => $value->business_manager_name
             ];
         }
         $dataUndefined = !empty($data) ? $data : [];
@@ -79,7 +79,7 @@ class EmployeeController extends Controller
     public function create()
     {
         $businessMngr = \App\User::where('role', 'business_manager')->pluck('name', 'id');
-        return view('employee.form', ['business_manager'=>$businessMngr]);
+        return view('employee.form', ['businessMngr'=>$businessMngr]);
     }
 
     /**
@@ -159,6 +159,7 @@ class EmployeeController extends Controller
         $user->mobile_no = $data['mobile_no'];
         $user->nric_no = $data['nric_no'];
         $user->school = $school;
+        $user->business_manager = $data['business_manager'];
 
         $user->save();
 
@@ -203,14 +204,14 @@ class EmployeeController extends Controller
     public function edit($id)
     {
         $userDetails = new AdditionalInfo();
-        $location = new Location();
-        $nationality = new Nationality();
-
-
         $details = $userDetails->userInfo($id);
         if (empty($details)) {
             abort(404);
         }
+
+        $location = new Location();
+        $nationality = new Nationality();
+        $businessMngr = \App\User::where('role', 'business_manager')->pluck('name', 'id');
 
         $contactMethod = [
             'sms'
@@ -233,6 +234,7 @@ class EmployeeController extends Controller
             , 'location' => $location->locationLists()
             , 'nationality' => $nationality->nationalityDropdown()
             , 'language' => $nationality->language()
+            , 'businessMngr' => $businessMngr
 
         ]);
     }
@@ -332,6 +334,7 @@ class EmployeeController extends Controller
             $user->email = $data['email'];
             $user->employee_points = $data['points'];
             $user->employee_status = isset($data['employee_status']) ? $data['employee_status'] : 'pending';
+            $user->business_manager = $data['business_manager'];
             $user->save();
         }
 
