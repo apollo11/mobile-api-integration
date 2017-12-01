@@ -97,7 +97,7 @@ class CancelJobController extends Controller
             if ($diffHours > 72) {
                 return $cancel->deductionsPoints($output->user_id, abs($set->point_cancel_job_within_72_hours));
             } else {
-                return $cancel->deductionsPoints($output->user_id, abs($set->point_cancel_job_before_72_hours));
+                return $cancel-> deductionsPoints($output->user_id, abs($set->point_cancel_job_before_72_hours));
 
             }
         }

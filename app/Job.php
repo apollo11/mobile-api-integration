@@ -642,4 +642,35 @@ class Job extends Model
 
         return $result;
     }
+
+    /**
+     * @param $id
+     * @return mixed
+     */
+    public function getLanguage($id)
+    {
+        $lang = DB::table('languages')
+            ->select('name')
+            ->where('job_id', $id)
+            ->get();
+
+        return $lang;
+    }
+
+
+    /**
+     * @param $id
+     * @return mixed
+     */
+    public function getAge($id)
+    {
+        $age = DB::table('ages')
+            ->select('name')
+            ->where('job_id', $id)
+             ->get();
+
+        return $age;
+
+    }
+
 }

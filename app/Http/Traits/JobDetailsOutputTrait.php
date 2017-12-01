@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Traits;
 
+use App\Job;
 trait JobDetailsOutputTrait
 {
     public function jobDetailsoutput($output)
@@ -53,9 +54,10 @@ trait JobDetailsOutputTrait
                 'description' => $output->description,
                 'min_age' => $output->min_age,
                 'max_age' => $output->max_age,
+                'age' => $this->getAge($output->id),
                 'role' => $output->role,
                 'remarks' => $output->notes,
-                'language' => $output->language,
+                'language' => $this->getLang($output->id),//$output->language,
                 'gender' => $output->gender,
                 'job_requirements' => $output->job_requirements,
                 'status' => $assigned,
@@ -69,6 +71,10 @@ trait JobDetailsOutputTrait
         return $details;
     }
 
+    /**
+     * @param $date
+     * @return false|null|string
+     */
     public function dateFormat($date)
     {
         if (is_null($date)) {
@@ -85,6 +91,42 @@ trait JobDetailsOutputTrait
 
     }
 
+    /**
+     * @param $id
+     * @return mixed
+     */
+    public function getAge($id)
+    {
+        $ageobj = new Job();
+        $output = $ageobj->getAge($id);
+        $name = array();
+
+        foreach ($output as $value) {
+            $name[] = $value->name;
+        }
+
+        return !$name ? '' : implode(', ', $name);
+
+    }
+
+
+    /**
+     * @param $id
+     * @return mixed
+     */
+    public function getLang($id)
+    {
+        $lang = new Job();
+        $output = $lang->getLanguage($id);
+        $name = array();
+        foreach ($output as $value) {
+
+            $name[] = ucfirst($value->name);
+        }
+
+        return !$name ? '' : implode(', ', $name);
+
+    }
 
 
 }
