@@ -44,7 +44,7 @@ class Notification extends Model
                 $join->on('assign.job_id', '=', 'jobs.id')
                     ->where('assign.user_id', '=', $userId);
             })
-            ->join('users as employer', 'employer.id', '=', 'jobs.user_id')
+            ->leftJoin('users as employer', 'employer.id', '=', 'jobs.user_id')
             ->select(
                   'notif.id'
                 , 'notif.title'
