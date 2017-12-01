@@ -44,7 +44,7 @@ class AdditionalInfoController extends Controller
     public function store(Request $request)
     {
         $data = $request->all();
-        $id = $data['user_id'];
+        $id = $data['user_id'] ?? '';
 
         $validator = $this->rules($data);
         $errorMsg = $validator->errors()->all();

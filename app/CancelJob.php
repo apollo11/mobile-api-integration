@@ -26,8 +26,9 @@ class CancelJob extends Model
     public function deductionsPoints($userId, $subtract)
     {
         $user = DB::table('users')
+            ->join('additional_infos', 'users.id','=', 'additional_infos.user_id')
             ->where('users.id', $userId)
-            ->decrement('users.employee_points', $subtract);
+            ->decrement('additional_infos.points', $subtract);
 
         return $user;
     }
