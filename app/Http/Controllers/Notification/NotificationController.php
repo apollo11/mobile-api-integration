@@ -600,6 +600,10 @@ class NotificationController extends Controller
         
     }
 
+    /**
+     * @param $jobId
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function successResponseNotif($jobId)
     {
         $job = new JobSchedule();
@@ -613,13 +617,9 @@ class NotificationController extends Controller
     }
 
 
-
     /**
-     * Update the specified resource in storage for Job Reminder.
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @param  int $id
-     * @return \Illuminate\Http\Response
+     * @param $userId
+     * @param $jobId
      */
     public function save24HrNotif($userId, $jobId)
     {
@@ -630,13 +630,8 @@ class NotificationController extends Controller
         ]);
     }
 
-
     /**
-     * Update the specified resource in storage for Birthday Notification.
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @param  int $id
-     * @return \Illuminate\Http\Response
+     * @param $userId
      */
     public function saveBirthdayNotif($userId)
     {
