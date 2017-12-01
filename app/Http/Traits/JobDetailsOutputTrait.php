@@ -52,8 +52,9 @@ trait JobDetailsOutputTrait
                 'thumbnail_url' => $output->job_image_path,
                 'nationality' => ucfirst($output->nationality),
                 'description' => $output->description,
-                'min_age' => $this->getMinAge($output->id),//$output->min_age,
+                'min_age' => $output->min_age,
                 'max_age' => $output->max_age,
+                'age' => $this->getAge($output->id),
                 'role' => $output->role,
                 'remarks' => $output->notes,
                 'language' => $this->getLang($output->id),//$output->language,
@@ -99,29 +100,12 @@ trait JobDetailsOutputTrait
         $ageobj = new Job();
         $output = $ageobj->getAge($id);
         $name = array();
+
         foreach ($output as $value) {
             $name[] = $value->name;
         }
 
         return !$name ? '' : implode(', ', $name);
-
-    }
-
-    /**
-     * @param $id
-     * @return mixed
-     */
-    public function getMaxAge($id)
-    {
-        $ageobj = new Job();
-        $output = $ageobj->getAge($id);
-
-        $name = array();
-        foreach ($output as $value) {
-            $name[] = $value->max_age;
-        }
-
-        return !$name ? '' : $name ;
 
     }
 
@@ -143,23 +127,6 @@ trait JobDetailsOutputTrait
         return !$name ? '' : implode(', ', $name);
 
     }
-
-    /**
-     * @param $id
-     * @return array
-     */
-//    public function parsingToken($id)
-//    {
-//        $device = array();
-//        $token = new DeviceToken();
-//        $tokenValue = $token->getMultipleDeviceTokenByUserId($id);
-//        foreach ($tokenValue as $value) {
-//            $device[] = $value->device_token;
-//        }
-//
-//        return $device;
-//
-//    }
 
 
 }

@@ -664,6 +664,7 @@ class Job extends Model
     public function getAge($id)
     {
         $age = DB::table('ages')
+            ->select('name')
             ->where('job_id', $id)
              ->get();
 
