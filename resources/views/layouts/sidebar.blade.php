@@ -1,4 +1,19 @@
-<?php $current_route = Request::route()->getName(); ?>
+<?php 
+
+/*Menu highlight*/
+$current_route = Request::route()->getName(); 
+
+$employee_navarr = array('employee.lists', 'employee.create','employee.details','employee.edit');
+$employer_navarr = array('employer.lists', 'employer.new.list','employer.create', 'employer.details','employer.edit');
+$jobs_navarr = array('job.lists','job.create', 'job.details','job.edit','job.location_tracking');
+$industry_navarr = array('industry.lists','industry.create', 'industry.details','industry.edit');
+$location_navarr = array('location.lists','location.create', 'location.details','location.edit');
+$mgt_navarr = array('mgt.lists','mgt.create', 'mgt.details','mgt.edit');
+$pushnotification_navarr = array('pushnotification.lists','pushnotification.create', 'pushnotification.details','pushnotification.edit','pushnotification.quickNotification');
+$recipient_navarr = array('recipient.lists','recipient.create', 'recipient.details','recipient.edit');
+
+/*Menu highlight end*/
+?>
 <!-- BEGIN SIDEBAR -->
 <div class="page-sidebar-wrapper">
     <!-- DOC: Set data-auto-scroll="false" to disable the sidebar from auto scrolling/focusing -->
@@ -25,7 +40,7 @@
                 </li>
             @endcan
             @can('employee-view')
-                <li {{{ ($current_route == 'employee.lists' ? 'class=active' : '') }}}>
+                <li {{{ (  in_array($current_route,$employee_navarr)  ? 'class=active' : '') }}}>
                     <a href="{{ route('employee.lists') }}">
                         <i class="fa fa-user"></i>
                         <span class="title">Employees</span>
@@ -35,14 +50,14 @@
              
             @if (Auth::user()->role_id == 0)
                  @can('employer-view')
-                    <li class="nav-item {{{ (  ($current_route == 'employer.new.list' || $current_route == 'employer.lists') ? ' active' : '') }}}">
+                    <li class="nav-item {{{ (    in_array($current_route,$employer_navarr) ? ' active open' : '') }}}">
                         <a href="javascript:;" class="nav-link nav-toggle ">
                              <i class="fa fa-user"></i>
                             <span class="title">Employers</span>
-                            <span class="arrow"></span>
+                            <span class="arrow {{{ (    in_array($current_route,$employer_navarr) ? ' open' : '') }}}"></span>
                         </a>
-                        <ul class="sub-menu" style="display: none;">
-                            <li class="nav-link {{{ ($current_route == 'employer.lists' ? ' active' : '') }}} ">
+                        <ul class="sub-menu"  {{{ ( !in_array($current_route,$employer_navarr) ? 'style="display: none;"' : '') }}} >
+                            <li class="nav-link {{{ (   ($current_route != 'employer.new.list' && in_array($current_route,$employer_navarr) ) ? ' active' : '') }}} ">
                                 <a href="{{ route('employer.lists') }}">Employers</a>
                             </li>
                             <li class="nav-link {{{ ($current_route == 'employer.new.list' ? ' active' : '') }}}">
@@ -50,7 +65,6 @@
                             </li>
                         </ul>
                     </li>
-                    
                  @endcan
 
                  @can('payout-view')
@@ -61,82 +75,82 @@
                     </li>
                  @endcan
             @endif
+
             @can('job-view')
-             <li {{{ ($current_route == 'job.lists' ? 'class=active' : '') }}}>
-                <a href="{{ route('job.lists') }}">
-                    <i class="fa fa-tasks"></i>
-                    Job Management</a>
+             <li {{{ (in_array($current_route,$jobs_navarr) ? 'class=active' : '') }}}>
+                <a href="{{ route('job.lists') }}"><i class="fa fa-tasks"></i> Job Management</a>
             </li>
             @endcan
 
              @if (Auth::user()->role_id == 0)
                 @can('admin-view')
-                <li {{{ ($current_route == 'industry.lists' ? 'class=active' : '') }}}>
+                <li {{{ ( in_array($current_route,$industry_navarr) ? 'class=active' : '') }}}>
                     <a href="{{ route('industry.lists') }}">
                         <i class="fa fa-industry"></i>
                         Industry</a>
                 </li>
                 @endcan
-            @can('admin-view')
-             <li {{{ ($current_route == 'location.lists' ? 'class=active' : '') }}}>
-                <a href="{{ route('location.lists') }}">
-                    <i class="fa fa-globe"></i>
-                    Location</a>
-            </li>
-            @endcan
 
-            @can('reports-view')
-            <li class="nav-item {{{ ($current_route == 'reports.weekly_report' ? ' active' : '') }}}">
-                <a href="javascript:;" class="nav-link nav-toggle">
-                    <i class="fa fa-line-chart"></i>
-                    <span class="title">Reports</span>
-                    <span class="arrow"></span>
-                </a>
-                <ul class="sub-menu" style="display: none;">
-                    <li class="nav-item  {{{ ($current_route == 'reports.weekly_report' ? ' active' : '') }}}">
-                        <a href="{{route('reports.weekly_report') }}" class="nav-link ">
-                            <span class="title">Weekly Report</span>
+                @can('admin-view')
+                 <li {{{ ( in_array($current_route, $location_navarr ) ? 'class=active' : '') }}}>
+                    <a href="{{ route('location.lists') }}">
+                        <i class="fa fa-globe"></i>
+                        Location</a>
+                </li>
+                @endcan
+
+                @can('reports-view')
+                <li class="nav-item {{{ ($current_route == 'reports.weekly_report' ? ' active open' : '') }}}">
+                    <a href="javascript:;" class="nav-link nav-toggle">
+                        <i class="fa fa-line-chart"></i>
+                        <span class="title">Reports</span>
+                        <span class="arrow {{{ ($current_route == 'reports.weekly_report' ? ' open' : '') }}}"></span>
+                    </a>
+                    <ul class="sub-menu"  {{{ ($current_route != 'reports.weekly_report' ? 'style="display: none;"' : '') }}} >
+                        <li class="nav-item  {{{ ($current_route == 'reports.weekly_report' ? ' active' : '') }}}">
+                            <a href="{{route('reports.weekly_report') }}" class="nav-link ">
+                                <span class="title">Weekly Report</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                @endcan
+                @can('admin-view')
+                     <li {{ ( in_array($current_route,$mgt_navarr)  ? 'class=active' : '') }}>
+                        <a href="{{ route('mgt.list') }}">
+                            <i class="fa fa-user"></i>
+                            <span class="title">Admin Users</span>
                         </a>
                     </li>
-                </ul>
-            </li>
-            @endcan
-            @can('admin-view')
-                 <li {{ ($current_route == 'mgt.list' ? 'class=active' : '') }}>
-                    <a href="{{ route('mgt.list') }}">
-                        <i class="fa fa-user"></i>
-                        <span class="title">Admin Users</span>
+                @endcan
+                @can('push-view')
+                 <li {{{ (  in_array($current_route,$pushnotification_navarr) ? 'class=active' : '') }}}>
+                    <a href="{{ route('pushnotification.lists') }}">
+                        <i class="fa fa-comment"></i>
+                        <span class="title">Push Notification</span>
                     </a>
                 </li>
-            @endcan
-            @can('push-view')
-             <li {{{ ($current_route == 'pushnotification.lists' ? 'class=active' : '') }}}>
-                <a href="{{ route('pushnotification.lists') }}">
-                    <i class="fa fa-comment"></i>
-                    <span class="title">Push Notification</span>
-                </a>
-            </li>
-            @endcan
-            @can('recipient-view')
-                <li {{{ ($current_route == 'recipient.lists' ? 'class=active' : '') }}}>
-                    <a href="{{ route('recipient.lists') }}">
-                        <i class="fa fa-users"></i>
-                        <span class="title">Recipient Group</span>
-                    </a>
-                </li>
-            @endcan
-            @endif
+                @endcan
+                @can('recipient-view')
+                    <li {{{ ( in_array($current_route,$recipient_navarr) ? 'class=active' : '') }}}>
+                        <a href="{{ route('recipient.lists') }}">
+                            <i class="fa fa-users"></i>
+                            <span class="title">Recipient Group</span>
+                        </a>
+                    </li>
+                @endcan
+                @endif
 
-            @if (Auth::user()->role_id == 0)
-            @can('settings-view')
-                <li {{{ (Request::is('settings') ? 'class=active' : '') }}}>
-                    <a href="{{route('settings') }}">
-                        <i class="icon-settings"></i>
-                        <span class="title">Settings</span>
+                @if (Auth::user()->role_id == 0)
+                @can('settings-view')
+                    <li {{{ (Request::is('settings') ? 'class=active' : '') }}}>
+                        <a href="{{route('settings') }}">
+                            <i class="icon-settings"></i>
+                            <span class="title">Settings</span>
 
-                    </a>
-                </li>
-            @endcan
+                        </a>
+                    </li>
+                @endcan
             @endif
             <li>
                 <a href="{{ route('logout') }}"
