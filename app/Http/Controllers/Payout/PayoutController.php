@@ -4,11 +4,13 @@ namespace App\Http\Controllers\Payout;
 
 use Validator;
 use App\Payout;
+use App\Http\Traits\NotificationTrait;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 class PayoutController extends Controller
 {
+    use NotificationTrait;
     /**
      * Display a listing of the resource.
      *
@@ -125,6 +127,7 @@ class PayoutController extends Controller
 
     }
 
+
     /**
      * Job has been processed
      * @param $id
@@ -135,6 +138,9 @@ class PayoutController extends Controller
     {
         $payoutObj = new Payout();
         $payoutObj->processedJob($id, $userId);
+
+        $this->pushProcessedNotif($userId);
+        $this->saveProcessedNotif($id, (array)$userId, constant('PAYMENT_INITIATED'));
 
         return back();
     }
@@ -182,9 +188,42 @@ class PayoutController extends Controller
 
         } else {
             $payoutObj->multipleProcessed($multi['multicheck']);
+
             $result = back();
         }
 
         return $result;
+    }
+
+    /**
+     * @param $id
+     * @return \Illuminate\Http\JsonResponse|int
+     */
+    public function pushProcessedNotif($id)
+    {
+        $userId[] = $id;
+        $token = $this->parsingToken($userId);
+        $result = $this->paymentProcessed($token);
+
+        return $result;
+    }
+
+    /**
+     * @param $jobId
+     * @param $userId
+     * @param $type
+     */
+    public function saveProcessedNotif($jobId, $userId, $type)
+    {
+        $user = $userId;
+
+        foreach ($user as $key) {
+            $save = \App\User::find($key);
+            $save->userNotification()->updateOrCreate([
+                'type' => $type,
+                'job_id' => $jobId
+            ]);
+        }
+
     }
 }

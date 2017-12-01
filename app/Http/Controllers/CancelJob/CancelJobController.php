@@ -8,11 +8,14 @@ use App\Settings;
 use App\CancelJob;
 use App\JobSchedule;
 use Illuminate\Http\Request;
+use App\Http\Traits\HttpResponse;
+use App\Http\Traits\NotificationTrait;
 use App\Http\Controllers\Controller;
 
 class CancelJobController extends Controller
 {
-
+    use NotificationTrait;
+    use HttpResponse;
 
     /**
      * Display a listing of the resource.
@@ -22,6 +25,7 @@ class CancelJobController extends Controller
     public function index(Request $request)
     {
         $data = $request->all();
+
         $validate = $this->rules($data);
 
         $errorMsg = $validate->errors()->all();
@@ -51,6 +55,7 @@ class CancelJobController extends Controller
                 $this->deductCancelledJob($data['id']);
                 $merge = array_merge($data, $file);
                 $this->edit($merge);
+                $this->updateCancelJobNotif($data['id']);
 
                 $output = $this->show($request->input('id'));
             }
@@ -275,4 +280,36 @@ class CancelJobController extends Controller
         return view('job.cancel-details',['details' => $details]);
 
     }
+
+    /**
+     * @param $jobId
+     * @return \Illuminate\Http\JsonResponse|int
+     */
+    public function updateCancelJobNotif($jobId)
+    {
+        $jobSched = \App\JobSchedule::where('id','=',  $jobId)->first();
+        $job = \App\Job::where('id','=',  $jobSched->job_id)->first();
+
+        $userId = $jobSched->user_id;
+        $token = $this->parsingToken((array) $userId);
+
+         $this->saveCancelNotif($jobSched->job_id, $userId);
+         $this->jobCancelled($job, $token);
+
+        return $this->jobCancelled($job, $token);
+    }
+
+    /**
+     * @param $jobId
+     */
+    public function saveCancelNotif($jobId, $userId)
+    {
+            $save = \App\User::find($userId);
+            $save->userNotification()->updateOrCreate([
+                'type' => constant('JOB_CANCELLED_BY_USER'),
+                'job_id' => $jobId
+            ]);
+    }
+
+
 }

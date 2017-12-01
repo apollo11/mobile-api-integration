@@ -386,6 +386,8 @@ class EmployeeController extends Controller
         $user = new User();
 
         $multi['multicheck'] = is_null($request->input('multicheck')) ? [] : $request->input('multicheck');
+
+
         $validator = Validator::make($multi, ['multicheck' => 'required']);
 
         if ($validator->fails()) {
@@ -397,7 +399,11 @@ class EmployeeController extends Controller
             $submit = $request->input('multiple');
             switch ($submit) {
                 case 'Approve':
+
                     $user->multiUpdate($multi);
+                    $this->saveProfileNotif($multi['multicheck'] , constant('INTERVIEW'));
+                    $this->updateNotifInterview($multi);
+
                     break;
                 case 'Delete':
                     $user->multiDelete($multi);
@@ -538,6 +544,9 @@ class EmployeeController extends Controller
         $user->employee_status = "approved";
         $user->save();
 
+        $this->saveProfileNotif((array) $id, constant('INTERVIEW'));
+        $this->updateNotifInterview($id);
+
         return back();
 
     }
@@ -550,6 +559,9 @@ class EmployeeController extends Controller
         $user = \App\User::find($id);
         $user->employee_status = "upload";
         $user->save();
+
+        $this->saveProfileNotif($id, constant('PROFILE'));
+        $this->updateNotifProfile($id);
 
         return back();
 
@@ -564,6 +576,9 @@ class EmployeeController extends Controller
 
         $user->employee_status = "reject";
         $user->save();
+
+        $this->updateRejectInterview($id);
+        $this->saveProfileNotif((array) $id, constant('USER_REJECT'));
 
         return back();
     }
@@ -909,21 +924,46 @@ class EmployeeController extends Controller
      * @param $id
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
-    public function sendNotification()
+    public function updateNotifProfile($id)
     {
-//        $id =  $this->lastInsertId;
-//        $findToken = \App\DeviceToken::where('user_id',$id )->get();
-//        if(!$findToken)
-//        $user = \App\User::where('id', $id)->first();
-//        $token = $this->parsingToken($id);
-//        return $token;
-//            $this->saveNotif($id);
-//            $this->registrationNotification($user, $token);
+        $userId[] = $id;
+        $token = $this->parsingToken($userId);
+        $result = $this->updateProfileNotif($token);
+
+        return $result;
 
     }
 
     /**
-     * @return mixed|static
+     * @param $id
+     * @return \Illuminate\Http\JsonResponse|int
+     */
+    public function updateNotifInterview($id)
+    {
+        $userId[] = $id;
+        $token = $this->parsingToken($userId);
+        $result = $this->interviewApprovedNotif($token);
+
+        return $result;
+    }
+
+    /**
+     * @param $id
+     * @return \Illuminate\Http\JsonResponse|int
+     */
+    public function updateRejectInterview($id)
+    {
+        $userId[] = $id;
+        $token = $this->parsingToken($userId);
+        $result = $this->rejectEmployeedNotif($token);
+
+        return $result;
+    }
+
+
+
+    /**
+     * @return mixed|static$mut
      */
     public function saveNotif()
     {
@@ -933,6 +973,24 @@ class EmployeeController extends Controller
         $save->userNotification()->create([
             'type' => constant('REGISTRATION')
         ]);
+    }
+
+    /**
+     * @param $id
+     * @param $type
+     */
+    public function saveProfileNotif($id, $type)
+    {
+        $userId = $id;
+
+        foreach ($userId as $key) {
+            $save = \App\User::find($key);
+            $save->userNotification()->updateOrCreate([
+                'type' => $type
+            ]);
+
+        }
+
     }
 
 }

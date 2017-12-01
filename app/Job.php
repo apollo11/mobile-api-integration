@@ -214,7 +214,10 @@ class Job extends Model
                 $join->on('job_schedules.job_id', '=', 'jobs.id')
                     ->where('job_schedules.user_id', '=', $userId);
             })
-            ->leftJoin('assign_job_job as assign', 'assign.job_id', '=', 'jobs.id')
+             ->leftJoin('assign_job_job as assign', function ($join) use ($userId) {
+                    $join->on('assign.job_id', '=', 'jobs.id')
+                        ->where('assign.user_id', '=', $userId);
+                })
             ->select(
                 'jobs.id'
                 , 'job_schedules.id as schedule_id'
