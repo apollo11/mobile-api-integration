@@ -504,12 +504,13 @@ class Job extends Model
     {
         $job = DB::table('jobs')
             ->leftJoin('job_schedules', 'jobs.id', '=', 'job_schedules.job_id')
+            ->select(DB::raw('(no_of_person - count(job_schedules.id) )  as diff '))
             ->where('jobs.status','active')
             ->when(!empty($user_id), function ($query) use ($user_id) {
                 return $query->where('jobs.user_id', $user_id);
               })
             ->groupBy('jobs.id')
-            ->havingRaw(' (no_of_person - count(job_schedules.id) ) > 0 ')
+            ->havingRaw('diff > 0 ')
             ->get();
 
         if(!empty($job)){ return count($job); }
