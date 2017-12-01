@@ -59,7 +59,7 @@
                                 <i class="icon-settings font-dark"></i>
                                 <span class="caption-subject bold uppercase">Employees</span>
                             </div>
-                            <div class="actions">
+                            <div class="actions   hidden-print">
                                 @if($role_id == 0)
                                     <a class="btn sbold green" href="{{ route('employee.edit',['id' => $userDetails->id])  }}">Update</a>
                                      @if($userDetails->employee_status != 'reject' && $userDetails->employee_status != 'approved')
@@ -72,8 +72,7 @@
                                     </a>
                                     @endif
                                 @endif
-                                <input class="btn sbold green" name="multiple" onclick="window.print()" value="Print"
-                                       type="submit"/>
+                                <input class="btn sbold green" name="multiple" onclick="window.print()" value="Print" type="submit"/>
                             </div>
                         </div>
                         <div class="portlet-body">
@@ -295,7 +294,7 @@
                     </div>
                     <!-- END EXAMPLE TABLE PORTLET-->
                 </div>
-                <div class="col-sm-6">
+                <div class="col-sm-6 hidden-print">
                     <!-- BEGIN EXAMPLE TABLE PORTLET-->
                     <div class="portlet light bordered">
                         <div class="portlet-body">
@@ -354,7 +353,7 @@
                     <!-- END EXAMPLE TABLE PORTLET-->
                 </div>
             </div>
-            <div class="row">
+            <div class="row  hidden-print">
                 <div class="col-md-12">
                     <div class="portlet light bordered related-jobs">
                         <div class="portlet-title">

@@ -38,11 +38,12 @@ class EmployeeController extends Controller
      */
     public function index(Request $request)
     {
-        $param = [
-            'checkin' => $request->get('checkin'),
-            'checkout' => $request->get('checkout'),
-            'job_status' => $request->get('status'),
-        ];
+        // $param = [
+        //     'checkin' => $request->get('checkin'),
+        //     'checkout' => $request->get('checkout'),
+        //     'job_status' => $request->get('status'),
+        // ];
+        $param = [];
 
         $employee = new Employee();
         $result = $employee->employeeLists($param);
@@ -64,7 +65,6 @@ class EmployeeController extends Controller
                 'applied' => $applied,
                 'business_manager' => $value->business_manager
             ];
-
         }
         $dataUndefined = !empty($data) ? $data : [];
 
@@ -118,18 +118,15 @@ class EmployeeController extends Controller
         $validate = $this->validator($data);
 
         if ($validate->fails()) {
-
             return redirect('employee/create')
                 ->withErrors($validate)
                 ->withInput();
-
         } else {
             $this->save($data);
             $this->sendEmailtoEmployee($data);
             $this->saveNotif();
 
             return redirect('employee/lists');
-
         }
     }
 
@@ -400,13 +397,13 @@ class EmployeeController extends Controller
             switch ($submit) {
                 case 'Approve':
 
-                    $user->multiUpdate($multi);
+                    $user->multiUpdate($multi['multicheck']);
                     $this->saveProfileNotif($multi['multicheck'] , constant('INTERVIEW'));
                     $this->updateNotifInterview($multi);
 
                     break;
                 case 'Delete':
-                    $user->multiDelete($multi);
+                    $user->multiDelete($multi['multicheck']);
                     break;
             }
 
