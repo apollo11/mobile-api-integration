@@ -69,7 +69,7 @@
                                                             <td> <strong>Contact No.</strong></td>
                                                             <td> {{ $details->mobile_no }}</td>
                                                         </tr>
-                                                        <tr>
+                                                       <!--  <tr>
                                                             <td> <strong>Dashboard Permission</strong></td>
                                                             <td>
                                                                 @if(count($details->dashboard_permissions) >= 1)
@@ -79,7 +79,7 @@
 
                                                                 @endif
                                                             </td>
-                                                        </tr>
+                                                        </tr> -->
                                                         <tr>
                                                             <td> <strong>Employees Permission</strong></td>
                                                             <td>
