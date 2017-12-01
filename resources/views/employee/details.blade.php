@@ -228,6 +228,11 @@
                                                                 <td> {{ $userDetails->address }}</td>
                                                         </tr>
                                                         @endif
+
+                                                        <tr>
+                                                            <td><strong>Business Manager</strong></td>
+                                                            <td> {{ $userDetails->business_manager_name }}</td>
+                                                        </tr>
                                                     </tbody>
                                                     </table><br>
 

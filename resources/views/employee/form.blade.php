@@ -110,6 +110,28 @@
                                             @endif
                                         </div>
                                     </div>
+
+
+                                     <div class="form-group{{ $errors->has('business_manager') ? ' has-error' : '' }}">
+                                        <label class="col-md-3 control-label">Business Manager</label>
+                                        <div class="col-md-7">
+                                            <select class="form-control" name="business_manager">
+                                                @foreach($businessMngr as $key => $value)
+                                                    @if($loop->count > 0)
+                                                        <option value="{{ $key }}" {{ $key == old('business_manager') ? "selected" : "" }}>{{ $value }}</option>
+                                                    @else
+                                                        <option value=""> No Available Business </option>
+                                                    @endif
+                                                @endforeach
+                                            </select>
+
+                                            @if ($errors->has('business_manager'))
+                                                <span class="help-block">
+                                                {{ $errors->first('business_manager') }}
+                                               </span>
+                                            @endif
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="form-actions">
                                     <div class="row">
