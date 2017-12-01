@@ -462,8 +462,9 @@ class JobSchedule extends Model
     public function userPoints($userId)
     {
         $points = DB::table('users')
-           ->select('id', 'employee_points')
-            ->where('id', $userId)
+           ->leftJoin('additional_infos', 'additional_infos.user_id', '=', 'users.id')
+           ->select('users.id', 'additional_infos.points as employee_points')
+            ->where('users.id', $userId)
             ->first();
 
         return $points;
