@@ -179,7 +179,7 @@
                                                             <td> {{ $userDetails->rate }}</td>
                                                         </tr>
                                                         @endif
-                                                        @if($userDetails->points)
+                                                        @if($userDetails->employee_points)
                                                         <tr>
                                                             <td><strong>Points</strong></td>
                                                             <td> {{ $userDetails->employee_points }}</td>
